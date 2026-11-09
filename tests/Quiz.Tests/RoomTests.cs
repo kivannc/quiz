@@ -505,6 +505,32 @@ public sealed class RoomTests
     }
 
     [Fact]
+    public void Remaining_counts_the_question_down_and_is_clamped_at_zero()
+    {
+        var room = StartedRoom("Ada");
+        Assert.Equal(Limit, room.Remaining);
+
+        _clock.Advance(TimeSpan.FromSeconds(8));
+        Assert.Equal(TimeSpan.FromSeconds(12), room.Remaining);
+
+        _clock.Advance(Limit); // well past the limit
+        Assert.Equal(TimeSpan.Zero, room.Remaining);
+
+        // Reading the time does not move the room on, and the question is still answerable-or-not by the room's own rule.
+        Assert.Equal(RoomPhase.Question, room.Phase);
+        Assert.False(room.Answer("conn-Ada", Marker.Hearts));
+    }
+
+    [Theory]
+    [InlineData(RoomPhase.Lobby)]
+    [InlineData(RoomPhase.Reveal)]
+    [InlineData(RoomPhase.Finished)]
+    public void Remaining_is_null_when_no_question_is_open(RoomPhase phase)
+    {
+        Assert.Null(RoomIn(phase).Remaining);
+    }
+
+    [Fact]
     public void Refused_calls_do_not_move_LastActivity()
     {
         var room = NewRoom(maxPlayers: 1);

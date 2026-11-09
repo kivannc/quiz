@@ -164,7 +164,8 @@ conn.on('QuestionStarted', (question) => {
   state.reveal = null;
   state.answered = 0;
   show('question');
-  // Only a resume may inherit a deadline; a question that has just opened always gets the full limit.
+  // A screen that has run this question already counts its own deadline down. One arriving fresh
+  // uses limitSeconds, which on a resume is what the room says is left, not the whole limit.
   const at = (resuming ? recallDeadline(question.index) : null) ?? Date.now() + question.limitSeconds * 1000;
   startCountdown(question.index, at);
 });

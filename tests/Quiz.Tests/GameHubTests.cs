@@ -640,6 +640,31 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
+    public async Task ResumeHost_sends_what_is_left_of_the_question_not_the_whole_limit()
+    {
+        // A screen that opens somewhere else has nothing of its own to count down from, so what the
+        // hub tells it is the only thing standing between the players and time the room will refuse.
+        var factory = Factory(("QUIZ_QUESTION_SECONDS", "30"));
+        var host = await Connect(factory);
+        var opening = new Inbox<JsonElement>(host, "QuestionStarted");
+        var code = await Open(host);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+
+        // The screen that opened the question is told the whole limit.
+        Assert.Equal(30, (await opening.Next()).GetProperty("limitSeconds").GetInt32());
+
+        var elsewhere = await Connect(factory);
+        var questions = new Inbox<JsonElement>(elsewhere, "QuestionStarted");
+        await elsewhere.InvokeAsync("ResumeHost", code, HostKey);
+
+        var resumed = await questions.Next();
+        Assert.Equal(0, resumed.GetProperty("index").GetInt32()); // the same question, otherwise unchanged
+        Assert.InRange(resumed.GetProperty("limitSeconds").GetInt32(), 0, 29);
+    }
+
+    [Fact]
     public async Task ResumeHost_sends_the_reveal_during_the_reveal_and_advances_nothing()
     {
         var factory = Factory();

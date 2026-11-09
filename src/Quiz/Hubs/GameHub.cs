@@ -83,7 +83,12 @@ public sealed class GameHub(
 
         if (room.Phase == RoomPhase.Question && room.CurrentQuestion is { } question)
         {
-            await Clients.Caller.SendAsync("QuestionStarted", question);
+            // A screen arriving now needs what is left of the limit, not the whole of it: its
+            // countdown is what closes the question, and the room goes on refusing answers after
+            // the original limit whatever a late screen believes. Truncated, so a resumed screen
+            // closes a shade early rather than a shade late.
+            var left = (int)(room.Remaining ?? TimeSpan.Zero).TotalSeconds;
+            await Clients.Caller.SendAsync("QuestionStarted", question with { LimitSeconds = left });
             await Clients.Caller.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
         }
         else if (room.CurrentReveal is { } reveal)

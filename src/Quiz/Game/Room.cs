@@ -77,6 +77,25 @@ public sealed class Room
         get { lock (_gate) return _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList().AsReadOnly(); }
     }
 
+    /// <summary>
+    /// How much of the open question's limit is left, or null when no question is open. Never
+    /// negative: once the limit has passed this is zero, which is also when the room starts
+    /// refusing answers. Read-only, like <see cref="CurrentReveal"/>; a screen asking the time
+    /// does not move it.
+    /// </summary>
+    public TimeSpan? Remaining
+    {
+        get
+        {
+            lock (_gate)
+            {
+                if (_phase != RoomPhase.Question) return null;
+                var left = _questionLimit - (_clock.GetUtcNow() - _questionStartedAt);
+                return left > TimeSpan.Zero ? left : TimeSpan.Zero;
+            }
+        }
+    }
+
     /// <summary>The reveal being shown, or null outside the Reveal phase. Read-only: unlike <see cref="CloseQuestion"/> it never changes the room.</summary>
     public RevealView? CurrentReveal { get { lock (_gate) return _phase == RoomPhase.Reveal ? _reveal : null; } }
 
