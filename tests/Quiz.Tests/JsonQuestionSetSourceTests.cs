@@ -95,14 +95,34 @@ public sealed class JsonQuestionSetSourceTests : IDisposable
     }
 
     [Fact]
-    public void A_question_whose_correct_marker_is_not_among_its_options_throws()
+    public void A_question_with_too_few_options_throws()
     {
-        // Only hearts and diamonds are offered, but the answer is spades.
-        Write("bad.json", SetJson("bad", i => QuestionJson($"bad-{i}", correct: "spades", options: 2)));
+        Write("bad.json", SetJson("bad", i => QuestionJson($"bad-{i}", correct: "hearts", options: 2)));
 
         var ex = Assert.Throws<InvalidOperationException>(() => new JsonQuestionSetSource(_dir));
 
         Assert.Contains("bad.json", ex.Message);
+        Assert.Contains("needs 4 options", ex.Message);
+    }
+
+    [Fact]
+    public void An_option_with_no_marker_throws_naming_the_file()
+    {
+        Write("nomarker.json", SetJson("nomarker",
+            i => QuestionJson($"nm-{i}").Replace("""{ "marker": "hearts", "text""", """{ "text""")));
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new JsonQuestionSetSource(_dir));
+
+        Assert.Contains("nomarker.json", ex.Message);
+        Assert.Contains("no marker", ex.Message);
+    }
+
+    [Fact]
+    public void An_empty_directory_throws()
+    {
+        var ex = Assert.Throws<InvalidOperationException>(() => new JsonQuestionSetSource(_dir));
+
+        Assert.Contains("No question sets", ex.Message);
     }
 
     [Fact]

@@ -34,6 +34,8 @@ public sealed class JsonQuestionSetSource : IQuestionSetSource
                 throw Invalid(file, $"duplicate set id '{set.Id}'");
             sets.Add(set);
         }
+        if (sets.Count == 0)
+            throw new InvalidOperationException($"No question sets (*.json) found in {directory}");
         _sets = sets;
     }
 
@@ -77,6 +79,8 @@ public sealed class JsonQuestionSetSource : IQuestionSetSource
         var options = q.Options ?? [];
         if (options.Count != OptionsPerQuestion)
             throw Invalid(file, $"question '{q.Id}' needs {OptionsPerQuestion} options, found {options.Count}");
+        if (options.Any(o => o.Marker is null))
+            throw Invalid(file, $"question '{q.Id}' has an option with no marker");
         if (options.Select(o => o.Marker).Distinct().Count() != OptionsPerQuestion)
             throw Invalid(file, $"question '{q.Id}' must use each marker exactly once");
         if (options.Any(o => string.IsNullOrWhiteSpace(o.Text)))
@@ -84,7 +88,7 @@ public sealed class JsonQuestionSetSource : IQuestionSetSource
         if (q.Correct is not { } correct || options.All(o => o.Marker != correct))
             throw Invalid(file, $"question '{q.Id}' has a correct marker that is not among its options");
 
-        return new Question(q.Id, q.Type, q.Text, options.Select(o => new Option(o.Marker, o.Text!)).ToList(), correct);
+        return new Question(q.Id, q.Type, q.Text, options.Select(o => new Option(o.Marker!.Value, o.Text!)).ToList(), correct);
     }
 
     private static InvalidOperationException Invalid(string file, string problem) => new($"{file}: {problem}");
@@ -109,7 +113,7 @@ public sealed class JsonQuestionSetSource : IQuestionSetSource
 
     private sealed class OptionDto
     {
-        public Marker Marker { get; init; }
+        public Marker? Marker { get; init; }
         public string? Text { get; init; }
     }
 }

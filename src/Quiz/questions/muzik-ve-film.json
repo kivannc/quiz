@@ -55,7 +55,7 @@
       "options": [
         {
           "marker": "hearts",
-          "text": "Tarkan"
+          "text": "Mimar Sinan"
         },
         {
           "marker": "diamonds",
@@ -166,7 +166,7 @@
     },
     {
       "id": "mf-08",
-      "text": "Balık Nemo'yu aramaya çıkan karakter Marlin hangi hayvandır?",
+      "text": "Marlin ve Nemo hangi hayvandır?",
       "options": [
         {
           "marker": "hearts",
