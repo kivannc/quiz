@@ -321,6 +321,59 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
+    public async Task A_screen_that_opens_a_second_room_is_no_longer_painted_by_the_first()
+    {
+        var factory = Factory();
+        var screen = await Connect(factory);
+        var first = await Open(screen);
+        var second = await Open(screen);
+
+        var states = RoomState(screen);
+        var questions = new Inbox<JsonElement>(screen, "QuestionStarted");
+
+        // The room it left carries on without it: someone joins that room, and another screen starts it.
+        var stray = await Connect(factory);
+        Assert.Equal("joined", await stray.InvokeAsync<string>("Join", first, "Eski"));
+        var otherScreen = await Connect(factory);
+        await otherScreen.InvokeAsync("StartRound", first, HostKey);
+
+        await Barrier(screen);
+        Assert.Equal(0, states.Total);    // not the host group of the room it left...
+        Assert.Equal(0, questions.Total); // ...nor that room's own group
+
+        // The room it opened is the one that reaches it now.
+        var player = await Connect(factory);
+        Assert.Equal("joined", await player.InvokeAsync<string>("Join", second, "Yeni"));
+        var state = await states.Next();
+        Assert.Equal("lobby", state.Phase);
+        Assert.Equal(1, state.Players.GetArrayLength());
+        Assert.Equal("Yeni", state.Players[0].GetProperty("name").GetString());
+    }
+
+    [Fact]
+    public async Task A_phone_that_joins_a_second_room_is_no_longer_sent_the_first_one_s_question()
+    {
+        var factory = Factory();
+        var firstScreen = await Connect(factory);
+        var first = await Open(firstScreen);
+        var secondScreen = await Connect(factory);
+        var second = await Open(secondScreen);
+
+        var phone = await Connect(factory);
+        Assert.Equal("joined", await phone.InvokeAsync<string>("Join", first, "Ada"));
+        Assert.Equal("joined", await phone.InvokeAsync<string>("Join", second, "Ada"));
+
+        var questions = new Inbox<JsonElement>(phone, "QuestionStarted");
+        await firstScreen.InvokeAsync("StartRound", first, HostKey);
+        await Barrier(phone);
+        Assert.Equal(0, questions.Total);
+
+        await secondScreen.InvokeAsync("StartRound", second, HostKey);
+        Assert.Equal(0, (await questions.Next()).GetProperty("index").GetInt32());
+        Assert.Equal(1, questions.Total);
+    }
+
+    [Fact]
     public async Task Players_receive_QuestionStarted_but_never_the_correct_marker()
     {
         var factory = Factory();

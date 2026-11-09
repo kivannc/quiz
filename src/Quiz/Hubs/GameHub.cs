@@ -9,7 +9,10 @@ namespace Quiz.Hubs;
 ///
 /// Groups: every participant is in group <c>code</c>; host screens are also in <c>code + ":host"</c>,
 /// which is where <c>AnswerCount</c> and <c>RoomState</c> go. Every host action carries the key and re-joins
-/// the caller to both groups, so a reloaded TV page resumes simply by re-sending it.
+/// the caller to both groups, so a reloaded TV page resumes simply by re-sending it. Joining a room is also
+/// leaving the one before it: SignalR never takes a connection out of a group on its own, so without that a
+/// TV that opened a second room would still be painted by the first, and <see cref="ConnectionRooms"/> is
+/// what remembers which groups to leave.
 ///
 /// <see cref="Room"/> is strict about phases and throws when asked for something that makes no sense. A double-clicked
 /// button or a reloaded page re-sending an action is normal here, so host actions check the phase first and quietly
@@ -18,6 +21,7 @@ namespace Quiz.Hubs;
 public sealed class GameHub(
     RoomStore rooms,
     IHostAuthorizer hosts,
+    ConnectionRooms connections,
     JoinThrottle joinThrottle,
     [FromKeyedServices(GameHub.CreateThrottleKey)] JoinThrottle createThrottle) : Hub
 {
@@ -57,7 +61,7 @@ public sealed class GameHub(
         var result = room.Join(name, Context.ConnectionId);
         if (result is JoinResult.Joined or JoinResult.Rejoined)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, code);
+            await JoinPlayerGroup(code);
             var seat = room.Players.First(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
             await Clients.Caller.SendAsync("Seated", seat.Name, seat.Score);
             await Resync(room);
@@ -161,6 +165,14 @@ public sealed class GameHub(
         await SendRoomState(room);
     }
 
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        // SignalR drops a gone connection's groups itself, so this only clears the mirror of them, which
+        // would otherwise keep an entry for every connection the process has ever seen.
+        connections.Forget(Context.ConnectionId);
+        return base.OnDisconnectedAsync(exception);
+    }
+
     // Throttles are per client address, so opening a fresh connection buys no new allowance. Program.cs makes the
     // address the real client's behind the reverse proxy. Without an address (never expected) fall back to the connection.
     private string ClientKey() =>
@@ -187,8 +199,33 @@ public sealed class GameHub(
 
     private async Task JoinHostGroups(string code)
     {
+        // Driving a room is becoming its host screen, so whatever room this connection was the host screen
+        // of before, it is not any more: leave that one's groups before joining these. Re-joining the room
+        // it is already hosting reports no move and leaves nothing.
+        if (connections.Host(Context.ConnectionId, code) is { } left)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, HostGroup(left));
+            await LeaveRoomGroup(left);
+        }
+
         await Groups.AddToGroupAsync(Context.ConnectionId, code);
         await Groups.AddToGroupAsync(Context.ConnectionId, HostGroup(code));
+    }
+
+    /// <summary>Seats this connection in the room's group, leaving the one it was playing in first.</summary>
+    private async Task JoinPlayerGroup(string code)
+    {
+        if (connections.Play(Context.ConnectionId, code) is { } left) await LeaveRoomGroup(left);
+        await Groups.AddToGroupAsync(Context.ConnectionId, code);
+    }
+
+    // The room's own group carries the question and the reveal, and a connection can be in it as a player
+    // or as the host screen. Only leave it once neither of those points at that room any more.
+    private async Task LeaveRoomGroup(string code)
+    {
+        var id = Context.ConnectionId;
+        if (connections.Playing(id) == code || connections.Hosting(id) == code) return;
+        await Groups.RemoveFromGroupAsync(id, code);
     }
 
     private async Task AnnounceQuestion(Room room)

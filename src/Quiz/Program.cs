@@ -35,6 +35,7 @@ builder.Services.AddSingleton(options);
 builder.Services.AddSingleton<IQuestionSetSource>(
     new JsonQuestionSetSource(Path.Combine(builder.Environment.ContentRootPath, "questions")));
 builder.Services.AddSingleton<RoomStore>();
+builder.Services.AddSingleton<ConnectionRooms>();
 builder.Services.AddSingleton<IHostAuthorizer>(new KeyHostAuthorizer(hostKey));
 builder.Services.AddSingleton(sp => new JoinThrottle(sp.GetRequiredService<TimeProvider>(), options.JoinAttemptsPerMinute));
 builder.Services.AddKeyedSingleton(GameHub.CreateThrottleKey, createThrottle);
