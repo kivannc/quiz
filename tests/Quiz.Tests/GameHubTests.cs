@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Quiz.Game;
+using Quiz.Hubs;
 
 namespace Quiz.Tests;
 
@@ -341,9 +343,40 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
-    public async Task ResumeHost_says_the_room_is_paused_and_keeps_the_time_that_is_left()
+    public async Task A_pause_out_of_phase_is_ignored_quietly_and_tells_nobody()
     {
         var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var paused = new Inbox<bool>(phone, "Paused");
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+
+        // In the lobby there is no clock to stop, so this must not reach the phones: a buzzer locked
+        // before the round even starts would be the room lying about itself.
+        await host.InvokeAsync("PauseRound", code, HostKey);
+        await host.InvokeAsync("ResumeRound", code, HostKey);
+        await Barrier(phone);
+        Assert.Equal(0, paused.Total);
+
+        // The round still starts normally, and pausing works once there is something to pause.
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await host.InvokeAsync("PauseRound", code, HostKey);
+        Assert.True(await paused.Next());
+
+        // Nor during the reveal, where the question's clock is already over.
+        await host.InvokeAsync("ResumeRound", code, HostKey);
+        Assert.False(await paused.Next());
+        await host.InvokeAsync("CloseQuestion", code, HostKey);
+        await host.InvokeAsync("PauseRound", code, HostKey);
+        await Barrier(phone);
+        Assert.Equal(2, paused.Total); // the true and the false from the open question, and nothing else
+    }
+
+    [Fact]
+    public async Task ResumeHost_says_the_room_is_paused_and_keeps_the_time_that_is_left()
+    {
+        var factory = Factory(("QUIZ_QUESTION_SECONDS", "30"));
         var host = await Connect(factory);
         var code = await Open(host);
         var phone = await Connect(factory);
@@ -357,7 +390,17 @@ public sealed class GameHubTests : IDisposable
         var paused = new Inbox<bool>(reloaded, "Paused");
         await reloaded.InvokeAsync("ResumeHost", code, HostKey);
 
-        Assert.Equal(0, (await questions.Next()).GetProperty("index").GetInt32());
+        var resumed = await questions.Next();
+        Assert.Equal(0, resumed.GetProperty("index").GetInt32());
+        var left = resumed.GetProperty("limitSeconds").GetInt32();
+        Assert.InRange(left, 25, 30); // what the pause stopped at, give or take the test's own moments
+        Assert.True(await paused.Next());
+
+        // And it is not being spent: two seconds of real time later, the room says the same number.
+        // This is the whole claim — a clock that was only frozen on the screen would have moved.
+        await Task.Delay(TimeSpan.FromSeconds(2));
+        await reloaded.InvokeAsync("ResumeHost", code, HostKey);
+        Assert.Equal(left, (await questions.Next()).GetProperty("limitSeconds").GetInt32());
         Assert.True(await paused.Next());
 
         // A phone arriving now is told as well, so its buzzers are not left looking live.
@@ -386,15 +429,48 @@ public sealed class GameHubTests : IDisposable
         Assert.Contains("no-such-room", (await Refused(() => phone.InvokeAsync<string>("Join", code, "Ada"))).Message);
         Assert.Contains("no-such-room", (await Refused(() => host.InvokeAsync("ResumeHost", code, HostKey))).Message);
 
-        // Nothing is left listening to the code: the screen opens another room and the old members,
-        // still connected, hear only what belongs to the room they are actually in.
-        var questionsOnThePhone = new Inbox<JsonElement>(phone, "QuestionStarted");
-        var next = await Open(host);
-        var newPhone = await Connect(factory);
-        await newPhone.InvokeAsync<string>("Join", next, "Bob");
-        await host.InvokeAsync("StartRound", next, HostKey);
+        // And nothing is left listening to the code, which is free to be drawn again: the ledger has
+        // forgotten both connections, and a send to the groups it named reaches nobody.
+        var connections = factory.Services.GetRequiredService<ConnectionRooms>();
+        Assert.Null(connections.Playing(phone.ConnectionId!));
+        Assert.Null(connections.Hosting(host.ConnectionId!));
+        await factory.Services.GetRequiredService<IHubContext<GameHub>>().Clients.Group(code).SendAsync("RoomClosed");
         await Barrier(phone);
-        Assert.Equal(0, questionsOnThePhone.Total);
+        Assert.Equal(1, closedOnThePhone.Total);
+    }
+
+    [Fact]
+    public async Task A_room_the_sweeper_reclaims_ends_the_way_a_closed_one_does()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var closed = new Inbox<object?>(record => phone.On("RoomClosed", () => record(null)));
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+
+        // Exactly what IdleRoomSweeper does with a room nobody has touched: take it out of the store,
+        // then end it on the wire. A room that simply vanished would leave this phone on a dead
+        // question, listening to a code that is free to be drawn again.
+        var services = factory.Services;
+        var swept = services.GetRequiredService<RoomStore>().Remove(code);
+        Assert.True(swept);
+        var hub = services.GetRequiredService<IHubContext<GameHub>>();
+        await GameHub.Ended(hub.Clients, hub.Groups, services.GetRequiredService<ConnectionRooms>(), code);
+
+        await closed.Next();
+
+        // Nothing is left pointing at that code: the ledger has forgotten both connections, and a
+        // send to the groups it named now reaches nobody. Asserting it this way, rather than by
+        // opening another room, is deliberate — a new room draws a different code, so it would not
+        // notice a connection left behind in the old one's group.
+        var connections = services.GetRequiredService<ConnectionRooms>();
+        Assert.Null(connections.Playing(phone.ConnectionId!));
+        Assert.Null(connections.Hosting(host.ConnectionId!));
+        await hub.Clients.Group(code).SendAsync("RoomClosed");
+        await Barrier(phone);
+        Assert.Equal(1, closed.Total);
     }
 
     [Fact]

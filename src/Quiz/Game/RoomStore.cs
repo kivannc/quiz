@@ -58,16 +58,20 @@ public sealed class RoomStore(IQuestionSetSource sets, TimeProvider clock, RoomO
     /// </summary>
     public bool Remove(string code) => code is not null && _rooms.TryRemove(code, out _);
 
-    /// <summary>Removes rooms with no activity for longer than the idle timeout and returns how many. Called on a schedule.</summary>
-    public int SweepIdle()
+    /// <summary>
+    /// Removes rooms with no activity for longer than the idle timeout and returns their codes, so that
+    /// whoever called can end them the way <c>CloseRoom</c> does: a room that goes without telling anyone
+    /// leaves phones listening to a code that is free to be drawn again. Called on a schedule.
+    /// </summary>
+    public IReadOnlyList<string> SweepIdle()
     {
         lock (_gate)
         {
             var now = clock.GetUtcNow();
-            var removed = 0;
+            var removed = new List<string>();
             foreach (var (code, room) in _rooms)
             {
-                if (now - room.LastActivity > options.IdleTimeout && _rooms.TryRemove(code, out _)) removed++;
+                if (now - room.LastActivity > options.IdleTimeout && _rooms.TryRemove(code, out _)) removed.Add(code);
             }
             return removed;
         }

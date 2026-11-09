@@ -632,6 +632,23 @@ public sealed class RoomTests
     }
 
     [Fact]
+    public void A_paused_room_stays_active_for_as_long_as_it_is_paused()
+    {
+        var room = StartedRoom("Ada");
+        Assert.True(room.Pause());
+        var atThePause = room.LastActivity;
+
+        _clock.Advance(TimeSpan.FromHours(2));
+        Assert.Equal(_clock.GetUtcNow(), room.LastActivity); // still being waited for, not abandoned
+        Assert.True(room.LastActivity > atThePause);
+
+        Assert.True(room.Resume());
+        var atTheResume = room.LastActivity;
+        _clock.Advance(TimeSpan.FromHours(2));
+        Assert.Equal(atTheResume, room.LastActivity);        // running again, and ageing again
+    }
+
+    [Fact]
     public void Refused_calls_do_not_move_LastActivity()
     {
         var room = NewRoom(maxPlayers: 1);

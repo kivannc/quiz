@@ -1,9 +1,19 @@
+using Microsoft.AspNetCore.SignalR;
 using Quiz.Game;
+using Quiz.Hubs;
 
 namespace Quiz.Hosting;
 
-/// <summary>Once a minute, drops rooms nobody has touched for longer than the idle timeout.</summary>
-public sealed class IdleRoomSweeper(RoomStore rooms, ILogger<IdleRoomSweeper> log) : BackgroundService
+/// <summary>
+/// Once a minute, drops rooms nobody has touched for longer than the idle timeout — and ends each one
+/// the way the host closing it would, so the phones of an abandoned room are told it closed instead of
+/// being left on a dead question, and nothing is still listening to a code that is free again.
+/// </summary>
+public sealed class IdleRoomSweeper(
+    RoomStore rooms,
+    IHubContext<GameHub> hub,
+    ConnectionRooms connections,
+    ILogger<IdleRoomSweeper> log) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -13,7 +23,8 @@ public sealed class IdleRoomSweeper(RoomStore rooms, ILogger<IdleRoomSweeper> lo
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
                 var removed = rooms.SweepIdle();
-                if (removed > 0) log.LogInformation("Swept {Count} idle room(s)", removed);
+                foreach (var code in removed) await GameHub.Ended(hub.Clients, hub.Groups, connections, code);
+                if (removed.Count > 0) log.LogInformation("Swept {Count} idle room(s)", removed.Count);
             }
         }
         catch (OperationCanceledException)

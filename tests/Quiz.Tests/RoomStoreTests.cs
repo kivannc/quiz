@@ -114,7 +114,8 @@ public sealed class RoomStoreTests
         _clock.Advance(Idle + TimeSpan.FromSeconds(1));
         var removed = store.SweepIdle();
 
-        Assert.Equal(1, removed);
+        // The codes are reported, not just counted: whoever swept has to tell those rooms they ended.
+        Assert.Equal(code, Assert.Single(removed));
         Assert.Equal(0, store.Count);
         Assert.Null(store.Find(code));
         // The freed slot is usable again.
@@ -129,7 +130,7 @@ public sealed class RoomStoreTests
 
         _clock.Advance(Idle);
 
-        Assert.Equal(0, store.SweepIdle());
+        Assert.Empty(store.SweepIdle());
         Assert.NotNull(store.Find(code));
     }
 
@@ -146,9 +147,31 @@ public sealed class RoomStoreTests
         Assert.True(active.Start());              // activity just before the sweep
         _clock.Advance(TimeSpan.FromMinutes(2));  // idle room is past the timeout; the active one is 2 min old
 
-        Assert.Equal(1, store.SweepIdle());
+        Assert.Equal(idleCode, Assert.Single(store.SweepIdle()));
         Assert.Null(store.Find(idleCode));
         Assert.NotNull(store.Find(activeCode));
+    }
+
+    [Fact]
+    public void A_paused_room_is_not_swept_however_long_the_pause_lasts()
+    {
+        var store = NewStore();
+        var code = CodeOf(store.Create("test"));
+        var room = store.Find(code)!;
+        room.Join("Ada", "c1");
+        Assert.True(room.Start());
+        Assert.True(room.Pause());
+
+        // Everyone has been away from the table for far longer than the idle timeout.
+        _clock.Advance(Idle * 3);
+        Assert.Empty(store.SweepIdle());
+        Assert.NotNull(store.Find(code));
+
+        // Once it is running again it ages like any other room.
+        Assert.True(room.Resume());
+        _clock.Advance(Idle * 3);
+        Assert.Equal(code, Assert.Single(store.SweepIdle()));
+        Assert.Null(store.Find(code));
     }
 }
 

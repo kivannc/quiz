@@ -273,8 +273,12 @@ function render() {
   notice.textContent = view === 'join' ? (state.connection || state.notice) : '';
   notice.hidden = notice.textContent === '';
 
-  el('play-status').textContent = state.connection || state.error || statusText();
-  el('play-status').classList.toggle('error', Boolean(!state.connection && state.error));
+  // A tap that raced the pause is refused, and the refusal is true — but "that answer did not count"
+  // under a locked buzzer reads as a broken phone, when what actually happened is on the TV and this
+  // phone already knows it. While the room is paused, the room's state is the message.
+  const failure = state.paused ? '' : state.error;
+  el('play-status').textContent = state.connection || failure || statusText();
+  el('play-status').classList.toggle('error', Boolean(!state.connection && failure));
 
   const picked = state.chosen ?? state.pending;
   for (const buzzer of el('buzzers').querySelectorAll('.buzz')) {

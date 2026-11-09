@@ -155,9 +155,13 @@ function freezeCountdown() {
   drawClock(frozen);
 }
 
-/* Starts it again with exactly what was left, never with the whole limit. */
+/*
+ * Starts it again with exactly what was left, never with the whole limit — and starts it even when
+ * what was left is nothing, because a question frozen at zero still has to close, and the next tick
+ * is what does it. This screen has no other way to close a question by hand.
+ */
 function thawCountdown() {
-  if (!frozen || !state.question) return;
+  if (!state.question) return;
   const left = frozen;
   frozen = 0;
   startCountdown(state.question.index, Date.now() + left);
@@ -253,8 +257,8 @@ conn.on('AnswerCount', (answered, total) => {
 
   // Nobody is left to wait for, so there is nothing for the rest of the limit to buy: close after a
   // beat instead. The countdown stays the backstop — a phone that went to sleep never answers, and
-  // the question still closes at zero. Anything short of the full room drops the beat again, which
-  // is what a player joining and raising the total means.
+  // the question still closes at zero. Any other count leaves the beat unarmed, which in practice
+  // means the 0-of-n a question opens with: nobody can join a round in progress and raise the total.
   if (everyoneIsIn()) armEveryoneIn();
   else cancelEveryoneIn();
 });

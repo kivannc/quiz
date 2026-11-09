@@ -72,8 +72,15 @@ public sealed class Room
 
     public RoomPhase Phase { get { lock (_gate) return _phase; } }
 
-    /// <summary>The last time an accepted call changed the room. Refused calls do not count.</summary>
-    public DateTimeOffset LastActivity { get { lock (_gate) return _lastActivity; } }
+    /// <summary>
+    /// The last time an accepted call changed the room. Refused calls do not count. A paused room counts
+    /// as active for as long as the pause lasts: a long walk away from the table is what pausing is for,
+    /// and the idle sweep must not take the room, the scores and the code while everyone is in the kitchen.
+    /// </summary>
+    public DateTimeOffset LastActivity
+    {
+        get { lock (_gate) return _pausedAt is not null ? _clock.GetUtcNow() : _lastActivity; }
+    }
 
     public IReadOnlyList<PlayerView> Players { get { lock (_gate) return _seats.Select(s => new PlayerView(s.Name, s.Score)).ToList(); } }
 

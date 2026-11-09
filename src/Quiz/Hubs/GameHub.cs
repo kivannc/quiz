@@ -202,14 +202,29 @@ public sealed class GameHub(
         _ = HostRoom(code, hostKey); // authorizes, and says no-such-room if it has already gone
         if (!rooms.Remove(code)) return;
 
-        await Clients.Group(code).SendAsync("RoomClosed");
+        await Ended(Clients, Groups, connections, code);
+    }
 
-        // The groups outlive the room they were named after, and this code may be drawn again within
-        // the hour. Empty them, and the ledger with them, so nobody is left listening to a dead room.
+    /// <summary>
+    /// What the end of a room looks like on the wire, wherever it is ended from — the host closing it, or
+    /// the sweeper reclaiming one nobody is sitting at. Everyone in it is told, and then the groups named
+    /// after the code are emptied, because the groups outlive the room and the code may be drawn again
+    /// within the hour: without this, those phones would be sent the next room's questions while seated
+    /// in nothing. Call it only once the room is out of the store.
+    ///
+    /// Public because its other caller is <c>IdleRoomSweeper</c>, which runs on a timer where nothing
+    /// else can reach it: the two ways a room can end have to stay the same way, and this is what the
+    /// tests hold them to.
+    /// </summary>
+    // IHubClients<IClientProxy> is the shape both a hub's own Clients and an IHubContext's have in common.
+    public static async Task Ended(IHubClients<IClientProxy> clients, IGroupManager groups, ConnectionRooms connections, string code)
+    {
+        await clients.Group(code).SendAsync("RoomClosed");
+
         foreach (var id in connections.ForgetRoom(code))
         {
-            await Groups.RemoveFromGroupAsync(id, code);
-            await Groups.RemoveFromGroupAsync(id, HostGroup(code));
+            await groups.RemoveFromGroupAsync(id, code);
+            await groups.RemoveFromGroupAsync(id, HostGroup(code));
         }
     }
 
