@@ -27,6 +27,8 @@ var options = new RoomOptions(
     questionLimit: TimeSpan.FromSeconds(Setting("QUIZ_QUESTION_SECONDS", 20)),
     joinAttemptsPerMinute: Setting("QUIZ_JOIN_ATTEMPTS_PER_MINUTE", 20));
 var createAttemptsPerMinute = Setting("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", 5);
+// Built here, not lazily in DI, so a bad value stops startup like every other limit.
+var createThrottle = new JoinThrottle(TimeProvider.System, createAttemptsPerMinute);
 
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton(options);
@@ -35,8 +37,7 @@ builder.Services.AddSingleton<IQuestionSetSource>(
 builder.Services.AddSingleton<RoomStore>();
 builder.Services.AddSingleton<IHostAuthorizer>(new KeyHostAuthorizer(hostKey));
 builder.Services.AddSingleton(sp => new JoinThrottle(sp.GetRequiredService<TimeProvider>(), options.JoinAttemptsPerMinute));
-builder.Services.AddKeyedSingleton(GameHub.CreateThrottleKey,
-    (sp, _) => new JoinThrottle(sp.GetRequiredService<TimeProvider>(), createAttemptsPerMinute));
+builder.Services.AddKeyedSingleton(GameHub.CreateThrottleKey, createThrottle);
 builder.Services.AddHostedService<IdleRoomSweeper>();
 
 // Markers and phases travel as camelCase words ("hearts", "lobby"), matching the question files.
@@ -49,6 +50,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(o =>
     // Trusting X-Forwarded-For from any sender is safe here only because this container publishes no ports:
     // the reverse proxy is the only thing that can reach it, which the deployment design guarantees, and it
     // sets the header itself. Without this every player would share the proxy's address and one throttle bucket.
+    // Exactly one proxy hop: the middleware reads the header right to left, so with a limit of 1 only the entry the
+    // proxy appended is used and a client cannot pick its own address. Raise this only if a second hop is added.
+    o.ForwardLimit = 1;
     o.KnownNetworks.Clear();
     o.KnownProxies.Clear();
 });

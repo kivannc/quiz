@@ -74,8 +74,11 @@ public sealed class Room
     /// <summary>Players best score first; equal scores stay in join order (the same ordering <see cref="CloseQuestion"/> reports).</summary>
     public IReadOnlyList<PlayerView> Standings
     {
-        get { lock (_gate) return _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList(); }
+        get { lock (_gate) return _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList().AsReadOnly(); }
     }
+
+    /// <summary>The reveal being shown, or null outside the Reveal phase. Read-only: unlike <see cref="CloseQuestion"/> it never changes the room.</summary>
+    public RevealView? CurrentReveal { get { lock (_gate) return _phase == RoomPhase.Reveal ? _reveal : null; } }
 
     public QuestionView? CurrentQuestion
     {
@@ -184,13 +187,11 @@ public sealed class Room
             // Only mutate scores once everything that can throw has run.
             foreach (var (seat, answer) in _answers) seat.Score += answer.Points;
 
-            // OrderByDescending is stable, so equal scores stay in join order.
-            var standings = _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList();
 
             _reveal = new RevealView(
                 _set.Questions[_questionIndex].Correct,
                 new ReadOnlyDictionary<Marker, int>(distribution),
-                standings.AsReadOnly());
+                Standings); // the lock is reentrant; Standings owns the ordering rule
             _phase = RoomPhase.Reveal;
             Touch();
             return _reveal;

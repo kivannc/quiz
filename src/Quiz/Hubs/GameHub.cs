@@ -45,8 +45,8 @@ public sealed class GameHub(
         return code;
     }
 
-    /// <summary>Seats a player. Returns the <see cref="JoinResult"/> name; a refused join (RoomFull, RoundInProgress) is a result, not an error.</summary>
-    public async Task<string> Join(string code, string name)
+    /// <summary>Seats a player. Returns the <see cref="JoinResult"/> (camelCase on the wire); a refused join (RoomFull, RoundInProgress) is a result, not an error.</summary>
+    public async Task<JoinResult> Join(string code, string name)
     {
         if (!joinThrottle.Allow(ClientKey())) throw new HubException("throttled");
         var room = RoomOrThrow(code);
@@ -63,7 +63,7 @@ public sealed class GameHub(
             await Resync(room);
             await SendRoomState(room);
         }
-        return result.ToString();
+        return result;
     }
 
     public async Task StartRound(string code, string hostKey)
@@ -121,15 +121,12 @@ public sealed class GameHub(
     // A phone that joins or rejoins mid-round is shown what is on screen now, to that connection only.
     private async Task Resync(Room room)
     {
-        switch (room.Phase)
-        {
-            case RoomPhase.Question:
-                await Clients.Caller.SendAsync("QuestionStarted", room.CurrentQuestion);
-                break;
-            case RoomPhase.Reveal when Try(room.CloseQuestion, out var reveal): // repeats the current reveal; no state changes
-                await Clients.Caller.SendAsync("Revealed", reveal);
-                break;
-        }
+        // Read-only accessors only: nothing on a player's code path may change the game. Each returns null if the
+        // phase moved on since the room was looked up, in which case there is simply nothing to resync.
+        if (room.CurrentReveal is { } reveal)
+            await Clients.Caller.SendAsync("Revealed", reveal);
+        else if (room.Phase == RoomPhase.Question && room.CurrentQuestion is { } question)
+            await Clients.Caller.SendAsync("QuestionStarted", question);
     }
 
     private Room RoomOrThrow(string code) => rooms.Find(code) ?? throw new HubException("no-such-room");

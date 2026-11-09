@@ -114,7 +114,7 @@ public sealed class GameHubTests : IDisposable
         var questions = new Inbox<JsonElement>(player, "QuestionStarted");
         var revealed = new Inbox<JsonElement>(player, "Revealed");
 
-        Assert.Equal("Joined", await player.InvokeAsync<string>("Join", code, "Ada"));
+        Assert.Equal("joined", await player.InvokeAsync<string>("Join", code, "Ada"));
         Assert.Equal(("Ada", 0), await seated.Next());
 
         // The host group heard about the lobby, with the new player in it.
@@ -162,10 +162,11 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
-    public void A_sixteen_character_host_key_is_enough_to_start()
+    public async Task A_sixteen_character_host_key_is_enough_to_start()
     {
         using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(b => b.UseSetting("QUIZ_HOST_KEY", "sixteen-chars-ok"));
         using var client = factory.CreateClient();
+        Assert.Equal(System.Net.HttpStatusCode.OK, (await client.GetAsync("/healthz")).StatusCode);
     }
 
     [Fact]
@@ -176,8 +177,9 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
-    public async Task CreateRoom_attempts_are_throttled_per_connection()
+    public async Task CreateRoom_attempts_are_throttled_per_connection_when_the_client_address_is_unknown()
     {
+        // TestServer supplies no remote address, so the throttle falls back to the connection id here. With a known address the buckets are per address (see the X-Forwarded-For tests).
         var factory = Factory(("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", "3"));
         var attacker = await Connect(factory);
         for (var i = 0; i < 3; i++)
@@ -219,8 +221,9 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
-    public async Task Join_attempts_are_throttled_per_connection()
+    public async Task Join_attempts_are_throttled_per_connection_when_the_client_address_is_unknown()
     {
+        // Falls back to the connection id because TestServer supplies no remote address.
         var player = await Connect(Factory(("QUIZ_JOIN_ATTEMPTS_PER_MINUTE", "2")));
         for (var i = 0; i < 2; i++)
             Assert.Contains("no-such-room", (await Refused(() => player.InvokeAsync<string>("Join", "1234", "Ada"))).Message);
@@ -234,11 +237,11 @@ public sealed class GameHubTests : IDisposable
         var host = await Connect(factory);
         var code = await Open(host);
         var first = await Connect(factory);
-        Assert.Equal("Joined", await first.InvokeAsync<string>("Join", code, "Ada"));
+        Assert.Equal("joined", await first.InvokeAsync<string>("Join", code, "Ada"));
 
         var second = await Connect(factory);
         var seated = Seated(second);
-        Assert.Equal("RoomFull", await second.InvokeAsync<string>("Join", code, "Bob"));
+        Assert.Equal("roomFull", await second.InvokeAsync<string>("Join", code, "Bob"));
         await Barrier(second);
         Assert.Equal(0, seated.Total);
 
@@ -331,10 +334,11 @@ public sealed class GameHubTests : IDisposable
         var q = await raw.Next();
         Assert.Equal(4, q.GetProperty("options").GetArrayLength());
         Assert.Equal(0, q.GetProperty("index").GetInt32());
-        var text = q.GetRawText();
-        Assert.DoesNotContain("correct", text, StringComparison.OrdinalIgnoreCase);
-        foreach (var property in q.EnumerateObject())
-            Assert.DoesNotContain("correct", property.Name, StringComparison.OrdinalIgnoreCase);
+        // The exact property set, so a leak under any name (answer, isRight, ...) fails here.
+        Assert.Equal(["index", "total", "text", "options", "limitSeconds"], q.EnumerateObject().Select(p => p.Name));
+        foreach (var option in q.GetProperty("options").EnumerateArray())
+            Assert.Equal(["marker", "text"], option.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(["hearts", "diamonds", "clubs", "spades"], q.GetProperty("options").EnumerateArray().Select(o => o.GetProperty("marker").GetString()));
     }
 
     [Fact]
@@ -496,7 +500,7 @@ public sealed class GameHubTests : IDisposable
         // The phone reloads: a new connection, the same name.
         var reloaded = await Connect(factory);
         var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
-        Assert.Equal("Rejoined", await reloaded.InvokeAsync<string>("Join", code, "Ada"));
+        Assert.Equal("rejoined", await reloaded.InvokeAsync<string>("Join", code, "Ada"));
         var q = await questions.Next();
         Assert.Equal(0, q.GetProperty("index").GetInt32());
         Assert.Equal(4, q.GetProperty("options").GetArrayLength());
@@ -524,6 +528,7 @@ public sealed class GameHubTests : IDisposable
         var reveal = await reveals.Next();
         Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
         Assert.True(reveal.GetProperty("standings")[0].GetProperty("score").GetInt32() > 0);
+        await Barrier(reloaded);
         Assert.Equal(0, questions.Total);
     }
 
@@ -552,8 +557,44 @@ public sealed class GameHubTests : IDisposable
         var player = await Connect(factory);
         var name = new string('a', length);
         if (accepted)
-            Assert.Equal("Joined", await player.InvokeAsync<string>("Join", code, name));
+            Assert.Equal("joined", await player.InvokeAsync<string>("Join", code, name));
         else
             Assert.Contains("invalid-name", (await Refused(() => player.InvokeAsync<string>("Join", code, name))).Message);
+    }
+
+    [Fact]
+    public async Task The_reveal_has_a_pinned_shape_with_camelCase_marker_keys_in_the_distribution()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        var revealed = new Inbox<JsonElement>(player, "Revealed");
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await player.InvokeAsync("Answer", code, "clubs");
+        await host.InvokeAsync("CloseQuestion", code, HostKey);
+
+        var reveal = await revealed.Next();
+        Assert.Equal(["correct", "distribution", "standings"], reveal.EnumerateObject().Select(p => p.Name));
+        var distribution = reveal.GetProperty("distribution");
+        Assert.Equal(["hearts", "diamonds", "clubs", "spades"], distribution.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(1, distribution.GetProperty("clubs").GetInt32());
+        Assert.Equal(0, distribution.GetProperty("hearts").GetInt32());
+        Assert.Equal(["name", "score"], reveal.GetProperty("standings")[0].EnumerateObject().Select(p => p.Name));
+    }
+
+    [Theory]
+    [InlineData("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", "0")]
+    [InlineData("QUIZ_JOIN_ATTEMPTS_PER_MINUTE", "0")]
+    [InlineData("QUIZ_MAX_ROOMS", "0")]
+    public void A_nonsensical_limit_stops_the_app_from_starting(string setting, string value)
+    {
+        using var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(b =>
+        {
+            b.UseSetting("QUIZ_HOST_KEY", HostKey);
+            b.UseSetting(setting, value);
+        });
+        Assert.ThrowsAny<Exception>(() => factory.CreateClient());
     }
 }
