@@ -27,7 +27,9 @@ const state = {
   index: null,      // which question is open, so a reload can tell whose answer it kept
   pending: null,    // a tap on its way to the server, not yet taken
   chosen: null,     // the marker the room accepted for the current question
+  paused: false,    // the room's clock is stopped: taps are refused until it starts again
   error: '',
+  notice: '',       // something that happened rather than something that went wrong
   connection: '',
 };
 
@@ -96,11 +98,36 @@ conn.on('Seated', (name, score) => {
   render();
 });
 
+conn.on('Paused', (paused) => {
+  // The room refuses answers while it is stopped, so the buzzers say so rather than taking a tap
+  // the server would only throw away.
+  state.paused = Boolean(paused);
+  state.error = '';
+  render();
+});
+
+conn.on('RoomClosed', () => {
+  // Not an error and not a dead screen: the game ended, and this phone can join another room.
+  forget();
+  state.phase = 'join';
+  state.code = null;
+  state.name = null;
+  state.score = 0;
+  state.index = null;
+  state.pending = null;
+  state.chosen = null;
+  state.paused = false;
+  state.error = '';
+  state.notice = t('roomClosed');
+  render();
+});
+
 conn.on('QuestionStarted', (question) => {
   // The payload carries the question text and the options; this screen deliberately shows neither.
   // Its index is used only to tell this phone's own answer apart from an older one.
   state.phase = 'question';
   state.index = question.index;
+  state.paused = false;
   state.pending = null;
   state.chosen = recallTap(question.index);
   state.error = '';
@@ -110,12 +137,14 @@ conn.on('QuestionStarted', (question) => {
 conn.on('Revealed', (reveal) => {
   // The correct marker is in here too, but the TV is where the answer is read out.
   state.phase = 'closed';
+  state.paused = false;
   takeScore(reveal.standings);
   render();
 });
 
 conn.on('RoundFinished', (standings) => {
   state.phase = 'finished';
+  state.paused = false;
   takeScore(standings);
   render();
 });
@@ -187,6 +216,7 @@ el('form-join').addEventListener('submit', async (event) => {
   button.disabled = true;
   try {
     state.error = '';
+    state.notice = '';
     await join(code, name);
   } catch (error) {
     state.error = errorText(error);
@@ -197,7 +227,7 @@ el('form-join').addEventListener('submit', async (event) => {
 });
 
 async function answer(marker) {
-  if (state.phase !== 'question' || state.chosen || state.pending) return;
+  if (state.phase !== 'question' || state.paused || state.chosen || state.pending) return;
   // The tap shows at once, because a buzzer that does nothing for a moment feels broken — but it
   // only locks once the room says it took the answer. A host tab the browser has put to sleep can
   // leave a question open past its limit, and the room refuses answers that arrive after it;
@@ -237,7 +267,7 @@ function render() {
   // The join form is a screen of its own: without this a player would only learn the hub is
   // unreachable after typing a code and tapping GİR, as a generic failure.
   const notice = el('join-connection');
-  notice.textContent = view === 'join' ? state.connection : '';
+  notice.textContent = view === 'join' ? (state.connection || state.notice) : '';
   notice.hidden = notice.textContent === '';
 
   el('play-status').textContent = state.connection || state.error || statusText();
@@ -248,11 +278,14 @@ function render() {
     const marker = buzzer.dataset.marker;
     buzzer.setAttribute('aria-pressed', String(marker === picked));
     buzzer.setAttribute('aria-label', t('markerName', marker));
-    buzzer.disabled = state.phase !== 'question' || Boolean(picked);
+    buzzer.disabled = state.phase !== 'question' || state.paused || Boolean(picked);
   }
 }
 
 function statusText() {
+  // What the room is doing comes before what this phone is doing: a locked buzzer with "pick your
+  // answer" under it is the one thing a player would read as broken.
+  if (state.paused) return t('paused');
   if (state.phase === 'question') {
     if (state.chosen) return t('answerSent');
     if (state.pending) return t('answerSending');

@@ -51,6 +51,13 @@ public sealed class RoomStore(IQuestionSetSource sets, TimeProvider clock, RoomO
 
     public Room? Find(string code) => code is not null && _rooms.TryGetValue(code, out var room) ? room : null;
 
+    /// <summary>
+    /// Takes a room out of the store and frees its code, which may then be handed to a new room.
+    /// Returns whether it was still there. Lock-free like <see cref="Find"/>: removing one room
+    /// races with nothing the cap or the code draw depend on.
+    /// </summary>
+    public bool Remove(string code) => code is not null && _rooms.TryRemove(code, out _);
+
     /// <summary>Removes rooms with no activity for longer than the idle timeout and returns how many. Called on a schedule.</summary>
     public int SweepIdle()
     {

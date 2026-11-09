@@ -256,6 +256,42 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .tv .finished h1 { font-size: clamp(22px, 2.6vw, 44px); font-weight: 600; letter-spacing: .14em; margin: 0 0 .6em; text-align: center; }
 .tv .finished { gap: clamp(14px, 2vh, 28px); }
 
+/* --- paused, and the host's own controls --- */
+
+/* Big enough to read from the sofa: someone looking up has to see at once that the game is
+   waiting rather than broken, and that nothing is being lost while it waits. */
+.tv .paused-banner {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(26px, 5vw, 84px);
+  font-weight: 600;
+  letter-spacing: .2em;
+  color: var(--amber);
+}
+.tv .paused-banner[hidden] { display: none; }
+.tv .paused-banner .sub {
+  display: block;
+  font-size: clamp(11px, 1.1vw, 18px);
+  font-weight: 400;
+  letter-spacing: .14em;
+  color: var(--muted);
+  margin-top: .8em;
+}
+/* The question stays on the TV while it waits, but it is plainly not being asked right now. */
+.tv.paused .question, .tv.paused .options { opacity: .2; }
+.tv.paused .topbar .clock { color: var(--muted); }
+
+.tv .controls { display: flex; justify-content: center; gap: 10px; }
+.tv .controls[hidden] { display: none; }
+.tv .controls button { font-size: clamp(11px, 1vw, 16px); padding: 8px 18px; }
+/* Armed, the close button says what it is about to do; coral is the page's "this does something". */
+.tv .controls .danger[data-armed='true'] { color: var(--coral); border-color: var(--coral); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tv .paused-banner { animation: breathe 1.8s ease-in-out infinite; }
+  @keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+}
+
 /* ======================= the phone ======================= */
 
 .phone .inner { padding: 16px; gap: 14px; }

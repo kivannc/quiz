@@ -28,6 +28,24 @@ public sealed class ConnectionRooms
     /// <summary>Makes this connection <paramref name="code"/>'s host screen and returns the room it hosted, if that was another one.</summary>
     public string? Host(string connectionId, string code) => Move(_hosting, connectionId, code);
 
+    /// <summary>
+    /// Forgets a room that no longer exists and returns every connection that was pointing at it, as a
+    /// host screen or a seat or both, so its groups can be emptied too. An entry that moved to another
+    /// room between the read and the removal is left alone: it is already somewhere else.
+    /// </summary>
+    public IReadOnlyCollection<string> ForgetRoom(string code)
+    {
+        var gone = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var rooms in new[] { _playing, _hosting })
+        {
+            foreach (var (id, room) in rooms)
+            {
+                if (room == code && rooms.TryRemove(new KeyValuePair<string, string>(id, code))) gone.Add(id);
+            }
+        }
+        return gone;
+    }
+
     /// <summary>Drops a connection that has gone. SignalR has already dropped its groups; this is only the mirror of them.</summary>
     public void Forget(string connectionId)
     {

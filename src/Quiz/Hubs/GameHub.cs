@@ -95,6 +95,9 @@ public sealed class GameHub(
             var left = Math.Max(1, (int)(room.Remaining ?? TimeSpan.Zero).TotalSeconds);
             await Clients.Caller.SendAsync("QuestionStarted", question with { LimitSeconds = left });
             await Clients.Caller.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
+            // Only when it is: a screen starts out running, and what it was sent above is the time that
+            // is left, which a paused room has stopped spending. Without this it would spend it.
+            if (room.Paused) await Clients.Caller.SendAsync("Paused", true);
         }
         else if (room.CurrentReveal is { } reveal)
         {
@@ -165,6 +168,51 @@ public sealed class GameHub(
         await SendRoomState(room);
     }
 
+    /// <summary>
+    /// Stops the question's clock for the whole room. The room itself refuses answers while it is
+    /// stopped, so the screen and the server agree about the time; out of phase, or already paused,
+    /// this does nothing, like every other host action that does not fit.
+    /// </summary>
+    public async Task PauseRound(string code, string hostKey)
+    {
+        var room = HostRoom(code, hostKey);
+        await JoinHostGroups(code);
+        if (!room.Pause()) return;
+
+        await Clients.Group(code).SendAsync("Paused", true);
+    }
+
+    /// <summary>Starts it again with the time that was left. Resuming a room that is not paused does nothing.</summary>
+    public async Task ResumeRound(string code, string hostKey)
+    {
+        var room = HostRoom(code, hostKey);
+        await JoinHostGroups(code);
+        if (!room.Resume()) return;
+
+        await Clients.Group(code).SendAsync("Paused", false);
+    }
+
+    /// <summary>
+    /// Ends the room: the phones go back to the join screen, the screen back to its form, and the code
+    /// is free to be handed out again. Nothing is kept, so a closed room cannot be resumed — which is
+    /// why the screen asks before calling this.
+    /// </summary>
+    public async Task CloseRoom(string code, string hostKey)
+    {
+        _ = HostRoom(code, hostKey); // authorizes, and says no-such-room if it has already gone
+        if (!rooms.Remove(code)) return;
+
+        await Clients.Group(code).SendAsync("RoomClosed");
+
+        // The groups outlive the room they were named after, and this code may be drawn again within
+        // the hour. Empty them, and the ledger with them, so nobody is left listening to a dead room.
+        foreach (var id in connections.ForgetRoom(code))
+        {
+            await Groups.RemoveFromGroupAsync(id, code);
+            await Groups.RemoveFromGroupAsync(id, HostGroup(code));
+        }
+    }
+
     public override Task OnDisconnectedAsync(Exception? exception)
     {
         // SignalR drops a gone connection's groups itself, so this only clears the mirror of them, which
@@ -186,7 +234,11 @@ public sealed class GameHub(
         if (room.CurrentReveal is { } reveal)
             await Clients.Caller.SendAsync("Revealed", reveal);
         else if (room.Phase == RoomPhase.Question && room.CurrentQuestion is { } question)
+        {
             await Clients.Caller.SendAsync("QuestionStarted", question);
+            // Its buzzers would otherwise look live while the room is refusing every tap.
+            if (room.Paused) await Clients.Caller.SendAsync("Paused", true);
+        }
     }
 
     private Room RoomOrThrow(string code) => rooms.Find(code) ?? throw new HubException("no-such-room");

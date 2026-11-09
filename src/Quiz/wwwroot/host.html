@@ -51,6 +51,10 @@
 
     <!-- 3 · a question is open -->
     <section class="view" id="view-question" hidden>
+      <p class="paused-banner" id="paused-banner" hidden>
+        <span data-i18n="pausedBanner"></span>
+        <span class="sub" data-i18n="pausedHint"></span>
+      </p>
       <p class="question"><span class="caret">&gt;</span> <span id="question-text"></span><span class="block">&nbsp;</span></p>
       <div class="options" id="question-options"></div>
     </section>
@@ -73,6 +77,12 @@
         <button class="cta" type="button" id="new-room" data-i18n="newRoomButton"></button>
       </div>
     </section>
+
+    <!-- the host's controls, on this screen only: the key is what protects them -->
+    <div class="controls" id="controls" hidden>
+      <button class="ghost" type="button" id="pause" hidden></button>
+      <button class="ghost danger" type="button" id="close-room"></button>
+    </div>
 
   </div>
 </main>

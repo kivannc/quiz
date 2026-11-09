@@ -273,7 +273,7 @@ public sealed class GameHubTests : IDisposable
         var questions = new Inbox<JsonElement>(player, "QuestionStarted");
 
         var intruder = await Connect(factory);
-        foreach (var action in new[] { "StartRound", "CloseQuestion", "AdvanceQuestion" })
+        foreach (var action in new[] { "StartRound", "CloseQuestion", "AdvanceQuestion", "PauseRound", "ResumeRound", "CloseRoom" })
             Assert.Contains("forbidden", (await Refused(() => intruder.InvokeAsync(action, code, "wrong-key-wrong-key"))).Message);
 
         await Barrier(player);
@@ -288,7 +288,7 @@ public sealed class GameHubTests : IDisposable
     public async Task Host_actions_on_an_unknown_room_throw_no_such_room()
     {
         var host = await Connect(Factory());
-        foreach (var action in new[] { "StartRound", "CloseQuestion", "AdvanceQuestion" })
+        foreach (var action in new[] { "StartRound", "CloseQuestion", "AdvanceQuestion", "PauseRound", "ResumeRound", "CloseRoom" })
             Assert.Contains("no-such-room", (await Refused(() => host.InvokeAsync(action, "1234", HostKey))).Message);
         Assert.Contains("no-such-room", (await Refused(() => host.InvokeAsync("Answer", "1234", "hearts"))).Message);
     }
@@ -318,6 +318,83 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal((0, 1), await answerCounts.Next()); // the second question opening
         await player.InvokeAsync("Answer", code, "hearts");
         Assert.Equal((1, 1), await answerCounts.Next());
+    }
+
+    [Fact]
+    public async Task A_paused_room_tells_everyone_and_stops_taking_answers()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var paused = new Inbox<bool>(phone, "Paused");
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+
+        await host.InvokeAsync("PauseRound", code, HostKey);
+        Assert.True(await paused.Next());
+        Assert.False(await phone.InvokeAsync<bool>("Answer", code, "clubs"));
+
+        await host.InvokeAsync("ResumeRound", code, HostKey);
+        Assert.False(await paused.Next());
+        Assert.True(await phone.InvokeAsync<bool>("Answer", code, "clubs"));
+    }
+
+    [Fact]
+    public async Task ResumeHost_says_the_room_is_paused_and_keeps_the_time_that_is_left()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await host.InvokeAsync("PauseRound", code, HostKey);
+
+        // The TV reloads while the room is paused: a new connection, the same key.
+        var reloaded = await Connect(factory);
+        var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
+        var paused = new Inbox<bool>(reloaded, "Paused");
+        await reloaded.InvokeAsync("ResumeHost", code, HostKey);
+
+        Assert.Equal(0, (await questions.Next()).GetProperty("index").GetInt32());
+        Assert.True(await paused.Next());
+
+        // A phone arriving now is told as well, so its buzzers are not left looking live.
+        var latecomer = await Connect(factory);
+        var pausedOnThePhone = new Inbox<bool>(latecomer, "Paused");
+        await latecomer.InvokeAsync<string>("Join", code, "Ada");
+        Assert.True(await pausedOnThePhone.Next());
+    }
+
+    [Fact]
+    public async Task CloseRoom_tells_the_room_and_frees_the_code()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var closedOnThePhone = new Inbox<object?>(record => phone.On("RoomClosed", () => record(null)));
+        var closedOnTheScreen = new Inbox<object?>(record => host.On("RoomClosed", () => record(null)));
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+
+        await host.InvokeAsync("CloseRoom", code, HostKey);
+
+        await closedOnThePhone.Next();
+        await closedOnTheScreen.Next();
+        Assert.Contains("no-such-room", (await Refused(() => phone.InvokeAsync<string>("Join", code, "Ada"))).Message);
+        Assert.Contains("no-such-room", (await Refused(() => host.InvokeAsync("ResumeHost", code, HostKey))).Message);
+
+        // Nothing is left listening to the code: the screen opens another room and the old members,
+        // still connected, hear only what belongs to the room they are actually in.
+        var questionsOnThePhone = new Inbox<JsonElement>(phone, "QuestionStarted");
+        var next = await Open(host);
+        var newPhone = await Connect(factory);
+        await newPhone.InvokeAsync<string>("Join", next, "Bob");
+        await host.InvokeAsync("StartRound", next, HostKey);
+        await Barrier(phone);
+        Assert.Equal(0, questionsOnThePhone.Total);
     }
 
     [Fact]

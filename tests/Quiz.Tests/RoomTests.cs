@@ -531,6 +531,107 @@ public sealed class RoomTests
     }
 
     [Fact]
+    public void Paused_time_does_not_count_towards_the_question()
+    {
+        var room = StartedRoom("Ada");
+        _clock.Advance(TimeSpan.FromSeconds(5));
+
+        Assert.True(room.Pause());
+        Assert.True(room.Paused);
+        Assert.Equal(TimeSpan.FromSeconds(15), room.Remaining);
+
+        // Away from the table for far longer than the whole limit.
+        _clock.Advance(TimeSpan.FromMinutes(3));
+        Assert.Equal(TimeSpan.FromSeconds(15), room.Remaining);
+        Assert.Equal(RoomPhase.Question, room.Phase);
+
+        Assert.True(room.Resume());
+        Assert.False(room.Paused);
+        Assert.Equal(TimeSpan.FromSeconds(15), room.Remaining);
+
+        // And it runs down from there, not from the minutes that went by.
+        _clock.Advance(TimeSpan.FromSeconds(10));
+        Assert.Equal(TimeSpan.FromSeconds(5), room.Remaining);
+    }
+
+    [Fact]
+    public void An_answer_during_a_pause_is_refused_and_counts_again_once_resumed()
+    {
+        var room = StartedRoom("Ada");
+        Assert.True(room.Pause());
+
+        Assert.False(room.Answer("conn-Ada", Marker.Hearts)); // q0 is correct on Hearts
+
+        room.Resume();
+        Assert.True(room.Answer("conn-Ada", Marker.Hearts));
+    }
+
+    [Fact]
+    public void A_question_resumed_after_a_long_pause_scores_by_the_time_it_actually_ran()
+    {
+        var room = StartedRoom("Ada");
+
+        _clock.Advance(TimeSpan.FromSeconds(4));
+        room.Pause();
+        _clock.Advance(TimeSpan.FromMinutes(10)); // a long wait, in the middle of the question
+        room.Resume();
+        _clock.Advance(TimeSpan.FromSeconds(2));
+
+        Assert.True(room.Answer("conn-Ada", Marker.Hearts)); // q0 is correct on Hearts
+        room.CloseQuestion();
+
+        // Six seconds of question ran, so that is what it is worth — not ten minutes, which would
+        // be long past the limit and worth nothing at all.
+        Assert.Equal(Scoring.Points(correct: true, TimeSpan.FromSeconds(6), Limit), room.Players.Single().Score);
+        Assert.True(room.Players.Single().Score > Scoring.MinPoints);
+    }
+
+    [Fact]
+    public void Pausing_is_only_for_an_open_question_and_resuming_twice_is_harmless()
+    {
+        Assert.False(RoomIn(RoomPhase.Lobby).Pause());
+        Assert.False(RoomIn(RoomPhase.Reveal).Pause());
+        Assert.False(RoomIn(RoomPhase.Finished).Pause());
+
+        var room = StartedRoom("Ada");
+        Assert.False(room.Resume());  // not paused
+        Assert.True(room.Pause());
+        Assert.False(room.Pause());   // already paused
+        Assert.True(room.Resume());
+        Assert.False(room.Resume());
+    }
+
+    [Fact]
+    public void Closing_a_paused_question_leaves_the_room_running()
+    {
+        var room = StartedRoom("Ada");
+        room.Pause();
+
+        room.CloseQuestion();
+
+        Assert.False(room.Paused);
+        Assert.True(room.Advance());
+        Assert.False(room.Paused);
+        Assert.Equal(Limit, room.Remaining); // the next question starts with its whole limit
+    }
+
+    [Fact]
+    public void Pausing_and_resuming_count_as_activity()
+    {
+        var room = StartedRoom("Ada");
+        var last = room.LastActivity;
+
+        _clock.Advance(TimeSpan.FromMinutes(1));
+        Assert.True(room.Pause());
+        Assert.True(room.LastActivity > last);
+
+        last = room.LastActivity;
+        _clock.Advance(TimeSpan.FromMinutes(1));
+        Assert.True(room.Resume());
+        Assert.True(room.LastActivity > last);
+    }
+
+    [Fact]
     public void Refused_calls_do_not_move_LastActivity()
     {
         var room = NewRoom(maxPlayers: 1);

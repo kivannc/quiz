@@ -29,7 +29,9 @@ const STRINGS = {
     // alone, and this is what a screen reader reads out instead of an empty button.
     markerName: (marker) => ({ hearts: 'kupa', diamonds: 'karo', clubs: 'sinek', spades: 'maça' })[marker] ?? marker,
     questionClosed: 'soru kapandı, ekrana bak',
+    paused: 'oyun duraklatıldı, bekle',
     roundOver: 'tur bitti',
+    roomClosed: 'oda kapandı',
     scoreOf: (score) => `${score} p`,
 
     // --- TV ---
@@ -52,6 +54,12 @@ const STRINGS = {
     resultsButton: 'SONUÇLAR',
     finishedHeading: 'TUR BİTTİ',
     newRoomButton: 'YENİ ODA',
+    pauseButton: 'DURAKLAT',
+    resumeButton: 'DEVAM ET',
+    pausedBanner: 'DURAKLATILDI',
+    pausedHint: 'oyun bekliyor',
+    closeRoomButton: 'ODAYI KAPAT',
+    closeRoomConfirm: 'EMİN MİSİN?',
 
     // --- both: connection and errors ---
     reconnecting: 'bağlantı koptu, yeniden bağlanılıyor…',
@@ -81,7 +89,9 @@ const STRINGS = {
     answerRefused: 'that answer did not count',
     markerName: (marker) => ({ hearts: 'hearts', diamonds: 'diamonds', clubs: 'clubs', spades: 'spades' })[marker] ?? marker,
     questionClosed: 'question closed, look at the screen',
+    paused: 'the game is paused, hold on',
     roundOver: 'round over',
+    roomClosed: 'the room was closed',
     scoreOf: (score) => `${score} p`,
 
     // --- TV ---
@@ -104,6 +114,12 @@ const STRINGS = {
     resultsButton: 'RESULTS',
     finishedHeading: 'ROUND OVER',
     newRoomButton: 'NEW ROOM',
+    pauseButton: 'PAUSE',
+    resumeButton: 'RESUME',
+    pausedBanner: 'PAUSED',
+    pausedHint: 'the game is waiting',
+    closeRoomButton: 'CLOSE ROOM',
+    closeRoomConfirm: 'ARE YOU SURE?',
 
     // --- both: connection and errors ---
     reconnecting: 'connection lost, reconnecting…',

@@ -43,6 +43,7 @@ const state = {
   answered: 0,      // AnswerCount, host screens only
   seated: 0,        // how many players that count is out of
   question: null,   // the QuestionStarted payload
+  paused: false,    // the room's clock is stopped, which the server knows too
   reveal: null,     // the Revealed payload
   standings: [],    // from RoundFinished
   error: '',
@@ -87,6 +88,17 @@ function rememberDeadline(index, at) {
 }
 
 /*
+ * A remembered deadline is a promise about wall-clock time, and a paused room has stopped spending
+ * it. Rather than keep a stale one, drop it: a screen reloading into a paused question is then told
+ * what is left by the room itself, which is the number that stood still.
+ */
+function forgetDeadline() {
+  try {
+    sessionStorage.removeItem(STORE_DEADLINE);
+  } catch { /* nothing to forget */ }
+}
+
+/*
  * The deadline this page set for this very question, if it is the page that set it. A reload must
  * not hand the players a fresh twenty seconds: the room goes on refusing answers after the original
  * limit, so the extra time would be a lie. A screen that never ran this question has nothing stored
@@ -105,11 +117,14 @@ function recallDeadline(index) {
 
 let deadline = 0;
 let ticker = 0;
+// What was left of the clock when it was frozen, in milliseconds; 0 when it is running.
+let frozen = 0;
 
 function stopCountdown() {
   clearInterval(ticker);
   ticker = 0;
   deadline = 0;
+  frozen = 0;
 }
 
 function startCountdown(index, at) {
@@ -126,8 +141,30 @@ function startCountdown(index, at) {
   }, 200);
 }
 
-function drawClock() {
-  const left = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+/*
+ * Stops the clock where it stands and keeps what was left of it. The room stops counting too, so
+ * the frozen number is the truth rather than a frozen picture of it; it is read a moment after the
+ * room stopped, so it is a shade short, which is the safe direction.
+ */
+function freezeCountdown() {
+  if (!ticker) return;
+  frozen = Math.max(0, deadline - Date.now());
+  clearInterval(ticker);
+  ticker = 0;
+  forgetDeadline();
+  drawClock(frozen);
+}
+
+/* Starts it again with exactly what was left, never with the whole limit. */
+function thawCountdown() {
+  if (!frozen || !state.question) return;
+  const left = frozen;
+  frozen = 0;
+  startCountdown(state.question.index, Date.now() + left);
+}
+
+function drawClock(ms = deadline - Date.now()) {
+  const left = Math.max(0, Math.ceil(ms / 1000));
   el('tag-clock').textContent = t('clock', left);
 }
 
@@ -156,6 +193,12 @@ function cancelNextUp() {
 function cancelPacing() {
   cancelEveryoneIn();
   cancelNextUp();
+}
+
+/* Everyone seated has answered the question that is open. A paused room is waiting for its host,
+ * not for its players, so it is never ready to close on its own. */
+function everyoneIsIn() {
+  return state.view === 'question' && !state.paused && state.seated > 0 && state.answered >= state.seated;
 }
 
 /* The beat before the reveal. Already armed means the room was already full: a second count saying
@@ -212,7 +255,7 @@ conn.on('AnswerCount', (answered, total) => {
   // beat instead. The countdown stays the backstop — a phone that went to sleep never answers, and
   // the question still closes at zero. Anything short of the full room drops the beat again, which
   // is what a player joining and raising the total means.
-  if (state.view === 'question' && total > 0 && answered >= total) armEveryoneIn();
+  if (everyoneIsIn()) armEveryoneIn();
   else cancelEveryoneIn();
 });
 
@@ -225,6 +268,7 @@ conn.on('QuestionStarted', (question) => {
 
   state.reveal = null;
   state.answered = 0;
+  state.paused = false;
   show('question');
   // A screen that has run this question already counts its own deadline down. One arriving fresh
   // uses limitSeconds, which on a resume is what the room says is left, not the whole limit.
@@ -232,8 +276,40 @@ conn.on('QuestionStarted', (question) => {
   startCountdown(question.index, at);
 });
 
+conn.on('Paused', (paused) => {
+  state.paused = Boolean(paused);
+  if (state.paused) {
+    // Nothing of its own may happen while the room waits: not the countdown, and not the beat that
+    // closes a question everyone has answered.
+    freezeCountdown();
+    cancelPacing();
+  } else {
+    thawCountdown();
+    // The room may have filled up while it was stopped, or before it stopped: either way the beat
+    // starts now, since no further AnswerCount is coming to start it.
+    if (everyoneIsIn()) armEveryoneIn();
+  }
+  render();
+});
+
+conn.on('RoomClosed', () => {
+  // The room is gone for everyone, including this screen: back to the form, ready to open another.
+  stopCountdown();
+  cancelPacing();
+  forgetDeadline();
+  forgetRoom();
+  state.question = null;
+  state.reveal = null;
+  state.standings = [];
+  state.paused = false;
+  state.error = '';
+  show('setup');
+});
+
 conn.on('Revealed', (reveal) => {
   stopCountdown();
+  // The room drops its pause when the question closes, and so does the screen.
+  state.paused = false;
   state.reveal = reveal;
   show('reveal');
   // Armed after show(), which is what cleared the question's own timer. A screen that reloads during
@@ -244,6 +320,7 @@ conn.on('Revealed', (reveal) => {
 
 conn.on('RoundFinished', (standings) => {
   stopCountdown();
+  state.paused = false;
   // The round is over: the standings stay up until the host asks for a new room. Nothing is armed here.
   state.standings = standings ?? [];
   show('finished');
@@ -350,6 +427,9 @@ async function loadSets() {
 const startRound = () => hostAction('StartRound');
 const closeQuestion = () => hostAction('CloseQuestion');
 const advance = () => hostAction('AdvanceQuestion');
+/* The room is the one that decides: this only asks, and the Paused that comes back is what moves
+ * the screen. A press that does not fit the phase is ignored by the hub, like every other. */
+const togglePause = () => hostAction(state.paused ? 'ResumeRound' : 'PauseRound');
 
 el('form-open').addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -386,6 +466,32 @@ async function newRoom() {
 }
 
 el('new-room').addEventListener('click', newRoom);
+el('pause').addEventListener('click', togglePause);
+
+/*
+ * Closing the room ends the game for everyone in it, so it takes two presses: the first arms the
+ * button and says so, the second does it. A dialog would read badly on a TV and block nothing
+ * usefully; this says the same thing in the room's own language. The arming lapses on its own, and
+ * on any change of phase, so a button left armed is not waiting to end the next round.
+ */
+const CLOSE_ARMED_MS = 5000;
+let closeArmed = 0;
+
+function disarmClose() {
+  clearTimeout(closeArmed);
+  closeArmed = 0;
+  drawControls();
+}
+
+el('close-room').addEventListener('click', () => {
+  if (closeArmed) {
+    disarmClose();
+    hostAction('CloseRoom');
+    return;
+  }
+  closeArmed = setTimeout(disarmClose, CLOSE_ARMED_MS);
+  drawControls();
+});
 
 /* ---------- rendering ---------- */
 
@@ -393,6 +499,8 @@ function show(view) {
   // Every phase change comes through here, so this is where a timer armed for the phase being left
   // dies. Callers that want one for the phase they are entering arm it after calling show().
   cancelPacing();
+  clearTimeout(closeArmed);
+  closeArmed = 0;
   state.view = view;
   render();
 }
@@ -401,11 +509,26 @@ function render() {
   for (const [name, section] of Object.entries(views)) section.hidden = name !== state.view;
 
   drawTopbar();
+  drawControls();
   if (state.view === 'setup') drawSetup();
   if (state.view === 'lobby') drawLobby();
   if (state.view === 'question') drawQuestion();
   if (state.view === 'reveal') drawReveal();
   if (state.view === 'finished') drawBoard(el('final-board'), state.standings);
+}
+
+/* The two controls that belong to the host alone. They are on this page, which the key protects. */
+function drawControls() {
+  const open = state.code !== null && state.view !== 'setup' && state.view !== 'resuming';
+  el('controls').hidden = !open;
+
+  const pause = el('pause');
+  pause.hidden = state.view !== 'question';
+  pause.textContent = t(state.paused ? 'resumeButton' : 'pauseButton');
+
+  const close = el('close-room');
+  close.textContent = t(closeArmed ? 'closeRoomConfirm' : 'closeRoomButton');
+  close.dataset.armed = String(Boolean(closeArmed));
 }
 
 function drawTopbar() {
@@ -421,6 +544,8 @@ function drawTopbar() {
   else set(el('tag-answered'), '');
 
   el('tag-clock').hidden = state.view !== 'question';
+  document.body.classList.toggle('paused', state.paused);
+  el('paused-banner').hidden = !state.paused;
   set(el('tag-connection'), state.connection);
 }
 

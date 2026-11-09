@@ -37,6 +37,20 @@ public sealed class RoomStoreTests
     }
 
     [Fact]
+    public void Remove_takes_a_room_out_and_frees_its_code()
+    {
+        var store = NewStore();
+        var code = CodeOf(store.Create("test"));
+        Assert.NotNull(store.Find(code));
+
+        Assert.True(store.Remove(code));
+
+        Assert.Null(store.Find(code));
+        Assert.Equal(0, store.Count);
+        Assert.False(store.Remove(code)); // it has already gone
+    }
+
+    [Fact]
     public void Created_room_can_be_found_by_its_code()
     {
         var store = NewStore();
