@@ -66,6 +66,36 @@ public sealed class GameHub(
         return result;
     }
 
+    /// <summary>
+    /// Repaints a host screen that has just loaded: joins it to the host groups and sends it, and
+    /// only it, whatever is on the TV now. Read-only by design — a screen coming back must never
+    /// move the room on, so this reads the same accessors <see cref="Resync"/> does and calls
+    /// nothing that changes a room.
+    /// </summary>
+    public async Task ResumeHost(string code, string hostKey)
+    {
+        var room = HostRoom(code, hostKey);
+        await JoinHostGroups(code);
+
+        // Each accessor takes the room's lock on its own, so a phase that moves on mid-call means a
+        // slightly stale paint, which the next broadcast corrects. Nothing here can get it wrong.
+        await Clients.Caller.SendAsync("RoomState", room.Players, PhaseName(room.Phase));
+
+        if (room.Phase == RoomPhase.Question && room.CurrentQuestion is { } question)
+        {
+            await Clients.Caller.SendAsync("QuestionStarted", question);
+            await Clients.Caller.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
+        }
+        else if (room.CurrentReveal is { } reveal)
+        {
+            await Clients.Caller.SendAsync("Revealed", reveal);
+        }
+        else if (room.Phase == RoomPhase.Finished)
+        {
+            await Clients.Caller.SendAsync("RoundFinished", room.Standings);
+        }
+    }
+
     public async Task StartRound(string code, string hostKey)
     {
         var room = HostRoom(code, hostKey);
@@ -153,7 +183,10 @@ public sealed class GameHub(
         Clients.Group(HostGroup(room.Code)).SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
 
     private Task SendRoomState(Room room) =>
-        Clients.Group(HostGroup(room.Code)).SendAsync("RoomState", room.Players, room.Phase.ToString().ToLowerInvariant());
+        Clients.Group(HostGroup(room.Code)).SendAsync("RoomState", room.Players, PhaseName(room.Phase));
+
+    // Phases travel as lowercase words ("lobby", "question"), like every other enum on this wire.
+    private static string PhaseName(RoomPhase phase) => phase.ToString().ToLowerInvariant();
 
     // The phase was checked a moment ago, but two host clicks can race between that check and the call. Losing that race
     // is a duplicate action, not an error, so the room's "wrong phase" exception stops here and never reaches a client.

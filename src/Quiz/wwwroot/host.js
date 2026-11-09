@@ -4,7 +4,7 @@
  *
  * There are no timers on the server: when this page's countdown reaches zero it calls
  * CloseQuestion itself. The host key is typed once and kept in sessionStorage, so a reload
- * can re-send it and take the room back.
+ * re-sends it, asks the hub for the room as it stands now, and paints itself back.
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
@@ -12,25 +12,15 @@ import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n
 /* The order the four markers are drawn in. Glyph and colour come from app.css. */
 const MARKERS = ['hearts', 'diamonds', 'clubs', 'spades'];
 
-/*
- * The hub has no "list the question sets" call, so the three shipped sets are named here
- * by id. Their titles are content, like the questions themselves, and are not translated.
- */
-const SETS = [
-  { id: 'genel-kultur', title: 'Genel Kültür' },
-  { id: 'tarih', title: 'Tarih' },
-  { id: 'muzik-ve-film', title: 'Müzik ve Film' },
-];
-
 const STORE_KEY = 'quiz.hostKey';
 const STORE_CODE = 'quiz.code';
 const STORE_SET = 'quiz.setId';
+const STORE_DEADLINE = 'quiz.deadline';
 
 const el = (id) => document.getElementById(id);
 
 const views = {
   setup: el('view-setup'),
-  resume: el('view-resume'),
   lobby: el('view-lobby'),
   question: el('view-question'),
   reveal: el('view-reveal'),
@@ -38,10 +28,12 @@ const views = {
 };
 
 const state = {
+  // 'resuming' paints nothing: it is the moment between asking the hub for the room and hearing back.
   view: 'setup',
   code: null,
   hostKey: null,
-  setId: SETS[0].id,
+  setId: null,
+  sets: [],         // { id, title, language } from GET /sets; their titles are content, not UI strings
   players: [],      // [{ name, score }], from RoomState
   answered: 0,      // AnswerCount, host screens only
   seated: 0,        // how many players that count is out of
@@ -58,7 +50,7 @@ function remember() {
   try {
     sessionStorage.setItem(STORE_KEY, state.hostKey ?? '');
     sessionStorage.setItem(STORE_CODE, state.code ?? '');
-    sessionStorage.setItem(STORE_SET, state.setId);
+    sessionStorage.setItem(STORE_SET, state.setId ?? '');
   } catch {
     // Without storage a reload simply cannot resume; everything else still works.
   }
@@ -76,10 +68,31 @@ function recall() {
     return {
       hostKey: sessionStorage.getItem(STORE_KEY) || null,
       code: sessionStorage.getItem(STORE_CODE) || null,
-      setId: sessionStorage.getItem(STORE_SET) || SETS[0].id,
+      setId: sessionStorage.getItem(STORE_SET) || null,
     };
   } catch {
-    return { hostKey: null, code: null, setId: SETS[0].id };
+    return { hostKey: null, code: null, setId: null };
+  }
+}
+
+function rememberDeadline(index, at) {
+  try {
+    sessionStorage.setItem(STORE_DEADLINE, JSON.stringify({ code: state.code, index, at }));
+  } catch { /* the countdown still runs; only a reload would have used this */ }
+}
+
+/*
+ * The deadline this page set for this very question, if it is the page that set it. A reload must
+ * not hand the players a fresh twenty seconds: the room goes on refusing answers after the original
+ * limit, so the extra time would be a lie. A screen that never ran this question has nothing stored
+ * and falls back to the full limit.
+ */
+function recallDeadline(index) {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(STORE_DEADLINE) ?? 'null');
+    return stored && stored.code === state.code && stored.index === index ? stored.at : null;
+  } catch {
+    return null;
   }
 }
 
@@ -94,9 +107,10 @@ function stopCountdown() {
   deadline = 0;
 }
 
-function startCountdown(seconds) {
+function startCountdown(index, at) {
   stopCountdown();
-  deadline = Date.now() + seconds * 1000;
+  deadline = at;
+  rememberDeadline(index, at);
   drawClock();
   ticker = setInterval(() => {
     drawClock();
@@ -150,7 +164,9 @@ conn.on('QuestionStarted', (question) => {
   state.reveal = null;
   state.answered = 0;
   show('question');
-  startCountdown(question.limitSeconds);
+  // Only a resume may inherit a deadline; a question that has just opened always gets the full limit.
+  const at = (resuming ? recallDeadline(question.index) : null) ?? Date.now() + question.limitSeconds * 1000;
+  startCountdown(question.index, at);
 });
 
 conn.on('Revealed', (reveal) => {
@@ -171,10 +187,11 @@ conn.onreconnecting(() => {
 });
 
 conn.onreconnected(() => {
-  // The reconnected connection is in no groups until the next host action re-sends the key;
-  // the countdown kept running here, so the next CloseQuestion or button press repairs it.
+  // A reconnected connection is in no groups, and this one may have missed what happened while it
+  // was away, so it asks for the room again. Resuming changes nothing in the room.
   state.connection = '';
   render();
+  resume();
 });
 
 conn.onclose(() => {
@@ -216,6 +233,43 @@ async function hostAction(method) {
   }
 }
 
+/*
+ * Takes the room back after a reload or a dropped connection: re-sends the key (which re-joins the
+ * host groups) and asks the hub to send this screen the room as it stands. ResumeHost is read-only,
+ * so a screen coming back cannot start, close or advance anything.
+ */
+let resuming = false;
+
+async function resume() {
+  if (!state.code || !state.hostKey) return;
+  resuming = true;
+  try {
+    await conn.invoke('ResumeHost', state.code, state.hostKey);
+    state.error = '';
+  } catch (error) {
+    // The room has gone, or this key no longer drives it: ask for a room again.
+    state.error = errorText(error);
+    forgetRoom();
+    show('setup');
+  } finally {
+    resuming = false;
+  }
+}
+
+/* The question sets come from the server, so adding one needs no change here. */
+async function loadSets() {
+  try {
+    const response = await fetch('/sets');
+    if (!response.ok) throw new Error(`/sets answered ${response.status}`);
+    state.sets = await response.json();
+  } catch (error) {
+    state.sets = [];
+    state.error = t('errGeneric');
+    console.error('could not load the question sets', error);
+  }
+  render();
+}
+
 const startRound = () => hostAction('StartRound');
 const closeQuestion = () => hostAction('CloseQuestion');
 const advance = () => hostAction('AdvanceQuestion');
@@ -237,9 +291,6 @@ el('form-open').addEventListener('submit', async (event) => {
 
 el('start').addEventListener('click', startRound);
 el('next').addEventListener('click', advance);
-el('resume-start').addEventListener('click', startRound);
-el('resume-close').addEventListener('click', closeQuestion);
-el('resume-next').addEventListener('click', advance);
 
 /* A new room reuses the key and set already in hand, so the host types nothing again. */
 async function newRoom() {
@@ -254,7 +305,6 @@ async function newRoom() {
 }
 
 el('new-room').addEventListener('click', newRoom);
-el('resume-new').addEventListener('click', newRoom);
 
 /* ---------- rendering ---------- */
 
@@ -268,7 +318,6 @@ function render() {
 
   drawTopbar();
   if (state.view === 'setup') drawSetup();
-  if (state.view === 'resume') drawResume();
   if (state.view === 'lobby') drawLobby();
   if (state.view === 'question') drawQuestion();
   if (state.view === 'reveal') drawReveal();
@@ -298,19 +347,18 @@ function set(node, text) {
 
 function drawSetup() {
   const select = el('set-id');
-  if (!select.options.length) {
-    for (const { id, title } of SETS) select.add(new Option(title, id));
-    select.value = state.setId;
+  if (select.options.length !== state.sets.length) {
+    select.replaceChildren();
+    for (const set of state.sets) select.add(new Option(set.title, set.id));
+    if (state.sets.some((set) => set.id === state.setId)) select.value = state.setId;
   }
+  // Nothing can be opened before the sets are known, so do not pretend otherwise.
+  el('form-open').querySelector('button').disabled = state.sets.length === 0;
+
   // Only ever prefill an untouched field: a redraw must not overwrite what is being typed.
   const field = el('form-open').elements.hostKey;
   if (field.value === '' && document.activeElement !== field) field.value = state.hostKey ?? '';
   el('setup-error').textContent = state.error;
-}
-
-function drawResume() {
-  el('resume-code').textContent = t('roomTag', state.code ?? '');
-  el('resume-error').textContent = state.error;
 }
 
 function drawLobby() {
@@ -425,15 +473,23 @@ onLangChange(() => {
 
 const stored = recall();
 state.hostKey = stored.hostKey;
-state.setId = SETS.some((s) => s.id === stored.setId) ? stored.setId : SETS[0].id;
+state.setId = stored.setId;
 state.code = stored.code;
-show(stored.hostKey && stored.code ? 'resume' : 'setup');
+// A screen that is about to resume shows nothing rather than a form it is going to replace.
+show(stored.hostKey && stored.code ? 'resuming' : 'setup');
 
 try {
   await conn.start();
 } catch (error) {
   // Nothing works without the hub, so say so on screen and leave the reason in the console.
   state.connection = t('disconnected');
-  render();
+  show('setup');
   console.error('could not reach the hub', error);
 }
+
+await loadSets();
+
+if (conn.state === signalR.HubConnectionState.Connected) {
+  await resume();
+}
+if (state.view === 'resuming') show('setup');

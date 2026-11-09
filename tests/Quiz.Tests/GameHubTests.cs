@@ -584,6 +584,159 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(["name", "score"], reveal.GetProperty("standings")[0].EnumerateObject().Select(p => p.Name));
     }
 
+    [Fact]
+    public async Task Sets_lists_every_shipped_set_without_its_questions()
+    {
+        var response = await Factory().CreateClient().GetAsync("/sets");
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+
+        var sets = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
+        Assert.Equal(3, sets.GetArrayLength());
+        Assert.Equal(
+            ["genel-kultur", "muzik-ve-film", "tarih"],
+            sets.EnumerateArray().Select(set => set.GetProperty("id").GetString()).Order(StringComparer.Ordinal));
+
+        var first = sets[0];
+        // Exactly the three fields a picker needs: no questions, and so no answers, leave the server.
+        Assert.Equal(["id", "title", "language"], first.EnumerateObject().Select(f => f.Name));
+        Assert.False(string.IsNullOrWhiteSpace(first.GetProperty("title").GetString()));
+        Assert.Equal("tr", first.GetProperty("language").GetString());
+    }
+
+    [Fact]
+    public async Task ResumeHost_repaints_a_reloaded_screen_mid_question_and_leaves_the_question_open()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        var other = await Connect(factory);
+        await other.InvokeAsync<string>("Join", code, "Bob");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await player.InvokeAsync("Answer", code, "clubs");
+
+        // The TV page reloads: a new connection, the same key.
+        var reloaded = await Connect(factory);
+        var states = RoomState(reloaded);
+        var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
+        var counts = AnswerCount(reloaded);
+        var reveals = new Inbox<JsonElement>(reloaded, "Revealed");
+        await reloaded.InvokeAsync("ResumeHost", code, HostKey);
+
+        var state = await states.Next();
+        Assert.Equal("question", state.Phase);
+        Assert.Equal(["Ada", "Bob"], state.Players.EnumerateArray().Select(p => p.GetProperty("name").GetString()));
+        var question = await questions.Next();
+        Assert.Equal(0, question.GetProperty("index").GetInt32());
+        Assert.Equal(4, question.GetProperty("options").GetArrayLength());
+        Assert.False(question.TryGetProperty("correct", out _));
+        Assert.Equal((1, 2), await counts.Next());
+        Assert.Equal(0, reveals.Total); // the question was not closed by the screen coming back
+
+        // And the room really is untouched: the other phone can still answer, and the resumed screen hears it.
+        await other.InvokeAsync("Answer", code, "hearts");
+        Assert.Equal((2, 2), await counts.Next());
+    }
+
+    [Fact]
+    public async Task ResumeHost_sends_the_reveal_during_the_reveal_and_advances_nothing()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await player.InvokeAsync("Answer", code, "clubs");
+        await host.InvokeAsync("CloseQuestion", code, HostKey);
+
+        var reloaded = await Connect(factory);
+        var states = RoomState(reloaded);
+        var reveals = new Inbox<JsonElement>(reloaded, "Revealed");
+        var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
+        await reloaded.InvokeAsync("ResumeHost", code, HostKey);
+
+        Assert.Equal("reveal", (await states.Next()).Phase);
+        var reveal = await reveals.Next();
+        Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
+        await Barrier(reloaded);
+        Assert.Equal(0, questions.Total);
+
+        // Still in the reveal: the resumed screen can advance from it, once.
+        await reloaded.InvokeAsync("AdvanceQuestion", code, HostKey);
+        Assert.Equal(1, (await questions.Next()).GetProperty("index").GetInt32());
+    }
+
+    [Fact]
+    public async Task ResumeHost_sends_the_standings_when_the_round_is_over()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        var finishedOnTheHost = new Inbox<JsonElement>(host, "RoundFinished");
+        await host.InvokeAsync("StartRound", code, HostKey);
+
+        // Walk the round to its end: the set is finite, so this terminates.
+        var steps = 0;
+        while (finishedOnTheHost.Total == 0)
+        {
+            Assert.True(++steps < 100, "the round never finished");
+            await host.InvokeAsync("CloseQuestion", code, HostKey);
+            await host.InvokeAsync("AdvanceQuestion", code, HostKey);
+            await Barrier(host);
+        }
+
+        var reloaded = await Connect(factory);
+        var states = RoomState(reloaded);
+        var finished = new Inbox<JsonElement>(reloaded, "RoundFinished");
+        await reloaded.InvokeAsync("ResumeHost", code, HostKey);
+
+        Assert.Equal("finished", (await states.Next()).Phase);
+        Assert.Equal("Ada", (await finished.Next())[0].GetProperty("name").GetString());
+    }
+
+    [Fact]
+    public async Task ResumeHost_in_the_lobby_sends_the_roster_and_nothing_else()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", code, "Ada");
+
+        var reloaded = await Connect(factory);
+        var states = RoomState(reloaded);
+        var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
+        var reveals = new Inbox<JsonElement>(reloaded, "Revealed");
+        await reloaded.InvokeAsync("ResumeHost", code, HostKey);
+
+        var state = await states.Next();
+        Assert.Equal("lobby", state.Phase);
+        Assert.Equal("Ada", state.Players[0].GetProperty("name").GetString());
+        await Barrier(reloaded);
+        Assert.Equal(0, questions.Total + reveals.Total);
+
+        // The resumed screen is in the host group: it hears the next answer count.
+        var counts = AnswerCount(reloaded);
+        await reloaded.InvokeAsync("StartRound", code, HostKey);
+        Assert.Equal((0, 1), await counts.Next());
+    }
+
+    [Fact]
+    public async Task ResumeHost_needs_the_key_and_an_existing_room()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var stranger = await Connect(factory);
+
+        Assert.Contains("forbidden", (await Refused(() => stranger.InvokeAsync("ResumeHost", code, "not-the-key-at-all-0000"))).Message);
+        Assert.Contains("no-such-room", (await Refused(() => stranger.InvokeAsync("ResumeHost", "0000", HostKey))).Message);
+    }
+
     [Theory]
     [InlineData("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", "0")]
     [InlineData("QUIZ_JOIN_ATTEMPTS_PER_MINUTE", "0")]

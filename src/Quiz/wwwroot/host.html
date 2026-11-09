@@ -39,23 +39,7 @@
       </form>
     </section>
 
-    <!-- 2 · this page was reloaded while a room was live -->
-    <section class="view" id="view-resume" hidden>
-      <div class="form">
-        <h1 data-i18n="resumeHeading"></h1>
-        <p class="muted" id="resume-code"></p>
-        <p class="status" data-i18n="resumeHint"></p>
-        <div class="resume-actions">
-          <button class="cta" type="button" id="resume-start" data-i18n="startButton"></button>
-          <button class="ghost" type="button" id="resume-close" data-i18n="closeQuestionButton"></button>
-          <button class="ghost" type="button" id="resume-next" data-i18n="nextButton"></button>
-          <button class="ghost" type="button" id="resume-new" data-i18n="newRoomButton"></button>
-        </div>
-        <p class="error" id="resume-error" role="alert"></p>
-      </div>
-    </section>
-
-    <!-- 3 · lobby -->
+    <!-- 2 · lobby -->
     <section class="view lobby" id="view-lobby" hidden>
       <div class="label kod" data-i18n="codeTag"></div>
       <div class="code" id="lobby-code"></div>
@@ -65,13 +49,13 @@
       <button class="cta go" type="button" id="start" data-i18n="startButton" hidden></button>
     </section>
 
-    <!-- 4 · a question is open -->
+    <!-- 3 · a question is open -->
     <section class="view" id="view-question" hidden>
       <p class="question"><span class="caret">&gt;</span> <span id="question-text"></span><span class="block">&nbsp;</span></p>
       <div class="options" id="question-options"></div>
     </section>
 
-    <!-- 5 · the question is over -->
+    <!-- 4 · the question is over -->
     <section class="view" id="view-reveal" hidden>
       <p class="answer"><span data-i18n="correctIs"></span> <span class="glyph" id="reveal-glyph"></span> <span class="opt-text" id="reveal-text"></span></p>
       <div class="bars" id="reveal-bars"></div>
@@ -81,7 +65,7 @@
       </div>
     </section>
 
-    <!-- 6 · the round is over -->
+    <!-- 5 · the round is over -->
     <section class="view finished" id="view-finished" hidden>
       <h1 data-i18n="finishedHeading"></h1>
       <ol class="board" id="final-board"></ol>

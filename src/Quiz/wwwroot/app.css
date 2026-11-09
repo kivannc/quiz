@@ -163,7 +163,7 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .tv .view { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
 .tv .view[hidden] { display: none; }
 
-/* setup and resume: a narrow form in the middle of the screen */
+/* open a room: a narrow form in the middle of the screen */
 .tv .form {
   margin: auto;
   width: min(420px, 100%);
@@ -173,8 +173,6 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .tv .form h1 { font-size: 1em; font-weight: 500; letter-spacing: .18em; color: var(--muted); margin: 0 0 20px; text-transform: uppercase; }
 .tv .form .cta { width: 100%; padding: 12px; }
 .tv .form .error { margin-top: 14px; }
-.tv .resume-actions { display: flex; flex-direction: column; gap: 8px; }
-.tv .resume-actions button { padding: 11px; }
 
 /* lobby */
 .tv .lobby { align-items: center; justify-content: center; text-align: center; gap: 0; }

@@ -4,13 +4,15 @@ A small multiplayer quiz game for a living room: one screen (a TV) shows the boa
 
 ## Question sets
 
-Question sets are plain JSON files in `src/Quiz/questions/`. Each set has an `id`, a `title`, a `language`, and exactly ten multiple-choice questions with four options each. The options are marked `hearts`, `diamonds`, `clubs` and `spades` (never letters), and exactly one is `correct`. The shipped sets are in Turkish.
+Question sets are plain JSON files in `src/Quiz/questions/`. Each set has an `id`, a `title`, a `language`, and exactly ten multiple-choice questions with four options each. The options are marked `hearts`, `diamonds`, `clubs` and `spades` (never letters), and exactly one is `correct`. The shipped sets are in Turkish. `GET /sets` lists each set's `id`, `title` and `language` — never its questions — and that is where the host screen's picker comes from, so adding a set is adding a file.
 
 ## The screens
 
 Two static pages, served by the app itself: `/` is the phone (room code and name, then four
 suit buzzers and nothing else) and `/host.html` is the TV (lobby, question, reveal, standings).
-The host drives the round and owns the countdown; the server keeps no timers. Both pages are
+The host drives the round and owns the countdown; the server keeps no timers. A TV page that is
+reloaded mid-round re-sends its key, asks the hub for the room as it stands and paints itself back
+with the countdown it was already running. Both pages are
 plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm, no framework.
 
 The SignalR browser client is vendored rather than loaded from a CDN:

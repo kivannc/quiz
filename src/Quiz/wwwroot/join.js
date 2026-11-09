@@ -10,6 +10,7 @@ import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n
 
 const STORE_CODE = 'quiz.code';
 const STORE_NAME = 'quiz.name';
+const STORE_TAP = 'quiz.tap';
 
 const el = (id) => document.getElementById(id);
 
@@ -23,6 +24,7 @@ const state = {
   code: null,
   name: null,       // as the server spells it back in Seated
   score: 0,
+  index: null,      // which question is open, so a reload can tell whose answer it kept
   chosen: null,     // the marker this phone sent for the current question
   error: '',
   connection: '',
@@ -43,7 +45,28 @@ function forget() {
   try {
     sessionStorage.removeItem(STORE_CODE);
     sessionStorage.removeItem(STORE_NAME);
+    sessionStorage.removeItem(STORE_TAP);
   } catch { /* nothing to forget */ }
+}
+
+function rememberTap(index, marker) {
+  try {
+    sessionStorage.setItem(STORE_TAP, JSON.stringify({ code: state.code, index, marker }));
+  } catch { /* the lock still holds for as long as this page lives */ }
+}
+
+/*
+ * What this phone sent for this very question, if anything. Without it a reloaded player would see
+ * four live buzzers, tap one, and watch the server quietly refuse the second answer — which reads
+ * as a broken phone rather than as "you have already answered".
+ */
+function recallTap(index) {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(STORE_TAP) ?? 'null');
+    return stored && stored.code === state.code && stored.index === index ? stored.marker : null;
+  } catch {
+    return null;
+  }
 }
 
 function recall() {
@@ -72,10 +95,12 @@ conn.on('Seated', (name, score) => {
   render();
 });
 
-conn.on('QuestionStarted', () => {
-  // The payload carries the question and the options; this screen deliberately shows neither.
+conn.on('QuestionStarted', (question) => {
+  // The payload carries the question text and the options; this screen deliberately shows neither.
+  // Its index is used only to tell this phone's own answer apart from an older one.
   state.phase = 'question';
-  state.chosen = null;
+  state.index = question.index;
+  state.chosen = recallTap(question.index);
   state.error = '';
   render();
 });
@@ -174,11 +199,13 @@ async function answer(marker) {
   // Optimistic: the server accepts the first answer per question and quietly ignores the rest,
   // so the phone locks itself immediately rather than waiting for a round trip it is not told about.
   state.chosen = marker;
+  rememberTap(state.index, marker);
   render();
   try {
     await conn.invoke('Answer', state.code, marker);
   } catch (error) {
     state.chosen = null;
+    rememberTap(state.index, null);
     state.error = errorText(error);
     render();
   }

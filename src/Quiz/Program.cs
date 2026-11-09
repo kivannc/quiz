@@ -63,6 +63,10 @@ app.UseForwardedHeaders();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapGet("/healthz", () => Results.Ok());
+// The host screen offers a choice of set, so it has to know what there is. No key is asked for:
+// a set's id, title and language are not secret, and the questions themselves are not sent.
+app.MapGet("/sets", (IQuestionSetSource sets) =>
+    Results.Ok(sets.All().Select(s => new { s.Id, s.Title, s.Language })));
 app.MapHub<GameHub>("/hub");
 
 app.Run();

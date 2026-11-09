@@ -50,9 +50,6 @@ const STRINGS = {
     resultsButton: 'SONUÇLAR',
     finishedHeading: 'TUR BİTTİ',
     newRoomButton: 'YENİ ODA',
-    resumeHeading: 'Oda açık',
-    resumeHint: 'bu sayfa yenilendi. TV’de ne duruyorsa onu seç:',
-    closeQuestionButton: 'SORUYU KAPAT',
 
     // --- both: connection and errors ---
     reconnecting: 'bağlantı koptu, yeniden bağlanılıyor…',
@@ -103,9 +100,6 @@ const STRINGS = {
     resultsButton: 'RESULTS',
     finishedHeading: 'ROUND OVER',
     newRoomButton: 'NEW ROOM',
-    resumeHeading: 'Room still open',
-    resumeHint: 'this page was reloaded. pick whatever the TV is showing:',
-    closeQuestionButton: 'CLOSE THE QUESTION',
 
     // --- both: connection and errors ---
     reconnecting: 'connection lost, reconnecting…',
