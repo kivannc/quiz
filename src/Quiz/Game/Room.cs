@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace Quiz.Game;
 
 public enum RoomPhase { Lobby, Question, Reveal, Finished }
@@ -93,6 +95,7 @@ public sealed class Room
     public JoinResult Join(string name, string connectionId)
     {
         ArgumentNullException.ThrowIfNull(name);
+        ArgumentNullException.ThrowIfNull(connectionId);
         name = name.Trim();
         if (name.Length == 0) throw new ArgumentException("A name must not be empty.", nameof(name));
 
@@ -136,7 +139,7 @@ public sealed class Room
     }
 
     /// <summary>
-    /// Records an answer. Refused (false) outside the Question phase, from an unknown connection, as a repeat
+    /// Records an answer. Refused (false) outside the Question phase, for an undefined marker, from an unknown connection, as a repeat
     /// from a seat that already answered, or after the limit has passed, whether or not the question was closed.
     /// </summary>
     public bool Answer(string connectionId, Marker marker)
@@ -144,6 +147,7 @@ public sealed class Room
         lock (_gate)
         {
             if (_phase != RoomPhase.Question) return false;
+            if (!Enum.IsDefined(marker)) return false;
             if (!_seatByConnection.TryGetValue(connectionId, out var seat)) return false;
             if (_answers.ContainsKey(seat)) return false;
 
@@ -170,16 +174,17 @@ public sealed class Room
             if (_phase != RoomPhase.Question) throw new InvalidOperationException($"No question is open (phase: {_phase}).");
 
             var distribution = Enum.GetValues<Marker>().ToDictionary(m => m, _ => 0);
-            foreach (var (seat, answer) in _answers)
-            {
-                seat.Score += answer.Points;
-                distribution[answer.Marker]++;
-            }
+            foreach (var answer in _answers.Values) distribution[answer.Marker]++;
+            // Only mutate scores once everything that can throw has run.
+            foreach (var (seat, answer) in _answers) seat.Score += answer.Points;
 
             // OrderByDescending is stable, so equal scores stay in join order.
             var standings = _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList();
 
-            _reveal = new RevealView(_set.Questions[_questionIndex].Correct, distribution, standings);
+            _reveal = new RevealView(
+                _set.Questions[_questionIndex].Correct,
+                new ReadOnlyDictionary<Marker, int>(distribution),
+                standings.AsReadOnly());
             _phase = RoomPhase.Reveal;
             Touch();
             return _reveal;

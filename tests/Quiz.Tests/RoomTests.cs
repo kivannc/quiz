@@ -106,6 +106,127 @@ public sealed class RoomTests
     }
 
     [Fact]
+    public void Rejoining_drops_the_old_connection_so_it_can_no_longer_answer()
+    {
+        var room = StartedRoom("Ada");
+        room.Join("Ada", "conn-new");
+
+        Assert.False(room.Answer("conn-Ada", Marker.Hearts));   // old connection, seat has not answered yet
+
+        Assert.Equal(0, room.AnswerCount);
+        Assert.True(room.Answer("conn-new", Marker.Hearts));
+    }
+
+    [Fact]
+    public void An_undefined_marker_is_refused_and_does_not_wedge_the_round()
+    {
+        var room = StartedRoom("Ada", "Bob");
+        room.Answer("conn-Bob", Marker.Hearts);
+
+        Assert.False(room.Answer("conn-Ada", (Marker)99));
+
+        Assert.Equal(1, room.AnswerCount);
+        var reveal = room.CloseQuestion();
+        Assert.Equal(RoomPhase.Reveal, room.Phase);
+        Assert.Equal(1, reveal.Distribution[Marker.Hearts]);
+    }
+
+    [Fact]
+    public void A_null_connectionId_throws_without_seating_anyone()
+    {
+        var room = NewRoom();
+
+        Assert.Throws<ArgumentNullException>(() => room.Join("Ada", null!));
+
+        Assert.Empty(room.Players);
+    }
+
+    [Fact]
+    public void The_reveal_is_read_only_even_when_cast_back()
+    {
+        var room = StartedRoom("Ada");
+        var reveal = room.CloseQuestion();
+
+        Assert.False(reveal.Distribution is Dictionary<Marker, int>);
+        Assert.False(reveal.Standings is List<PlayerView>);
+        Assert.Throws<NotSupportedException>(() => ((IList<PlayerView>)reveal.Standings).Clear());
+        Assert.Throws<NotSupportedException>(() => ((IDictionary<Marker, int>)reveal.Distribution)[Marker.Hearts] = 5);
+    }
+
+    // ---- phase matrix: Task 5 guards duplicate host actions by checking Phase, so these are a contract ----
+
+    private Room RoomIn(RoomPhase phase)
+    {
+        var room = NewRoom();
+        room.Join("Ada", "conn-Ada");
+        if (phase == RoomPhase.Lobby) return room;
+        room.Start();
+        if (phase == RoomPhase.Question) return room;
+        room.CloseQuestion();
+        if (phase == RoomPhase.Reveal) return room;
+        while (room.Advance()) room.CloseQuestion();
+        Assert.Equal(RoomPhase.Finished, room.Phase);
+        return room;
+    }
+
+    [Theory]
+    [InlineData(RoomPhase.Question)]
+    [InlineData(RoomPhase.Reveal)]
+    [InlineData(RoomPhase.Finished)]
+    public void Start_is_refused_once_the_round_has_begun(RoomPhase phase)
+    {
+        var room = RoomIn(phase);
+
+        Assert.False(room.Start());
+
+        Assert.Equal(phase, room.Phase);
+    }
+
+    [Fact]
+    public void Advance_in_Lobby_throws()
+    {
+        Assert.Throws<InvalidOperationException>(() => RoomIn(RoomPhase.Lobby).Advance());
+    }
+
+    [Fact]
+    public void Advance_when_Finished_returns_false_and_stays_Finished()
+    {
+        var room = RoomIn(RoomPhase.Finished);
+
+        Assert.False(room.Advance());
+
+        Assert.Equal(RoomPhase.Finished, room.Phase);
+    }
+
+    [Fact]
+    public void CloseQuestion_in_Finished_throws()
+    {
+        Assert.Throws<InvalidOperationException>(() => RoomIn(RoomPhase.Finished).CloseQuestion());
+    }
+
+    [Theory]
+    [InlineData(RoomPhase.Reveal)]
+    [InlineData(RoomPhase.Finished)]
+    public void A_new_name_is_refused_with_RoundInProgress_in_Reveal_and_Finished(RoomPhase phase)
+    {
+        var room = RoomIn(phase);
+
+        Assert.Equal(JoinResult.RoundInProgress, room.Join("Latecomer", "c2"));
+
+        Assert.Single(room.Players);
+    }
+
+    [Fact]
+    public void A_rejoin_is_allowed_when_Finished()
+    {
+        var room = RoomIn(RoomPhase.Finished);
+
+        Assert.Equal(JoinResult.Rejoined, room.Join("Ada", "conn-new"));
+
+        Assert.Single(room.Players);
+    }
+
+    [Fact]
     public void A_new_name_after_the_round_started_is_refused_with_RoundInProgress()
     {
         var room = StartedRoom("Ada");
