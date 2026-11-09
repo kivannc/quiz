@@ -1,0 +1,237 @@
+{
+  "id": "genel-kultur",
+  "title": "Genel Kültür",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "gk-01",
+      "text": "Türkiye'nin başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İstanbul"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzmir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ankara"
+        },
+        {
+          "marker": "spades",
+          "text": "Bursa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-02",
+      "text": "Bir haftada kaç gün vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altı"
+        },
+        {
+          "marker": "spades",
+          "text": "Sekiz"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-03",
+      "text": "Gökkuşağında kaç renk vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Altı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dokuz"
+        },
+        {
+          "marker": "spades",
+          "text": "Yedi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-04",
+      "text": "Hangisi bir meyvedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Patlıcan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Muz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Havuç"
+        },
+        {
+          "marker": "spades",
+          "text": "Ispanak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-05",
+      "text": "Dünya'nın uydusu hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güneş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mars"
+        },
+        {
+          "marker": "spades",
+          "text": "Venüs"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-06",
+      "text": "Hangi hayvan \"ormanların kralı\" olarak bilinir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zürafa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tavşan"
+        },
+        {
+          "marker": "spades",
+          "text": "Aslan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-07",
+      "text": "Su kaç derecede kaynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "100"
+        },
+        {
+          "marker": "diamonds",
+          "text": "50"
+        },
+        {
+          "marker": "clubs",
+          "text": "80"
+        },
+        {
+          "marker": "spades",
+          "text": "150"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-08",
+      "text": "Bir futbol takımı sahada kaç kişiyle oynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "9"
+        },
+        {
+          "marker": "diamonds",
+          "text": "10"
+        },
+        {
+          "marker": "clubs",
+          "text": "11"
+        },
+        {
+          "marker": "spades",
+          "text": "12"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-09",
+      "text": "Hangisi bir kıta değildir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-10",
+      "text": "Güneş sistemindeki en büyük gezegen hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dünya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jüpiter"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mars"
+        },
+        {
+          "marker": "spades",
+          "text": "Venüs"
+        }
+      ],
+      "correct": "diamonds"
+    }
+  ]
+}
