@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- The title, like every other visible string, is set from i18n.js. -->
+<title>Quiz</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body class="phone">
+<!--
+  The phone: a buzzer, nothing more. The four suits carry no text and no letters, because
+  the question and the options are on the TV, which is the screen everyone shares.
+-->
+<main class="panel">
+  <div class="inner">
+
+    <div class="bar">
+      <span class="me" id="bar-me"></span>
+      <span class="score" id="bar-score"></span>
+      <span id="langs"></span>
+    </div>
+
+    <section class="view join" id="view-join" hidden>
+      <form id="form-join" autocomplete="off">
+        <h1 data-i18n="joinHeading"></h1>
+        <label class="field">
+          <span class="k" data-i18n="codeLabel"></span>
+          <input name="code" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+        </label>
+        <label class="field">
+          <span class="k" data-i18n="nameLabel"></span>
+          <input name="name" type="text" maxlength="24" required>
+        </label>
+        <button class="cta" type="submit" data-i18n="joinButton"></button>
+        <p class="error" id="join-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="view play" id="view-play" hidden>
+      <p class="status" id="play-status"></p>
+      <div class="buzzers" id="buzzers">
+        <button class="buzz" type="button" data-marker="hearts" aria-pressed="false"><span class="glyph"></span></button>
+        <button class="buzz" type="button" data-marker="diamonds" aria-pressed="false"><span class="glyph"></span></button>
+        <button class="buzz" type="button" data-marker="clubs" aria-pressed="false"><span class="glyph"></span></button>
+        <button class="buzz" type="button" data-marker="spades" aria-pressed="false"><span class="glyph"></span></button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script src="lib/signalr/signalr.min.js"></script>
+<script type="module" src="join.js"></script>
+</body>
+</html>

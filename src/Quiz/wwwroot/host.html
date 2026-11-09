@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<!-- The title, like every other visible string, is set from i18n.js. -->
+<title>Quiz</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body class="tv">
+<!-- The TV / laptop screen: the host drives the round from here. -->
+<main class="panel">
+  <div class="inner">
+
+    <div class="topbar">
+      <span id="tag-room" hidden></span>
+      <span id="tag-question" hidden></span>
+      <span id="tag-answered" hidden></span>
+      <span class="clock" id="tag-clock" hidden></span>
+      <span class="status" id="tag-connection" hidden></span>
+      <span id="langs"></span>
+    </div>
+
+    <!-- 1 · open a room -->
+    <section class="view" id="view-setup" hidden>
+      <form class="form" id="form-open" autocomplete="off">
+        <h1 data-i18n="openHeading"></h1>
+        <label class="field">
+          <span class="k" data-i18n="hostKeyLabel"></span>
+          <input name="hostKey" type="password" autocomplete="off" required>
+        </label>
+        <label class="field">
+          <span class="k" data-i18n="setLabel"></span>
+          <select name="setId" id="set-id"></select>
+        </label>
+        <button class="cta" type="submit" data-i18n="openButton"></button>
+        <p class="error" id="setup-error" role="alert"></p>
+      </form>
+    </section>
+
+    <!-- 2 · this page was reloaded while a room was live -->
+    <section class="view" id="view-resume" hidden>
+      <div class="form">
+        <h1 data-i18n="resumeHeading"></h1>
+        <p class="muted" id="resume-code"></p>
+        <p class="status" data-i18n="resumeHint"></p>
+        <div class="resume-actions">
+          <button class="cta" type="button" id="resume-start" data-i18n="startButton"></button>
+          <button class="ghost" type="button" id="resume-close" data-i18n="closeQuestionButton"></button>
+          <button class="ghost" type="button" id="resume-next" data-i18n="nextButton"></button>
+          <button class="ghost" type="button" id="resume-new" data-i18n="newRoomButton"></button>
+        </div>
+        <p class="error" id="resume-error" role="alert"></p>
+      </div>
+    </section>
+
+    <!-- 3 · lobby -->
+    <section class="view lobby" id="view-lobby" hidden>
+      <div class="label kod" data-i18n="codeTag"></div>
+      <div class="code" id="lobby-code"></div>
+      <div class="where" id="lobby-where"></div>
+      <div class="pills" id="lobby-players"></div>
+      <p class="status" id="lobby-status" hidden></p>
+      <button class="cta go" type="button" id="start" data-i18n="startButton" hidden></button>
+    </section>
+
+    <!-- 4 · a question is open -->
+    <section class="view" id="view-question" hidden>
+      <p class="question"><span class="caret">&gt;</span> <span id="question-text"></span><span class="block">&nbsp;</span></p>
+      <div class="options" id="question-options"></div>
+    </section>
+
+    <!-- 5 · the question is over -->
+    <section class="view" id="view-reveal" hidden>
+      <p class="answer"><span data-i18n="correctIs"></span> <span class="glyph" id="reveal-glyph"></span> <span class="opt-text" id="reveal-text"></span></p>
+      <div class="bars" id="reveal-bars"></div>
+      <ol class="board" id="reveal-board"></ol>
+      <div class="row-end">
+        <button class="cta" type="button" id="next"></button>
+      </div>
+    </section>
+
+    <!-- 6 · the round is over -->
+    <section class="view finished" id="view-finished" hidden>
+      <h1 data-i18n="finishedHeading"></h1>
+      <ol class="board" id="final-board"></ol>
+      <div class="row-end">
+        <button class="cta" type="button" id="new-room" data-i18n="newRoomButton"></button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script src="lib/signalr/signalr.min.js"></script>
+<script type="module" src="host.js"></script>
+</body>
+</html>
