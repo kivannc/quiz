@@ -22,4 +22,20 @@ public sealed class ScoringTests
     {
         Assert.Equal(0, Scoring.Points(true, TimeSpan.FromSeconds(-1), Limit));
     }
+
+    [Fact]
+    public void Points_rounds_half_away_from_zero()
+    {
+        // 1000 - 500 * 0.06 / 20 = 998.5: away from zero gives 999, banker's rounding gives 998.
+        Assert.Equal(999, Scoring.Points(true, TimeSpan.FromMilliseconds(60), Limit));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void Points_throws_for_a_non_positive_limit(int limitSeconds)
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Scoring.Points(true, TimeSpan.Zero, TimeSpan.FromSeconds(limitSeconds)));
+    }
 }
