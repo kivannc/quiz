@@ -1,0 +1,18 @@
+# Keep the build context to what the image needs.
+tests/
+**/bin/
+**/obj/
+.git
+.github/
+.gitignore
+.dockerignore
+Dockerfile
+*.md
+LICENSE
+.env
+.env.*
+.vs/
+.vscode/
+.idea/
+**/appsettings.Development.json
+**/Properties/launchSettings.json
