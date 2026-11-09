@@ -109,6 +109,9 @@ conn.on('Paused', (paused) => {
 conn.on('RoomClosed', () => {
   // Not an error and not a dead screen: the game ended, and this phone can join another room.
   forget();
+  // That code went with the room and will never work again, so it is not worth offering back; the
+  // name is, and whoever opens the next room will read it out anyway.
+  el('form-join').elements.code.value = '';
   state.phase = 'join';
   state.code = null;
   state.name = null;
