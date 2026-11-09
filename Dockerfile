@@ -8,10 +8,12 @@ RUN dotnet restore src/Quiz/Quiz.csproj
 
 COPY src/Quiz/ src/Quiz/
 # questions/*.json are copied to the output by the csproj, so they land in /app/publish/questions.
-RUN dotnet publish src/Quiz/Quiz.csproj -c Release --no-restore -o /app/publish
+RUN dotnet publish src/Quiz/Quiz.csproj -c Release --no-restore -p:UseAppHost=false -o /app/publish
 
 # Run stage: ASP.NET runtime only, on Alpine.
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
+# Links the GHCR package to its repository, so the release workflow's GITHUB_TOKEN may push to it.
+LABEL org.opencontainers.image.source="https://github.com/kivannc/quiz"
 WORKDIR /app
 COPY --from=build /app/publish .
 
