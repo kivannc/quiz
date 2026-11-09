@@ -106,6 +106,19 @@ public sealed class JsonQuestionSetSourceTests : IDisposable
     }
 
     [Fact]
+    public void A_question_with_four_valid_options_but_no_correct_marker_throws()
+    {
+        // Four options, four distinct markers: only the correct-marker rule is broken.
+        // (With four distinct markers every marker is present, so "correct" can only be absent.)
+        Write("nocorrect.json", SetJson("nocorrect", i => QuestionJson($"nc-{i}").Replace(", \"correct\": \"hearts\"", "")));
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new JsonQuestionSetSource(_dir));
+
+        Assert.Contains("nocorrect.json", ex.Message);
+        Assert.Contains("correct marker", ex.Message);
+    }
+
+    [Fact]
     public void A_missing_directory_throws()
     {
         var missing = Path.Combine(_dir, "does-not-exist");
