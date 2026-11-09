@@ -17,7 +17,8 @@ public sealed record RevealView(
 /// One room: its players and one round of questions played in order.
 /// There are no timers here. The host's page owns the countdown and calls <see cref="CloseQuestion"/>;
 /// the room independently records when each question opened and refuses answers that arrive after the limit.
-/// Not thread-safe: the caller serialises access.
+/// Safe for concurrent use: every public member takes one internal lock, so simultaneous calls
+/// (two phones answering at the same instant) are applied one at a time.
 /// </summary>
 public sealed class Room
 {
@@ -29,6 +30,7 @@ public sealed class Room
 
     private sealed record GivenAnswer(Marker Marker, int Points);
 
+    private readonly object _gate = new();
     private readonly QuestionSet _set;
     private readonly TimeProvider _clock;
     private readonly int _maxPlayers;
@@ -36,13 +38,15 @@ public sealed class Room
 
     // Insertion order is join order; it is also the tie-break for standings.
     private readonly List<Seat> _seats = [];
-    private readonly Dictionary<string, Seat> _seatByName = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, Seat> _seatByName = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, Seat> _seatByConnection = new(StringComparer.Ordinal);
 
     private readonly Dictionary<Seat, GivenAnswer> _answers = [];
     private int _questionIndex;
     private DateTimeOffset _questionStartedAt;
     private RevealView? _reveal;
+    private RoomPhase _phase = RoomPhase.Lobby;
+    private DateTimeOffset _lastActivity;
 
     public Room(string code, QuestionSet set, TimeProvider clock, int maxPlayers, TimeSpan questionLimit)
     {
@@ -53,68 +57,82 @@ public sealed class Room
         _clock = clock;
         _maxPlayers = maxPlayers;
         _questionLimit = questionLimit;
-        LastActivity = clock.GetUtcNow();
+        _lastActivity = clock.GetUtcNow();
     }
 
     public string Code { get; }
 
-    public RoomPhase Phase { get; private set; } = RoomPhase.Lobby;
+    public RoomPhase Phase { get { lock (_gate) return _phase; } }
 
     /// <summary>The last time an accepted call changed the room. Refused calls do not count.</summary>
-    public DateTimeOffset LastActivity { get; private set; }
+    public DateTimeOffset LastActivity { get { lock (_gate) return _lastActivity; } }
 
-    public IReadOnlyList<PlayerView> Players => _seats.Select(s => new PlayerView(s.Name, s.Score)).ToList();
+    public IReadOnlyList<PlayerView> Players { get { lock (_gate) return _seats.Select(s => new PlayerView(s.Name, s.Score)).ToList(); } }
 
     public QuestionView? CurrentQuestion
     {
         get
         {
-            if (Phase is not (RoomPhase.Question or RoomPhase.Reveal)) return null;
-            var q = _set.Questions[_questionIndex];
-            return new QuestionView(_questionIndex, _set.Questions.Count, q.Text, q.Options, (int)_questionLimit.TotalSeconds);
+            lock (_gate)
+            {
+                if (_phase is not (RoomPhase.Question or RoomPhase.Reveal)) return null;
+                var q = _set.Questions[_questionIndex];
+                return new QuestionView(_questionIndex, _set.Questions.Count, q.Text, q.Options, (int)_questionLimit.TotalSeconds);
+            }
         }
     }
 
     /// <summary>How many answers have been accepted for the current question.</summary>
-    public int AnswerCount => _answers.Count;
+    public int AnswerCount { get { lock (_gate) return _answers.Count; } }
 
     /// <summary>
-    /// Seats <paramref name="name"/>. A name already in the room is a rejoin at any phase: the connection is
+    /// Seats <paramref name="name"/> (trimmed; matched case-insensitively; the spelling first seen is displayed;
+    /// empty or whitespace throws). A name already in the room is a rejoin at any phase: the connection is
     /// remapped onto the existing seat and the score is kept. A new name needs a free seat and a lobby.
     /// </summary>
     public JoinResult Join(string name, string connectionId)
     {
-        if (_seatByName.TryGetValue(name, out var existing))
+        ArgumentNullException.ThrowIfNull(name);
+        name = name.Trim();
+        if (name.Length == 0) throw new ArgumentException("A name must not be empty.", nameof(name));
+
+        lock (_gate)
         {
-            foreach (var stale in _seatByConnection.Where(kv => kv.Value == existing).Select(kv => kv.Key).ToList())
+            if (_seatByName.TryGetValue(name, out var existing))
             {
-                _seatByConnection.Remove(stale);
+                foreach (var stale in _seatByConnection.Where(kv => kv.Value == existing).Select(kv => kv.Key).ToList())
+                {
+                    _seatByConnection.Remove(stale);
+                }
+                _seatByConnection[connectionId] = existing;
+                Touch();
+                return JoinResult.Rejoined;
             }
-            _seatByConnection[connectionId] = existing;
+
+            if (_phase != RoomPhase.Lobby) return JoinResult.RoundInProgress;
+            if (_seats.Count >= _maxPlayers) return JoinResult.RoomFull;
+
+            var seat = new Seat(name);
+            _seats.Add(seat);
+            _seatByName[name] = seat;
+            _seatByConnection[connectionId] = seat;
             Touch();
-            return JoinResult.Rejoined;
+            return JoinResult.Joined;
         }
-
-        if (Phase != RoomPhase.Lobby) return JoinResult.RoundInProgress;
-        if (_seats.Count >= _maxPlayers) return JoinResult.RoomFull;
-
-        var seat = new Seat(name);
-        _seats.Add(seat);
-        _seatByName[name] = seat;
-        _seatByConnection[connectionId] = seat;
-        Touch();
-        return JoinResult.Joined;
     }
 
     /// <summary>Opens the first question. Refused outside the lobby or with nobody seated.</summary>
     public bool Start()
     {
-        if (Phase != RoomPhase.Lobby || _seats.Count == 0) return false;
+        lock (_gate)
+        {
+            if (_phase != RoomPhase.Lobby || _seats.Count == 0) return false;
 
-        _questionIndex = 0;
-        OpenQuestion();
-        Touch();
-        return true;
+            _questionIndex = 0;
+            OpenQuestion();
+            Touch();
+            return true;
+        }
     }
 
     /// <summary>
@@ -123,17 +141,20 @@ public sealed class Room
     /// </summary>
     public bool Answer(string connectionId, Marker marker)
     {
-        if (Phase != RoomPhase.Question) return false;
-        if (!_seatByConnection.TryGetValue(connectionId, out var seat)) return false;
-        if (_answers.ContainsKey(seat)) return false;
+        lock (_gate)
+        {
+            if (_phase != RoomPhase.Question) return false;
+            if (!_seatByConnection.TryGetValue(connectionId, out var seat)) return false;
+            if (_answers.ContainsKey(seat)) return false;
 
-        var elapsed = _clock.GetUtcNow() - _questionStartedAt;
-        if (elapsed > _questionLimit) return false;
+            var elapsed = _clock.GetUtcNow() - _questionStartedAt;
+            if (elapsed > _questionLimit) return false;
 
-        var correct = marker == _set.Questions[_questionIndex].Correct;
-        _answers[seat] = new GivenAnswer(marker, Scoring.Points(correct, elapsed, _questionLimit));
-        Touch();
-        return true;
+            var correct = marker == _set.Questions[_questionIndex].Correct;
+            _answers[seat] = new GivenAnswer(marker, Scoring.Points(correct, elapsed, _questionLimit));
+            Touch();
+            return true;
+        }
     }
 
     /// <summary>
@@ -143,23 +164,26 @@ public sealed class Room
     /// </summary>
     public RevealView CloseQuestion()
     {
-        if (Phase == RoomPhase.Reveal) return _reveal!;
-        if (Phase != RoomPhase.Question) throw new InvalidOperationException($"No question is open (phase: {Phase}).");
-
-        var distribution = Enum.GetValues<Marker>().ToDictionary(m => m, _ => 0);
-        foreach (var (seat, answer) in _answers)
+        lock (_gate)
         {
-            seat.Score += answer.Points;
-            distribution[answer.Marker]++;
+            if (_phase == RoomPhase.Reveal) return _reveal!;
+            if (_phase != RoomPhase.Question) throw new InvalidOperationException($"No question is open (phase: {_phase}).");
+
+            var distribution = Enum.GetValues<Marker>().ToDictionary(m => m, _ => 0);
+            foreach (var (seat, answer) in _answers)
+            {
+                seat.Score += answer.Points;
+                distribution[answer.Marker]++;
+            }
+
+            // OrderByDescending is stable, so equal scores stay in join order.
+            var standings = _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList();
+
+            _reveal = new RevealView(_set.Questions[_questionIndex].Correct, distribution, standings);
+            _phase = RoomPhase.Reveal;
+            Touch();
+            return _reveal;
         }
-
-        // OrderByDescending is stable, so equal scores stay in join order.
-        var standings = _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList();
-
-        _reveal = new RevealView(_set.Questions[_questionIndex].Correct, distribution, standings);
-        Phase = RoomPhase.Reveal;
-        Touch();
-        return _reveal;
     }
 
     /// <summary>
@@ -168,19 +192,22 @@ public sealed class Room
     /// </summary>
     public bool Advance()
     {
-        if (Phase == RoomPhase.Finished) return false;
-        if (Phase != RoomPhase.Reveal) throw new InvalidOperationException($"Nothing to advance from (phase: {Phase}).");
-
-        Touch();
-        if (_questionIndex + 1 >= _set.Questions.Count)
+        lock (_gate)
         {
-            Phase = RoomPhase.Finished;
-            return false;
-        }
+            if (_phase == RoomPhase.Finished) return false;
+            if (_phase != RoomPhase.Reveal) throw new InvalidOperationException($"Nothing to advance from (phase: {_phase}).");
 
-        _questionIndex++;
-        OpenQuestion();
-        return true;
+            Touch();
+            if (_questionIndex + 1 >= _set.Questions.Count)
+            {
+                _phase = RoomPhase.Finished;
+                return false;
+            }
+
+            _questionIndex++;
+            OpenQuestion();
+            return true;
+        }
     }
 
     private void OpenQuestion()
@@ -188,8 +215,8 @@ public sealed class Room
         _answers.Clear();
         _reveal = null;
         _questionStartedAt = _clock.GetUtcNow();
-        Phase = RoomPhase.Question;
+        _phase = RoomPhase.Question;
     }
 
-    private void Touch() => LastActivity = _clock.GetUtcNow();
+    private void Touch() => _lastActivity = _clock.GetUtcNow();
 }

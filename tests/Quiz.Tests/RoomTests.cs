@@ -70,6 +70,41 @@ public sealed class RoomTests
         Assert.False(room.Answer("conn-Ada", Marker.Hearts));
     }
 
+    [Theory]
+    [InlineData("  Ada ")]
+    [InlineData("ada")]
+    [InlineData("ADA ")]
+    public void Rejoining_with_whitespace_or_different_case_lands_in_the_same_seat_with_the_score_intact(string typedAgain)
+    {
+        var room = StartedRoom("Ada");
+        room.Answer("conn-Ada", Marker.Hearts);
+        room.CloseQuestion();
+
+        Assert.Equal(JoinResult.Rejoined, room.Join(typedAgain, "conn-new"));
+
+        Assert.Equal(new[] { new PlayerView("Ada", Scoring.MaxPoints) }, room.Players);   // first-seen spelling kept
+        room.Advance();
+        Assert.True(room.Answer("conn-new", Marker.Diamonds));
+    }
+
+    [Fact]
+    public void A_name_is_stored_trimmed()
+    {
+        var room = NewRoom();
+
+        room.Join("  Ada  ", "c1");
+
+        Assert.Equal("Ada", room.Players.Single().Name);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void An_empty_or_whitespace_name_throws(string name)
+    {
+        Assert.Throws<ArgumentException>(() => NewRoom().Join(name, "c1"));
+    }
+
     [Fact]
     public void A_new_name_after_the_round_started_is_refused_with_RoundInProgress()
     {
