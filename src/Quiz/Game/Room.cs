@@ -71,6 +71,12 @@ public sealed class Room
 
     public IReadOnlyList<PlayerView> Players { get { lock (_gate) return _seats.Select(s => new PlayerView(s.Name, s.Score)).ToList(); } }
 
+    /// <summary>Players best score first; equal scores stay in join order (the same ordering <see cref="CloseQuestion"/> reports).</summary>
+    public IReadOnlyList<PlayerView> Standings
+    {
+        get { lock (_gate) return _seats.OrderByDescending(s => s.Score).Select(s => new PlayerView(s.Name, s.Score)).ToList(); }
+    }
+
     public QuestionView? CurrentQuestion
     {
         get

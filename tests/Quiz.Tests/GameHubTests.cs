@@ -38,12 +38,13 @@ public sealed class GameHubTests : IDisposable
         return factory;
     }
 
-    private async Task<HubConnection> Connect(WebApplicationFactory<Program> factory)
+    private async Task<HubConnection> Connect(WebApplicationFactory<Program> factory, string? clientAddress = null)
     {
         var connection = new HubConnectionBuilder()
             .WithUrl(new Uri(factory.Server.BaseAddress, "/hub"), o =>
             {
                 o.HttpMessageHandlerFactory = _ => factory.Server.CreateHandler();
+                if (clientAddress is not null) o.Headers["X-Forwarded-For"] = clientAddress;
                 o.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling;
             })
             .AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)))
@@ -447,5 +448,112 @@ public sealed class GameHubTests : IDisposable
         await host.InvokeAsync("StartRound", code, HostKey);
         await Barrier(player);
         Assert.Equal(1, finished.Total);
+    }
+
+    [Fact]
+    public async Task Connections_from_one_address_share_a_create_throttle_bucket()
+    {
+        var factory = Factory(("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", "2"));
+        var first = await Connect(factory, "203.0.113.7");
+        for (var i = 0; i < 2; i++)
+            Assert.Contains("forbidden", (await Refused(() => first.InvokeAsync<string>("CreateRoom", "guess-number-" + i + "-0000", "genel-kultur"))).Message);
+
+        // A fresh connection from the same address gets no new allowance...
+        var reconnected = await Connect(factory, "203.0.113.7");
+        Assert.Contains("throttled", (await Refused(() => reconnected.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur"))).Message);
+
+        // ...while a different address has its own.
+        var other = await Connect(factory, "203.0.113.8");
+        Assert.Matches("^[1-9][0-9]{3}$", await Open(other));
+    }
+
+    [Fact]
+    public async Task Connections_from_one_address_share_a_join_throttle_bucket()
+    {
+        var factory = Factory(("QUIZ_JOIN_ATTEMPTS_PER_MINUTE", "2"));
+        var first = await Connect(factory, "203.0.113.7");
+        for (var i = 0; i < 2; i++)
+            Assert.Contains("no-such-room", (await Refused(() => first.InvokeAsync<string>("Join", "1234", "Ada"))).Message);
+        var second = await Connect(factory, "203.0.113.7");
+        Assert.Contains("throttled", (await Refused(() => second.InvokeAsync<string>("Join", "1234", "Ada"))).Message);
+    }
+
+    [Fact]
+    public async Task A_phone_that_rejoins_mid_question_gets_the_current_question_on_that_connection_only()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var other = await Connect(factory);
+        var otherQuestions = new Inbox<JsonElement>(other, "QuestionStarted");
+        await other.InvokeAsync<string>("Join", code, "Bob");
+        var phone = await Connect(factory);
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await Barrier(other);
+        Assert.Equal(1, otherQuestions.Total);
+
+        // The phone reloads: a new connection, the same name.
+        var reloaded = await Connect(factory);
+        var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
+        Assert.Equal("Rejoined", await reloaded.InvokeAsync<string>("Join", code, "Ada"));
+        var q = await questions.Next();
+        Assert.Equal(0, q.GetProperty("index").GetInt32());
+        Assert.Equal(4, q.GetProperty("options").GetArrayLength());
+
+        await Barrier(other);
+        Assert.Equal(1, otherQuestions.Total); // nobody else was sent it again
+    }
+
+    [Fact]
+    public async Task A_phone_that_rejoins_during_the_reveal_gets_the_current_reveal()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await phone.InvokeAsync("Answer", code, "clubs");
+        await host.InvokeAsync("CloseQuestion", code, HostKey);
+
+        var reloaded = await Connect(factory);
+        var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
+        var reveals = new Inbox<JsonElement>(reloaded, "Revealed");
+        await reloaded.InvokeAsync<string>("Join", code, "Ada");
+        var reveal = await reveals.Next();
+        Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
+        Assert.True(reveal.GetProperty("standings")[0].GetProperty("score").GetInt32() > 0);
+        Assert.Equal(0, questions.Total);
+    }
+
+    [Fact]
+    public async Task A_lobby_join_is_not_sent_a_question()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        var questions = new Inbox<JsonElement>(player, "QuestionStarted");
+        var reveals = new Inbox<JsonElement>(player, "Revealed");
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        await Barrier(player);
+        Assert.Equal(0, questions.Total + reveals.Total);
+    }
+
+    [Theory]
+    [InlineData(24, true)]
+    [InlineData(25, false)]
+    public async Task Names_longer_than_24_characters_are_refused(int length, bool accepted)
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        var name = new string('a', length);
+        if (accepted)
+            Assert.Equal("Joined", await player.InvokeAsync<string>("Join", code, name));
+        else
+            Assert.Contains("invalid-name", (await Refused(() => player.InvokeAsync<string>("Join", code, name))).Message);
     }
 }

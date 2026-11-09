@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.HttpOverrides;
 using System.Text.Json.Serialization;
 using Quiz.Game;
 using Quiz.Hosting;
@@ -42,8 +43,19 @@ builder.Services.AddHostedService<IdleRoomSweeper>();
 builder.Services.AddSignalR().AddJsonProtocol(o =>
     o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
+builder.Services.Configure<ForwardedHeadersOptions>(o =>
+{
+    o.ForwardedHeaders = ForwardedHeaders.XForwardedFor;
+    // Trusting X-Forwarded-For from any sender is safe here only because this container publishes no ports:
+    // the reverse proxy is the only thing that can reach it, which the deployment design guarantees, and it
+    // sets the header itself. Without this every player would share the proxy's address and one throttle bucket.
+    o.KnownNetworks.Clear();
+    o.KnownProxies.Clear();
+});
+
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapGet("/healthz", () => Results.Ok());

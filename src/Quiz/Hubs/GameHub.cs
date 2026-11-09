@@ -31,7 +31,7 @@ public sealed class GameHub(
     public async Task<string> CreateRoom(string hostKey, string setId)
     {
         // Counted before the key is checked, so guessing the key is what gets limited.
-        if (!createThrottle.Allow(Context.ConnectionId)) throw new HubException("throttled");
+        if (!createThrottle.Allow(ClientKey())) throw new HubException("throttled");
         if (!hosts.IsHost(hostKey)) throw new HubException("forbidden");
 
         var code = rooms.Create(setId) switch
@@ -48,7 +48,7 @@ public sealed class GameHub(
     /// <summary>Seats a player. Returns the <see cref="JoinResult"/> name; a refused join (RoomFull, RoundInProgress) is a result, not an error.</summary>
     public async Task<string> Join(string code, string name)
     {
-        if (!joinThrottle.Allow(Context.ConnectionId)) throw new HubException("throttled");
+        if (!joinThrottle.Allow(ClientKey())) throw new HubException("throttled");
         var room = RoomOrThrow(code);
 
         name = name?.Trim() ?? "";
@@ -60,6 +60,7 @@ public sealed class GameHub(
             await Groups.AddToGroupAsync(Context.ConnectionId, code);
             var seat = room.Players.First(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
             await Clients.Caller.SendAsync("Seated", seat.Name, seat.Score);
+            await Resync(room);
             await SendRoomState(room);
         }
         return result.ToString();
@@ -107,11 +108,28 @@ public sealed class GameHub(
         }
         else
         {
-            // Best score first; OrderBy is stable, so ties stay in join order, as in the reveal.
-            var standings = room.Players.OrderByDescending(p => p.Score).ToList();
-            await Clients.Group(code).SendAsync("RoundFinished", standings);
+            await Clients.Group(code).SendAsync("RoundFinished", room.Standings);
         }
         await SendRoomState(room);
+    }
+
+    // Throttles are per client address, so opening a fresh connection buys no new allowance. Program.cs makes the
+    // address the real client's behind the reverse proxy. Without an address (never expected) fall back to the connection.
+    private string ClientKey() =>
+        Context.GetHttpContext()?.Connection.RemoteIpAddress?.ToString() ?? Context.ConnectionId;
+
+    // A phone that joins or rejoins mid-round is shown what is on screen now, to that connection only.
+    private async Task Resync(Room room)
+    {
+        switch (room.Phase)
+        {
+            case RoomPhase.Question:
+                await Clients.Caller.SendAsync("QuestionStarted", room.CurrentQuestion);
+                break;
+            case RoomPhase.Reveal when Try(room.CloseQuestion, out var reveal): // repeats the current reveal; no state changes
+                await Clients.Caller.SendAsync("Revealed", reveal);
+                break;
+        }
     }
 
     private Room RoomOrThrow(string code) => rooms.Find(code) ?? throw new HubException("no-such-room");
