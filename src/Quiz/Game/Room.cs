@@ -56,6 +56,14 @@ public sealed class Room
     private RoomPhase _phase = RoomPhase.Lobby;
     private DateTimeOffset _lastActivity;
 
+    /// <summary>
+    /// How long a pause holds a room out of the idle sweep. Far longer than any walk away from the table
+    /// a round survives, and short of forever: a paused screen that is simply abandoned would otherwise
+    /// keep a room slot and its code for as long as the process lives, and there are only a few slots.
+    /// Past this the room ages from the end of the grace like any other, and is reclaimed and told so.
+    /// </summary>
+    public static readonly TimeSpan PauseGrace = TimeSpan.FromHours(4);
+
     public Room(string code, QuestionSet set, TimeProvider clock, int maxPlayers, TimeSpan questionLimit)
     {
         if (set.Questions.Count == 0) throw new ArgumentException("A room needs at least one question.", nameof(set));
@@ -74,12 +82,22 @@ public sealed class Room
 
     /// <summary>
     /// The last time an accepted call changed the room. Refused calls do not count. A paused room counts
-    /// as active for as long as the pause lasts: a long walk away from the table is what pausing is for,
-    /// and the idle sweep must not take the room, the scores and the code while everyone is in the kitchen.
+    /// as active while it is paused: a long walk away from the table is what pausing is for, and the idle
+    /// sweep must not take the room, the scores and the code while everyone is in the kitchen. That only
+    /// holds for <see cref="PauseGrace"/>, after which the room is as old as the end of its grace and
+    /// ages on from there, because a pause nobody ever came back to is an abandoned room.
     /// </summary>
     public DateTimeOffset LastActivity
     {
-        get { lock (_gate) return _pausedAt is not null ? _clock.GetUtcNow() : _lastActivity; }
+        get
+        {
+            lock (_gate)
+            {
+                if (_pausedAt is not { } since) return _lastActivity;
+                var now = _clock.GetUtcNow();
+                return now - since <= PauseGrace ? now : since + PauseGrace;
+            }
+        }
     }
 
     public IReadOnlyList<PlayerView> Players { get { lock (_gate) return _seats.Select(s => new PlayerView(s.Name, s.Score)).ToList(); } }

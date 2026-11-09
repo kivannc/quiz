@@ -102,6 +102,18 @@ public sealed class GameHubTests : IDisposable
 
     private static async Task<HubException> Refused(Func<Task> call) => await Assert.ThrowsAsync<HubException>(call);
 
+    /// <summary>
+    /// Sends to both of a room's groups, named the way <c>GameHub</c> names them: the code itself,
+    /// which carries the question and the reveal, and <c>code + ":host"</c>, which carries what only
+    /// the screens are sent. Used on either side of a room ending, so that silence afterwards means
+    /// the groups were emptied rather than that the test was shouting down a name nobody uses.
+    /// </summary>
+    private static async Task Probe(IHubContext<GameHub> hub, string code)
+    {
+        await hub.Clients.Group(code).SendAsync("Probe");
+        await hub.Clients.Group(code + ":host").SendAsync("HostProbe");
+    }
+
     [Fact]
     public async Task A_host_can_open_a_room_and_a_player_can_join_and_score()
     {
@@ -422,6 +434,13 @@ public sealed class GameHubTests : IDisposable
         await phone.InvokeAsync<string>("Join", code, "Ada");
         await host.InvokeAsync("StartRound", code, HostKey);
 
+        var hub = factory.Services.GetRequiredService<IHubContext<GameHub>>();
+        var roomProbes = new Inbox<object?>(record => phone.On("Probe", () => record(null)));
+        var hostProbes = new Inbox<object?>(record => host.On("HostProbe", () => record(null)));
+        await Probe(hub, code);
+        await roomProbes.Next();
+        await hostProbes.Next();
+
         await host.InvokeAsync("CloseRoom", code, HostKey);
 
         await closedOnThePhone.Next();
@@ -434,8 +453,11 @@ public sealed class GameHubTests : IDisposable
         var connections = factory.Services.GetRequiredService<ConnectionRooms>();
         Assert.Null(connections.Playing(phone.ConnectionId!));
         Assert.Null(connections.Hosting(host.ConnectionId!));
-        await factory.Services.GetRequiredService<IHubContext<GameHub>>().Clients.Group(code).SendAsync("RoomClosed");
+        await Probe(hub, code);
         await Barrier(phone);
+        await Barrier(host);
+        Assert.Equal(1, roomProbes.Total);  // the phone is out of the room group...
+        Assert.Equal(1, hostProbes.Total);  // ...and the screen is out of the host group
         Assert.Equal(1, closedOnThePhone.Total);
     }
 
@@ -449,6 +471,14 @@ public sealed class GameHubTests : IDisposable
         var closed = new Inbox<object?>(record => phone.On("RoomClosed", () => record(null)));
         await phone.InvokeAsync<string>("Join", code, "Ada");
         await host.InvokeAsync("StartRound", code, HostKey);
+
+        // Both groups reach their members while the room is alive, so that the same sends after it
+        // ends mean something.
+        var roomProbes = new Inbox<object?>(record => phone.On("Probe", () => record(null)));
+        var hostProbes = new Inbox<object?>(record => host.On("HostProbe", () => record(null)));
+        await Probe(factory.Services.GetRequiredService<IHubContext<GameHub>>(), code);
+        await roomProbes.Next();
+        await hostProbes.Next();
 
         // Exactly what IdleRoomSweeper does with a room nobody has touched: take it out of the store,
         // then end it on the wire. A room that simply vanished would leave this phone on a dead
@@ -468,8 +498,11 @@ public sealed class GameHubTests : IDisposable
         var connections = services.GetRequiredService<ConnectionRooms>();
         Assert.Null(connections.Playing(phone.ConnectionId!));
         Assert.Null(connections.Hosting(host.ConnectionId!));
-        await hub.Clients.Group(code).SendAsync("RoomClosed");
+        await Probe(hub, code);
         await Barrier(phone);
+        await Barrier(host);
+        Assert.Equal(1, roomProbes.Total); // the phone is out of the room group...
+        Assert.Equal(1, hostProbes.Total); // ...and the screen is out of the host group
         Assert.Equal(1, closed.Total);
     }
 

@@ -649,6 +649,23 @@ public sealed class RoomTests
     }
 
     [Fact]
+    public void A_pause_holds_the_room_open_for_the_grace_and_no_longer()
+    {
+        var room = StartedRoom("Ada");
+        Assert.True(room.Pause());
+        var pausedAt = _clock.GetUtcNow();
+
+        // Still being waited for, right up to the end of the grace.
+        _clock.Advance(Room.PauseGrace);
+        Assert.Equal(_clock.GetUtcNow(), room.LastActivity);
+
+        // Past it, the room is as old as the end of its grace, and goes on ageing from there: a pause
+        // nobody ever came back to must not hold a room slot and its code for the life of the process.
+        _clock.Advance(TimeSpan.FromHours(8));
+        Assert.Equal(pausedAt + Room.PauseGrace, room.LastActivity);
+    }
+
+    [Fact]
     public void Refused_calls_do_not_move_LastActivity()
     {
         var room = NewRoom(maxPlayers: 1);

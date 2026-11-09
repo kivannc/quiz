@@ -159,9 +159,15 @@ function freezeCountdown() {
  * Starts it again with exactly what was left, never with the whole limit — and starts it even when
  * what was left is nothing, because a question frozen at zero still has to close, and the next tick
  * is what does it. This screen has no other way to close a question by hand.
+ *
+ * A running ticker is what tells a frozen clock from one that was never frozen, since zero left and
+ * never frozen both read as `frozen === 0`: freezing always stops the ticker, so a screen with one
+ * still running has nothing to thaw. Without that, a stray resume — a second screen on the same
+ * key, or one that lands between a reload's QuestionStarted and its Paused — would restart the
+ * countdown with nothing on it and close a running question a tick later.
  */
 function thawCountdown() {
-  if (!state.question) return;
+  if (!state.question || ticker) return;
   const left = frozen;
   frozen = 0;
   startCountdown(state.question.index, Date.now() + left);

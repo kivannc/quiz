@@ -23,7 +23,21 @@ public sealed class IdleRoomSweeper(
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
                 var removed = rooms.SweepIdle();
-                foreach (var code in removed) await GameHub.Ended(hub.Clients, hub.Groups, connections, code);
+                foreach (var code in removed)
+                {
+                    try
+                    {
+                        await GameHub.Ended(hub.Clients, hub.Groups, connections, code);
+                    }
+                    catch (Exception error) when (error is not OperationCanceledException)
+                    {
+                        // That room is already out of the store, so there is nothing to put back and
+                        // nothing to retry; the rooms after it still have to be told. An exception
+                        // escaping here would end this service, and with the default
+                        // BackgroundServiceExceptionBehavior that ends the server.
+                        log.LogError(error, "Could not tell room {Code} that it closed", code);
+                    }
+                }
                 if (removed.Count > 0) log.LogInformation("Swept {Count} idle room(s)", removed.Count);
             }
         }

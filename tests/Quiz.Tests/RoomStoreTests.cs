@@ -153,6 +153,29 @@ public sealed class RoomStoreTests
     }
 
     [Fact]
+    public void A_pause_nobody_comes_back_from_is_swept_in_the_end()
+    {
+        var store = NewStore();
+        var code = CodeOf(store.Create("test"));
+        var room = store.Find(code)!;
+        room.Join("Ada", "c1");
+        Assert.True(room.Start());
+        Assert.True(room.Pause());
+
+        // Deep into the grace, still nobody's to reclaim.
+        _clock.Advance(Room.PauseGrace - TimeSpan.FromMinutes(1));
+        Assert.Empty(store.SweepIdle());
+        Assert.NotNull(store.Find(code));
+
+        // Past the grace it ages from the end of it, and goes one idle timeout after that.
+        _clock.Advance(TimeSpan.FromMinutes(1) + Idle);
+        Assert.Empty(store.SweepIdle()); // exactly at the timeout, which this store keeps
+        _clock.Advance(TimeSpan.FromSeconds(1));
+        Assert.Equal(code, Assert.Single(store.SweepIdle()));
+        Assert.Null(store.Find(code));
+    }
+
+    [Fact]
     public void A_paused_room_is_not_swept_however_long_the_pause_lasts()
     {
         var store = NewStore();
@@ -162,7 +185,8 @@ public sealed class RoomStoreTests
         Assert.True(room.Start());
         Assert.True(room.Pause());
 
-        // Everyone has been away from the table for far longer than the idle timeout.
+        // Everyone has been away from the table for far longer than the idle timeout, and still
+        // inside the grace a pause is given.
         _clock.Advance(Idle * 3);
         Assert.Empty(store.SweepIdle());
         Assert.NotNull(store.Find(code));
