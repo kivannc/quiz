@@ -171,6 +171,31 @@ public sealed class RoomOptionsTests
     public void Non_positive_QuestionLimit_is_rejected(int seconds) =>
         Assert.Throws<ArgumentOutOfRangeException>(() => new RoomOptions(5, 8, Idle, TimeSpan.FromSeconds(seconds), 10));
 
+    [Theory]
+    [InlineData(9001)]
+    [InlineData(100000)]
+    public void MaxRooms_beyond_the_code_space_is_rejected(int maxRooms) =>
+        Assert.Throws<ArgumentOutOfRangeException>(() => new RoomOptions(maxRooms, 8, Idle, Limit, 10));
+
+    [Fact]
+    public void MaxRooms_equal_to_the_code_space_is_accepted() =>
+        Assert.Equal(9000, new RoomOptions(9000, 8, Idle, Limit, 10).MaxRooms);
+
+    [Theory]
+    [InlineData(10)]   // shorter than the question limit
+    [InlineData(20)]   // equal to the question limit
+    public void IdleTimeout_not_longer_than_QuestionLimit_is_rejected(int idleSeconds) =>
+        Assert.Throws<ArgumentOutOfRangeException>(() => new RoomOptions(5, 8, TimeSpan.FromSeconds(idleSeconds), Limit, 10));
+
+    [Fact]
+    public void Options_cannot_be_replaced_after_construction()
+    {
+        // No setters and no init accessors: validation cannot be stepped around.
+        foreach (var p in typeof(RoomOptions).GetProperties())
+            Assert.Null(p.SetMethod);
+        Assert.Empty(typeof(RoomOptions).GetMethods().Where(m => m.Name == "<Clone>$"));
+    }
+
     [Fact]
     public void JoinAttemptsPerMinute_below_one_is_rejected() =>
         Assert.Throws<ArgumentOutOfRangeException>(() => new RoomOptions(5, 8, Idle, Limit, 0));

@@ -36,10 +36,12 @@ public sealed class HostAuthorizerTests
         Assert.False(authorizer.IsHost(null));
     }
 
+    // Attempt side: with a real key configured, an absent/blank attempt is refused.
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void IsHost_is_false_for_a_null_or_empty_attempt(string? attempt)
+    [InlineData("   ")]
+    public void IsHost_is_false_for_a_null_empty_or_whitespace_attempt(string? attempt)
     {
         Assert.False(new KeyHostAuthorizer("s3cret-key").IsHost(attempt));
     }
