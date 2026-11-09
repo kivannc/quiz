@@ -19,7 +19,9 @@ The SignalR browser client is vendored rather than loaded from a CDN:
 `src/Quiz/wwwroot/lib/signalr/signalr.min.js` is `dist/browser/signalr.min.js` taken from
 **@microsoft/signalr 10.0.11** on npm (tarball sha-512
 `FulOJ2EEtKvLQcswe/U7v8pzyXyk7Jua5xgWJPPwyQU/2Z9ORvKcVjyO75VvLsem+CJ1ORRexJ+7Bz1FCei2aw==`).
-To move to another version, download that version's tarball and copy the one file out of it.
+To move to another version, download that version's tarball and copy the one file out of it. The
+only edit to the file is that its trailing `sourceMappingURL` comment is removed, because the `.map`
+it names is not shipped and every load with devtools open would ask for it.
 No web fonts are shipped: the pages ask for `Geist Mono` and fall back to the system monospace.
 
 ## Development

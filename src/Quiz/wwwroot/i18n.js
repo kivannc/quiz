@@ -22,7 +22,9 @@ const STRINGS = {
     joinButton: 'GİR',
     waitingForStart: 'oda hazır, başlamasını bekle',
     pickYours: 'cevabını seç',
+    answerSending: 'gönderiliyor…',
     answerSent: 'cevabın alındı',
+    answerRefused: 'cevap geçmedi',
     // Spoken names for the four suits. They are never shown: the buzzers carry the glyph
     // alone, and this is what a screen reader reads out instead of an empty button.
     markerName: (marker) => ({ hearts: 'kupa', diamonds: 'karo', clubs: 'sinek', spades: 'maça' })[marker] ?? marker,
@@ -74,7 +76,9 @@ const STRINGS = {
     joinButton: 'ENTER',
     waitingForStart: 'you are in, waiting for the host',
     pickYours: 'pick your answer',
+    answerSending: 'sending…',
     answerSent: 'answer locked in',
+    answerRefused: 'that answer did not count',
     markerName: (marker) => ({ hearts: 'hearts', diamonds: 'diamonds', clubs: 'clubs', spades: 'spades' })[marker] ?? marker,
     questionClosed: 'question closed, look at the screen',
     roundOver: 'round over',

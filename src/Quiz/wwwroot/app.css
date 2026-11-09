@@ -13,7 +13,6 @@
   --fg: #ffffff;
   --muted: #9c9c9d;
   --hairline: rgba(255, 255, 255, .10);
-  --glass: rgba(255, 255, 255, .04);
 
   --crimson: #ff2f3a;
   --coral: #ff6b4a;
@@ -82,10 +81,11 @@ body {
 
 /* ---- the four markers: glyph and colour, defined once ---- */
 
-[data-marker='hearts']   { --c: var(--crimson);  --tint: rgba(255, 47, 58, .07);   --tint-up: rgba(255, 47, 58, .20); }
-[data-marker='diamonds'] { --c: var(--amber);    --tint: rgba(255, 179, 71, .07);  --tint-up: rgba(255, 179, 71, .20); }
-[data-marker='clubs']    { --c: var(--teal);     --tint: rgba(74, 214, 195, .07);  --tint-up: rgba(74, 214, 195, .20); }
-[data-marker='spades']   { --c: var(--lavender); --tint: rgba(179, 156, 255, .07); --tint-up: rgba(179, 156, 255, .20); }
+/* --tint is the TV card's fill, --tint-up the phone buzzer's: both washes, not colour blocks. */
+[data-marker='hearts']   { --c: var(--crimson);  --tint: rgba(255, 47, 58, .07);   --tint-up: rgba(255, 47, 58, .10); }
+[data-marker='diamonds'] { --c: var(--amber);    --tint: rgba(255, 179, 71, .07);  --tint-up: rgba(255, 179, 71, .10); }
+[data-marker='clubs']    { --c: var(--teal);     --tint: rgba(74, 214, 195, .07);  --tint-up: rgba(74, 214, 195, .10); }
+[data-marker='spades']   { --c: var(--lavender); --tint: rgba(179, 156, 255, .07); --tint-up: rgba(179, 156, 255, .10); }
 
 .glyph { color: var(--c); line-height: 1; }
 [data-marker='hearts'] > .glyph::before,   .glyph[data-marker='hearts']::before   { content: '\2665'; }
@@ -240,14 +240,14 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .tv .bars .b { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; text-align: center; }
 .tv .bars .b .fill { background: var(--c); border-radius: 4px 4px 0 0; min-height: 3px; }
 .tv .bars .b .n { font-size: clamp(12px, 1.1vw, 20px); color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
-.tv .bars .b .glyph { font-size: clamp(14px, 1.3vw, 24px); margin-bottom: 6px; }
+.tv .bars .b .glyph { font-size: clamp(26px, 2.6vw, 46px); margin-bottom: 8px; }
 
-.tv .board { list-style: none; margin: 0; padding: 0; font-size: clamp(14px, 1.5vw, 26px); }
+.tv .board { list-style: none; margin: 0 auto; padding: 0; width: min(760px, 100%); font-size: clamp(14px, 1.5vw, 26px); }
 .tv .board li { display: flex; justify-content: space-between; gap: 16px; padding: .4em 0; border-bottom: 1px solid rgba(255, 255, 255, .06); }
 .tv .board li:last-child { border-bottom: 0; }
 .tv .board .rank { color: var(--muted); margin-right: .8em; }
 .tv .board .score { font-variant-numeric: tabular-nums; }
-.tv .board.dense { font-size: clamp(12px, 1.1vw, 19px); columns: 2; column-gap: clamp(20px, 3vw, 60px); }
+.tv .board.dense { width: min(1040px, 100%); font-size: clamp(12px, 1.1vw, 19px); columns: 2; column-gap: clamp(20px, 3vw, 60px); }
 .tv .board.dense li { break-inside: avoid; }
 
 .tv .row-end { display: flex; justify-content: center; }
@@ -279,6 +279,7 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .phone .join h1 { font-size: 11px; font-weight: 500; letter-spacing: .18em; color: var(--muted); margin: 0 0 18px; text-transform: uppercase; }
 .phone .join .cta { width: 100%; padding: 13px; }
 .phone .join .error { margin-top: 14px; font-size: 12px; }
+.phone .join .notice { font-size: 12px; margin-bottom: 14px; letter-spacing: .04em; }
 .phone .field input { font-size: 16px; } /* 16px keeps iOS from zooming on focus */
 .phone .field input[name='code'] { letter-spacing: .4em; text-align: center; font-size: 26px; }
 

@@ -86,13 +86,20 @@ public sealed class GameHub(
             // A screen arriving now needs what is left of the limit, not the whole of it: its
             // countdown is what closes the question, and the room goes on refusing answers after
             // the original limit whatever a late screen believes. Truncated, so a resumed screen
-            // closes a shade early rather than a shade late.
-            var left = (int)(room.Remaining ?? TimeSpan.Zero).TotalSeconds;
+            // closes a shade early rather than a shade late, and never below one second, which is
+            // reserved to mean "for context only" below.
+            var left = Math.Max(1, (int)(room.Remaining ?? TimeSpan.Zero).TotalSeconds);
             await Clients.Caller.SendAsync("QuestionStarted", question with { LimitSeconds = left });
             await Clients.Caller.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
         }
         else if (room.CurrentReveal is { } reveal)
         {
+            // The reveal names the correct marker but not the question it answers, and a screen that
+            // has just loaded has never seen one. Send it first, with no time on it, so the screen
+            // can say which question this is and read the winning option out; limitSeconds 0 means
+            // "context, nothing is open", and the reveal that follows is what gets painted.
+            if (room.CurrentQuestion is { } asked)
+                await Clients.Caller.SendAsync("QuestionStarted", asked with { LimitSeconds = 0 });
             await Clients.Caller.SendAsync("Revealed", reveal);
         }
         else if (room.Phase == RoomPhase.Finished)
@@ -111,12 +118,18 @@ public sealed class GameHub(
         await SendRoomState(room);
     }
 
-    public async Task Answer(string code, Marker marker)
+    /// <summary>
+    /// Records an answer and says whether the room took it. False is an ordinary outcome, not an
+    /// error: the question may have closed, the limit may have passed while a host tab was asleep,
+    /// or this seat may have answered already. The phone needs the truth to show the player.
+    /// </summary>
+    public async Task<bool> Answer(string code, Marker marker)
     {
         var room = RoomOrThrow(code);
-        if (!room.Answer(Context.ConnectionId, marker)) return;
+        if (!room.Answer(Context.ConnectionId, marker)) return false;
 
         await SendAnswerCount(room);
+        return true;
     }
 
     public async Task CloseQuestion(string code, string hostKey)

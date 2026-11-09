@@ -25,7 +25,8 @@ const state = {
   name: null,       // as the server spells it back in Seated
   score: 0,
   index: null,      // which question is open, so a reload can tell whose answer it kept
-  chosen: null,     // the marker this phone sent for the current question
+  pending: null,    // a tap on its way to the server, not yet taken
+  chosen: null,     // the marker the room accepted for the current question
   error: '',
   connection: '',
 };
@@ -100,6 +101,7 @@ conn.on('QuestionStarted', (question) => {
   // Its index is used only to tell this phone's own answer apart from an older one.
   state.phase = 'question';
   state.index = question.index;
+  state.pending = null;
   state.chosen = recallTap(question.index);
   state.error = '';
   render();
@@ -195,18 +197,25 @@ el('form-join').addEventListener('submit', async (event) => {
 });
 
 async function answer(marker) {
-  if (state.phase !== 'question' || state.chosen) return;
-  // Optimistic: the server accepts the first answer per question and quietly ignores the rest,
-  // so the phone locks itself immediately rather than waiting for a round trip it is not told about.
-  state.chosen = marker;
-  rememberTap(state.index, marker);
+  if (state.phase !== 'question' || state.chosen || state.pending) return;
+  // The tap shows at once, because a buzzer that does nothing for a moment feels broken — but it
+  // only locks once the room says it took the answer. A host tab the browser has put to sleep can
+  // leave a question open past its limit, and the room refuses answers that arrive after it;
+  // telling that player their answer is in would be a lie the scoreboard then contradicts.
+  state.pending = marker;
+  state.error = '';
   render();
   try {
-    await conn.invoke('Answer', state.code, marker);
+    if (await conn.invoke('Answer', state.code, marker)) {
+      state.chosen = marker;
+      rememberTap(state.index, marker);
+    } else {
+      state.error = t('answerRefused');
+    }
   } catch (error) {
-    state.chosen = null;
-    rememberTap(state.index, null);
     state.error = errorText(error);
+  } finally {
+    state.pending = null;
     render();
   }
 }
@@ -225,19 +234,30 @@ function render() {
   el('bar-score').textContent = view === 'play' ? t('scoreOf', state.score) : '';
   el('join-error').textContent = view === 'join' ? state.error : '';
 
+  // The join form is a screen of its own: without this a player would only learn the hub is
+  // unreachable after typing a code and tapping GİR, as a generic failure.
+  const notice = el('join-connection');
+  notice.textContent = view === 'join' ? state.connection : '';
+  notice.hidden = notice.textContent === '';
+
   el('play-status').textContent = state.connection || state.error || statusText();
   el('play-status').classList.toggle('error', Boolean(!state.connection && state.error));
 
+  const picked = state.chosen ?? state.pending;
   for (const buzzer of el('buzzers').querySelectorAll('.buzz')) {
     const marker = buzzer.dataset.marker;
-    buzzer.setAttribute('aria-pressed', String(marker === state.chosen));
+    buzzer.setAttribute('aria-pressed', String(marker === picked));
     buzzer.setAttribute('aria-label', t('markerName', marker));
-    buzzer.disabled = state.phase !== 'question' || Boolean(state.chosen);
+    buzzer.disabled = state.phase !== 'question' || Boolean(picked);
   }
 }
 
 function statusText() {
-  if (state.phase === 'question') return state.chosen ? t('answerSent') : t('pickYours');
+  if (state.phase === 'question') {
+    if (state.chosen) return t('answerSent');
+    if (state.pending) return t('answerSending');
+    return t('pickYours');
+  }
   if (state.phase === 'closed') return t('questionClosed');
   if (state.phase === 'finished') return t('roundOver');
   return t('waitingForStart');

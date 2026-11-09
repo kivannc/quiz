@@ -161,6 +161,11 @@ conn.on('AnswerCount', (answered, total) => {
 
 conn.on('QuestionStarted', (question) => {
   state.question = question;
+  // A resume during the reveal sends the question with no time on it, only so this screen knows what
+  // was asked — which question of how many, and what the winning option says. Nothing is open, so
+  // nothing is painted here and no countdown runs: the Revealed that follows does the painting.
+  if (question.limitSeconds <= 0) return;
+
   state.reveal = null;
   state.answered = 0;
   show('question');
@@ -241,6 +246,12 @@ async function hostAction(method) {
  */
 let resuming = false;
 
+/*
+ * Load-bearing ordering: the hub's sends for this resume reach the client before the invoke's own
+ * completion, so every QuestionStarted that belongs to a resume is handled while this flag is still
+ * true. Do not move the reset, or awaken it after other awaits — a resumed screen would then throw
+ * away the deadline it was already counting down and restart the question's clock.
+ */
 async function resume() {
   if (!state.code || !state.hostKey) return;
   resuming = true;
@@ -350,8 +361,8 @@ function drawSetup() {
   const select = el('set-id');
   if (select.options.length !== state.sets.length) {
     select.replaceChildren();
-    for (const set of state.sets) select.add(new Option(set.title, set.id));
-    if (state.sets.some((set) => set.id === state.setId)) select.value = state.setId;
+    for (const item of state.sets) select.add(new Option(item.title, item.id));
+    if (state.sets.some((item) => item.id === state.setId)) select.value = state.setId;
   }
   // Nothing can be opened before the sets are known, so do not pretend otherwise.
   el('form-open').querySelector('button').disabled = state.sets.length === 0;

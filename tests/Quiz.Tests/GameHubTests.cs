@@ -661,11 +661,12 @@ public sealed class GameHubTests : IDisposable
 
         var resumed = await questions.Next();
         Assert.Equal(0, resumed.GetProperty("index").GetInt32()); // the same question, otherwise unchanged
-        Assert.InRange(resumed.GetProperty("limitSeconds").GetInt32(), 0, 29);
+        // Never zero: zero is reserved for the question sent as context during a reveal.
+        Assert.InRange(resumed.GetProperty("limitSeconds").GetInt32(), 1, 29);
     }
 
     [Fact]
-    public async Task ResumeHost_sends_the_reveal_during_the_reveal_and_advances_nothing()
+    public async Task ResumeHost_sends_the_reveal_with_the_question_it_answers_and_advances_nothing()
     {
         var factory = Factory();
         var host = await Connect(factory);
@@ -683,14 +684,28 @@ public sealed class GameHubTests : IDisposable
         await reloaded.InvokeAsync("ResumeHost", code, HostKey);
 
         Assert.Equal("reveal", (await states.Next()).Phase);
+
+        // The reveal names the correct marker but not the question it answers, and a screen that has
+        // just loaded has never seen one: without this it could not say which question this was, nor
+        // read out what the winning option said. No time on it, because nothing is open.
+        var context = await questions.Next();
+        Assert.Equal(0, context.GetProperty("index").GetInt32());
+        Assert.Equal(10, context.GetProperty("total").GetInt32());
+        Assert.Equal(0, context.GetProperty("limitSeconds").GetInt32());
+        Assert.Equal(4, context.GetProperty("options").GetArrayLength());
+        Assert.False(context.TryGetProperty("correct", out _)); // still no answer on this wire
+
         var reveal = await reveals.Next();
         Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
         await Barrier(reloaded);
-        Assert.Equal(0, questions.Total);
+        Assert.Equal(1, questions.Total); // the context, and nothing else
 
-        // Still in the reveal: the resumed screen can advance from it, once.
+        // Still in the reveal: the resumed screen can advance from it, and that next question is a
+        // real one, with its whole limit.
         await reloaded.InvokeAsync("AdvanceQuestion", code, HostKey);
-        Assert.Equal(1, (await questions.Next()).GetProperty("index").GetInt32());
+        var opened = await questions.Next();
+        Assert.Equal(1, opened.GetProperty("index").GetInt32());
+        Assert.True(opened.GetProperty("limitSeconds").GetInt32() > 0);
     }
 
     [Fact]
@@ -748,6 +763,30 @@ public sealed class GameHubTests : IDisposable
         var counts = AnswerCount(reloaded);
         await reloaded.InvokeAsync("StartRound", code, HostKey);
         Assert.Equal((0, 1), await counts.Next());
+    }
+
+    [Fact]
+    public async Task Answer_reports_whether_the_room_took_it()
+    {
+        // The phone shows the player what happened to their tap, so a refusal has to come back as a
+        // result rather than as silence: a sleeping host tab can leave a question open past its limit.
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", code, "Ada");
+
+        Assert.False(await player.InvokeAsync<bool>("Answer", code, "clubs")); // nothing is open yet
+
+        await host.InvokeAsync("StartRound", code, HostKey);
+        Assert.True(await player.InvokeAsync<bool>("Answer", code, "clubs"));
+        Assert.False(await player.InvokeAsync<bool>("Answer", code, "hearts")); // one answer per seat
+
+        await host.InvokeAsync("CloseQuestion", code, HostKey);
+        Assert.False(await player.InvokeAsync<bool>("Answer", code, "clubs")); // the question is over
+
+        var stranger = await Connect(factory);
+        Assert.False(await stranger.InvokeAsync<bool>("Answer", code, "clubs")); // no seat, no answer
     }
 
     [Fact]
