@@ -12,6 +12,11 @@ import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n
 /* The order the four markers are drawn in. Glyph and colour come from app.css. */
 const MARKERS = ['hearts', 'diamonds', 'clubs', 'spades'];
 
+/* Everyone has answered: the beat the room gets to see the last tap land before the reveal. */
+const EVERYONE_IN_MS = 3000;
+/* How long the reveal stays up — the bars and the standings — before the round moves on by itself. */
+const REVEAL_MS = 6000;
+
 const STORE_KEY = 'quiz.hostKey';
 const STORE_CODE = 'quiz.code';
 const STORE_SET = 'quiz.setId';
@@ -126,6 +131,51 @@ function drawClock() {
   el('tag-clock').textContent = t('clock', left);
 }
 
+/* ---------- pacing: the two beats that carry the round on its own ---------- */
+
+/*
+ * Two one-shot timers, never more than one of them armed: a question closes early once everyone is
+ * in, and a reveal hands the round on once it has been read. Both call the same host actions the
+ * buttons do, and the hub ignores a host action that does not fit the phase — but a timer left over
+ * from the phase before would fire into the next one and skip a question, so show() drops both on
+ * every view change and the reveal arms its own only after that.
+ */
+let everyoneIn = 0;
+let nextUp = 0;
+
+function cancelEveryoneIn() {
+  clearTimeout(everyoneIn);
+  everyoneIn = 0;
+}
+
+function cancelNextUp() {
+  clearTimeout(nextUp);
+  nextUp = 0;
+}
+
+function cancelPacing() {
+  cancelEveryoneIn();
+  cancelNextUp();
+}
+
+/* The beat before the reveal. Already armed means the room was already full: a second count saying
+ * the same thing must not push it back. */
+function armEveryoneIn() {
+  if (everyoneIn) return;
+  everyoneIn = setTimeout(() => {
+    everyoneIn = 0;
+    closeQuestion();
+  }, EVERYONE_IN_MS);
+}
+
+/* The beat after it. Its caller has just shown the reveal, which is what cleared the question's. */
+function armNextUp() {
+  nextUp = setTimeout(() => {
+    nextUp = 0;
+    advance();
+  }, REVEAL_MS);
+}
+
 /* ---------- hub ---------- */
 
 const conn = new signalR.HubConnectionBuilder()
@@ -157,6 +207,13 @@ conn.on('AnswerCount', (answered, total) => {
   state.answered = answered;
   state.seated = total;
   drawTopbar();
+
+  // Nobody is left to wait for, so there is nothing for the rest of the limit to buy: close after a
+  // beat instead. The countdown stays the backstop — a phone that went to sleep never answers, and
+  // the question still closes at zero. Anything short of the full room drops the beat again, which
+  // is what a player joining and raising the total means.
+  if (state.view === 'question' && total > 0 && answered >= total) armEveryoneIn();
+  else cancelEveryoneIn();
 });
 
 conn.on('QuestionStarted', (question) => {
@@ -179,15 +236,22 @@ conn.on('Revealed', (reveal) => {
   stopCountdown();
   state.reveal = reveal;
   show('reveal');
+  // Armed after show(), which is what cleared the question's own timer. A screen that reloads during
+  // a reveal is sent this again and arms it too, so a refresh at the wrong moment does not stall the
+  // round. The last question's reveal advances the same way: that is what ends the round.
+  armNextUp();
 });
 
 conn.on('RoundFinished', (standings) => {
   stopCountdown();
+  // The round is over: the standings stay up until the host asks for a new room. Nothing is armed here.
   state.standings = standings ?? [];
   show('finished');
 });
 
 conn.onreconnecting(() => {
+  // An invoke now would only fail. Resuming re-sends AnswerCount or Revealed, which arms it again.
+  cancelPacing();
   state.connection = t('reconnecting');
   render();
 });
@@ -202,6 +266,7 @@ conn.onreconnected(() => {
 
 conn.onclose(() => {
   stopCountdown();
+  cancelPacing();
   state.connection = t('disconnected');
   render();
 });
@@ -302,7 +367,11 @@ el('form-open').addEventListener('submit', async (event) => {
 });
 
 el('start').addEventListener('click', startRound);
-el('next').addEventListener('click', advance);
+/* Moving on sooner by hand must not leave the automatic advance to fire into the next question. */
+el('next').addEventListener('click', () => {
+  cancelNextUp();
+  advance();
+});
 
 /* A new room reuses the key and set already in hand, so the host types nothing again. */
 async function newRoom() {
@@ -321,6 +390,9 @@ el('new-room').addEventListener('click', newRoom);
 /* ---------- rendering ---------- */
 
 function show(view) {
+  // Every phase change comes through here, so this is where a timer armed for the phase being left
+  // dies. Callers that want one for the phase they are entering arm it after calling show().
+  cancelPacing();
   state.view = view;
   render();
 }
