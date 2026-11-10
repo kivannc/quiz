@@ -1,0 +1,237 @@
+{
+  "id": "cografya",
+  "title": "Coğrafya",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "cg-01",
+      "text": "Türkiye'nin en kalabalık şehri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ankara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzmir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bursa"
+        },
+        {
+          "marker": "spades",
+          "text": "İstanbul"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-02",
+      "text": "Türkiye'nin en yüksek dağı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ağrı Dağı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Erciyes Dağı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Uludağ"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaçkar Dağı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-03",
+      "text": "Eyfel Kulesi hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Londra"
+        },
+        {
+          "marker": "clubs",
+          "text": "Paris"
+        },
+        {
+          "marker": "spades",
+          "text": "Viyana"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-04",
+      "text": "Dünyanın en büyük okyanusu hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atlas Okyanusu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pasifik Okyanusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hint Okyanusu"
+        },
+        {
+          "marker": "spades",
+          "text": "Arktik Okyanusu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-05",
+      "text": "Türkiye'nin en büyük gölü hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Van Gölü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tuz Gölü"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beyşehir Gölü"
+        },
+        {
+          "marker": "spades",
+          "text": "Eğirdir Gölü"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-06",
+      "text": "Sahra Çölü hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "spades",
+          "text": "Afrika"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-07",
+      "text": "Kapadokya hangi bölgemizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ege"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "clubs",
+          "text": "İç Anadolu"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-08",
+      "text": "Tokyo hangi ülkenin başkentidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Japonya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kore"
+        },
+        {
+          "marker": "spades",
+          "text": "Vietnam"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-09",
+      "text": "Everest Dağı hangi sıradağlarda yer alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Himalayalar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alpler"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kafkaslar"
+        },
+        {
+          "marker": "spades",
+          "text": "And Dağları"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-10",
+      "text": "Pamukkale travertenleri hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Antalya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Denizli"
+        },
+        {
+          "marker": "clubs",
+          "text": "Muğla"
+        },
+        {
+          "marker": "spades",
+          "text": "Aydın"
+        }
+      ],
+      "correct": "diamonds"
+    }
+  ]
+}

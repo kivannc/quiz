@@ -1,0 +1,237 @@
+{
+  "id": "ulasim-ve-araclar",
+  "title": "Ulaşım ve Araçlar",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "ul-01",
+      "text": "Trafik lambasında hangi renk \"dur\" demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Mavi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ul-02",
+      "text": "Trenlerin üzerinde gittiği yapıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şerit"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ray"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hat"
+        },
+        {
+          "marker": "spades",
+          "text": "Kanal"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ul-03",
+      "text": "Denizaltıların su üstünü görmek için kullandığı alet hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Teleskop"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mikroskop"
+        },
+        {
+          "marker": "clubs",
+          "text": "Periskop"
+        },
+        {
+          "marker": "spades",
+          "text": "Pusula"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ul-04",
+      "text": "Uçakların iniş kalkış yaptığı uzun düz zemine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rampa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hangar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Apron"
+        },
+        {
+          "marker": "spades",
+          "text": "Pist"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ul-05",
+      "text": "Şehir içinde raylar üzerinde çalışan araç hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Otobüs"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tramvay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dolmuş"
+        },
+        {
+          "marker": "spades",
+          "text": "Teleferik"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ul-06",
+      "text": "Boğaziçi Köprüsü hangi iki kıtayı birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya ve Avrupa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avrupa ve Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Asya ve Afrika"
+        },
+        {
+          "marker": "spades",
+          "text": "Avrupa ve Amerika"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ul-07",
+      "text": "Süveyş Kanalı hangi iki denizi birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karadeniz ve Marmara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Atlas ve Pasifik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Baltık ve Kuzey"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz ve Kızıldeniz"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ul-08",
+      "text": "Dünyanın ilk metrosu hangi şehirde açıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Paris"
+        },
+        {
+          "marker": "diamonds",
+          "text": "New York"
+        },
+        {
+          "marker": "clubs",
+          "text": "Londra"
+        },
+        {
+          "marker": "spades",
+          "text": "Berlin"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ul-09",
+      "text": "Dünyanın en uzun demiryolu hattı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Orient Express"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Trans-Kanada"
+        },
+        {
+          "marker": "clubs",
+          "text": "Trans-Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Trans-Sibirya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ul-10",
+      "text": "İstanbul'daki Tünel ne tür bir ulaşım aracıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Füniküler"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Metro"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tramvay"
+        },
+        {
+          "marker": "spades",
+          "text": "Teleferik"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "id": "edebiyat",
+  "title": "Edebiyat",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "ed-01",
+      "text": "Şiir yazan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yazar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şair"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ressam"
+        },
+        {
+          "marker": "spades",
+          "text": "Oyuncu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-02",
+      "text": "İstiklal Marşı'nın şairi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mehmet Akif Ersoy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Namık Kemal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tevfik Fikret"
+        },
+        {
+          "marker": "spades",
+          "text": "Ziya Gökalp"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-03",
+      "text": "\"Küçük Prens\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Jules Verne"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lewis Carroll"
+        },
+        {
+          "marker": "clubs",
+          "text": "Antoine de Saint-Exupéry"
+        },
+        {
+          "marker": "spades",
+          "text": "Charles Dickens"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-04",
+      "text": "\"Çalıkuşu\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Halide Edib Adıvar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peyami Safa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hüseyin Rahmi Gürpınar"
+        },
+        {
+          "marker": "spades",
+          "text": "Reşat Nuri Güntekin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-05",
+      "text": "Nobel Edebiyat Ödülü kazanan Türk yazar kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yaşar Kemal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Orhan Pamuk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nâzım Hikmet"
+        },
+        {
+          "marker": "spades",
+          "text": "Aziz Nesin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-06",
+      "text": "\"Kürk Mantolu Madonna\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sabahattin Ali"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sait Faik Abasıyanık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ahmet Hamdi Tanpınar"
+        },
+        {
+          "marker": "spades",
+          "text": "Oğuz Atay"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-07",
+      "text": "\"İnce Memed\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Orhan Kemal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kemal Tahir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fakir Baykurt"
+        },
+        {
+          "marker": "spades",
+          "text": "Yaşar Kemal"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-08",
+      "text": "\"Romeo ve Juliet\" hangi türde bir eserdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şiir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tiyatro oyunu"
+        },
+        {
+          "marker": "spades",
+          "text": "Deneme"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-09",
+      "text": "Dede Korkut Hikâyeleri hangi türe örnektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Destan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Deneme"
+        },
+        {
+          "marker": "spades",
+          "text": "Makale"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-10",
+      "text": "\"Yaban\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Reşat Nuri Güntekin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Halit Ziya Uşaklıgil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Refik Halit Karay"
+        },
+        {
+          "marker": "spades",
+          "text": "Yakup Kadri Karaosmanoğlu"
+        }
+      ],
+      "correct": "spades"
+    }
+  ]
+}
