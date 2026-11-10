@@ -577,6 +577,351 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "it-16",
+      "text": "Otomobili seri üretimle yaygınlaştıran kişi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karl Benz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Henry Ford"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gottlieb Daimler"
+        },
+        {
+          "marker": "spades",
+          "text": "Ferdinand Porsche"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-17",
+      "text": "Dizel motoru geliştiren mucit kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nikolaus Otto"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Robert Bosch"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rudolf Diesel"
+        },
+        {
+          "marker": "spades",
+          "text": "Felix Wankel"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-18",
+      "text": "Uzaya giden ilk insan kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Neil Armstrong"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alan Shepard"
+        },
+        {
+          "marker": "clubs",
+          "text": "Valentina Tereşkova"
+        },
+        {
+          "marker": "spades",
+          "text": "Yuri Gagarin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-19",
+      "text": "Teleskopu gökyüzü gözleminde ilk kullananlardan biri kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Galileo Galilei"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tycho Brahe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Edwin Hubble"
+        },
+        {
+          "marker": "spades",
+          "text": "Johannes Kepler"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-20",
+      "text": "Hangi araç dikey olarak havalanabilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yolcu uçağı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Helikopter"
+        },
+        {
+          "marker": "clubs",
+          "text": "Planör"
+        },
+        {
+          "marker": "spades",
+          "text": "Zeplin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-21",
+      "text": "Bisiklette pedalın gücünü tekerleğe aktaran parça nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fren"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gidon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zincir"
+        },
+        {
+          "marker": "spades",
+          "text": "Jant"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-22",
+      "text": "İlk lokomotifleri hangi güç kaynağı çekiyordu?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Elektrik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dizel"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rüzgâr"
+        },
+        {
+          "marker": "spades",
+          "text": "Buhar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-23",
+      "text": "Trafikte \"yol ver\" levhası hangi şekildedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ters üçgen"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sekizgen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Daire"
+        },
+        {
+          "marker": "spades",
+          "text": "Kare"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-24",
+      "text": "Bir geminin hızı hangi birimle ölçülür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beaufort"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Knot"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mil"
+        },
+        {
+          "marker": "spades",
+          "text": "Fersah"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-25",
+      "text": "Uçağın yükseklik ölçen aletine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Barometre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Anemometre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altimetre"
+        },
+        {
+          "marker": "spades",
+          "text": "Takometre"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-26",
+      "text": "Havada asılı kablolar üzerinde çalışan araç hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Metro"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tramvay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Füniküler"
+        },
+        {
+          "marker": "spades",
+          "text": "Teleferik"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-27",
+      "text": "Ampulden önce evlerde yaygın olarak ne kullanılırdı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gaz lambası"
+        },
+        {
+          "marker": "diamonds",
+          "text": "El feneri"
+        },
+        {
+          "marker": "clubs",
+          "text": "Floresan lamba"
+        },
+        {
+          "marker": "spades",
+          "text": "Projektör"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-28",
+      "text": "Televizyon yayınında görüntü hangi dalgalarla iletilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ses dalgalarıyla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Radyo dalgalarıyla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Su dalgalarıyla"
+        },
+        {
+          "marker": "spades",
+          "text": "Isı dalgalarıyla"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-29",
+      "text": "Telsiz telgrafı geliştirerek radyonun önünü açan kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Heinrich Hertz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Samuel Morse"
+        },
+        {
+          "marker": "clubs",
+          "text": "Guglielmo Marconi"
+        },
+        {
+          "marker": "spades",
+          "text": "Reginald Fessenden"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-30",
+      "text": "Uçaktaki \"kara kutu\" ne işe yarar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yakıt taşır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Radarı çalıştırır"
+        },
+        {
+          "marker": "clubs",
+          "text": "Basıncı dengeler"
+        },
+        {
+          "marker": "spades",
+          "text": "Uçuş verilerini kaydeder"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

@@ -577,6 +577,351 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "ad-26",
+      "text": "\"Tatlı dil yılanı ... çıkarır\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "yuvasından"
+        },
+        {
+          "marker": "diamonds",
+          "text": "deliğinden"
+        },
+        {
+          "marker": "clubs",
+          "text": "çalıdan"
+        },
+        {
+          "marker": "spades",
+          "text": "taştan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ad-27",
+      "text": "\"Akıllı düşman, akılsız ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "komşudan yeğdir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "yoldan çevirir"
+        },
+        {
+          "marker": "clubs",
+          "text": "dosttan iyidir"
+        },
+        {
+          "marker": "spades",
+          "text": "işe yaramaz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ad-28",
+      "text": "\"Dost ... söyler\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "tatlı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "yavaş"
+        },
+        {
+          "marker": "clubs",
+          "text": "az"
+        },
+        {
+          "marker": "spades",
+          "text": "acı"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ad-29",
+      "text": "\"Bir musibet bin ... yeğdir\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "nasihatten"
+        },
+        {
+          "marker": "diamonds",
+          "text": "dertten"
+        },
+        {
+          "marker": "clubs",
+          "text": "sözden"
+        },
+        {
+          "marker": "spades",
+          "text": "yıldan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ad-30",
+      "text": "\"Üzümünü ye, ... sorma\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "fiyatını"
+        },
+        {
+          "marker": "diamonds",
+          "text": "bağını"
+        },
+        {
+          "marker": "clubs",
+          "text": "tadını"
+        },
+        {
+          "marker": "spades",
+          "text": "dalını"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ad-31",
+      "text": "\"Horoz ölür, gözü ... kalır\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "yuvada"
+        },
+        {
+          "marker": "diamonds",
+          "text": "damda"
+        },
+        {
+          "marker": "clubs",
+          "text": "çöplükte"
+        },
+        {
+          "marker": "spades",
+          "text": "bahçede"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ad-32",
+      "text": "\"İğneyi kendine, çuvaldızı ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "kenara koy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "sakla"
+        },
+        {
+          "marker": "clubs",
+          "text": "kimseye verme"
+        },
+        {
+          "marker": "spades",
+          "text": "başkasına batır"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ad-33",
+      "text": "\"Bugünün işini yarına ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "bırakma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "sakla"
+        },
+        {
+          "marker": "clubs",
+          "text": "yaz"
+        },
+        {
+          "marker": "spades",
+          "text": "taşı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ad-34",
+      "text": "\"Sakınan göze ... batar\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "kum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "çöp"
+        },
+        {
+          "marker": "clubs",
+          "text": "toz"
+        },
+        {
+          "marker": "spades",
+          "text": "kıl"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ad-35",
+      "text": "\"Rüzgâr eken ... biçer\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "yağmur"
+        },
+        {
+          "marker": "diamonds",
+          "text": "buğday"
+        },
+        {
+          "marker": "clubs",
+          "text": "fırtına"
+        },
+        {
+          "marker": "spades",
+          "text": "toz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ad-36",
+      "text": "\"Keskin sirke ... zarar\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "tadına"
+        },
+        {
+          "marker": "diamonds",
+          "text": "şişesine"
+        },
+        {
+          "marker": "clubs",
+          "text": "kabına"
+        },
+        {
+          "marker": "spades",
+          "text": "küpüne"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ad-37",
+      "text": "\"Yuvarlanan taş ... tutmaz\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "yosun"
+        },
+        {
+          "marker": "diamonds",
+          "text": "toprak"
+        },
+        {
+          "marker": "clubs",
+          "text": "su"
+        },
+        {
+          "marker": "spades",
+          "text": "kir"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ad-38",
+      "text": "\"Göz kulak olmak\" ne demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gizlice dinlemek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gözetip korumak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çok konuşmak"
+        },
+        {
+          "marker": "spades",
+          "text": "Uyumak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ad-39",
+      "text": "\"Dört gözle beklemek\" ne demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şüpheyle bakmak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Uzun süre uyumak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Heyecanla beklemek"
+        },
+        {
+          "marker": "spades",
+          "text": "Gizlice izlemek"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ad-40",
+      "text": "\"Balık kavağa çıkınca\" ne demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çok yakında"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bahar gelince"
+        },
+        {
+          "marker": "clubs",
+          "text": "Her zaman"
+        },
+        {
+          "marker": "spades",
+          "text": "Hiçbir zaman"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

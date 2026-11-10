@@ -577,6 +577,351 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "mf-16",
+      "text": "Hangisi yaylı bir çalgıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Flüt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Keman"
+        },
+        {
+          "marker": "clubs",
+          "text": "Trompet"
+        },
+        {
+          "marker": "spades",
+          "text": "Darbuka"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-17",
+      "text": "Bağlama hangi çalgı grubundandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Üflemeli"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vurmalı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Telli"
+        },
+        {
+          "marker": "spades",
+          "text": "Tuşlu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-18",
+      "text": "Zurna hangi çalgı grubundandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yaylı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Telli"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vurmalı"
+        },
+        {
+          "marker": "spades",
+          "text": "Üflemeli"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-19",
+      "text": "Beethoven'ın mesleği nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Besteci"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ressam"
+        },
+        {
+          "marker": "clubs",
+          "text": "Heykeltıraş"
+        },
+        {
+          "marker": "spades",
+          "text": "Mimar"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-20",
+      "text": "\"Oyuncak Hikâyesi\" filmindeki kovboy oyuncağın adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Buzz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Woody"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rex"
+        },
+        {
+          "marker": "spades",
+          "text": "Slinky"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-21",
+      "text": "\"Aslan Kral\"da Simba'nın babasının adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Scar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rafiki"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mufasa"
+        },
+        {
+          "marker": "spades",
+          "text": "Zazu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-22",
+      "text": "Mickey Mouse'u yaratan stüdyo hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pixar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Warner Bros"
+        },
+        {
+          "marker": "clubs",
+          "text": "Universal"
+        },
+        {
+          "marker": "spades",
+          "text": "Disney"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-23",
+      "text": "Pokemon'un en bilinen karakteri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pikachu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Charizard"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bulbasaur"
+        },
+        {
+          "marker": "spades",
+          "text": "Squirtle"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-24",
+      "text": "\"Şaban\" karakteriyle tanınan oyuncu kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şener Şen"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kemal Sunal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Münir Özkul"
+        },
+        {
+          "marker": "spades",
+          "text": "İlyas Salman"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-25",
+      "text": "\"Hababam Sınıfı\" ne tür bir filmdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Korku"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Belgesel"
+        },
+        {
+          "marker": "clubs",
+          "text": "Komedi"
+        },
+        {
+          "marker": "spades",
+          "text": "Bilim kurgu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-26",
+      "text": "Picasso hangi ülkedendir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İtalya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fransa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hollanda"
+        },
+        {
+          "marker": "spades",
+          "text": "İspanya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-27",
+      "text": "Hangi müze İstanbul'dadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Topkapı Sarayı Müzesi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Louvre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Prado"
+        },
+        {
+          "marker": "spades",
+          "text": "Hermitage"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-28",
+      "text": "\"Mona Lisa\" hangi teknikle yapılmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Suluboya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yağlı boya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pastel"
+        },
+        {
+          "marker": "spades",
+          "text": "Fresk"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-29",
+      "text": "Hangi iki rengin karışımı yeşil verir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kırmızı ve mavi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sarı ve kırmızı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mavi ve sarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Mavi ve beyaz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-30",
+      "text": "Anadolu'da halı dokumacılığı hangi malzemeyle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Keten"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kâğıt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Deri"
+        },
+        {
+          "marker": "spades",
+          "text": "Yün"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

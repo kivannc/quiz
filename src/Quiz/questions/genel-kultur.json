@@ -692,6 +692,236 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "gk-11",
+      "text": "Bir yılda kaç mevsim vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dört"
+        },
+        {
+          "marker": "spades",
+          "text": "Beş"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-12",
+      "text": "Türkiye'nin para birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Euro"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Türk lirası"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dinar"
+        },
+        {
+          "marker": "spades",
+          "text": "Dirhem"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-13",
+      "text": "Kırmızı ile mavi karıştırılınca hangi renk olur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Turuncu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mor"
+        },
+        {
+          "marker": "spades",
+          "text": "Kahverengi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-14",
+      "text": "Bir yılda kaç gün vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "365"
+        },
+        {
+          "marker": "diamonds",
+          "text": "300"
+        },
+        {
+          "marker": "clubs",
+          "text": "350"
+        },
+        {
+          "marker": "spades",
+          "text": "400"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-15",
+      "text": "Dünyanın en kalabalık kıtası hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Afrika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Asya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuzey Amerika"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-16",
+      "text": "Dünyanın en uzun duvarı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Berlin Duvarı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hadrian Suru"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çin Seddi"
+        },
+        {
+          "marker": "spades",
+          "text": "Babil Surları"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-17",
+      "text": "Türkiye'de acil çağrı numarası kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "112"
+        },
+        {
+          "marker": "diamonds",
+          "text": "110"
+        },
+        {
+          "marker": "clubs",
+          "text": "155"
+        },
+        {
+          "marker": "spades",
+          "text": "156"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-18",
+      "text": "Birleşmiş Milletler'in merkezi hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cenevre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "New York"
+        },
+        {
+          "marker": "clubs",
+          "text": "Brüksel"
+        },
+        {
+          "marker": "spades",
+          "text": "Viyana"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-19",
+      "text": "Bir yılda yaklaşık kaç hafta vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "40"
+        },
+        {
+          "marker": "diamonds",
+          "text": "48"
+        },
+        {
+          "marker": "clubs",
+          "text": "52"
+        },
+        {
+          "marker": "spades",
+          "text": "60"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-20",
+      "text": "Türkiye'de trafikte yolun hangi tarafından gidilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sol"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Orta"
+        },
+        {
+          "marker": "clubs",
+          "text": "Değişken"
+        },
+        {
+          "marker": "spades",
+          "text": "Sağ"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

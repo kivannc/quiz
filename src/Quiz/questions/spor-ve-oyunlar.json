@@ -577,6 +577,351 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "sp-16",
+      "text": "Basketbolda pota yüksekliği yaklaşık kaç metredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "2,50"
+        },
+        {
+          "marker": "diamonds",
+          "text": "3,05"
+        },
+        {
+          "marker": "clubs",
+          "text": "3,50"
+        },
+        {
+          "marker": "spades",
+          "text": "4,00"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-17",
+      "text": "Futbolda sarı kart ne anlama gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Oyundan atılma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gol iptali"
+        },
+        {
+          "marker": "clubs",
+          "text": "Uyarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Penaltı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-18",
+      "text": "Voleybolda bir takım topa en fazla kaç kez vurabilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Üç"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-19",
+      "text": "Modern Olimpiyat Oyunları ilk kez hangi yıl yapıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1896"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1870"
+        },
+        {
+          "marker": "clubs",
+          "text": "1912"
+        },
+        {
+          "marker": "spades",
+          "text": "1924"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-20",
+      "text": "Yüzmede en hızlı stil hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kurbağalama"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Serbest"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sırtüstü"
+        },
+        {
+          "marker": "spades",
+          "text": "Kelebek"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-21",
+      "text": "Satrançta kurtulamayacak şekilde tehdit edilen şaha ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rok"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şah mat"
+        },
+        {
+          "marker": "spades",
+          "text": "Terfi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-22",
+      "text": "Golf oyununda amaç nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Topu fileden geçirmek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Topu uzağa atmak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Topu yakalamak"
+        },
+        {
+          "marker": "spades",
+          "text": "Topu deliğe sokmak"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-23",
+      "text": "Bir basketbol maçı kaç periyottan oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dört"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İki"
+        },
+        {
+          "marker": "clubs",
+          "text": "Üç"
+        },
+        {
+          "marker": "spades",
+          "text": "Beş"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-24",
+      "text": "Hangi sporda \"ippon\" terimi kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güreş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Judo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Boks"
+        },
+        {
+          "marker": "spades",
+          "text": "Eskrim"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-25",
+      "text": "Masa tenisi topu hangi malzemedendir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Deri"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kauçuk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Plastik"
+        },
+        {
+          "marker": "spades",
+          "text": "Tahta"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-26",
+      "text": "Hangi sporda \"home run\" terimi kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kriket"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ragbi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hokey"
+        },
+        {
+          "marker": "spades",
+          "text": "Beyzbol"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-27",
+      "text": "Olimpiyatlarda birinci olana hangi madalya verilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altın"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gümüş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bronz"
+        },
+        {
+          "marker": "spades",
+          "text": "Platin"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-28",
+      "text": "Tavla oyununda kaç zar kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İki"
+        },
+        {
+          "marker": "clubs",
+          "text": "Üç"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-29",
+      "text": "Satrançta başlangıçta her oyuncunun kaç taşı vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "8"
+        },
+        {
+          "marker": "diamonds",
+          "text": "12"
+        },
+        {
+          "marker": "clubs",
+          "text": "16"
+        },
+        {
+          "marker": "spades",
+          "text": "20"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-30",
+      "text": "Tour de France'ta lider hangi renk formayı giyer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beyaz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "spades",
+          "text": "Sarı"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

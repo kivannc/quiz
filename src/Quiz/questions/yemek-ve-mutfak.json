@@ -577,6 +577,351 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "ym-26",
+      "text": "Hangisi bir Türk çorbasıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Minestrone"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tarhana"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gazpacho"
+        },
+        {
+          "marker": "spades",
+          "text": "Miso"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-27",
+      "text": "Dolma nasıl hazırlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sarılarak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kızartılarak"
+        },
+        {
+          "marker": "clubs",
+          "text": "İçi doldurularak"
+        },
+        {
+          "marker": "spades",
+          "text": "Haşlanarak"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-28",
+      "text": "Yoğurt yapımında hangi malzeme kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kabartma tozu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sirke"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nişasta"
+        },
+        {
+          "marker": "spades",
+          "text": "Maya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-29",
+      "text": "Hangisi sütlü bir tatlıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sütlaç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Baklava"
+        },
+        {
+          "marker": "clubs",
+          "text": "Künefe"
+        },
+        {
+          "marker": "spades",
+          "text": "Tulumba"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-30",
+      "text": "Turşu nasıl hazırlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fırında pişirilerek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tuzlu suda bekletilerek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şerbette kaynatılarak"
+        },
+        {
+          "marker": "spades",
+          "text": "Dumanda kurutularak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-31",
+      "text": "Kaymak hangi üründen elde edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yumurta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Süt"
+        },
+        {
+          "marker": "spades",
+          "text": "Zeytin"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-32",
+      "text": "Şalgam suyu hangi şehirle ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Antalya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Konya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Trabzon"
+        },
+        {
+          "marker": "spades",
+          "text": "Adana"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-33",
+      "text": "Zeytinyağlı yemekler genellikle nasıl servis edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Soğuk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çok sıcak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ateşte"
+        },
+        {
+          "marker": "spades",
+          "text": "Dondurulmuş"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-34",
+      "text": "Kuzu tandır nerede pişirilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tavada"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Toprak fırında"
+        },
+        {
+          "marker": "clubs",
+          "text": "Buharda"
+        },
+        {
+          "marker": "spades",
+          "text": "Izgarada"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-35",
+      "text": "Ezine hangi peynirle ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kaşar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tulum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beyaz peynir"
+        },
+        {
+          "marker": "spades",
+          "text": "Lor"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-36",
+      "text": "Zeytin Türkiye'de en çok hangi bölgede yetişir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İç Anadolu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Doğu Anadolu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "spades",
+          "text": "Ege"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-37",
+      "text": "Künefenin içine hangi malzeme konur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Peynir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ceviz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Krema"
+        },
+        {
+          "marker": "spades",
+          "text": "Reçel"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-38",
+      "text": "Çiğ köfte geleneksel olarak neyle servis edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pilav"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Marul"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ekmek kadayıfı"
+        },
+        {
+          "marker": "spades",
+          "text": "Patates"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-39",
+      "text": "Menemen hangi kapta pişirilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cezvede"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güveçte"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tavada"
+        },
+        {
+          "marker": "spades",
+          "text": "Tencerede"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-40",
+      "text": "Tavuk göğsü tatlısının ana malzemesi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Badem"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İrmik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pirinç unu"
+        },
+        {
+          "marker": "spades",
+          "text": "Tavuk eti"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

@@ -577,6 +577,351 @@
         }
       ],
       "correct": "hearts"
+    },
+    {
+      "id": "bd-16",
+      "text": "Güneş sistemindeki gezegen sayısı kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dokuz"
+        },
+        {
+          "marker": "spades",
+          "text": "On"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-17",
+      "text": "Hangi gezegen halkalarıyla ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mars"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Venüs"
+        },
+        {
+          "marker": "clubs",
+          "text": "Satürn"
+        },
+        {
+          "marker": "spades",
+          "text": "Neptün"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-18",
+      "text": "Işık hızı yaklaşık saniyede kaç kilometredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "3.000"
+        },
+        {
+          "marker": "diamonds",
+          "text": "30.000"
+        },
+        {
+          "marker": "clubs",
+          "text": "3.000.000"
+        },
+        {
+          "marker": "spades",
+          "text": "300.000"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-19",
+      "text": "DNA'nın şekli nasıl tanımlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çift sarmal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Küre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Üçgen"
+        },
+        {
+          "marker": "spades",
+          "text": "Düz çizgi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-20",
+      "text": "En hafif element hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Helyum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hidrojen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oksijen"
+        },
+        {
+          "marker": "spades",
+          "text": "Karbon"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-21",
+      "text": "Bitkilere yeşil rengini veren madde nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hemoglobin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Melanin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Klorofil"
+        },
+        {
+          "marker": "spades",
+          "text": "Keratin"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-22",
+      "text": "Hangi vitamin güneş ışığıyla üretilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "A vitamini"
+        },
+        {
+          "marker": "diamonds",
+          "text": "B12 vitamini"
+        },
+        {
+          "marker": "clubs",
+          "text": "C vitamini"
+        },
+        {
+          "marker": "spades",
+          "text": "D vitamini"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-23",
+      "text": "Kan grupları kaç ana gruba ayrılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dört"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İki"
+        },
+        {
+          "marker": "clubs",
+          "text": "Üç"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-24",
+      "text": "Deprem büyüklüğünü ölçen ölçeğe ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beaufort"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Richter"
+        },
+        {
+          "marker": "clubs",
+          "text": "Celsius"
+        },
+        {
+          "marker": "spades",
+          "text": "Mohs"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-25",
+      "text": "Volkandan çıkan erimiş kayaya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kül"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Maden"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lav"
+        },
+        {
+          "marker": "spades",
+          "text": "Kireç"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-26",
+      "text": "Atmosferde en çok bulunan gaz hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Oksijen"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karbondioksit"
+        },
+        {
+          "marker": "clubs",
+          "text": "Argon"
+        },
+        {
+          "marker": "spades",
+          "text": "Azot"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-27",
+      "text": "İnsan vücudundaki en uzun kemik hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uyluk kemiği"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kaburga"
+        },
+        {
+          "marker": "clubs",
+          "text": "Köprücük kemiği"
+        },
+        {
+          "marker": "spades",
+          "text": "Kol kemiği"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-28",
+      "text": "Hangi organ safra üretir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mide"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karaciğer"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pankreas"
+        },
+        {
+          "marker": "spades",
+          "text": "Dalak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-29",
+      "text": "Gözde görme hücrelerinin bulunduğu tabaka hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kornea"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sklera"
+        },
+        {
+          "marker": "clubs",
+          "text": "Retina"
+        },
+        {
+          "marker": "spades",
+          "text": "İris"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-30",
+      "text": "Ay'ın Dünya etrafındaki turu yaklaşık kaç gün sürer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "7"
+        },
+        {
+          "marker": "diamonds",
+          "text": "14"
+        },
+        {
+          "marker": "clubs",
+          "text": "365"
+        },
+        {
+          "marker": "spades",
+          "text": "28"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }
