@@ -33,6 +33,9 @@ const STRINGS = {
     roundOver: 'tur bitti',
     roomClosed: 'oda kapandı',
     scoreOf: (score) => `${score} p`,
+    // The result screen, shown while the TV reveals the answer.
+    pointsEarned: (points) => `+${points}`,
+    totalScore: (score) => `TOPLAM ${score}`,
 
     // --- TV ---
     hostTitle: 'Quiz — Sunucu',
@@ -93,6 +96,9 @@ const STRINGS = {
     roundOver: 'round over',
     roomClosed: 'the room was closed',
     scoreOf: (score) => `${score} p`,
+    // The result screen, shown while the TV reveals the answer.
+    pointsEarned: (points) => `+${points}`,
+    totalScore: (score) => `TOTAL ${score}`,
 
     // --- TV ---
     hostTitle: 'Quiz — Host',

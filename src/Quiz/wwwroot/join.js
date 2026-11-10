@@ -27,6 +27,8 @@ const state = {
   index: null,      // which question is open, so a reload can tell whose answer it kept
   pending: null,    // a tap on its way to the server, not yet taken
   chosen: null,     // the marker the room accepted for the current question
+  baseline: null,   // this player's total before the open question is scored, or null when not knowable
+  reveal: null,     // { marker, points } while the TV reveals the answer; points null means "not knowable"
   paused: false,    // the room's clock is stopped: taps are refused until it starts again
   error: '',
   notice: '',       // something that happened rather than something that went wrong
@@ -94,6 +96,12 @@ conn.on('Seated', (name, score) => {
   state.name = name;
   state.score = score;
   if (state.phase === 'join') state.phase = 'lobby';
+  // A seat handed back mid-round comes with the score it already has, and during a reveal that score
+  // already includes the points being revealed. Nothing here can tell those points apart from the
+  // total, so the result screen says it does not know rather than showing a number that would be
+  // wrong; the next question makes it knowable again.
+  state.baseline = null;
+  state.reveal = null;
   remember();
   render();
 });
@@ -119,6 +127,8 @@ conn.on('RoomClosed', () => {
   state.index = null;
   state.pending = null;
   state.chosen = null;
+  state.baseline = null;
+  state.reveal = null;
   state.paused = false;
   state.error = '';
   state.notice = t('roomClosed');
@@ -133,14 +143,23 @@ conn.on('QuestionStarted', (question) => {
   state.paused = false;
   state.pending = null;
   state.chosen = recallTap(question.index);
+  // The total as it stands before this question is scored. A reveal carries totals and not deltas,
+  // so this is the only thing the points earned can be worked out from.
+  state.baseline = state.score;
+  // Whatever the last reveal said, it is not about this question: the buzzers come back.
+  state.reveal = null;
   state.error = '';
   render();
 });
 
 conn.on('Revealed', (reveal) => {
-  // The correct marker is in here too, but the TV is where the answer is read out.
+  // The correct marker is in here too, but the TV is where the answer is read out. What the phone
+  // adds is this player's own result, and it waits for this moment to show it: a phone that lit up
+  // on the tap would let a fast player's face tell the room before the TV does.
   state.phase = 'closed';
   state.paused = false;
+  // Worked out before the new total is taken, because the old one is half of the subtraction.
+  state.reveal = resultOf(reveal.standings);
   takeScore(reveal.standings);
   render();
 });
@@ -148,6 +167,8 @@ conn.on('Revealed', (reveal) => {
 conn.on('RoundFinished', (standings) => {
   state.phase = 'finished';
   state.paused = false;
+  state.baseline = null;
+  state.reveal = null;
   takeScore(standings);
   render();
 });
@@ -174,6 +195,24 @@ conn.onclose(() => {
 function takeScore(standings) {
   const mine = (standings ?? []).find((player) => player.name === state.name);
   if (mine) state.score = mine.score;
+}
+
+/*
+ * This player's own result for the question that just closed: the suit they tapped, and what it
+ * earned. A reveal carries totals, so the points are the difference from the total this phone knew
+ * before the question opened — which is the question's points only when this phone watched the
+ * question open and this player is in the standings. When it is not (the phone joined or came back
+ * during the reveal, or the standings do not name this player), points is null and the screen shows
+ * the result without a number, which is better than a number that is wrong.
+ */
+function resultOf(standings) {
+  const mine = (standings ?? []).find((player) => player.name === state.name);
+  if (state.baseline === null || !mine) return { marker: null, points: null };
+  const points = mine.score - state.baseline;
+  // A total that went down is not something this screen can explain, so it does not try.
+  if (points < 0) return { marker: null, points: null };
+  // The tap is shown whether it earned anything or not; what changes is how loudly.
+  return { marker: state.chosen, points };
 }
 
 /* ---------- actions ---------- */
@@ -287,6 +326,69 @@ function render() {
     buzzer.setAttribute('aria-label', t('markerName', marker));
     buzzer.disabled = state.phase !== 'question' || state.paused || Boolean(picked);
   }
+
+  // The result takes the buzzers' place for as long as the room is revealing, and no longer. A paused
+  // room and a closed one own this screen on their own terms, so neither has to argue with the result.
+  const result = state.phase === 'closed' && !state.paused ? state.reveal : null;
+  el('buzzers').hidden = result !== null;
+  paintResult(result);
+}
+
+/*
+ * The scale. A correct answer is worth 500 points on the buzzer and 1000 given at once, so the
+ * scale has a floor and a ceiling: everything that says "how well did I do" is interpolated
+ * linearly between them, and nothing is stepped. Zero is not on that scale — it is the muted
+ * state below it.
+ */
+const POINTS_FLOOR = 500;
+const POINTS_CEILING = 1000;
+const GLYPH_PX = [42, 66];
+const POINTS_PX = [27, 54];
+const WASH = [0.06, 0.26];
+const NOTHING_GLYPH_PX = 38;
+const NOTHING_POINTS_PX = 22;
+
+function between([floor, ceiling], fraction) {
+  return floor + (ceiling - floor) * fraction;
+}
+
+/* Paints the result screen, or hides it when there is nothing to reveal. */
+function paintResult(result) {
+  const box = el('result');
+  const glyph = el('result-glyph');
+  const points = el('result-points');
+
+  box.hidden = result === null;
+  if (result === null) return;
+
+  const earned = result.points !== null && result.points > 0;
+  const fraction = earned
+    ? (Math.min(Math.max(result.points, POINTS_FLOOR), POINTS_CEILING) - POINTS_FLOOR) / (POINTS_CEILING - POINTS_FLOOR)
+    : 0;
+
+  // The suit's own colour, and the wash and the glow in it, belong to an answer that earned something.
+  if (earned && result.marker) box.dataset.marker = result.marker;
+  else delete box.dataset.marker;
+  box.style.setProperty('--o', earned ? between(WASH, fraction).toFixed(3) : '0');
+
+  glyph.hidden = !result.marker;
+  if (result.marker) {
+    glyph.dataset.marker = result.marker;
+    // The glyph is drawn by the stylesheet, so a screen reader has nothing to read without this.
+    glyph.setAttribute('role', 'img');
+    glyph.setAttribute('aria-label', t('markerName', result.marker));
+  } else {
+    delete glyph.dataset.marker;
+    glyph.removeAttribute('role');
+    glyph.removeAttribute('aria-label');
+  }
+  glyph.style.fontSize = `${earned ? between(GLYPH_PX, fraction) : NOTHING_GLYPH_PX}px`;
+
+  points.hidden = result.points === null;
+  points.textContent = result.points === null ? '' : t('pointsEarned', result.points);
+  points.style.fontSize = `${earned ? between(POINTS_PX, fraction) : NOTHING_POINTS_PX}px`;
+
+  el('result-total').textContent = t('totalScore', state.score);
 }
 
 function statusText() {
