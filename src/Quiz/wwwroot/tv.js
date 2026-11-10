@@ -17,12 +17,14 @@ import { t, applyStatic, onLangChange, setLang } from './i18n.js';
 const MARKERS = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 /*
- * A pairing code lives QUIZ_PAIRING_SECONDS (120 by default) on the server, which is not told to
- * the client. Ask for the next one a little before that, so a code that has quietly died is never
- * the one on screen: a host who was called away comes back to a screen that still works. Asking
- * early costs nothing — a screen only ever holds one code, and the new one replaces the old.
+ * How much of a code's life to use before asking for the next one. The lifetime itself comes with
+ * the code — QUIZ_PAIRING_SECONDS is a setting, and a screen that assumed the default would show a
+ * dead code on any deployment that shortened it, without ever saying so. Replacing it early costs
+ * nothing: a screen only ever holds one code, and the new one replaces the old.
  */
-const CODE_REFRESH_MS = 110_000;
+const CODE_REFRESH_SHARE = 0.9;
+/* However short a lifetime is configured, never spin faster than this. */
+const CODE_REFRESH_FLOOR_MS = 5_000;
 /*
  * After a refused OpenScreen. The hub answers the same "pairing-unavailable" whether the four-digit
  * space is crowded or this address has asked too often, so the only sensible thing is to wait and
@@ -56,6 +58,7 @@ const views = {
 const state = {
   view: 'pairing',
   code: null,        // the pairing code on screen, null while there is none to show
+  codeDeadAt: 0,     // when that code stops being claimable, as the server timed it
   codeFailed: false, // the last OpenScreen was refused
   room: null,        // the room this screen is in, from RoomOpened
   wasIn: null,       // the room it was painting before a reload or a reconnect
@@ -123,7 +126,7 @@ function stopClock() {
  * question is over and the reveal is on its way.
  */
 function startClock(ms) {
-  clearInterval(ticker);
+  stopClock();
   deadline = Date.now() + ms;
   drawClock();
   ticker = setInterval(() => {
@@ -286,11 +289,18 @@ conn.onreconnected(() => {
 });
 
 conn.onclose(() => {
-  // Only reachable if the reconnect policy above was told to stop, which it never is; kept so a
-  // closed connection cannot leave a clock running behind a notice.
+  /*
+   * The reconnect policy above never gives up, so getting here means the connection ended in a way
+   * it could not retry — a server that aborted this one, or a start that was never completed. There
+   * is nobody in front of a television to reload it, so it starts itself again. Whatever was on
+   * screen, the new connection will be in no groups: back to a pairing code, as after a reload.
+   */
   stopClock();
+  state.wasIn = state.room ?? recallRoom();
+  state.room = null;
   state.connection = t('tvOffline');
-  render();
+  show('pairing');
+  connect();
 });
 
 /* ---------- pairing ---------- */
@@ -318,19 +328,36 @@ async function openScreen() {
   // Not connected yet, or no longer: whoever brings the connection back asks again.
   if (conn.state !== signalR.HubConnectionState.Connected) return;
 
-  let code = null;
+  let pairing = null;
   try {
-    code = await conn.invoke('OpenScreen');
+    // { code, lifetimeSeconds }
+    pairing = await conn.invoke('OpenScreen');
   } catch {
-    // Deliberately not reported any further: there is nothing here to read it.
+    // Not reported any further: the screen says so itself, and nobody is reading a console here.
   }
 
   // A phone may have claimed the screen, or a room may have arrived, while this was in flight.
   if (state.view !== 'pairing') return;
 
-  state.code = code;
-  state.codeFailed = code === null;
-  codeTimer = setTimeout(openScreen, code === null ? CODE_RETRY_MS : CODE_REFRESH_MS);
+  if (pairing) {
+    state.code = pairing.code;
+    state.codeDeadAt = Date.now() + pairing.lifetimeSeconds * 1000;
+    state.codeFailed = false;
+    codeTimer = setTimeout(openScreen, Math.max(
+      CODE_REFRESH_FLOOR_MS, pairing.lifetimeSeconds * 1000 * CODE_REFRESH_SHARE));
+  } else {
+    // Keep the code that is up: it was refused a replacement, not withdrawn, and until its own
+    // lifetime runs out it can still be typed. Only once it is certainly dead does the screen stop
+    // offering it — a television showing nothing but a line of small red text reads as broken.
+    state.codeFailed = true;
+    const alive = state.code !== null && Date.now() < state.codeDeadAt;
+    if (!alive) state.code = null;
+    // Ask again in a while, or the moment the code on screen dies if that comes first, so that a
+    // code nobody can claim any more is never the one left up.
+    codeTimer = setTimeout(openScreen, alive
+      ? Math.min(CODE_RETRY_MS, state.codeDeadAt - Date.now())
+      : CODE_RETRY_MS);
+  }
   render();
 }
 
@@ -345,6 +372,7 @@ function show(view) {
 
   if (view === 'pairing') {
     state.code = null;
+    state.codeDeadAt = 0;
     state.codeFailed = false;
     render();
     openScreen();
@@ -392,6 +420,9 @@ function set(node, text) {
 }
 
 function drawPairing() {
+  // Either the first code has not arrived yet, or the one that was up has outlived itself. The slot
+  // keeps its size and shows dashes instead: at three metres an empty screen is a broken screen.
+  const waiting = state.code === null;
   const code = el('pair-code');
   /*
    * Drawn as two pairs — 48 21 — where the room code is drawn as one solid block. Four digits that
@@ -399,21 +430,25 @@ function drawPairing() {
    * do not. Together with the label, the colour and the size, that is four separate reasons not to
    * mistake one code for the other.
    */
-  code.replaceChildren(...(state.code ? [state.code.slice(0, 2), state.code.slice(2)] : []).map((part) => {
+  const halves = waiting ? ['--', '--'] : [state.code.slice(0, 2), state.code.slice(2)];
+  code.replaceChildren(...halves.map((part) => {
     const half = document.createElement('span');
     half.textContent = part;
     return half;
   }));
-  code.hidden = state.code === null;
-  el('pair-tag').hidden = state.code === null;
+  code.classList.toggle('waiting', waiting);
 
-  set(el('pair-where'), state.code ? t('pairHint', consoleAddress()) : '');
+  set(el('pair-where'), waiting ? '' : t('pairHint', consoleAddress()));
 
   const status = el('pair-status');
   set(status, state.codeFailed ? t('pairFailed') : '');
   status.classList.toggle('error', state.codeFailed);
+  // With no code under it, this line is the only thing on the screen that explains it, so it is read
+  // at the distance the code is read from rather than in the small print.
+  status.classList.toggle('big', state.codeFailed && waiting);
 
-  set(el('pair-rejoin'), state.wasIn ? t('rejoinHint', state.wasIn) : '');
+  // Only ever beside a code: on its own it would tell the room to type something that is not there.
+  set(el('pair-rejoin'), state.wasIn && !waiting ? t('rejoinHint', state.wasIn) : '');
 }
 
 /* Where the host's console lives, which is the one thing this screen asks anybody to do. */
@@ -534,20 +569,37 @@ onLangChange(() => {
 state.wasIn = recallRoom();
 show('pairing');
 
-/* Keeps trying for as long as the page is open: there is nobody in front of it to reload it. */
-while (conn.state === signalR.HubConnectionState.Disconnected) {
+/*
+ * Keeps trying for as long as the page is open: there is nobody in front of it to reload it. Called
+ * at load and again from onclose, and reentrant-safe, because a second loop would double every
+ * retry and could ask for two pairing codes at once.
+ */
+let connecting = false;
+
+async function connect() {
+  if (connecting) return;
+  connecting = true;
   try {
-    await conn.start();
-    state.connection = '';
-    render();
-  } catch (error) {
-    // Nothing works without the hub, so say so on screen and leave the reason in the console.
-    state.connection = t('tvOffline');
-    render();
-    console.error('could not reach the hub', error);
-    await new Promise((resolve) => setTimeout(resolve, RECONNECT_MS));
+    while (conn.state === signalR.HubConnectionState.Disconnected) {
+      try {
+        await conn.start();
+        state.connection = '';
+        render();
+      } catch (error) {
+        // Nothing works without the hub, so say so on screen and leave the reason in the console.
+        state.connection = t('tvOffline');
+        render();
+        console.error('could not reach the hub', error);
+        await new Promise((resolve) => setTimeout(resolve, RECONNECT_MS));
+      }
+    }
+  } finally {
+    connecting = false;
   }
+
+  // The screen was waiting for a connection to ask on; it has one now. A fresh connection is in no
+  // groups and the code it showed before belongs to a connection that is gone, so it asks again.
+  if (state.view === 'pairing') openScreen();
 }
 
-// The screen was waiting for a connection to ask on; it has one now.
-if (state.view === 'pairing') openScreen();
+await connect();

@@ -110,8 +110,8 @@ public sealed class GameHubTests : IDisposable
     private async Task<HubConnection> ClaimAScreen(HubConnection console)
     {
         var screen = await Connect(_factoryOf[console]);
-        var pairing = await screen.InvokeAsync<string>("OpenScreen");
-        await console.InvokeAsync("ClaimScreen", pairing, HostKey);
+        var pairing = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+        await console.InvokeAsync("ClaimScreen", pairing.Code, HostKey);
         return screen;
     }
 
@@ -841,6 +841,18 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(1, distribution.GetProperty("clubs").GetInt32());
         Assert.Equal(0, distribution.GetProperty("hearts").GetInt32());
         Assert.Equal(["name", "score"], reveal.GetProperty("standings")[0].EnumerateObject().Select(p => p.Name));
+    }
+
+    [Fact]
+    public async Task The_television_answers_at_the_short_address_a_remote_can_type()
+    {
+        // "/tv" is the one address anybody enters on that device, and it is a route rather than a
+        // static file, so nothing else would notice if a deployment moved the web root underneath it.
+        var response = await Factory().CreateClient().GetAsync("/tv");
+
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
+        Assert.Contains("tv.js", await response.Content.ReadAsStringAsync());
     }
 
     [Fact]

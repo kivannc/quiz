@@ -203,8 +203,12 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 }
 /* the letter-spacing hangs off each pair's last digit; pull it back so the gap is the one above */
 .tv .pair .pcode span { margin-right: -.08em; }
+/* no code to show yet, or the one that was up outlived itself: the slot keeps its size */
+.tv .pair .pcode.waiting { color: var(--dim); }
 .tv .pair .where { font-size: clamp(12px, 1.1vw, 20px); color: var(--muted); letter-spacing: .1em; }
 .tv .pair .status { font-size: clamp(11px, 1.05vw, 18px); letter-spacing: .08em; margin: clamp(14px, 2.4vh, 32px) 0 0; }
+/* when it stands in for the code, it is read from the sofa like the code is */
+.tv .pair .status.big { font-size: clamp(16px, 2vw, 34px); max-width: 46ch; }
 /* claimed: teal is this page's "that worked", as it is on the lobby's start button */
 .tv .pair .paired { font-size: clamp(22px, 3.4vw, 60px); font-weight: 600; letter-spacing: .18em; color: var(--teal); margin: 0 0 .6em; }
 

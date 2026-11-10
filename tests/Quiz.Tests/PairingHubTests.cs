@@ -100,6 +100,10 @@ public sealed class PairingHubTests : IDisposable
     private static Task<string> Create(HubConnection console) =>
         console.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
 
+    // The code alone, for the tests that only need something to claim.
+    private static async Task<string> Open(HubConnection screen) =>
+        (await screen.InvokeAsync<ScreenPairing>("OpenScreen")).Code;
+
     [Fact]
     public async Task A_screen_gets_a_code_and_a_console_with_the_key_can_claim_it()
     {
@@ -108,8 +112,12 @@ public sealed class PairingHubTests : IDisposable
         var paired = Signal(screen, "Paired");
         var console = await Connect(factory);
 
-        var code = await screen.InvokeAsync<string>("OpenScreen");
-        Assert.Matches("^[1-9][0-9]{3}$", code);
+        var pairing = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+        Assert.Matches("^[1-9][0-9]{3}$", pairing.Code);
+        // The lifetime travels with it: the screen replaces the code before it dies, and the only
+        // thing that knows how long that is, is the server.
+        Assert.Equal(120, pairing.LifetimeSeconds);
+        var code = pairing.Code;
 
         await Claim(console, code);
         await paired.Next();
@@ -122,7 +130,7 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var screen = await Connect(factory);
         var paired = Signal(screen, "Paired");
-        var code = await screen.InvokeAsync<string>("OpenScreen");
+        var code = await Open(screen);
 
         var stranger = await Connect(factory);
         Assert.Contains("forbidden", (await Refused(() => Claim(stranger, code, "not-the-key-at-all-0000"))).Message);
@@ -172,10 +180,19 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var both = await Connect(factory);
 
-        var code = await both.InvokeAsync<string>("OpenScreen");
+        var code = await Open(both);
         Assert.Contains("no-such-code", (await Refused(() => Claim(both, code))).Message);
 
         Assert.Contains("no-screen", (await Refused(() => Create(both))).Message);
+    }
+
+    [Fact]
+    public async Task A_screen_is_told_the_lifetime_the_server_was_configured_with()
+    {
+        var factory = Factory(("QUIZ_PAIRING_SECONDS", "45"));
+        var screen = await Connect(factory);
+
+        Assert.Equal(45, (await screen.InvokeAsync<ScreenPairing>("OpenScreen")).LifetimeSeconds);
     }
 
     [Fact]
@@ -183,9 +200,9 @@ public sealed class PairingHubTests : IDisposable
     {
         var factory = Factory(("QUIZ_PAIRING_ISSUES_PER_MINUTE", "1"));
         var screen = await Connect(factory);
-        await screen.InvokeAsync<string>("OpenScreen");
+        await Open(screen);
 
-        var ex = await Refused(() => screen.InvokeAsync<string>("OpenScreen"));
+        var ex = await Refused(() => Open(screen));
         Assert.Contains("pairing-unavailable", ex.Message);
         Assert.DoesNotContain("throttle", ex.Message, StringComparison.OrdinalIgnoreCase);
     }
@@ -197,7 +214,7 @@ public sealed class PairingHubTests : IDisposable
         var screen = await Connect(factory);
         var opened = new Inbox<string>(screen, "RoomOpened");
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
 
         var room = await Create(console);
 
@@ -219,7 +236,7 @@ public sealed class PairingHubTests : IDisposable
         var revealed = new Inbox<JsonElement>(screen, "Revealed");
         var counts = new Inbox<(int, int)>(r => screen.On<int, int>("AnswerCount", (a, t) => r((a, t))));
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         var room = await Create(console);
         var player = await Connect(factory);
         await player.InvokeAsync<string>("Join", room, "Ada");
@@ -240,7 +257,7 @@ public sealed class PairingHubTests : IDisposable
         var questions = new Inbox<JsonElement>(screen, "QuestionStarted");
         var revealed = new Inbox<JsonElement>(screen, "Revealed");
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         var room = await Create(console);
         var player = await Connect(factory);
         await player.InvokeAsync<string>("Join", room, "Ada");
@@ -263,7 +280,7 @@ public sealed class PairingHubTests : IDisposable
         var screen = await Connect(factory);
         var revealed = new Inbox<JsonElement>(screen, "Revealed");
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         var room = await Create(console);
         var player = await Connect(factory);
         await player.InvokeAsync<string>("Join", room, "Ada");
@@ -285,7 +302,7 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var screen = await Connect(factory);
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         var room = await Create(console);
         var player = await Connect(factory);
         await player.InvokeAsync<string>("Join", room, "Ada");
@@ -296,7 +313,7 @@ public sealed class PairingHubTests : IDisposable
         var opened = new Inbox<string>(reloaded, "RoomOpened");
         var state = RoomState(reloaded);
         var questions = new Inbox<JsonElement>(reloaded, "QuestionStarted");
-        await Claim(console, await reloaded.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(reloaded));
 
         Assert.Equal(room, await opened.Next());
         Assert.Equal("question", (await state.Next()).Phase);
@@ -316,7 +333,7 @@ public sealed class PairingHubTests : IDisposable
     {
         var factory = Factory();
         var screen = await Connect(factory);
-        var code = await screen.InvokeAsync<string>("OpenScreen");
+        var code = await Open(screen);
         var id = screen.ConnectionId!;
         var connections = factory.Services.GetRequiredService<ConnectionRooms>();
         var store = factory.Services.GetRequiredService<PairingStore>();
@@ -335,7 +352,7 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var screen = await Connect(factory);
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         var connections = factory.Services.GetRequiredService<ConnectionRooms>();
         Assert.NotNull(connections.Screen(console.ConnectionId!));
 
@@ -351,7 +368,7 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var screen = await Connect(factory);
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         var connections = factory.Services.GetRequiredService<ConnectionRooms>();
         var id = console.ConnectionId!;
 
@@ -365,7 +382,7 @@ public sealed class PairingHubTests : IDisposable
     {
         var factory = Factory();
         var screen = await Connect(factory);
-        var code = await screen.InvokeAsync<string>("OpenScreen");
+        var code = await Open(screen);
         var first = await Connect(factory);
         var second = await Connect(factory);
 
@@ -384,8 +401,8 @@ public sealed class PairingHubTests : IDisposable
         var first = await Connect(factory);
         var second = await Connect(factory);
 
-        await Claim(first, await screen.InvokeAsync<string>("OpenScreen"));
-        await Claim(second, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(first, await Open(screen));
+        await Claim(second, await Open(screen));
 
         // One television, one console: only the last to claim it can open a room on it.
         Assert.Contains("no-screen", (await Refused(() => Create(first))).Message);
@@ -411,7 +428,7 @@ public sealed class PairingHubTests : IDisposable
         Assert.Contains("forbidden", (await Refused(WrongKey)).Message);
 
         var screen = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
         Assert.Contains("forbidden", (await Refused(WrongKey)).Message);
     }
 
@@ -421,7 +438,7 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var screen = await Connect(factory);
         var console = await Connect(factory);
-        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        await Claim(console, await Open(screen));
 
         Assert.Contains("unknown-set", (await Refused(() => console.InvokeAsync<string>("CreateRoom", HostKey, "nope"))).Message);
         await Create(console);

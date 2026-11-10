@@ -31,6 +31,7 @@ public sealed class GameHub(
     JoinThrottle joinThrottle,
     [FromKeyedServices(GameHub.CreateThrottleKey)] JoinThrottle createThrottle,
     PairingStore pairings,
+    PairingOptions pairingOptions,
     [FromKeyedServices(GameHub.ClaimThrottleKey)] JoinThrottle claimThrottle) : Hub
 {
     public const string CreateThrottleKey = "create-room";
@@ -41,12 +42,18 @@ public sealed class GameHub(
     private static string HostGroup(string code) => code + ":host";
 
     /// <summary>
-    /// Gives a television a four-digit pairing code to show. The only failure is "pairing-unavailable",
-    /// which covers both a throttled caller and a full code space: the screen cannot act on the
-    /// difference, so it is not told one.
+    /// Gives a television a four-digit pairing code to show, and how long it will last. The only failure
+    /// is "pairing-unavailable", which covers both a throttled caller and a full code space: the screen
+    /// cannot act on the difference, so it is not told one.
+    ///
+    /// The lifetime travels with the code because the screen has to replace it before it dies, and
+    /// <see cref="PairingOptions.Lifetime"/> is a setting: a screen that assumed the default would show
+    /// a code that was already dead on any deployment that shortened it, and would never say so.
     /// </summary>
-    public Task<string> OpenScreen() =>
-        Task.FromResult(pairings.Issue(Context.ConnectionId, ClientKey()) ?? throw new HubException("pairing-unavailable"));
+    public Task<ScreenPairing> OpenScreen() =>
+        Task.FromResult(pairings.Issue(Context.ConnectionId, ClientKey()) is { } code
+            ? new ScreenPairing(code, (int)pairingOptions.Lifetime.TotalSeconds)
+            : throw new HubException("pairing-unavailable"));
 
     /// <summary>
     /// Makes the caller the console of the screen showing <paramref name="code"/>. Throws "throttled",
@@ -405,3 +412,9 @@ public sealed class GameHub(
 
     private static bool Try(Func<bool> action) => Try(action, out var started) && started;
 }
+
+/// <summary>
+/// What a television is given to show: the code itself and the seconds it has left to live, so the
+/// page can ask for the next one in time rather than guessing the server's setting.
+/// </summary>
+public sealed record ScreenPairing(string Code, int LifetimeSeconds);
