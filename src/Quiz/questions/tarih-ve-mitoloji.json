@@ -1,0 +1,582 @@
+{
+  "id": "tarih-ve-mitoloji",
+  "title": "Tarih ve Mitoloji",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "th-01",
+      "text": "Türkiye Cumhuriyeti hangi yıl kuruldu?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1453"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1923"
+        },
+        {
+          "marker": "clubs",
+          "text": "1938"
+        },
+        {
+          "marker": "spades",
+          "text": "1950"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-02",
+      "text": "Cumhuriyetin ilk cumhurbaşkanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İsmet İnönü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mustafa Kemal Atatürk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Celal Bayar"
+        },
+        {
+          "marker": "spades",
+          "text": "Fatih Sultan Mehmet"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-03",
+      "text": "İstanbul'u 1453'te kim fethetti?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yavuz Sultan Selim"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kanuni Sultan Süleyman"
+        },
+        {
+          "marker": "clubs",
+          "text": "Osman Bey"
+        },
+        {
+          "marker": "spades",
+          "text": "Fatih Sultan Mehmet"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-04",
+      "text": "Gize Piramitleri hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mısır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hindistan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Meksika"
+        },
+        {
+          "marker": "spades",
+          "text": "Yunanistan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-05",
+      "text": "Kristof Kolomb 1492'de hangi kıtaya ulaştı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Amerika"
+        },
+        {
+          "marker": "spades",
+          "text": "Antarktika"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-06",
+      "text": "Antik çağda Olimpiyat Oyunları hangi ülkede başladı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mısır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çin"
+        },
+        {
+          "marker": "clubs",
+          "text": "İtalya"
+        },
+        {
+          "marker": "spades",
+          "text": "Yunanistan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-07",
+      "text": "Ay'a ayak basan ilk insan kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yuri Gagarin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Neil Armstrong"
+        },
+        {
+          "marker": "clubs",
+          "text": "Albert Einstein"
+        },
+        {
+          "marker": "spades",
+          "text": "Kristof Kolomb"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-08",
+      "text": "Çanakkale Savaşı hangi yüzyılda yapıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "18. yüzyıl"
+        },
+        {
+          "marker": "diamonds",
+          "text": "17. yüzyıl"
+        },
+        {
+          "marker": "clubs",
+          "text": "20. yüzyıl"
+        },
+        {
+          "marker": "spades",
+          "text": "15. yüzyıl"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-09",
+      "text": "Malazgirt Savaşı'nı kazanan hükümdar kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Alparslan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fatih Sultan Mehmet"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yıldırım Bayezid"
+        },
+        {
+          "marker": "spades",
+          "text": "Kılıçarslan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-10",
+      "text": "Büyük İskender hangi krallığın hükümdarıydı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mısır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Roma"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pers"
+        },
+        {
+          "marker": "spades",
+          "text": "Makedonya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mt-01",
+      "text": "Yunan mitolojisinde tanrıların kralı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zeus"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Apollon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hermes"
+        },
+        {
+          "marker": "spades",
+          "text": "Hades"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mt-02",
+      "text": "Truva Savaşı'nda kullanılan dev tahta hayvan nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Aslan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "At"
+        },
+        {
+          "marker": "clubs",
+          "text": "Boğa"
+        },
+        {
+          "marker": "spades",
+          "text": "Kartal"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mt-03",
+      "text": "Yunan mitolojisinde denizlerin tanrısı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ares"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hephaistos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Poseidon"
+        },
+        {
+          "marker": "spades",
+          "text": "Kronos"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mt-04",
+      "text": "Yunan mitolojisinde aşk ve güzellik tanrıçası kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Athena"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Artemis"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hera"
+        },
+        {
+          "marker": "spades",
+          "text": "Afrodit"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mt-05",
+      "text": "Bakanı taşa çeviren mitolojik yaratık kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Siren"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Medusa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Harpi"
+        },
+        {
+          "marker": "spades",
+          "text": "Kimera"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mt-06",
+      "text": "Yunan mitolojisinde tanrıların yaşadığı dağ hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Olimpos"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Parnassos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Etna"
+        },
+        {
+          "marker": "spades",
+          "text": "Ida"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mt-07",
+      "text": "Anka kuşu hangi özelliğiyle bilinir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hiç uyumaması"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Su altında yaşaması"
+        },
+        {
+          "marker": "clubs",
+          "text": "Görünmez olması"
+        },
+        {
+          "marker": "spades",
+          "text": "Küllerinden doğması"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mt-08",
+      "text": "Topuğundan vurularak öldürülen Yunan kahramanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Herakles"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Odysseus"
+        },
+        {
+          "marker": "clubs",
+          "text": "Akhilleus"
+        },
+        {
+          "marker": "spades",
+          "text": "Perseus"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mt-09",
+      "text": "Yarı insan yarı boğa mitolojik yaratık hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kentaur"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Satir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kiklop"
+        },
+        {
+          "marker": "spades",
+          "text": "Minotauros"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mt-10",
+      "text": "İskandinav mitolojisinde şimşek tanrısı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Thor"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Odin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Loki"
+        },
+        {
+          "marker": "spades",
+          "text": "Freyja"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-11",
+      "text": "Osmanlı Devleti'nin kurucusu kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Orhan Gazi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ertuğrul Gazi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Osman Bey"
+        },
+        {
+          "marker": "spades",
+          "text": "Murad I"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-12",
+      "text": "Birinci Dünya Savaşı hangi yıl başladı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1914"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1908"
+        },
+        {
+          "marker": "clubs",
+          "text": "1918"
+        },
+        {
+          "marker": "spades",
+          "text": "1923"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-13",
+      "text": "Mustafa Kemal Atatürk Samsun'a hangi yıl çıktı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1918"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1919"
+        },
+        {
+          "marker": "clubs",
+          "text": "1920"
+        },
+        {
+          "marker": "spades",
+          "text": "1923"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-14",
+      "text": "Pompei'yi küller altında bırakan yanardağ hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Etna"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Stromboli"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vezüv"
+        },
+        {
+          "marker": "spades",
+          "text": "Krakatoa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-15",
+      "text": "Yunan mitolojisinde av tanrıçası kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Artemis"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hera"
+        },
+        {
+          "marker": "clubs",
+          "text": "Demeter"
+        },
+        {
+          "marker": "spades",
+          "text": "Hestia"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}

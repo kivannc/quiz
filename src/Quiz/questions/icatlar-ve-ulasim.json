@@ -1,0 +1,582 @@
+{
+  "id": "icatlar-ve-ulasim",
+  "title": "İcatlar ve Ulaşım",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "it-01",
+      "text": "Pusula hangi yönü gösterir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güney"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Doğu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kuzey"
+        },
+        {
+          "marker": "spades",
+          "text": "Batı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-02",
+      "text": "İlk uçağı yapan kardeşler hangileridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lumière Kardeşler"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Montgolfier Kardeşler"
+        },
+        {
+          "marker": "clubs",
+          "text": "Grimm Kardeşler"
+        },
+        {
+          "marker": "spades",
+          "text": "Wright Kardeşler"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-03",
+      "text": "Telefonu icat eden kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Alexander Graham Bell"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Thomas Edison"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nikola Tesla"
+        },
+        {
+          "marker": "spades",
+          "text": "Guglielmo Marconi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-04",
+      "text": "Ampulü geliştiren ünlü mucit kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nikola Tesla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Thomas Edison"
+        },
+        {
+          "marker": "clubs",
+          "text": "Michael Faraday"
+        },
+        {
+          "marker": "spades",
+          "text": "Alessandro Volta"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-05",
+      "text": "Yerçekimi yasasını formüle eden kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Galileo Galilei"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Albert Einstein"
+        },
+        {
+          "marker": "clubs",
+          "text": "Isaac Newton"
+        },
+        {
+          "marker": "spades",
+          "text": "Nikolas Kopernik"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-06",
+      "text": "Bilgisayarın beyni sayılan parça hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İşlemci"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ekran kartı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sabit disk"
+        },
+        {
+          "marker": "spades",
+          "text": "Anakart"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-07",
+      "text": "Ay'a ilk kez insan götüren görevin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sputnik 1"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vostok 1"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gemini 4"
+        },
+        {
+          "marker": "spades",
+          "text": "Apollo 11"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-08",
+      "text": "Penisilini keşfeden bilim insanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Louis Pasteur"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alexander Fleming"
+        },
+        {
+          "marker": "clubs",
+          "text": "Robert Koch"
+        },
+        {
+          "marker": "spades",
+          "text": "Edward Jenner"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-09",
+      "text": "Matbaayı Avrupa'da geliştiren kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Leonardo da Vinci"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Galileo Galilei"
+        },
+        {
+          "marker": "clubs",
+          "text": "James Watt"
+        },
+        {
+          "marker": "spades",
+          "text": "Johannes Gutenberg"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-10",
+      "text": "World Wide Web'i (www) icat eden kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tim Berners-Lee"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bill Gates"
+        },
+        {
+          "marker": "clubs",
+          "text": "Steve Jobs"
+        },
+        {
+          "marker": "spades",
+          "text": "Alan Turing"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ul-01",
+      "text": "Trafik lambasında hangi renk \"dur\" demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Mavi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ul-02",
+      "text": "Trenlerin üzerinde gittiği yapıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şerit"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ray"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hat"
+        },
+        {
+          "marker": "spades",
+          "text": "Kanal"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ul-03",
+      "text": "Denizaltıların su üstünü görmek için kullandığı alet hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Teleskop"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mikroskop"
+        },
+        {
+          "marker": "clubs",
+          "text": "Periskop"
+        },
+        {
+          "marker": "spades",
+          "text": "Pusula"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ul-04",
+      "text": "Uçakların iniş kalkış yaptığı uzun düz zemine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rampa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hangar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Apron"
+        },
+        {
+          "marker": "spades",
+          "text": "Pist"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ul-05",
+      "text": "Şehir içinde raylar üzerinde çalışan araç hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Otobüs"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tramvay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dolmuş"
+        },
+        {
+          "marker": "spades",
+          "text": "Teleferik"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ul-06",
+      "text": "Boğaziçi Köprüsü hangi iki kıtayı birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya ve Avrupa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avrupa ve Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Asya ve Afrika"
+        },
+        {
+          "marker": "spades",
+          "text": "Avrupa ve Amerika"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ul-07",
+      "text": "Süveyş Kanalı hangi iki denizi birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karadeniz ve Marmara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Atlas ve Pasifik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Baltık ve Kuzey"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz ve Kızıldeniz"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ul-08",
+      "text": "Dünyanın ilk metrosu hangi şehirde açıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Paris"
+        },
+        {
+          "marker": "diamonds",
+          "text": "New York"
+        },
+        {
+          "marker": "clubs",
+          "text": "Londra"
+        },
+        {
+          "marker": "spades",
+          "text": "Berlin"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ul-09",
+      "text": "Dünyanın en uzun demiryolu hattı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Orient Express"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Trans-Kanada"
+        },
+        {
+          "marker": "clubs",
+          "text": "Trans-Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Trans-Sibirya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ul-10",
+      "text": "İstanbul'daki Tünel ne tür bir ulaşım aracıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Füniküler"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Metro"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tramvay"
+        },
+        {
+          "marker": "spades",
+          "text": "Teleferik"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-11",
+      "text": "Nokta ve çizgilerden oluşan telgraf alfabesinin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Braille alfabesi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mors alfabesi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Latin alfabesi"
+        },
+        {
+          "marker": "spades",
+          "text": "İşaret alfabesi"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-12",
+      "text": "Elektrik akımının birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Volt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Watt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Amper"
+        },
+        {
+          "marker": "spades",
+          "text": "Ohm"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-13",
+      "text": "Buharlı makineyi geliştiren mucit kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Henry Ford"
+        },
+        {
+          "marker": "diamonds",
+          "text": "James Watt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rudolf Diesel"
+        },
+        {
+          "marker": "spades",
+          "text": "George Stephenson"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-14",
+      "text": "Radyoaktiflik çalışmalarıyla iki Nobel kazanan bilim insanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lise Meitner"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rosalind Franklin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Marie Curie"
+        },
+        {
+          "marker": "spades",
+          "text": "Ada Lovelace"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-15",
+      "text": "İlk yapay Dünya uydusunun adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sputnik 1"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Explorer 1"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vostok 1"
+        },
+        {
+          "marker": "spades",
+          "text": "Luna 1"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}

@@ -1,0 +1,582 @@
+{
+  "id": "sanat-muzik-ve-film",
+  "title": "Sanat, Müzik ve Film",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "mf-01",
+      "text": "\"Aslan Kral\" filminin baş karakteri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Simba"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bambi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dumbo"
+        },
+        {
+          "marker": "spades",
+          "text": "Nemo"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-02",
+      "text": "Davul hangi çalgı grubundadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Üflemeli"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yaylı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vurmalı"
+        },
+        {
+          "marker": "spades",
+          "text": "Tuşlu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-03",
+      "text": "Hangisi bir çizgi film karakteridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mimar Sinan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kemal Sunal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Harry Potter"
+        },
+        {
+          "marker": "spades",
+          "text": "Sünger Bob"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-04",
+      "text": "\"Karlar Ülkesi\" filminde buzlar yaratan prenses kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pamuk Prenses"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Elsa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Külkedisi"
+        },
+        {
+          "marker": "spades",
+          "text": "Rapunzel"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-05",
+      "text": "Harry Potter'ın okulunun adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Narnia"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Atlantis"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hogwarts"
+        },
+        {
+          "marker": "spades",
+          "text": "Mordor"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-06",
+      "text": "Gitarın kaç teli vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dört"
+        },
+        {
+          "marker": "spades",
+          "text": "On"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-07",
+      "text": "\"Shrek\" filminde Shrek hangi renktir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mavi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Yeşil"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-08",
+      "text": "Marlin ve Nemo hangi hayvandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yunus"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Palyaço balığı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Köpek balığı"
+        },
+        {
+          "marker": "spades",
+          "text": "Deniz kaplumbağası"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-09",
+      "text": "Piyanoda tuşlar hangi iki renktir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kırmızı ve mavi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Siyah ve beyaz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yeşil ve sarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Gri ve turuncu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-10",
+      "text": "Pamuk Prenses'in yanındaki cücelerin sayısı kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Üç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dokuz"
+        },
+        {
+          "marker": "spades",
+          "text": "Yedi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sm-01",
+      "text": "\"Mona Lisa\" tablosunu kim yaptı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Leonardo da Vinci"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Michelangelo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Van Gogh"
+        },
+        {
+          "marker": "spades",
+          "text": "Picasso"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sm-02",
+      "text": "Ayasofya hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bursa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İstanbul"
+        },
+        {
+          "marker": "clubs",
+          "text": "Edirne"
+        },
+        {
+          "marker": "spades",
+          "text": "İzmir"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sm-03",
+      "text": "Heykel yapan sanatçıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ressam"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mimar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Heykeltıraş"
+        },
+        {
+          "marker": "spades",
+          "text": "Hattat"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sm-04",
+      "text": "Süleymaniye Camii'nin mimarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mimar Kemaleddin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sedefkâr Mehmet Ağa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mimar Hayruddin"
+        },
+        {
+          "marker": "spades",
+          "text": "Mimar Sinan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sm-05",
+      "text": "\"Yıldızlı Gece\" tablosu kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Claude Monet"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vincent van Gogh"
+        },
+        {
+          "marker": "clubs",
+          "text": "Paul Cézanne"
+        },
+        {
+          "marker": "spades",
+          "text": "Edgar Degas"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sm-06",
+      "text": "Tac Mahal hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hindistan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İran"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pakistan"
+        },
+        {
+          "marker": "spades",
+          "text": "Mısır"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sm-07",
+      "text": "Ebru sanatı neyin üzerinde yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cam"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahşap"
+        },
+        {
+          "marker": "clubs",
+          "text": "Deri"
+        },
+        {
+          "marker": "spades",
+          "text": "Su"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sm-08",
+      "text": "Sistine Şapeli'nin tavanını kim boyadı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Leonardo da Vinci"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rafael"
+        },
+        {
+          "marker": "clubs",
+          "text": "Michelangelo"
+        },
+        {
+          "marker": "spades",
+          "text": "Donatello"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sm-09",
+      "text": "Mona Lisa hangi müzede sergilenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Prado Müzesi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Uffizi Galerisi"
+        },
+        {
+          "marker": "clubs",
+          "text": "British Museum"
+        },
+        {
+          "marker": "spades",
+          "text": "Louvre Müzesi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sm-10",
+      "text": "Picasso'nun öncülerinden olduğu akım hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kübizm"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzlenimcilik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Romantizm"
+        },
+        {
+          "marker": "spades",
+          "text": "Gerçekçilik"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-11",
+      "text": "Orkestrayı yöneten kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Solist"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Besteci"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şef"
+        },
+        {
+          "marker": "spades",
+          "text": "Korist"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-12",
+      "text": "Temel notalar kaç tanedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "spades",
+          "text": "On iki"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-13",
+      "text": "Ney hangi malzemeden yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ahşap"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kamış"
+        },
+        {
+          "marker": "clubs",
+          "text": "Metal"
+        },
+        {
+          "marker": "spades",
+          "text": "Deri"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-14",
+      "text": "Oscar hangi alanda verilen bir ödüldür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Müzik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Edebiyat"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sinema"
+        },
+        {
+          "marker": "spades",
+          "text": "Mimarlık"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-15",
+      "text": "Mimar Sinan'ın \"ustalık eserim\" dediği yapı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Selimiye Camii"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Süleymaniye Camii"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şehzade Camii"
+        },
+        {
+          "marker": "spades",
+          "text": "Sultanahmet Camii"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}

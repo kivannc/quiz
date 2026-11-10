@@ -232,6 +232,351 @@
         }
       ],
       "correct": "clubs"
+    },
+    {
+      "id": "vc-01",
+      "text": "Soluk aldığımızda hava hangi organa gider?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Akciğer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mide"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karaciğer"
+        },
+        {
+          "marker": "spades",
+          "text": "Böbrek"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "vc-02",
+      "text": "Beynimizi koruyan kemik yapıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Omurga"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kafatası"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kaburga"
+        },
+        {
+          "marker": "spades",
+          "text": "Leğen kemiği"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "vc-03",
+      "text": "Kaç duyu organımız vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Üç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "vc-04",
+      "text": "Vücudumuzun en büyük organı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karaciğer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Akciğer"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beyin"
+        },
+        {
+          "marker": "spades",
+          "text": "Deri"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "vc-05",
+      "text": "Kemiklerin birleştiği yere ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kiriş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Eklem"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kıkırdak"
+        },
+        {
+          "marker": "spades",
+          "text": "Bağ"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "vc-06",
+      "text": "Kanı süzen organ hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Böbrek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dalak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pankreas"
+        },
+        {
+          "marker": "spades",
+          "text": "Mide"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "vc-07",
+      "text": "Gözün renkli kısmına ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kornea"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Retina"
+        },
+        {
+          "marker": "clubs",
+          "text": "Göz bebeği"
+        },
+        {
+          "marker": "spades",
+          "text": "İris"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "vc-08",
+      "text": "Yetişkin bir kalp dakikada ortalama kaç kez atar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "20"
+        },
+        {
+          "marker": "diamonds",
+          "text": "150"
+        },
+        {
+          "marker": "clubs",
+          "text": "70"
+        },
+        {
+          "marker": "spades",
+          "text": "300"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "vc-09",
+      "text": "Yetişkin bir insanda kaç kemik vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "106"
+        },
+        {
+          "marker": "diamonds",
+          "text": "306"
+        },
+        {
+          "marker": "clubs",
+          "text": "406"
+        },
+        {
+          "marker": "spades",
+          "text": "206"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "vc-10",
+      "text": "Dişlerin üzerindeki sert tabakaya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mine"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kemik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dentin"
+        },
+        {
+          "marker": "spades",
+          "text": "Kireç"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-11",
+      "text": "Buz kaç derecede erir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "0"
+        },
+        {
+          "marker": "diamonds",
+          "text": "-10"
+        },
+        {
+          "marker": "clubs",
+          "text": "10"
+        },
+        {
+          "marker": "spades",
+          "text": "100"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-12",
+      "text": "Solunumda havadan hangi gaz alınır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Azot"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Oksijen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karbondioksit"
+        },
+        {
+          "marker": "spades",
+          "text": "Helyum"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-13",
+      "text": "Sesin havadaki hızı yaklaşık kaç metre/saniyedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "34"
+        },
+        {
+          "marker": "diamonds",
+          "text": "3.400"
+        },
+        {
+          "marker": "clubs",
+          "text": "340"
+        },
+        {
+          "marker": "spades",
+          "text": "300.000"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-14",
+      "text": "Bir mıknatısın kaç kutbu vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dört"
+        },
+        {
+          "marker": "spades",
+          "text": "İki"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-15",
+      "text": "Dünya kendi etrafındaki turunu kaç saatte tamamlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "24"
+        },
+        {
+          "marker": "diamonds",
+          "text": "12"
+        },
+        {
+          "marker": "clubs",
+          "text": "48"
+        },
+        {
+          "marker": "spades",
+          "text": "365"
+        }
+      ],
+      "correct": "hearts"
     }
   ]
 }

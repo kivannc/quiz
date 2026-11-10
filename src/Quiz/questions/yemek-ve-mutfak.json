@@ -232,6 +232,351 @@
         }
       ],
       "correct": "clubs"
+    },
+    {
+      "id": "ym-11",
+      "text": "Mantının üzerine geleneksel olarak ne dökülür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yoğurt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zeytinyağı"
+        },
+        {
+          "marker": "spades",
+          "text": "Krema"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-12",
+      "text": "Lahmacunun üzerine hangi meyve sıkılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Portakal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Limon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nar"
+        },
+        {
+          "marker": "spades",
+          "text": "Greyfurt"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-13",
+      "text": "Kuru fasulyenin yanında geleneksel olarak ne yenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pilav"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Makarna"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patates püresi"
+        },
+        {
+          "marker": "spades",
+          "text": "Börek"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-14",
+      "text": "Hangisi bir Türk tatlısıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tiramisu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kazandibi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Panna cotta"
+        },
+        {
+          "marker": "spades",
+          "text": "Cheesecake"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-15",
+      "text": "Hamsi en çok hangi bölgede tüketilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ege"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Akdeniz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "spades",
+          "text": "İç Anadolu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-16",
+      "text": "Adana kebabı hangi etle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kuşbaşı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pirzola"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tavuk"
+        },
+        {
+          "marker": "spades",
+          "text": "Kıyma"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-17",
+      "text": "Çiğ köfte hangi tahılla yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bulgur"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pirinç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mısır"
+        },
+        {
+          "marker": "spades",
+          "text": "Yulaf"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-18",
+      "text": "Türk kahvesinin yanında geleneksel olarak ne ikram edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kurabiye"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lokum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çikolata"
+        },
+        {
+          "marker": "spades",
+          "text": "Reçel"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-19",
+      "text": "Şekerpare ve revani hangi tatlı grubuna girer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sütlü tatlılar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dondurmalar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şerbetli tatlılar"
+        },
+        {
+          "marker": "spades",
+          "text": "Çikolatalı tatlılar"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-20",
+      "text": "Yaprak sarma hangi bitkinin yaprağıyla yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dut"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İncir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lahana"
+        },
+        {
+          "marker": "spades",
+          "text": "Asma"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-21",
+      "text": "Su böreği hangi malzemeyle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yufka"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tel kadayıf"
+        },
+        {
+          "marker": "clubs",
+          "text": "Milföy"
+        },
+        {
+          "marker": "spades",
+          "text": "Mısır unu"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-22",
+      "text": "Ayran neyden yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Süt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yoğurt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kaymak"
+        },
+        {
+          "marker": "spades",
+          "text": "Peynir suyu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-23",
+      "text": "Pastırma hangi şehirle ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Afyon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çorum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kayseri"
+        },
+        {
+          "marker": "spades",
+          "text": "Sivas"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-24",
+      "text": "İmambayıldı hangi sebzeyle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kabak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Biber"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pırasa"
+        },
+        {
+          "marker": "spades",
+          "text": "Patlıcan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-25",
+      "text": "Kebap pişirilirken kullanılan metal çubuğa ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şiş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Maşa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tel"
+        },
+        {
+          "marker": "spades",
+          "text": "Mil"
+        }
+      ],
+      "correct": "hearts"
     }
   ]
 }
