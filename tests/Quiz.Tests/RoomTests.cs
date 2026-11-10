@@ -176,7 +176,12 @@ public sealed class RoomTests
         if (phase == RoomPhase.Question) return room;
         room.CloseQuestion();
         if (phase == RoomPhase.Reveal) return room;
-        while (room.Advance()) room.CloseQuestion();
+        var steps = 0;
+        while (room.Advance())
+        {
+            Assert.True(++steps <= Room.QuestionsPerRound, "the round would not end");
+            room.CloseQuestion();
+        }
         Assert.Equal(RoomPhase.Finished, room.Phase);
         return room;
     }
@@ -707,12 +712,18 @@ public sealed class RoomTests
         Assert.Equal(last, room.LastActivity);
     }
 
-    /// <summary>Walks a started room to the end, returning the text of every question it showed, in order.</summary>
+    /// <summary>
+    /// Walks a started room to the end, returning the text of every question it showed, in order.
+    /// Bounded, because a round cannot be longer than a round: a room that stopped advancing would
+    /// otherwise hang the suite rather than fail it, and a run that never ends is the one failure that
+    /// does not look like one - there is no CI here to notice it.
+    /// </summary>
     private static List<string> QuestionsShown(Room room)
     {
         var shown = new List<string>();
         while (room.CurrentQuestion is { } q)
         {
+            Assert.True(shown.Count <= Room.QuestionsPerRound, "the round would not end");
             shown.Add(q.Text);
             room.CloseQuestion();
             if (!room.Advance()) break;
@@ -747,14 +758,52 @@ public sealed class RoomTests
     }
 
     [Fact]
-    public void Two_rooms_on_the_same_pool_do_not_play_the_same_questions()
+    public void Two_rooms_sharing_one_set_draw_differently_and_leave_it_as_they_found_it()
     {
+        // The same QuestionSet instance both times, which is what RoomStore hands out: every room on a
+        // category gets the one set object. A draw that shuffled in place would be invisible today -
+        // QuestionSet.Questions is an IReadOnlyList over a List at runtime, so it is one cast away -
+        // and would quietly reorder every other room's questions.
+        var shared = Pool(40);
+        var order = shared.Questions.Select(q => q.Text).ToList();
+
+        var first = QuestionsShown(StartedRoom(shared, "Ada"));
+        var second = QuestionsShown(StartedRoom(shared, "Bob"));
+
+        Assert.Equal(order, shared.Questions.Select(q => q.Text));
+
         // Forty questions, ten drawn: the odds of two rounds drawing the same ten in the same order are
         // one in forty-permute-ten, which is a few thousand million million. A repeat means it is not drawing.
-        var first = QuestionsShown(StartedRoom(Pool(40), "Ada"));
-        var second = QuestionsShown(StartedRoom(Pool(40), "Bob"));
-
         Assert.NotEqual(first, second);
+    }
+
+    [Fact]
+    public void A_right_answer_scores_against_the_question_that_was_shown()
+    {
+        // Question i answers to marker i % 4 here, so answering the marker of the question the room has
+        // just reported only ever scores if the room scores the question it showed. A room that scored
+        // the set's question at the same index would mark three of every four of these wrong, and the
+        // scoring path is the one this whole change risks getting wrong.
+        var pool = Pool(40, varyCorrect: true);
+        var correctOf = pool.Questions.ToDictionary(q => q.Text, q => q.Correct);
+        var room = StartedRoom(pool, "Ada");
+
+        var score = 0;
+        for (var asked = 1; ; asked++)
+        {
+            Assert.True(asked <= Room.QuestionsPerRound, "the round would not end");
+            var shown = room.CurrentQuestion!;
+            Assert.True(room.Answer("conn-Ada", correctOf[shown.Text]));
+            room.CloseQuestion();
+
+            var now = room.Players.Single().Score;
+            Assert.True(now > score, $"question {asked} of the round scored nothing");
+            score = now;
+
+            if (!room.Advance()) break;
+        }
+
+        Assert.Equal(RoomPhase.Finished, room.Phase);
     }
 
     [Fact]
@@ -766,10 +815,12 @@ public sealed class RoomTests
         var correctOf = pool.Questions.ToDictionary(q => q.Text, q => q.Correct);
         var room = StartedRoom(pool, "Ada");
 
-        while (room.CurrentQuestion is { } q)
+        for (var asked = 1; ; asked++)
         {
+            Assert.True(asked <= Room.QuestionsPerRound, "the round would not end");
+            var shown = room.CurrentQuestion!;
             var reveal = room.CloseQuestion();
-            Assert.Equal(correctOf[q.Text], reveal.Correct);
+            Assert.Equal(correctOf[shown.Text], reveal.Correct);
             if (!room.Advance()) break;
         }
 

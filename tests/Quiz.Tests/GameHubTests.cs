@@ -18,6 +18,9 @@ public sealed class GameHubTests : IDisposable
 
     private static readonly TimeSpan Patience = TimeSpan.FromSeconds(10);
 
+    // The real sets, read once: CorrectMarkerOf is called several times a run and they do not change.
+    private static readonly JsonQuestionSetSource Shipped = new(ShippedQuestions.Directory);
+
     private readonly List<HubConnection> _connections = [];
     private readonly List<WebApplicationFactory<Program>> _factories = [];
     private readonly Dictionary<HubConnection, WebApplicationFactory<Program>> _factoryOf = [];
@@ -99,21 +102,22 @@ public sealed class GameHubTests : IDisposable
     private static async Task Barrier(HubConnection connection) =>
         await Assert.ThrowsAsync<HubException>(() => connection.InvokeAsync<string>("Join", "0000", "barrier"));
 
-    /// <summary>Opens a room from <paramref name="host"/>, the way a console must: with a television it has claimed.</summary>
     /// <summary>
     /// Which marker answers the question a screen was sent, looked up in the shipped set by its text.
     /// A room draws its ten questions out of a set that holds far more (see <see cref="Room.QuestionsPerRound"/>),
-    /// so a test is told which question it got rather than deciding it in advance.
+    /// so a test is told which question it got rather than deciding it in advance. A question whose text
+    /// is in no shipped set fails here rather than passing: Assert.Single throws on no match.
     /// </summary>
     private static string CorrectMarkerOf(JsonElement question, string setId = "genel-kultur")
     {
         var text = question.GetProperty("text").GetString();
-        var set = new JsonQuestionSetSource(ShippedQuestions.Directory).ById(setId);
+        var set = Shipped.ById(setId);
         Assert.NotNull(set);
-        var asked = Assert.Single(set.Questions.Where(q => q.Text == text));
+        var asked = Assert.Single(set.Questions, q => q.Text == text);
         return JsonNamingPolicy.CamelCase.ConvertName(asked.Correct.ToString());
     }
 
+    /// <summary>Opens a room from <paramref name="host"/>, the way a console must: with a television it has claimed.</summary>
     private async Task<string> Open(HubConnection host, string setId = "genel-kultur")
     {
         await ClaimAScreen(host);

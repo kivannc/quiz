@@ -224,6 +224,8 @@ public sealed class Room
     /// <summary>
     /// A round's questions: <see cref="QuestionsPerRound"/> of the set, in a random order, each at most
     /// once. A set smaller than a round plays whole, which is what a one-question test set is.
+    /// Runs once per room, because <see cref="Start"/> is refused outside the lobby and nothing returns
+    /// a room to the lobby. Copies the set before shuffling, so rooms can share one.
     /// The same generator the room codes are drawn with, for no better reason than that a game has one
     /// source of chance; a question draw asks nothing of it that a shuffle could not give.
     /// </summary>
