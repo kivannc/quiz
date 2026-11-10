@@ -52,6 +52,7 @@ const state = {
   question: null,   // the QuestionStarted payload: which question of how many, and whether it is the last
   paused: false,    // the room's clock is stopped, which the server knows too
   error: '',
+  repair: null,
   connection: '',   // reconnecting / disconnected notice
 };
 
@@ -390,7 +391,7 @@ async function hostAction(method) {
     state.error = '';
     render();
   } catch (error) {
-    state.error = errorText(error);
+    state.error = error;
     if (String(error?.message ?? '').includes('no-such-room')) {
       forgetRoom();
       show('setup');
@@ -422,7 +423,7 @@ async function resume() {
     state.error = '';
   } catch (error) {
     // The room has gone, or this key no longer drives it: ask for a room again.
-    state.error = errorText(error);
+    state.error = error;
     forgetRoom();
     show('setup');
   } finally {
@@ -438,7 +439,7 @@ async function loadSets() {
     state.sets = await response.json();
   } catch (error) {
     state.sets = [];
-    state.error = t('errGeneric');
+    state.error = error;
     console.error('could not load the question sets', error);
   }
   render();
@@ -463,11 +464,15 @@ el('form-open').addEventListener('submit', async (event) => {
     state.hostKey = hostKey;
     // No code typed and no screen in hand is left to the server to answer: it says "no-screen",
     // which is the plainest way this page can put it.
-    if (code) await claimScreen(code);
+    if (code) {
+      await claimScreen(code);
+      // The code is spent the moment the claim succeeds. Leaving it in the field would send a retry
+      // after a failed CreateRoom back to ClaimScreen with a dead code; state.claimed carries the claim.
+      form.elements.pairCode.value = '';
+    }
     await createRoom(hostKey, setId);
-    form.elements.pairCode.value = '';
   } catch (error) {
-    state.error = errorText(error);
+    state.error = error;
     render();
   }
 });
@@ -486,24 +491,23 @@ el('pause').addEventListener('click', togglePause);
 el('repair-open').addEventListener('click', () => {
   const form = el('form-repair');
   form.hidden = !form.hidden;
-  set(el('repair-status'), '');
+  state.repair = null;
+  drawRepair();
   if (!form.hidden) form.elements.pairCode.focus();
 });
 
 el('form-repair').addEventListener('submit', async (event) => {
   event.preventDefault();
   const form = event.target;
-  const status = el('repair-status');
   try {
     await claimScreen(form.elements.pairCode.value.trim());
     form.elements.pairCode.value = '';
     form.hidden = true;
-    set(status, t('rePairDone'));
-    status.classList.remove('error');
+    state.repair = { done: true };
   } catch (error) {
-    set(status, errorText(error));
-    status.classList.add('error');
+    state.repair = { error };
   }
+  drawRepair();
 });
 
 /*
@@ -540,9 +544,19 @@ function show(view) {
   clearTimeout(closeArmed);
   closeArmed = 0;
   el('form-repair').hidden = true;
-  set(el('repair-status'), '');
+  state.repair = null;
+  stopCountdown();
   state.view = view;
   render();
+}
+
+/* The re-pair line is a confirmation or an error; it keeps what happened so it can be redrawn in
+ * the language now chosen. */
+function drawRepair() {
+  const status = el('repair-status');
+  const { done, error } = state.repair ?? {};
+  set(status, done ? t('rePairDone') : error ? errorText(error) : '');
+  status.classList.toggle('error', Boolean(error));
 }
 
 function render() {
@@ -554,11 +568,17 @@ function render() {
   set(el('tag-connection'), state.connection);
   document.body.classList.toggle('paused', state.paused);
 
+  drawRepair();
   if (state.view === 'setup') drawSetup();
   if (running) {
     drawRun();
     drawControls();
   }
+}
+
+/* state.error holds what went wrong, not its words, so a language switch can say it again. */
+function errorOf(error) {
+  return error ? errorText(error) : '';
 }
 
 function set(node, text) {
@@ -585,7 +605,7 @@ function drawSetup() {
   // Only ever prefill an untouched field: a redraw must not overwrite what is being typed.
   const field = el('form-open').elements.hostKey;
   if (field.value === '' && document.activeElement !== field) field.value = state.hostKey ?? '';
-  el('setup-error').textContent = state.error;
+  el('setup-error').textContent = errorOf(state.error);
 }
 
 /*
@@ -609,7 +629,7 @@ function drawRun() {
   else set(el('tag-answered'), '');
 
   set(el('phase-detail'), detail());
-  set(el('run-error'), state.error);
+  set(el('run-error'), errorOf(state.error));
 }
 
 function detail() {
