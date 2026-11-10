@@ -375,6 +375,10 @@ conn.on('Displayed', (present) => {
     // All that is left to do: a beat already armed would otherwise close or advance in front of
     // nobody. The clock goes on, and the tick is what asks before acting.
     cancelPacing();
+    // And the re-pair line goes with it. "The screen is back in the room" is only cleared by a
+    // change of phase, so a television that leaves again in the same question would otherwise
+    // leave that confirmation sitting under the notice that contradicts it.
+    state.repair = null;
   }
   render();
 });

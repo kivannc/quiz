@@ -143,16 +143,18 @@ public sealed class GameHub(
         // shown on that screen and stays related to it for as long as the room lives, which is the
         // only thing that notices the television leaving.
         await JoinHostGroups(code);
-        // Two refusals can land here, and neither can be reached from a test against the real ledger:
-        // both are the same race — this console's screen disconnecting partway through this very
-        // method — caught between two separate takings of _screenGate, which is the one lock under
-        // which Forget drops a screen's claim and its liveness together.
-        // Unpair returns null when the screen went after the Screen look above, the guard that
-        // spends nothing. Display refuses when it went after Unpair handed the screen back, since
-        // by then the claim is gone and released and only the live set is left to read. The second
-        // window is the narrower of the two, not a different kind of thing. Both refusals are
-        // deliberate belt-and-braces, not untested paths somebody forgot, and both end in the same
-        // honest "Displayed false" below.
+        // Two refusals can land here, and neither can be reached from a test against the real ledger.
+        // Display refuses only a screen missing from the live set, and Forget alone empties that, so
+        // that one is this console's screen going away between Unpair handing it back and Display
+        // reading _live — the two calls below take _screenGate separately, and Forget is where a
+        // screen's claim and its liveness are dropped together.
+        // Unpair returning null has that same cause, between the Screen look above and here, and one
+        // more that needs no disconnect at all: ForgetRoom empties the claim of any console whose
+        // claimed screen is the departing room's display, and the re-seat branch above deliberately
+        // leaves exactly such a claim standing. So a console whose PREVIOUS room is swept for idleness
+        // in this window finds its claim gone with every connection still up.
+        // Both refusals are deliberate belt-and-braces, not untested paths somebody forgot, and both
+        // end in the same honest "Displayed false" below.
         if (connections.Unpair(Context.ConnectionId) is { } display && connections.Display(code, display, out _))
         {
             await SeatHost(display, code);
