@@ -37,13 +37,27 @@ const STRINGS = {
     pointsEarned: (points) => `+${points}`,
     totalScore: (score) => `TOPLAM ${grouped(score)}`,
 
-    // --- TV ---
+    // --- the host's console, and the game strings the two screens draw from ---
     hostTitle: 'Quiz — Sunucu',
     openHeading: 'Oda aç',
     hostKeyLabel: 'Sunucu anahtarı',
     setLabel: 'Soru seti',
     openButton: 'ODA AÇ',
-    codeTag: '[ KOD ]',
+    // What the console asks for before anything else: the code the television is showing.
+    pairCodeLabel: 'Ekran kodu',
+    tvHint: (url) => `televizyonda ${url} adresini aç, ekranda çıkan dört haneli kodu buraya gir`,
+    pairedAlready: 'ekran eşleşti',
+    pairButton: 'EŞLE',
+    rePairButton: '[ EKRANI YENİDEN EŞLE ]',
+    rePairHint: 'televizyon yeniden başladıysa ekranda çıkan kodu gir, odaya geri dönsün',
+    rePairDone: 'ekran odaya döndü',
+    // The phase the room is in, which is what says what the buttons under it do right now.
+    phaseLobby: 'LOBİ',
+    phaseQuestion: 'SORU AÇIK',
+    phaseReveal: 'CEVAP EKRANDA',
+    playerCount: (n) => `${n} oyuncu`,
+    revealHint: 'sonraki soru birazdan açılıyor',
+    newRoomHint: 'yeni oda için odayı kapat, sonra ekranda çıkan yeni kodu gir',
     joinAt: (host) => `telefonundan ${host} adresine gir`,
     waitingForPlayers: 'oyuncu bekleniyor',
     startButton: 'BAŞLAT',
@@ -56,7 +70,6 @@ const STRINGS = {
     nextButton: 'SONRAKİ SORU',
     resultsButton: 'SONUÇLAR',
     finishedHeading: 'TUR BİTTİ',
-    newRoomButton: 'YENİ ODA',
     pauseButton: 'DURAKLAT',
     resumeButton: 'DEVAM ET',
     pausedBanner: 'DURAKLATILDI',
@@ -88,6 +101,10 @@ const STRINGS = {
     errRoomFull: 'oda dolu',
     errRoundInProgress: 'tur başladı, bitmesini bekle',
     errForbidden: 'anahtar kabul edilmedi',
+    // Pairing, from the console's side. The server deliberately does not say which of the two
+    // reasons a code failed for, so this covers both: never shown, and already used.
+    errNoSuchCode: 'bu ekran kodu geçmedi, televizyondaki kodu kontrol et',
+    errNoScreen: 'önce bir ekran eşleştir: televizyonda çıkan kodu buraya gir',
     errTooManyRooms: 'şu an açılabilecek oda kalmadı',
     errUnknownSet: 'böyle bir soru seti yok',
     errGeneric: 'bir şeyler ters gitti, tekrar dene',
@@ -115,13 +132,27 @@ const STRINGS = {
     pointsEarned: (points) => `+${points}`,
     totalScore: (score) => `TOTAL ${grouped(score)}`,
 
-    // --- TV ---
+    // --- the host's console, and the game strings the two screens draw from ---
     hostTitle: 'Quiz — Host',
     openHeading: 'Open a room',
     hostKeyLabel: 'Host key',
     setLabel: 'Question set',
     openButton: 'OPEN ROOM',
-    codeTag: '[ CODE ]',
+    // What the console asks for before anything else: the code the television is showing.
+    pairCodeLabel: 'Screen code',
+    tvHint: (url) => `open ${url} on the television, then type the four-digit code it shows`,
+    pairedAlready: 'a screen is paired',
+    pairButton: 'PAIR',
+    rePairButton: '[ PAIR THE SCREEN AGAIN ]',
+    rePairHint: 'if the television restarted, type the code it is showing to put it back in the room',
+    rePairDone: 'the screen is back in the room',
+    // The phase the room is in, which is what says what the buttons under it do right now.
+    phaseLobby: 'LOBBY',
+    phaseQuestion: 'QUESTION OPEN',
+    phaseReveal: 'ANSWER ON SCREEN',
+    playerCount: (n) => `${n} player${n === 1 ? '' : 's'}`,
+    revealHint: 'the next question opens in a moment',
+    newRoomHint: 'to play again, close the room and type the new code the screen shows',
     joinAt: (host) => `open ${host} on your phone`,
     waitingForPlayers: 'waiting for players',
     startButton: 'START',
@@ -134,7 +165,6 @@ const STRINGS = {
     nextButton: 'NEXT QUESTION',
     resultsButton: 'RESULTS',
     finishedHeading: 'ROUND OVER',
-    newRoomButton: 'NEW ROOM',
     pauseButton: 'PAUSE',
     resumeButton: 'RESUME',
     pausedBanner: 'PAUSED',
@@ -166,6 +196,10 @@ const STRINGS = {
     errRoomFull: 'the room is full',
     errRoundInProgress: 'the round has started, wait for it to end',
     errForbidden: 'that host key was refused',
+    // Pairing, from the console's side. The server deliberately does not say which of the two
+    // reasons a code failed for, so this covers both: never shown, and already used.
+    errNoSuchCode: 'that screen code did not work; check the code on the television',
+    errNoScreen: 'no screen is paired: type the code the television is showing',
     errTooManyRooms: 'no room can be opened right now',
     errUnknownSet: 'no such question set',
     errGeneric: 'something went wrong, try again',
@@ -270,6 +304,8 @@ export function mountLangSwitch(el) {
  */
 const ERROR_STRINGS = {
   'no-such-room': 'errNoSuchRoom',
+  'no-such-code': 'errNoSuchCode',
+  'no-screen': 'errNoScreen',
   'invalid-name': 'errInvalidName',
   'throttled': 'errThrottled',
   'forbidden': 'errForbidden',
