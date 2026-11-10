@@ -29,9 +29,9 @@ public sealed class PairingStore
     // Same 1000..9999 space as room codes. When it is crowded, a bounded number of draws gives up.
     private const int MaxCodeAttempts = 50;
 
-    private readonly record struct Pairing(string ScreenConnectionId, DateTimeOffset ExpiresAt);
+    private readonly record struct Entry(string ScreenConnectionId, DateTimeOffset ExpiresAt);
 
-    private readonly ConcurrentDictionary<string, Pairing> _codes = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<string, Entry> _codes = new(StringComparer.Ordinal);
     private readonly object _gate = new();
     private readonly TimeProvider _clock;
     private readonly PairingOptions _options;
@@ -52,6 +52,8 @@ public sealed class PairingStore
     {
         lock (_gate)
         {
+            // The allowance is spent before we know whether a code can be drawn: a call that ends in null
+            // because the space is crowded still counts against the client. Deliberate, and simpler than refunding.
             if (!_throttle.Allow(clientKey)) return null;
 
             var now = _clock.GetUtcNow();
@@ -62,7 +64,7 @@ public sealed class PairingStore
                 if (_codes.TryGetValue(code, out var existing) && existing.ExpiresAt > now) continue;
 
                 RemoveHeldBy(screenConnectionId);
-                _codes[code] = new Pairing(screenConnectionId, now + _options.Lifetime);
+                _codes[code] = new Entry(screenConnectionId, now + _options.Lifetime);
                 return code;
             }
 
@@ -70,11 +72,11 @@ public sealed class PairingStore
         }
     }
 
-    public ClaimResult Claim(string code)
+    public ClaimResult Claim(string? code)
     {
-        if (code is null || !_codes.TryRemove(code, out var pairing)) return new ClaimResult.NoSuchCode();
-        return pairing.ExpiresAt > _clock.GetUtcNow()
-            ? new ClaimResult.Claimed(pairing.ScreenConnectionId)
+        if (code is null || !_codes.TryRemove(code, out var entry)) return new ClaimResult.NoSuchCode();
+        return entry.ExpiresAt > _clock.GetUtcNow()
+            ? new ClaimResult.Claimed(entry.ScreenConnectionId)
             : new ClaimResult.NoSuchCode();
     }
 
@@ -91,9 +93,9 @@ public sealed class PairingStore
         {
             var now = _clock.GetUtcNow();
             var removed = 0;
-            foreach (var (code, pairing) in _codes)
+            foreach (var (code, entry) in _codes)
             {
-                if (pairing.ExpiresAt <= now && _codes.TryRemove(code, out _)) removed++;
+                if (entry.ExpiresAt <= now && _codes.TryRemove(code, out _)) removed++;
             }
             return removed;
         }
@@ -102,9 +104,9 @@ public sealed class PairingStore
     // Caller holds _gate. At most 9000 entries, so a scan is cheaper than keeping a second map in step.
     private void RemoveHeldBy(string screenConnectionId)
     {
-        foreach (var (code, pairing) in _codes)
+        foreach (var (code, entry) in _codes)
         {
-            if (pairing.ScreenConnectionId == screenConnectionId) _codes.TryRemove(code, out _);
+            if (entry.ScreenConnectionId == screenConnectionId) _codes.TryRemove(code, out _);
         }
     }
 }

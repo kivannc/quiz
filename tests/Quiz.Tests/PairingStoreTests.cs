@@ -108,7 +108,7 @@ public sealed class PairingStoreTests
     }
 
     [Fact]
-    public void Swept_codes_become_drawable_again()
+    public void SweepExpired_counts_every_expired_code_in_a_crowded_space()
     {
         // Crowd the 1000..9999 space until a bounded draw gives up, then sweep: issuing must succeed again.
         var store = NewStore();
@@ -118,8 +118,22 @@ public sealed class PairingStoreTests
 
         _clock.Advance(Lifetime);
         Assert.Equal(issued, store.SweepExpired());
+        Assert.Equal(0, store.SweepExpired());
+    }
 
-        Assert.NotNull(store.Issue("late-screen", "late-client"));
+    [Fact]
+    public void Issue_treats_an_expired_but_unswept_code_as_free()
+    {
+        var store = NewStore();
+        var issued = 0;
+        while (store.Issue($"screen-{issued}", $"client-{issued}") is not null) issued++;
+
+        _clock.Advance(Lifetime);
+
+        // No sweep: every code is expired but still in the map. Asking for more codes than there are free
+        // slots (9000 - issued) can only succeed if expired entries are reused.
+        var more = 9000 - issued + 1;
+        for (var i = 0; i < more; i++) Assert.NotNull(store.Issue($"late-screen-{i}", $"late-client-{i}"));
     }
 
     [Fact]
@@ -142,7 +156,7 @@ public sealed class PairingStoreTests
     {
         var store = NewStore();
 
-        Assert.IsType<ClaimResult.NoSuchCode>(store.Claim(null!));
+        Assert.IsType<ClaimResult.NoSuchCode>(store.Claim(null));
         Assert.IsType<ClaimResult.NoSuchCode>(store.Claim(""));
         Assert.IsType<ClaimResult.NoSuchCode>(store.Claim("abcd"));
     }
