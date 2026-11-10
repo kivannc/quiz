@@ -22,7 +22,11 @@ namespace Quiz.Hubs;
 /// Screens and consoles: the television shows nothing but a pairing code (<see cref="OpenScreen"/>) and
 /// the host's phone, the console, claims it (<see cref="ClaimScreen"/>). The console keeps that claim
 /// until it opens a room, and <see cref="CreateRoom"/> then seats both connections in the room's host
-/// groups, so every host-bound message reaches the screen and the console alike.
+/// groups, so every host-bound message reaches the screen and the console alike. Past that moment the
+/// claim is spent, so the room's own tie to its television is <see cref="ConnectionRooms.Display"/>:
+/// without it nothing would notice a screen leaving, and the console — which owns the countdown and
+/// the beats between questions — would carry the round on with no display in the room at all. When one
+/// goes, <see cref="DisplayGone"/> stops the round and says "Displayed false" to the host group.
 /// </summary>
 public sealed class GameHub(
     RoomStore rooms,
@@ -83,8 +87,14 @@ public sealed class GameHub(
         if (connections.Hosting(Context.ConnectionId) is { } hosted && rooms.Find(hosted) is { } room)
         {
             await SeatHost(screen, hosted);
+            // This is the room's display now, so the next time this one goes the room notices again.
+            connections.Display(hosted, screen);
             await Clients.Client(screen).SendAsync("RoomOpened", hosted);
             await Repaint(room, Clients.Client(screen));
+            // The console has been saying the room had no television in it since the last one left.
+            // It has one again — and nothing else: a round stopped when the display went stays
+            // stopped, because the host is the one who knows the room is looking at it again.
+            await Clients.GroupExcept(HostGroup(hosted), new[] { screen }).SendAsync("Displayed", true);
         }
     }
 
@@ -109,6 +119,9 @@ public sealed class GameHub(
 
         // The claim is spent only now, so a refused set or a full server leaves it for the retry.
         connections.Unpair(Context.ConnectionId);
+        // And this is what takes its place: the room is shown on that screen, and stays related to it
+        // for as long as the room lives, which is what notices the television leaving.
+        connections.Display(code, screen);
         await JoinHostGroups(code);
         await SeatHost(screen, code);
         // The screen has only ever been told "Paired", and a room code is not in any host-bound message.
@@ -151,6 +164,10 @@ public sealed class GameHub(
         // Each accessor takes the room's lock on its own, so a phase that moves on mid-call means a
         // slightly stale paint, which the next broadcast corrects. Nothing here can get it wrong.
         await Repaint(room, Clients.Caller);
+        // Whether the room still has a television in it, which a console that has been away cannot
+        // know and has to: its own pacing is what would otherwise advance a room nobody can see.
+        // After the repaint, so it lands on a console that has just been shown a reveal.
+        await Clients.Caller.SendAsync("Displayed", connections.DisplayOf(code) is not null);
     }
 
     // Paints whatever is on a host screen now onto one connection, and only that one.
@@ -307,15 +324,37 @@ public sealed class GameHub(
         return base.OnConnectedAsync();
     }
 
-    public override Task OnDisconnectedAsync(Exception? exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         // SignalR drops a gone connection's groups itself, so this only clears the mirror of them, which
         // would otherwise keep an entry for every connection the process has ever seen.
         // A code nobody claimed would otherwise be claimable for a connection that no longer exists. First,
         // so that a connection no longer reading as connected has certainly lost its code too.
         pairings.Forget(Context.ConnectionId);
-        connections.Forget(Context.ConnectionId);
-        return base.OnDisconnectedAsync(exception);
+        // The one thing about a gone connection that a room has to act on: it was the television.
+        if (connections.Forget(Context.ConnectionId) is { } blinded) await DisplayGone(blinded);
+        await base.OnDisconnectedAsync(exception);
+    }
+
+    /// <summary>
+    /// A room's television has left it — reloaded, or a blink of Wi-Fi, which are the same thing here:
+    /// a reconnected screen is a new connection in no groups. Nothing may carry the round on while
+    /// nobody in the room can see it, so an open question is paused, which stops the room's own clock
+    /// and locks the players' buzzers; in the reveal there is no clock to stop, and not advancing is
+    /// the console's part, which it cannot do without being told. So the console is told either way.
+    ///
+    /// Coming back is deliberately not the reverse of this: <see cref="ClaimScreen"/> says the display
+    /// is back and the host presses resume, because the host is the one who can see the room.
+    /// </summary>
+    private async Task DisplayGone(string code)
+    {
+        // Closed or swept already: there is no round to stop and nobody left to tell.
+        if (rooms.Find(code) is not { } room) return;
+
+        // Pause is state, not a scheduler, so this is the whole of stopping the round.
+        if (room.Pause()) await Clients.Group(code).SendAsync("Paused", true);
+        // Only this room's host group, so a console hears about its own television and no other.
+        await Clients.Group(HostGroup(code)).SendAsync("Displayed", false);
     }
 
     // Throttles are per client address, so opening a fresh connection buys no new allowance. Program.cs makes the

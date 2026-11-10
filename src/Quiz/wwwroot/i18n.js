@@ -51,6 +51,11 @@ const STRINGS = {
     rePairButton: '[ EKRANI YENİDEN EŞLE ]',
     rePairHint: 'televizyon yeniden başladıysa ekranda çıkan kodu gir, odaya geri dönsün',
     rePairDone: 'ekran odaya döndü',
+    // Said on the console when the room's television has left it. The round is stopped, and it is
+    // the host — the only one who can see whether the room is looking at the screen again — who
+    // starts it, so the notice asks for the two presses rather than promising anything.
+    displayGone: 'TELEVİZYON ODADAN DÜŞTÜ',
+    displayGoneHint: 'oyun bekliyor; televizyonda çıkan kodu yeniden eşle, sonra devam et',
     // The phase the room is in, which is what says what the buttons under it do right now.
     phaseLobby: 'LOBİ',
     phaseQuestion: 'SORU AÇIK',
@@ -146,6 +151,11 @@ const STRINGS = {
     rePairButton: '[ PAIR THE SCREEN AGAIN ]',
     rePairHint: 'if the television restarted, type the code it is showing to put it back in the room',
     rePairDone: 'the screen is back in the room',
+    // Said on the console when the room's television has left it. The round is stopped, and it is
+    // the host — the only one who can see whether the room is looking at the screen again — who
+    // starts it, so the notice asks for the two presses rather than promising anything.
+    displayGone: 'THE TELEVISION LEFT THE ROOM',
+    displayGoneHint: 'the game is waiting; pair the code the television is showing, then carry on',
     // The phase the room is in, which is what says what the buttons under it do right now.
     phaseLobby: 'LOBBY',
     phaseQuestion: 'QUESTION OPEN',

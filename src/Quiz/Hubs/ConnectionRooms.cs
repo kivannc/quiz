@@ -8,12 +8,14 @@ namespace Quiz.Hubs;
 /// that opens a second room — or a phone that joins one — would go on hearing the room it left, and be
 /// repainted by it. This is the memory <see cref="GameHub"/> needs to leave the old groups first.
 ///
-/// Two parts of it are not a mirror and do decide something. A console that has claimed a pairing code
+/// Three parts of it are not a mirror and do decide something. A console that has claimed a pairing code
 /// remembers the screen it claimed until it opens a room, and a missing entry there means "no screen":
 /// <c>CreateRoom</c> refuses without one. <see cref="Pair"/> enforces that a screen answers to one console
 /// and that a gone screen cannot be claimed, which is why it also keeps the set of connections that are up
-/// under the same lock. The room entries (playing, hosting) remain a plain mirror: a missing one only means
-/// there is no old group to leave, which is also what every connection starts out as.
+/// under the same lock. And <see cref="Display"/> remembers which screen each open room is shown on, past
+/// the moment the claim is spent: that is the only thing that relates a room back to its television, so it
+/// is what notices one leaving. The room entries (playing, hosting) remain a plain mirror: a missing one
+/// only means there is no old group to leave, which is also what every connection starts out as.
 /// </summary>
 public sealed class ConnectionRooms
 {
@@ -29,6 +31,12 @@ public sealed class ConnectionRooms
     // without it, a screen disconnecting between "claimed" and "paired" would leave the console holding a
     // television that no longer exists. Guarded by _screenGate, like the links it protects.
     private readonly HashSet<string> _live = new(StringComparer.Ordinal);
+
+    // room code -> the screen connection that room is shown on. The claim above is spent the moment the
+    // room opens, so this is what outlives it: without it nothing relates a room back to its television,
+    // and a room whose display has gone goes on being driven blind. Guarded by _screenGate too, because
+    // forgetting a room reads it and drops the claims that name the screen it finds.
+    private readonly Dictionary<string, string> _displays = new(StringComparer.Ordinal);
 
     /// <summary>The room this connection is seated in, if it is seated in one.</summary>
     public string? Playing(string connectionId) => _playing.GetValueOrDefault(connectionId);
@@ -87,6 +95,30 @@ public sealed class ConnectionRooms
         lock (_screenGate) return _screens.Remove(consoleConnectionId, out var screen) ? screen : null;
     }
 
+    /// <summary>The screen connection the room is shown on, or null when no television is in it.</summary>
+    public string? DisplayOf(string code)
+    {
+        lock (_screenGate) return _displays.GetValueOrDefault(code);
+    }
+
+    /// <summary>
+    /// Records which screen a room is shown on, replacing whatever was there — a room opening on a
+    /// screen, and a screen being seated back into a room it fell out of. A television shows one room:
+    /// any other room this screen was the display of is dropped, so the room a gone screen leaves
+    /// without one is never ambiguous.
+    /// </summary>
+    public void Display(string code, string screenConnectionId)
+    {
+        lock (_screenGate)
+        {
+            foreach (var (room, screen) in _displays.ToList())
+            {
+                if (screen == screenConnectionId) _displays.Remove(room);
+            }
+            _displays[code] = screenConnectionId;
+        }
+    }
+
     /// <summary>
     /// Forgets a room that no longer exists and returns every connection that was pointing at it, as a
     /// host screen or a seat or both, so its groups can be emptied too. An entry that moved to another
@@ -94,6 +126,21 @@ public sealed class ConnectionRooms
     /// </summary>
     public IReadOnlyCollection<string> ForgetRoom(string code)
     {
+        // Its television is going back to showing a pairing code, so a claim anybody still holds on that
+        // screen is a claim on something that is asking to be paired again — the re-seat branch of
+        // ClaimScreen leaves exactly that behind. Dropped here, or the console would read as holding a
+        // screen at the very moment the screen offers a fresh code and the console says to type it.
+        lock (_screenGate)
+        {
+            if (_displays.Remove(code, out var display))
+            {
+                foreach (var (console, screen) in _screens.ToList())
+                {
+                    if (screen == display) _screens.Remove(console);
+                }
+            }
+        }
+
         var gone = new HashSet<string>(StringComparer.Ordinal);
         foreach (var rooms in new[] { _playing, _hosting })
         {
@@ -105,8 +152,12 @@ public sealed class ConnectionRooms
         return gone;
     }
 
-    /// <summary>Drops a connection that has gone. SignalR has already dropped its groups; this is only the mirror of them.</summary>
-    public void Forget(string connectionId)
+    /// <summary>
+    /// Drops a connection that has gone, and returns the room it was the display of, if it was one.
+    /// SignalR has already dropped its groups, so most of this is only the mirror of them — but a room
+    /// whose television has just left has to be told, and this is the only place that knows.
+    /// </summary>
+    public string? Forget(string connectionId)
     {
         _playing.TryRemove(connectionId, out _);
         _hosting.TryRemove(connectionId, out _);
@@ -120,6 +171,16 @@ public sealed class ConnectionRooms
             {
                 if (screen == connectionId) _screens.Remove(console);
             }
+
+            string? blinded = null;
+            foreach (var (room, screen) in _displays)
+            {
+                if (screen != connectionId) continue;
+                blinded = room;
+                break; // a television shows one room, which Display is what keeps true
+            }
+            if (blinded is not null) _displays.Remove(blinded);
+            return blinded;
         }
     }
 

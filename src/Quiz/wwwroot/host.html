@@ -61,6 +61,17 @@
           <span id="tag-answered" hidden></span>
         </div>
         <p class="detail" id="phase-detail" hidden></p>
+        <!--
+          The room has no television in it any more. It belongs here, where the host reads the room,
+          because it is the one thing on this page that has to be noticed without being looked for:
+          the console owns the pacing, so a host who does not know would go on driving a room nobody
+          can see. Every button below it stays live — closing the room, or carrying on deliberately,
+          are both the host's to choose.
+        -->
+        <div class="gone" id="display-gone" hidden role="alert">
+          <p class="label" data-i18n="displayGone"></p>
+          <p class="detail" data-i18n="displayGoneHint"></p>
+        </div>
       </div>
 
       <div class="acts">

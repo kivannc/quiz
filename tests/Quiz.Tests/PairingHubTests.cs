@@ -208,6 +208,22 @@ public sealed class PairingHubTests : IDisposable
     }
 
     [Fact]
+    public async Task Codes_are_issued_per_client_so_a_reloaded_screen_buys_no_new_allowance()
+    {
+        var factory = Factory(("QUIZ_PAIRING_ISSUES_PER_MINUTE", "1"));
+        var screen = await Connect(factory, "203.0.113.11");
+        await Open(screen);
+        Assert.Contains("pairing-unavailable", (await Refused(() => Open(screen))).Message);
+
+        // A fresh connection from the same address gets no new allowance, and a different address has
+        // its own: a television that reloads in a loop must not be able to empty the four-digit space.
+        var reloaded = await Connect(factory, "203.0.113.11");
+        Assert.Contains("pairing-unavailable", (await Refused(() => Open(reloaded))).Message);
+        var other = await Connect(factory, "203.0.113.12");
+        Assert.Matches("^[1-9][0-9]{3}$", await Open(other));
+    }
+
+    [Fact]
     public async Task A_claimed_screen_receives_the_room_the_console_opens()
     {
         var factory = Factory();
@@ -455,6 +471,192 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory((name, value));
 
         Assert.ThrowsAny<Exception>(() => factory.Server);
+    }
+
+    // ---- a room's display: the television it was opened on, and what happens when it goes ----
+
+    /// <summary>
+    /// A television, a console that opened a room on it, and one player seated — where the display
+    /// tests start. The round is not started: each of them picks the phase it needs.
+    /// </summary>
+    private sealed record Table(HubConnection Screen, HubConnection Console, string Room, Inbox<bool> Displayed);
+
+    private async Task<Table> Seated(WebApplicationFactory<Program> factory)
+    {
+        var screen = await Connect(factory);
+        var console = await Connect(factory);
+        var displayed = new Inbox<bool>(console, "Displayed");
+        await Claim(console, await Open(screen));
+        var room = await Create(console);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", room, "Ada");
+        return new Table(screen, console, room, displayed);
+    }
+
+    private static Quiz.Game.Room RoomOf(WebApplicationFactory<Program> factory, string code) =>
+        factory.Services.GetRequiredService<Quiz.Game.RoomStore>().Find(code)!;
+
+    [Fact]
+    public async Task A_television_that_drops_mid_question_stops_the_round_and_says_so_to_the_console()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        var player = await Connect(factory);
+        await player.InvokeAsync<string>("Join", table.Room, "Bora");
+        var paused = new Inbox<bool>(player, "Paused");
+        await table.Console.InvokeAsync("StartRound", table.Room, HostKey);
+
+        await table.Screen.StopAsync();
+
+        Assert.False(await table.Displayed.Next());
+        // Pause is room state, so the room stops counting and the phones lock their buzzers. Without
+        // it the console's countdown would reach zero and close a question nobody in the room saw.
+        Assert.True(await paused.Next());
+        Assert.True(RoomOf(factory, table.Room).Paused);
+    }
+
+    [Fact]
+    public async Task A_television_that_drops_during_a_reveal_says_so_and_leaves_the_room_as_it_is()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        await table.Console.InvokeAsync("StartRound", table.Room, HostKey);
+        await table.Console.InvokeAsync("CloseQuestion", table.Room, HostKey);
+
+        await table.Screen.StopAsync();
+
+        Assert.False(await table.Displayed.Next());
+        // Nothing is running in a reveal, so there is nothing to pause: not advancing is the console's
+        // part of this, and the message above is the only thing that can tell it to.
+        var room = RoomOf(factory, table.Room);
+        Assert.Equal(Quiz.Game.RoomPhase.Reveal, room.Phase);
+        Assert.False(room.Paused);
+        // And the room came through it: a host who wants to carry on deliberately still can.
+        await table.Console.InvokeAsync("AdvanceQuestion", table.Room, HostKey);
+        Assert.Equal(Quiz.Game.RoomPhase.Question, room.Phase);
+    }
+
+    [Fact]
+    public async Task A_television_put_back_in_the_room_is_announced_and_the_round_stays_paused()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        await table.Console.InvokeAsync("StartRound", table.Room, HostKey);
+        await table.Screen.StopAsync();
+        Assert.False(await table.Displayed.Next());
+
+        var reloaded = await Connect(factory);
+        var opened = new Inbox<string>(reloaded, "RoomOpened");
+        await Claim(table.Console, await Open(reloaded));
+
+        Assert.Equal(table.Room, await opened.Next());
+        Assert.True(await table.Displayed.Next());
+        // Resuming is the host's call: they are the one who knows whether the room is looking at the
+        // television again, so the round is still stopped until the button is pressed.
+        Assert.True(RoomOf(factory, table.Room).Paused);
+        await table.Console.InvokeAsync("ResumeRound", table.Room, HostKey);
+        Assert.False(RoomOf(factory, table.Room).Paused);
+    }
+
+    [Fact]
+    public async Task A_console_is_not_told_about_a_television_that_is_not_its_rooms()
+    {
+        var factory = Factory();
+        var mine = await Seated(factory);
+        var theirScreen = await Connect(factory);
+        var theirConsole = await Connect(factory);
+        var theirs = new Inbox<bool>(theirConsole, "Displayed");
+        await Claim(theirConsole, await Open(theirScreen));
+        await Create(theirConsole);
+
+        await mine.Screen.StopAsync();
+
+        // Once the room that lost its television has been told, whatever was sent has been sent.
+        Assert.False(await mine.Displayed.Next());
+        await Barrier(theirConsole);
+        Assert.Equal(0, theirs.Total);
+    }
+
+    [Fact]
+    public async Task Closing_a_room_drops_the_claim_on_the_television_it_was_shown_on()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        // The television reloaded once and was claimed back into the room, which leaves a claim behind.
+        var reloaded = await Connect(factory);
+        var closed = Signal(reloaded, "RoomClosed");
+        await Claim(table.Console, await Open(reloaded));
+        Assert.NotNull(factory.Services.GetRequiredService<ConnectionRooms>().Screen(table.Console.ConnectionId!));
+
+        await table.Console.InvokeAsync("CloseRoom", table.Room, HostKey);
+        await closed.Next();
+
+        // That television is offering a fresh code again, and the server now agrees that it has to be
+        // typed: "close the room, then type the new code the screen shows" is the truth on both sides.
+        Assert.Contains("no-screen", (await Refused(() => Create(table.Console))).Message);
+    }
+
+    [Fact]
+    public async Task A_console_that_comes_back_is_told_whether_the_room_still_has_a_television()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        var connections = factory.Services.GetRequiredService<ConnectionRooms>();
+
+        var returning = await Connect(factory);
+        var present = new Inbox<bool>(returning, "Displayed");
+        await returning.InvokeAsync("ResumeHost", table.Room, HostKey);
+        Assert.True(await present.Next());
+
+        await table.Screen.StopAsync();
+        await Eventually(() => connections.DisplayOf(table.Room) is null);
+
+        // A console reloading into a room with no television must not arm its pacing and advance it.
+        var again = await Connect(factory);
+        var gone = new Inbox<bool>(again, "Displayed");
+        await again.InvokeAsync("ResumeHost", table.Room, HostKey);
+        Assert.False(await gone.Next());
+    }
+
+    [Fact]
+    public void A_rooms_display_is_remembered_and_the_room_it_leaves_is_named_when_it_goes()
+    {
+        var connections = new ConnectionRooms();
+        connections.Connected("screen");
+        connections.Display("1618", "screen");
+
+        Assert.Equal("screen", connections.DisplayOf("1618"));
+        // What the hub acts on: the room the gone connection was the display of, and nothing for any
+        // other connection, however many of them end.
+        Assert.Null(connections.Forget("console"));
+        Assert.Equal("1618", connections.Forget("screen"));
+        Assert.Null(connections.DisplayOf("1618"));
+    }
+
+    [Fact]
+    public void A_television_shows_one_room_at_a_time()
+    {
+        var connections = new ConnectionRooms();
+        connections.Display("1618", "screen");
+        connections.Display("2718", "screen");
+
+        Assert.Null(connections.DisplayOf("1618"));
+        Assert.Equal("screen", connections.DisplayOf("2718"));
+    }
+
+    [Fact]
+    public void Forgetting_a_room_drops_the_claim_on_the_television_it_was_shown_on()
+    {
+        var connections = new ConnectionRooms();
+        connections.Connected("screen");
+        connections.Host("console", "1618");
+        connections.Display("1618", "screen");
+        Assert.True(connections.Pair("console", "screen"));
+
+        connections.ForgetRoom("1618");
+
+        Assert.Null(connections.Screen("console"));
+        Assert.Null(connections.DisplayOf("1618"));
     }
 
     [Fact]

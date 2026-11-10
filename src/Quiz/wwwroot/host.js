@@ -11,6 +11,10 @@
  * There are no timers on the server: when this page's countdown reaches zero it calls CloseQuestion
  * itself. The host key is typed once and kept in sessionStorage, so a phone that slept mid-round
  * re-sends it, asks the hub for the room as it stands, and comes back to its controls.
+ *
+ * Which is why "Displayed" matters here more than anywhere: owning the pacing means that if the
+ * television falls out of the room and nothing says so, this page asks, closes and advances
+ * questions in front of nobody. On that message the pacing stops and the host is told.
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
@@ -51,6 +55,7 @@ const state = {
   seated: 0,        // how many players that count is out of
   question: null,   // the QuestionStarted payload: which question of how many, and whether it is the last
   paused: false,    // the room's clock is stopped, which the server knows too
+  display: true,    // the room still has a television in it; the server is what knows
   error: '',
   repair: null,
   connection: '',   // reconnecting / disconnected notice
@@ -302,15 +307,39 @@ conn.on('Paused', (paused) => {
   render();
 });
 
+/*
+ * Whether the room still has a television in it. This page paints none of the game, so without
+ * being told it would go on pacing a round nobody can see: the countdown would reach zero, close
+ * question one, and six seconds later open question two in front of nothing.
+ *
+ * Coming back is not resuming and nothing is re-armed for it. Mid-question the room itself is
+ * paused, so the round waits for the resume button; in a reveal the host presses next. Either way
+ * the one who decides the room is looking at the television again is the host.
+ */
+conn.on('Displayed', (present) => {
+  state.display = Boolean(present);
+  if (!state.display) {
+    // Mid-question the Paused that comes with this freezes the clock too; in a reveal there is
+    // nothing to pause, and cancelling the beat is the only thing between here and a blind advance.
+    freezeCountdown();
+    cancelPacing();
+  }
+  render();
+});
+
 conn.on('RoomClosed', () => {
   // The room is gone for everyone, the television included: back to the form, ready to claim the
-  // code the television is showing again and open another room on it.
+  // code the television is showing again and open another room on it. That code is a new one, and
+  // ending the room drops the claim on its screen server-side, so the claim this page was holding
+  // is spent too: saying otherwise would be telling the host not to type the code they can see.
+  state.claimed = false;
   stopCountdown();
   cancelPacing();
   forgetDeadline();
   forgetRoom();
   state.question = null;
   state.paused = false;
+  state.display = true;
   state.error = '';
   show('setup');
 });
@@ -378,6 +407,8 @@ async function createRoom(hostKey, setId) {
   state.claimed = false;
   state.players = [];
   state.question = null;
+  // Opened on a screen that was claimed a moment ago, so the room has a television in it.
+  state.display = true;
   remember();
   show('lobby');
 }
@@ -629,6 +660,8 @@ function drawRun() {
   else set(el('tag-answered'), '');
 
   set(el('phase-detail'), detail());
+  // Its words are static, so applyStatic keeps them in the language chosen; this says when to look.
+  el('display-gone').hidden = state.display;
   set(el('run-error'), errorOf(state.error));
 }
 
@@ -637,7 +670,8 @@ function detail() {
   if (state.view === 'lobby') {
     return state.players.length === 0 ? t('waitingForPlayers') : t('playerCount', state.players.length);
   }
-  if (state.view === 'reveal') return t('revealHint');
+  // Nothing opens by itself while the room has no television in it, so do not promise that it will.
+  if (state.view === 'reveal') return state.display ? t('revealHint') : '';
   if (state.view === 'finished') return t('newRoomHint');
   return '';
 }

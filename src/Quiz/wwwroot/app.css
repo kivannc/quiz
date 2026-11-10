@@ -365,6 +365,14 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .console .now .detail { font-size: 13px; color: var(--muted); letter-spacing: .06em; margin: 14px 0 0; }
 .console.paused .now .clock { color: var(--muted); }
 .console.paused .now .detail { color: var(--amber); font-weight: 600; letter-spacing: .2em; }
+/*
+ * The room has no television in it: framed, and in the colour this page says "wrong" in, because it
+ * has to be noticed without being looked for. A frame is all the weight it gets — the buttons under
+ * it stay live, so this says what happened rather than standing in the way of anything.
+ */
+.console .now .gone { border: 1px solid var(--crimson); padding: 10px 12px; margin: 16px 0 0; }
+.console .now .gone .label { color: var(--crimson); font-weight: 600; margin: 0; }
+.console .now .gone .detail { margin: 6px 0 0; }
 
 /* the buttons: on the bottom edge, stacked, each one a thumb wide and a thumb tall */
 .console .acts { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
