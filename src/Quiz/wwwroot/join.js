@@ -11,6 +11,7 @@ import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n
 const STORE_CODE = 'quiz.code';
 const STORE_NAME = 'quiz.name';
 const STORE_TAP = 'quiz.tap';
+const STORE_OPEN = 'quiz.open';
 
 const el = (id) => document.getElementById(id);
 
@@ -51,6 +52,7 @@ function forget() {
     sessionStorage.removeItem(STORE_CODE);
     sessionStorage.removeItem(STORE_NAME);
     sessionStorage.removeItem(STORE_TAP);
+    sessionStorage.removeItem(STORE_OPEN);
   } catch { /* nothing to forget */ }
 }
 
@@ -58,6 +60,29 @@ function rememberTap(index, marker) {
   try {
     sessionStorage.setItem(STORE_TAP, JSON.stringify({ code: state.code, index, marker }));
   } catch { /* the lock still holds for as long as this page lives */ }
+}
+
+/*
+ * The total this phone had before the open question is scored, kept with the question it belongs to.
+ * A reload during the reveal loses everything in memory, and the reveal the server sends back carries
+ * totals rather than the points just earned — so without this the phone could only say it does not
+ * know. With it, a player who reloads mid-reveal still sees what the question was worth.
+ */
+function rememberOpen(index, baseline) {
+  try {
+    sessionStorage.setItem(STORE_OPEN, JSON.stringify({ code: state.code, index, baseline }));
+  } catch { /* the figure is still in memory for as long as this page lives */ }
+}
+
+function recallOpen() {
+  try {
+    const stored = JSON.parse(sessionStorage.getItem(STORE_OPEN) ?? 'null');
+    const usable = stored && stored.code === state.code
+      && Number.isInteger(stored.index) && Number.isInteger(stored.baseline);
+    return usable ? stored : null;
+  } catch {
+    return null;
+  }
 }
 
 /*
@@ -144,8 +169,10 @@ conn.on('QuestionStarted', (question) => {
   state.pending = null;
   state.chosen = recallTap(question.index);
   // The total as it stands before this question is scored. A reveal carries totals and not deltas,
-  // so this is the only thing the points earned can be worked out from.
+  // so this is the only thing the points earned can be worked out from — in memory, and in storage
+  // for a page that does not live long enough to use the one in memory.
   state.baseline = state.score;
+  rememberOpen(question.index, state.score);
   // Whatever the last reveal said, it is not about this question: the buzzers come back.
   state.reveal = null;
   state.error = '';
@@ -158,8 +185,12 @@ conn.on('Revealed', (reveal) => {
   // on the tap would let a fast player's face tell the room before the TV does.
   state.phase = 'closed';
   state.paused = false;
+  // A tap the room refused has already said so, under the buzzers, while they were still up. The
+  // result says the same thing now, and more kindly: whichever state the room is in owns this
+  // screen, the way a pause already takes the refusal off it.
+  state.error = '';
   // Worked out before the new total is taken, because the old one is half of the subtraction.
-  state.reveal = resultOf(reveal.standings);
+  state.reveal = resultOf(reveal);
   takeScore(reveal.standings);
   render();
 });
@@ -197,22 +228,38 @@ function takeScore(standings) {
   if (mine) state.score = mine.score;
 }
 
+/* The result with nothing to put a number on: better than a number that would be wrong. */
+function unnumbered() {
+  return { marker: null, points: null };
+}
+
 /*
  * This player's own result for the question that just closed: the suit they tapped, and what it
- * earned. A reveal carries totals, so the points are the difference from the total this phone knew
- * before the question opened — which is the question's points only when this phone watched the
- * question open and this player is in the standings. When it is not (the phone joined or came back
- * during the reveal, or the standings do not name this player), points is null and the screen shows
- * the result without a number, which is better than a number that is wrong.
+ * earned. A reveal carries totals, so the points are the difference from the total this phone had
+ * before the question opened. While the page has been watching, that total is in memory and the
+ * answer is certain. After a reload or a rejoin it is not, and the stored one stands in: it was
+ * written when a question opened, but nothing in a reveal says which question it is answering, so
+ * it is only trusted when this phone's own answer is among the ones this reveal counted. A phone
+ * that sat out a whole question has neither, and shows the result without a number.
  */
-function resultOf(standings) {
-  const mine = (standings ?? []).find((player) => player.name === state.name);
-  if (state.baseline === null || !mine) return { marker: null, points: null };
-  const points = mine.score - state.baseline;
+function resultOf(reveal) {
+  const mine = (reveal.standings ?? []).find((player) => player.name === state.name);
+  if (!mine) return unnumbered();
+
+  if (state.baseline !== null) return earnedFrom(mine.score - state.baseline, state.chosen);
+
+  const open = recallOpen();
+  if (!open) return unnumbered();
+  const marker = recallTap(open.index);
+  if (marker && !(reveal.distribution?.[marker] > 0)) return unnumbered();
+  return earnedFrom(mine.score - open.baseline, marker);
+}
+
+function earnedFrom(points, marker) {
   // A total that went down is not something this screen can explain, so it does not try.
-  if (points < 0) return { marker: null, points: null };
+  if (points < 0) return unnumbered();
   // The tap is shown whether it earned anything or not; what changes is how loudly.
-  return { marker: state.chosen, points };
+  return { marker, points };
 }
 
 /* ---------- actions ---------- */
@@ -342,11 +389,12 @@ function render() {
  */
 const POINTS_FLOOR = 500;
 const POINTS_CEILING = 1000;
-const GLYPH_PX = [42, 66];
-const POINTS_PX = [27, 54];
+/* In the mockup's own units; app.css decides what one of them is worth on the screen in hand. */
+const GLYPH_SIZE = [42, 66];
+const POINTS_SIZE = [27, 54];
 const WASH = [0.06, 0.26];
-const NOTHING_GLYPH_PX = 38;
-const NOTHING_POINTS_PX = 22;
+const NOTHING_GLYPH_SIZE = 38;
+const NOTHING_POINTS_SIZE = 22;
 
 function between([floor, ceiling], fraction) {
   return floor + (ceiling - floor) * fraction;
@@ -382,11 +430,11 @@ function paintResult(result) {
     glyph.removeAttribute('role');
     glyph.removeAttribute('aria-label');
   }
-  glyph.style.fontSize = `${earned ? between(GLYPH_PX, fraction) : NOTHING_GLYPH_PX}px`;
+  box.style.setProperty('--glyph', String(earned ? between(GLYPH_SIZE, fraction) : NOTHING_GLYPH_SIZE));
+  box.style.setProperty('--pts', String(earned ? between(POINTS_SIZE, fraction) : NOTHING_POINTS_SIZE));
 
   points.hidden = result.points === null;
   points.textContent = result.points === null ? '' : t('pointsEarned', result.points);
-  points.style.fontSize = `${earned ? between(POINTS_PX, fraction) : NOTHING_POINTS_PX}px`;
 
   el('result-total').textContent = t('totalScore', state.score);
 }

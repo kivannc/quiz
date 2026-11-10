@@ -365,12 +365,22 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
  * the same scale. A tap that earned nothing keeps its shape but loses its colour and its wash.
  */
 .phone .result {
+  /*
+   * One design unit. The approved mockup was drawn inside a 186px-wide phone frame, so its sizes
+   * are proportions of a screen rather than lengths: this turns them back into proportions of the
+   * screen the player is actually holding, which is what keeps a fast answer obvious at arm's
+   * length. join.js sets --glyph and --pts in those units, so the ratios it works in are untouched
+   * by what this is worth. Clamped at both ends: a narrow phone keeps the widest number (+1000)
+   * inside its width, and a desktop window on the phone page does not shout.
+   */
+  --unit: clamp(1.3px, .47vw, 2px);
   position: relative;
   flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 0;
+  overflow: hidden;
 }
 /* The wash is the screen, not a card on it: fixed, so it reaches past this view's own box and
    under the bar, which keeps its text because the wash is a tint and never a fill. */
@@ -398,18 +408,22 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: calc(4 * var(--unit));
 }
+/* The two the score is read from, sized in design units by join.js. */
+.phone .result .glyph { font-size: calc(var(--glyph, 0) * var(--unit)); }
 .phone .result .pts {
   margin: 0;
+  font-size: calc(var(--pts, 0) * var(--unit));
   font-weight: 600;
   line-height: 1;
   letter-spacing: -.02em;
   font-variant-numeric: tabular-nums;
 }
+/* Small on purpose, and never far from the size the same number has in the bar above it. */
 .phone .result .total {
-  margin: 10px 0 0;
-  font-size: 11px;
+  margin: calc(6 * var(--unit)) 0 0;
+  font-size: clamp(11px, calc(7 * var(--unit)), 15px);
   color: var(--muted);
   letter-spacing: .1em;
 }
