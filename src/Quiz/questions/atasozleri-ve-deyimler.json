@@ -274,7 +274,7 @@
         },
         {
           "marker": "spades",
-          "text": "rehber"
+          "text": "fener"
         }
       ],
       "correct": "clubs"
@@ -538,7 +538,7 @@
       "options": [
         {
           "marker": "hearts",
-          "text": "Çok temiz olmak"
+          "text": "Çok titiz olmak"
         },
         {
           "marker": "diamonds",
@@ -584,7 +584,7 @@
       "options": [
         {
           "marker": "hearts",
-          "text": "yuvasından"
+          "text": "ağacından"
         },
         {
           "marker": "diamonds",
@@ -615,7 +615,7 @@
         },
         {
           "marker": "clubs",
-          "text": "dosttan iyidir"
+          "text": "dosttan hayırlıdır"
         },
         {
           "marker": "spades",

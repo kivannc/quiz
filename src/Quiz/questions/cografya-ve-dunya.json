@@ -362,7 +362,7 @@
         },
         {
           "marker": "clubs",
-          "text": "Washington"
+          "text": "Washington D.C."
         },
         {
           "marker": "spades",
@@ -442,7 +442,7 @@
     },
     {
       "id": "bb-10",
-      "text": "Dört köşeli olmayan tek ulusal bayrak hangi ülkeye aittir?",
+      "text": "Kare ya da dikdörtgen olmayan tek ulusal bayrak hangi ülkeye aittir?",
       "options": [
         {
           "marker": "hearts",
@@ -688,7 +688,7 @@
         },
         {
           "marker": "spades",
-          "text": "Marmara"
+          "text": "Kızıldeniz"
         }
       ],
       "correct": "diamonds"

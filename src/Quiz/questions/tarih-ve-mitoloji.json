@@ -216,7 +216,7 @@
       "options": [
         {
           "marker": "hearts",
-          "text": "Mısır"
+          "text": "Kartaca"
         },
         {
           "marker": "diamonds",
@@ -224,7 +224,7 @@
         },
         {
           "marker": "clubs",
-          "text": "Pers"
+          "text": "Sparta"
         },
         {
           "marker": "spades",
@@ -481,7 +481,7 @@
         },
         {
           "marker": "spades",
-          "text": "Murad I"
+          "text": "I. Murad"
         }
       ],
       "correct": "clubs"
@@ -638,7 +638,7 @@
         },
         {
           "marker": "clubs",
-          "text": "Abdülhamid II"
+          "text": "II. Abdülhamid"
         },
         {
           "marker": "spades",
@@ -868,7 +868,7 @@
         },
         {
           "marker": "clubs",
-          "text": "Sandığı"
+          "text": "Kuyuyu"
         },
         {
           "marker": "spades",
