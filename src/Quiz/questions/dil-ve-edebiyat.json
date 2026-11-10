@@ -1,0 +1,927 @@
+{
+  "id": "dil-ve-edebiyat",
+  "title": "Dil ve Edebiyat",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "ed-01",
+      "text": "Şiir yazan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yazar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şair"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ressam"
+        },
+        {
+          "marker": "spades",
+          "text": "Oyuncu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-02",
+      "text": "İstiklal Marşı'nın şairi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mehmet Akif Ersoy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Namık Kemal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tevfik Fikret"
+        },
+        {
+          "marker": "spades",
+          "text": "Ziya Gökalp"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-03",
+      "text": "\"Küçük Prens\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Jules Verne"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lewis Carroll"
+        },
+        {
+          "marker": "clubs",
+          "text": "Antoine de Saint-Exupéry"
+        },
+        {
+          "marker": "spades",
+          "text": "Charles Dickens"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-04",
+      "text": "\"Çalıkuşu\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Halide Edib Adıvar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peyami Safa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hüseyin Rahmi Gürpınar"
+        },
+        {
+          "marker": "spades",
+          "text": "Reşat Nuri Güntekin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-05",
+      "text": "Nobel Edebiyat Ödülü kazanan Türk yazar kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yaşar Kemal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Orhan Pamuk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nâzım Hikmet"
+        },
+        {
+          "marker": "spades",
+          "text": "Aziz Nesin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-06",
+      "text": "\"Kürk Mantolu Madonna\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sabahattin Ali"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sait Faik Abasıyanık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ahmet Hamdi Tanpınar"
+        },
+        {
+          "marker": "spades",
+          "text": "Oğuz Atay"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-07",
+      "text": "\"İnce Memed\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Orhan Kemal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kemal Tahir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fakir Baykurt"
+        },
+        {
+          "marker": "spades",
+          "text": "Yaşar Kemal"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-08",
+      "text": "\"Romeo ve Juliet\" hangi türde bir eserdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şiir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tiyatro oyunu"
+        },
+        {
+          "marker": "spades",
+          "text": "Deneme"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-09",
+      "text": "Dede Korkut Hikâyeleri hangi türe örnektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Destan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Deneme"
+        },
+        {
+          "marker": "spades",
+          "text": "Makale"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-10",
+      "text": "\"Yaban\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Reşat Nuri Güntekin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Halit Ziya Uşaklıgil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Refik Halit Karay"
+        },
+        {
+          "marker": "spades",
+          "text": "Yakup Kadri Karaosmanoğlu"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-01",
+      "text": "\"Güzel\" kelimesinin zıt anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hoş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zarif"
+        },
+        {
+          "marker": "spades",
+          "text": "Çirkin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-02",
+      "text": "Soru cümlelerinin sonuna hangi işaret konur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nokta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Virgül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Soru işareti"
+        },
+        {
+          "marker": "spades",
+          "text": "Ünlem"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "td-03",
+      "text": "\"Siyah\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koyu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gri"
+        },
+        {
+          "marker": "spades",
+          "text": "Mor"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "td-04",
+      "text": "Hangisi bir fiildir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Masa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koşmak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güzel"
+        },
+        {
+          "marker": "spades",
+          "text": "Hızlı"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "td-05",
+      "text": "\"Hediye\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Emanet"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ödül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bağış"
+        },
+        {
+          "marker": "spades",
+          "text": "Armağan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-06",
+      "text": "Türk alfabesinde kaç harf vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "29"
+        },
+        {
+          "marker": "diamonds",
+          "text": "26"
+        },
+        {
+          "marker": "clubs",
+          "text": "31"
+        },
+        {
+          "marker": "spades",
+          "text": "33"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "td-07",
+      "text": "\"Okul\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dershane"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sınıf"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mektep"
+        },
+        {
+          "marker": "spades",
+          "text": "Medrese"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "td-08",
+      "text": "\"Ben, sen, o\" hangi sözcük türüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sıfat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zamir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zarf"
+        },
+        {
+          "marker": "spades",
+          "text": "Edat"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "td-09",
+      "text": "Türk alfabesinde kaç ünlü harf vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dokuz"
+        },
+        {
+          "marker": "clubs",
+          "text": "On"
+        },
+        {
+          "marker": "spades",
+          "text": "Sekiz"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-10",
+      "text": "\"Kitapları\" kelimesinde kaç hece vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dört"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "İki"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-11",
+      "text": "\"Nutuk\" adlı eser kime aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Namık Kemal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ziya Gökalp"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mustafa Kemal Atatürk"
+        },
+        {
+          "marker": "spades",
+          "text": "Yusuf Akçura"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-12",
+      "text": "\"Sefiller\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Victor Hugo"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alexandre Dumas"
+        },
+        {
+          "marker": "clubs",
+          "text": "Émile Zola"
+        },
+        {
+          "marker": "spades",
+          "text": "Gustave Flaubert"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-13",
+      "text": "Türkçede \"-lar, -ler\" eki ne bildirir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zaman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çokluk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Olumsuzluk"
+        },
+        {
+          "marker": "spades",
+          "text": "Soru"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-14",
+      "text": "\"Suç ve Ceza\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tolstoy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çehov"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dostoyevski"
+        },
+        {
+          "marker": "spades",
+          "text": "Gogol"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-15",
+      "text": "\"Saatleri Ayarlama Enstitüsü\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ahmet Hamdi Tanpınar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sabahattin Ali"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yusuf Atılgan"
+        },
+        {
+          "marker": "spades",
+          "text": "Peyami Safa"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-16",
+      "text": "\"Büyük\" kelimesinin zıt anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Geniş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Küçük"
+        },
+        {
+          "marker": "clubs",
+          "text": "Uzun"
+        },
+        {
+          "marker": "spades",
+          "text": "Kalın"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-17",
+      "text": "\"Beyaz\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Açık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ak"
+        },
+        {
+          "marker": "spades",
+          "text": "Sade"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-18",
+      "text": "Hangisi bir sıfattır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Koşmak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kitap"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hızlıca"
+        },
+        {
+          "marker": "spades",
+          "text": "Kırmızı"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-19",
+      "text": "Türk alfabesinde kaç ünsüz harf vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "21"
+        },
+        {
+          "marker": "diamonds",
+          "text": "19"
+        },
+        {
+          "marker": "clubs",
+          "text": "23"
+        },
+        {
+          "marker": "spades",
+          "text": "25"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-20",
+      "text": "\"Robinson Crusoe\" kahramanı nerede mahsur kalır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir mağarada"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Issız bir adada"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bir ormanda"
+        },
+        {
+          "marker": "spades",
+          "text": "Bir kalede"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-21",
+      "text": "\"Hamlet\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Molière"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Goethe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Shakespeare"
+        },
+        {
+          "marker": "spades",
+          "text": "Ibsen"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-22",
+      "text": "Nâzım Hikmet hangi türde ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Deneme"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tiyatro"
+        },
+        {
+          "marker": "clubs",
+          "text": "Anı"
+        },
+        {
+          "marker": "spades",
+          "text": "Şiir"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-23",
+      "text": "\"Dokuzuncu Hariciye Koğuşu\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Peyami Safa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Halit Ziya Uşaklıgil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yusuf Atılgan"
+        },
+        {
+          "marker": "spades",
+          "text": "Memduh Şevket Esendal"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-24",
+      "text": "Hikâye romandan hangi yönüyle ayrılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şiirle yazılır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Daha kısadır"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kahramanı yoktur"
+        },
+        {
+          "marker": "spades",
+          "text": "Sahnede oynanır"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-25",
+      "text": "\"Tutunamayanlar\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Adalet Ağaoğlu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vüs'at O. Bener"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oğuz Atay"
+        },
+        {
+          "marker": "spades",
+          "text": "Bilge Karasu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-26",
+      "text": "\"Simyacı\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gabriel García Márquez"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jorge Luis Borges"
+        },
+        {
+          "marker": "clubs",
+          "text": "Isabel Allende"
+        },
+        {
+          "marker": "spades",
+          "text": "Paulo Coelho"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-27",
+      "text": "\"Alice Harikalar Diyarında\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lewis Carroll"
+        },
+        {
+          "marker": "diamonds",
+          "text": "J. M. Barrie"
+        },
+        {
+          "marker": "clubs",
+          "text": "Roald Dahl"
+        },
+        {
+          "marker": "spades",
+          "text": "C. S. Lewis"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-28",
+      "text": "Türkçede \"-me, -ma\" eki ne bildirir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çokluk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Olumsuzluk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zaman"
+        },
+        {
+          "marker": "spades",
+          "text": "Soru"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-29",
+      "text": "Şiirdeki satırlara ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kıta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bent"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dize"
+        },
+        {
+          "marker": "spades",
+          "text": "Beyit"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-30",
+      "text": "Şiirde satır sonlarındaki ses benzerliğine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nakarat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ölçü"
+        },
+        {
+          "marker": "clubs",
+          "text": "İmge"
+        },
+        {
+          "marker": "spades",
+          "text": "Kafiye"
+        }
+      ],
+      "correct": "spades"
+    }
+  ]
+}

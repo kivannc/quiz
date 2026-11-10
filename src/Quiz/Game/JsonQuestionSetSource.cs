@@ -10,7 +10,12 @@ namespace Quiz.Game;
 /// </summary>
 public sealed class JsonQuestionSetSource : IQuestionSetSource
 {
-    private const int QuestionsPerSet = 10;
+    /// <summary>
+    /// The fewest questions a set may hold. It is a floor, not a size: a set is a pool and a round is a
+    /// sample of it (see <see cref="Room.QuestionsPerRound"/>), so a category may hold forty questions
+    /// and still play ten. The floor is a round, because a pool smaller than a round cannot fill one.
+    /// </summary>
+    private const int MinQuestionsPerSet = Room.QuestionsPerRound;
     private const int OptionsPerQuestion = 4;
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web)
@@ -61,8 +66,8 @@ public sealed class JsonQuestionSetSource : IQuestionSetSource
         if (string.IsNullOrWhiteSpace(dto.Language)) throw Invalid(file, "set language is missing");
 
         var questions = dto.Questions ?? [];
-        if (questions.Count != QuestionsPerSet)
-            throw Invalid(file, $"expected {QuestionsPerSet} questions, found {questions.Count}");
+        if (questions.Count < MinQuestionsPerSet)
+            throw Invalid(file, $"expected at least {MinQuestionsPerSet} questions, found {questions.Count}");
 
         var built = questions.Select(q => Build(q, file)).ToList();
         var duplicate = built.GroupBy(q => q.Id).FirstOrDefault(g => g.Count() > 1);

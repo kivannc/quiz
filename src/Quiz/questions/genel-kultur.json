@@ -232,6 +232,696 @@
         }
       ],
       "correct": "diamonds"
+    },
+    {
+      "id": "sl-01",
+      "text": "Bir karenin kaç kenarı vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Üç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sl-02",
+      "text": "Bir düzine kaç tanedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "On iki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "On"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yirmi"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sl-03",
+      "text": "Bir deste kaç tanedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "On iki"
+        },
+        {
+          "marker": "clubs",
+          "text": "On"
+        },
+        {
+          "marker": "spades",
+          "text": "Yirmi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sl-04",
+      "text": "Yüzde 50 hangi kesre eşittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1/3"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1/4"
+        },
+        {
+          "marker": "clubs",
+          "text": "1/5"
+        },
+        {
+          "marker": "spades",
+          "text": "1/2"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sl-05",
+      "text": "Bir dik açı kaç derecedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "45 derece"
+        },
+        {
+          "marker": "diamonds",
+          "text": "90 derece"
+        },
+        {
+          "marker": "clubs",
+          "text": "180 derece"
+        },
+        {
+          "marker": "spades",
+          "text": "360 derece"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sl-06",
+      "text": "Bir küpün kaç yüzü vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "spades",
+          "text": "On iki"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sl-07",
+      "text": "Roma rakamıyla \"X\" kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "5"
+        },
+        {
+          "marker": "diamonds",
+          "text": "50"
+        },
+        {
+          "marker": "clubs",
+          "text": "100"
+        },
+        {
+          "marker": "spades",
+          "text": "10"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sl-08",
+      "text": "Bir üçgenin iç açıları toplamı kaç derecedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "90 derece"
+        },
+        {
+          "marker": "diamonds",
+          "text": "270 derece"
+        },
+        {
+          "marker": "clubs",
+          "text": "180 derece"
+        },
+        {
+          "marker": "spades",
+          "text": "360 derece"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sl-09",
+      "text": "Bir çeyrek asır kaç yıldır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "10 yıl"
+        },
+        {
+          "marker": "diamonds",
+          "text": "50 yıl"
+        },
+        {
+          "marker": "clubs",
+          "text": "100 yıl"
+        },
+        {
+          "marker": "spades",
+          "text": "25 yıl"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sl-10",
+      "text": "Bir hafta kaç saattir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "168"
+        },
+        {
+          "marker": "diamonds",
+          "text": "144"
+        },
+        {
+          "marker": "clubs",
+          "text": "180"
+        },
+        {
+          "marker": "spades",
+          "text": "240"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ms-01",
+      "text": "Hayvanları tedavi eden kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Veteriner"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Eczacı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hemşire"
+        },
+        {
+          "marker": "spades",
+          "text": "Biyolog"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ms-02",
+      "text": "Mektupları evlere dağıtan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kurye"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Postacı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Memur"
+        },
+        {
+          "marker": "spades",
+          "text": "Tahsildar"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ms-03",
+      "text": "Gemiyi yöneten kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çarkçı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lostromo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kaptan"
+        },
+        {
+          "marker": "spades",
+          "text": "Tayfa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ms-04",
+      "text": "Yangını söndüren kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Polis"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Asker"
+        },
+        {
+          "marker": "clubs",
+          "text": "Jandarma"
+        },
+        {
+          "marker": "spades",
+          "text": "İtfaiyeci"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ms-05",
+      "text": "Binaların planını çizen kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mühendis"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mimar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Müteahhit"
+        },
+        {
+          "marker": "spades",
+          "text": "Teknisyen"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ms-06",
+      "text": "Çekiç ve örs hangi mesleğin aletleridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Demircilik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Marangozluk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Camcılık"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuyumculuk"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ms-07",
+      "text": "Stetoskop hangi meslekte kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Öğretmenlik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mimarlık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avukatlık"
+        },
+        {
+          "marker": "spades",
+          "text": "Doktorluk"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ms-08",
+      "text": "Hangi meslek kumaşla çalışır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marangozluk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Demircilik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Terzilik"
+        },
+        {
+          "marker": "spades",
+          "text": "Camcılık"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ms-09",
+      "text": "Tuğla ve harçla duvar ören meslek hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Boyacılık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Marangozluk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tesisatçılık"
+        },
+        {
+          "marker": "spades",
+          "text": "Duvarcılık"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ms-10",
+      "text": "Rende hangi mesleğin aletidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marangozluk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Saatçilik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dokumacılık"
+        },
+        {
+          "marker": "spades",
+          "text": "Çiftçilik"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-11",
+      "text": "Bir yılda kaç mevsim vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dört"
+        },
+        {
+          "marker": "spades",
+          "text": "Beş"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-12",
+      "text": "Türkiye'nin para birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Euro"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Türk lirası"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dinar"
+        },
+        {
+          "marker": "spades",
+          "text": "Dirhem"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-13",
+      "text": "Kırmızı ile mavi karıştırılınca hangi renk olur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Turuncu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mor"
+        },
+        {
+          "marker": "spades",
+          "text": "Kahverengi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-14",
+      "text": "Bir yılda kaç gün vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "365"
+        },
+        {
+          "marker": "diamonds",
+          "text": "300"
+        },
+        {
+          "marker": "clubs",
+          "text": "350"
+        },
+        {
+          "marker": "spades",
+          "text": "400"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-15",
+      "text": "Dünyanın en kalabalık kıtası hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Afrika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Asya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuzey Amerika"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-16",
+      "text": "Dünyanın en uzun duvarı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Berlin Duvarı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hadrian Suru"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çin Seddi"
+        },
+        {
+          "marker": "spades",
+          "text": "Babil Surları"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-17",
+      "text": "Türkiye'de acil çağrı numarası kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "112"
+        },
+        {
+          "marker": "diamonds",
+          "text": "110"
+        },
+        {
+          "marker": "clubs",
+          "text": "155"
+        },
+        {
+          "marker": "spades",
+          "text": "156"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-18",
+      "text": "Birleşmiş Milletler'in merkezi hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cenevre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "New York"
+        },
+        {
+          "marker": "clubs",
+          "text": "Brüksel"
+        },
+        {
+          "marker": "spades",
+          "text": "Viyana"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-19",
+      "text": "Bir yılda yaklaşık kaç hafta vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "40"
+        },
+        {
+          "marker": "diamonds",
+          "text": "48"
+        },
+        {
+          "marker": "clubs",
+          "text": "52"
+        },
+        {
+          "marker": "spades",
+          "text": "60"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-20",
+      "text": "Türkiye'de trafikte yolun hangi tarafından gidilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sol"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Orta"
+        },
+        {
+          "marker": "clubs",
+          "text": "Değişken"
+        },
+        {
+          "marker": "spades",
+          "text": "Sağ"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

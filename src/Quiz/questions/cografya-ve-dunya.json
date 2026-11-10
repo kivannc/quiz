@@ -1,0 +1,927 @@
+{
+  "id": "cografya-ve-dunya",
+  "title": "Coğrafya ve Dünya",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "cg-01",
+      "text": "Türkiye'nin en kalabalık şehri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ankara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzmir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bursa"
+        },
+        {
+          "marker": "spades",
+          "text": "İstanbul"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-02",
+      "text": "Türkiye'nin en yüksek dağı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ağrı Dağı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Erciyes Dağı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Uludağ"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaçkar Dağı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-03",
+      "text": "Eyfel Kulesi hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Londra"
+        },
+        {
+          "marker": "clubs",
+          "text": "Paris"
+        },
+        {
+          "marker": "spades",
+          "text": "Viyana"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-04",
+      "text": "Dünyanın en büyük okyanusu hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atlas Okyanusu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pasifik Okyanusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hint Okyanusu"
+        },
+        {
+          "marker": "spades",
+          "text": "Arktik Okyanusu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-05",
+      "text": "Türkiye'nin en büyük gölü hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Van Gölü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tuz Gölü"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beyşehir Gölü"
+        },
+        {
+          "marker": "spades",
+          "text": "Eğirdir Gölü"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-06",
+      "text": "Sahra Çölü hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "spades",
+          "text": "Afrika"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-07",
+      "text": "Kapadokya hangi bölgemizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ege"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "clubs",
+          "text": "İç Anadolu"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-08",
+      "text": "Tokyo hangi ülkenin başkentidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Japonya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kore"
+        },
+        {
+          "marker": "spades",
+          "text": "Vietnam"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-09",
+      "text": "Everest Dağı hangi sıradağlarda yer alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Himalayalar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alpler"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kafkaslar"
+        },
+        {
+          "marker": "spades",
+          "text": "And Dağları"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-10",
+      "text": "Pamukkale travertenleri hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Antalya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Denizli"
+        },
+        {
+          "marker": "clubs",
+          "text": "Muğla"
+        },
+        {
+          "marker": "spades",
+          "text": "Aydın"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bb-01",
+      "text": "İngiltere'nin başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Manchester"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Liverpool"
+        },
+        {
+          "marker": "clubs",
+          "text": "Londra"
+        },
+        {
+          "marker": "spades",
+          "text": "Edinburgh"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bb-02",
+      "text": "İtalya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Milano"
+        },
+        {
+          "marker": "clubs",
+          "text": "Venedik"
+        },
+        {
+          "marker": "spades",
+          "text": "Napoli"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bb-03",
+      "text": "Türk bayrağındaki yıldız kaç köşelidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dört"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altı"
+        },
+        {
+          "marker": "spades",
+          "text": "Sekiz"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bb-04",
+      "text": "Mısır'ın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İskenderiye"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Luksor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Asvan"
+        },
+        {
+          "marker": "spades",
+          "text": "Kahire"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bb-05",
+      "text": "Hangi ülkenin bayrağında akçaağaç yaprağı vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kanada"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İsveç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Norveç"
+        },
+        {
+          "marker": "spades",
+          "text": "İsviçre"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bb-06",
+      "text": "ABD'nin başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "New York"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Los Angeles"
+        },
+        {
+          "marker": "clubs",
+          "text": "Washington D.C."
+        },
+        {
+          "marker": "spades",
+          "text": "Chicago"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bb-07",
+      "text": "ABD bayrağında kaç yıldız vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "13"
+        },
+        {
+          "marker": "diamonds",
+          "text": "50"
+        },
+        {
+          "marker": "clubs",
+          "text": "48"
+        },
+        {
+          "marker": "spades",
+          "text": "52"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bb-08",
+      "text": "Avustralya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sydney"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Melbourne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Brisbane"
+        },
+        {
+          "marker": "spades",
+          "text": "Canberra"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bb-09",
+      "text": "Brezilya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Brasília"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rio de Janeiro"
+        },
+        {
+          "marker": "clubs",
+          "text": "São Paulo"
+        },
+        {
+          "marker": "spades",
+          "text": "Salvador"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bb-10",
+      "text": "Kare ya da dikdörtgen olmayan tek ulusal bayrak hangi ülkeye aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İsviçre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vatikan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Japonya"
+        },
+        {
+          "marker": "spades",
+          "text": "Nepal"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-11",
+      "text": "Türkiye kaç ilden oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "71"
+        },
+        {
+          "marker": "diamonds",
+          "text": "77"
+        },
+        {
+          "marker": "clubs",
+          "text": "81"
+        },
+        {
+          "marker": "spades",
+          "text": "85"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-12",
+      "text": "Nil Nehri hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Güney Amerika"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-13",
+      "text": "İzlanda'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Oslo"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Helsinki"
+        },
+        {
+          "marker": "clubs",
+          "text": "Reykjavík"
+        },
+        {
+          "marker": "spades",
+          "text": "Kopenhag"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-14",
+      "text": "Türkiye'nin en kalabalık ikinci şehri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İzmir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bursa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Antalya"
+        },
+        {
+          "marker": "spades",
+          "text": "Ankara"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-15",
+      "text": "Amazon Ormanları ağırlıklı olarak hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Brezilya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peru"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kolombiya"
+        },
+        {
+          "marker": "spades",
+          "text": "Venezuela"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-16",
+      "text": "Dünyanın en yüksek dağı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "K2"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Everest"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kilimanjaro"
+        },
+        {
+          "marker": "spades",
+          "text": "Mont Blanc"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-17",
+      "text": "Türkiye'nin en batı noktası hangi ildedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İzmir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Edirne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çanakkale"
+        },
+        {
+          "marker": "spades",
+          "text": "Balıkesir"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-18",
+      "text": "Marmara Denizi'ni iki yandan bağlayan boğazlar hangileridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cebelitarık ve Süveyş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kerç ve Hürmüz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Malakka ve Bering"
+        },
+        {
+          "marker": "spades",
+          "text": "İstanbul ve Çanakkale"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-19",
+      "text": "İsviçre'nin başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bern"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zürih"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cenevre"
+        },
+        {
+          "marker": "spades",
+          "text": "Basel"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-20",
+      "text": "Hangi deniz Türkiye'nin batısındadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ege"
+        },
+        {
+          "marker": "clubs",
+          "text": "Akdeniz"
+        },
+        {
+          "marker": "spades",
+          "text": "Kızıldeniz"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-21",
+      "text": "Dünyanın en büyük adası hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Madagaskar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Borneo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Grönland"
+        },
+        {
+          "marker": "spades",
+          "text": "Sumatra"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-22",
+      "text": "Kanada'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Toronto"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Montreal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vancouver"
+        },
+        {
+          "marker": "spades",
+          "text": "Ottawa"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-23",
+      "text": "Yüzey alanı en büyük ülke hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rusya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kanada"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çin"
+        },
+        {
+          "marker": "spades",
+          "text": "ABD"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-24",
+      "text": "Ekvator çizgisi Dünya'yı nasıl böler?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Doğu ve batı yarımküre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kuzey ve güney yarımküre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kara ve deniz"
+        },
+        {
+          "marker": "spades",
+          "text": "Sıcak ve soğuk kuşak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-25",
+      "text": "Türkiye'nin en kalabalık üçüncü şehri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bursa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Antalya"
+        },
+        {
+          "marker": "clubs",
+          "text": "İzmir"
+        },
+        {
+          "marker": "spades",
+          "text": "Adana"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-26",
+      "text": "Hollanda'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rotterdam"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Utrecht"
+        },
+        {
+          "marker": "clubs",
+          "text": "Eindhoven"
+        },
+        {
+          "marker": "spades",
+          "text": "Amsterdam"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-27",
+      "text": "Avrupa ile Amerika arasındaki okyanus hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atlas Okyanusu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pasifik Okyanusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hint Okyanusu"
+        },
+        {
+          "marker": "spades",
+          "text": "Arktik Okyanusu"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-28",
+      "text": "Dünyanın en derin okyanus çukuru hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tonga Çukuru"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mariana Çukuru"
+        },
+        {
+          "marker": "clubs",
+          "text": "Java Çukuru"
+        },
+        {
+          "marker": "spades",
+          "text": "Porto Riko Çukuru"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-29",
+      "text": "Türkiye'nin kaç komşusu vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yedi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "spades",
+          "text": "Dokuz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-30",
+      "text": "Hangi şehir iki kıtada yer alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atina"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kahire"
+        },
+        {
+          "marker": "clubs",
+          "text": "Moskova"
+        },
+        {
+          "marker": "spades",
+          "text": "İstanbul"
+        }
+      ],
+      "correct": "spades"
+    }
+  ]
+}

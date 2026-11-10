@@ -44,16 +44,40 @@ public sealed class JsonQuestionSetSourceTests : IDisposable
     }
 
     [Fact]
-    public void Each_shipped_set_has_ten_questions_of_four_options()
+    public void Every_shipped_set_can_fill_a_round_and_every_question_has_four_options()
     {
         var sets = new JsonQuestionSetSource(ShippedQuestions.Directory).All();
 
-        Assert.Equal(21, sets.Count);
+        Assert.Equal(11, sets.Count);
         foreach (var set in sets)
         {
-            Assert.Equal(10, set.Questions.Count);
+            // A set is a pool, not a round: what matters is that it can fill one.
+            Assert.True(
+                set.Questions.Count >= Room.QuestionsPerRound,
+                $"{set.Id} has {set.Questions.Count} questions, fewer than a round");
             Assert.All(set.Questions, q => Assert.Equal(4, q.Options.Count));
         }
+    }
+
+    [Fact]
+    public void A_set_too_small_to_fill_a_round_throws_naming_the_file()
+    {
+        Write("thin.json", SetJson("thin", count: Room.QuestionsPerRound - 1));
+
+        var ex = Assert.Throws<InvalidOperationException>(() => new JsonQuestionSetSource(_dir));
+
+        Assert.Contains("thin.json", ex.Message);
+        Assert.Contains($"at least {Room.QuestionsPerRound} questions, found {Room.QuestionsPerRound - 1}", ex.Message);
+    }
+
+    [Fact]
+    public void A_set_larger_than_a_round_is_loaded_whole()
+    {
+        Write("deep.json", SetJson("deep", count: 40));
+
+        var set = new JsonQuestionSetSource(_dir).ById("deep")!;
+
+        Assert.Equal(40, set.Questions.Count);
     }
 
     [Fact]
