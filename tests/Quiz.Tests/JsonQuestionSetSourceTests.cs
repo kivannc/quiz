@@ -48,7 +48,7 @@ public sealed class JsonQuestionSetSourceTests : IDisposable
     {
         var sets = new JsonQuestionSetSource(ShippedQuestions.Directory).All();
 
-        Assert.Equal(3, sets.Count);
+        Assert.Equal(9, sets.Count);
         foreach (var set in sets)
         {
             Assert.Equal(10, set.Questions.Count);

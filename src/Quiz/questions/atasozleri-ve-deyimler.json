@@ -1,0 +1,237 @@
+{
+  "id": "atasozleri-ve-deyimler",
+  "title": "Atasözleri ve Deyimler",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "ad-01",
+      "text": "\"Damlaya damlaya ...\" atasözü nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "deniz olur"
+        },
+        {
+          "marker": "diamonds",
+          "text": "ırmak olur"
+        },
+        {
+          "marker": "clubs",
+          "text": "taş olur"
+        },
+        {
+          "marker": "spades",
+          "text": "göl olur"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ad-02",
+      "text": "\"Bir elin nesi var, iki elin ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "gücü var"
+        },
+        {
+          "marker": "diamonds",
+          "text": "işi var"
+        },
+        {
+          "marker": "clubs",
+          "text": "sesi var"
+        },
+        {
+          "marker": "spades",
+          "text": "yolu var"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ad-03",
+      "text": "\"Sakla samanı, gelir ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "zamanı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "sırası"
+        },
+        {
+          "marker": "clubs",
+          "text": "parası"
+        },
+        {
+          "marker": "spades",
+          "text": "kazancı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ad-04",
+      "text": "\"Ağaç yaşken ...\" atasözü nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "kırılır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "eğilir"
+        },
+        {
+          "marker": "clubs",
+          "text": "büyür"
+        },
+        {
+          "marker": "spades",
+          "text": "kurur"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ad-05",
+      "text": "\"Taşıma su ile ... dönmez\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "çark"
+        },
+        {
+          "marker": "diamonds",
+          "text": "dolap"
+        },
+        {
+          "marker": "clubs",
+          "text": "değirmen"
+        },
+        {
+          "marker": "spades",
+          "text": "kuyu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ad-06",
+      "text": "\"Komşunun tavuğu komşuya ... görünür\" boşluğa ne gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "kaz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "ördek"
+        },
+        {
+          "marker": "clubs",
+          "text": "horoz"
+        },
+        {
+          "marker": "spades",
+          "text": "hindi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ad-07",
+      "text": "\"Zararın neresinden dönülse ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "zarardır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "kayıptır"
+        },
+        {
+          "marker": "clubs",
+          "text": "borçtur"
+        },
+        {
+          "marker": "spades",
+          "text": "kârdır"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ad-08",
+      "text": "\"Etekleri zil çalmak\" ne demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çok korkmak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çok sevinmek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çok üzülmek"
+        },
+        {
+          "marker": "spades",
+          "text": "Çok acele etmek"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ad-09",
+      "text": "\"Pabucu dama atılmak\" ne demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zengin olmak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yolculuğa çıkmak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çok yorulmak"
+        },
+        {
+          "marker": "spades",
+          "text": "Gözden düşmek"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ad-10",
+      "text": "\"Üzüm üzüme bakarak ...\" nasıl tamamlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "kararır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "büyür"
+        },
+        {
+          "marker": "clubs",
+          "text": "tatlanır"
+        },
+        {
+          "marker": "spades",
+          "text": "olgunlaşır"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}

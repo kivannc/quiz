@@ -1,0 +1,237 @@
+{
+  "id": "yemek-ve-mutfak",
+  "title": "Yemek ve Mutfak",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "ym-01",
+      "text": "Türk kahvesi hangi kapta pişirilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cezve"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tava"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güveç"
+        },
+        {
+          "marker": "spades",
+          "text": "Tencere"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-02",
+      "text": "Simitin üzerinde hangi çekirdek bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ay çekirdeği"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Susam"
+        },
+        {
+          "marker": "clubs",
+          "text": "Keten tohumu"
+        },
+        {
+          "marker": "spades",
+          "text": "Haşhaş"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-03",
+      "text": "İskender kebap hangi şehirle anılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Adana"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Konya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bursa"
+        },
+        {
+          "marker": "spades",
+          "text": "Hatay"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-04",
+      "text": "Menemenin temel malzemeleri hangileridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pirinç ve et"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Un ve süt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patates ve mantar"
+        },
+        {
+          "marker": "spades",
+          "text": "Yumurta ve domates"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-05",
+      "text": "Künefe hangi malzemeyle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yufka"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tel kadayıf"
+        },
+        {
+          "marker": "clubs",
+          "text": "İrmik"
+        },
+        {
+          "marker": "spades",
+          "text": "Pirinç unu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-06",
+      "text": "Gaziantep baklavası hangi kuruyemişle ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Antep fıstığı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ceviz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fındık"
+        },
+        {
+          "marker": "spades",
+          "text": "Badem"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-07",
+      "text": "Hangi baharat pilava sarı rengini verir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karabiber"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kimyon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pul biber"
+        },
+        {
+          "marker": "spades",
+          "text": "Safran"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-08",
+      "text": "Hangisi bir peynir çeşididir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pastırma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sucuk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tulum"
+        },
+        {
+          "marker": "spades",
+          "text": "Kavurma"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-09",
+      "text": "Türkiye'de çay en çok hangi ilde yetiştirilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Trabzon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Samsun"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ordu"
+        },
+        {
+          "marker": "spades",
+          "text": "Rize"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-10",
+      "text": "Maraş dondurmasına çekilebilme özelliğini veren bitki hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nane"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zencefil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Salep"
+        },
+        {
+          "marker": "spades",
+          "text": "Kekik"
+        }
+      ],
+      "correct": "clubs"
+    }
+  ]
+}

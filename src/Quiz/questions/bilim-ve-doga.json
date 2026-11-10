@@ -1,0 +1,237 @@
+{
+  "id": "bilim-ve-doga",
+  "title": "Bilim ve Doğa",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "bd-01",
+      "text": "Suyun kimyasal formülü nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "H2O"
+        },
+        {
+          "marker": "diamonds",
+          "text": "CO2"
+        },
+        {
+          "marker": "clubs",
+          "text": "O2"
+        },
+        {
+          "marker": "spades",
+          "text": "NaCl"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-02",
+      "text": "Hangi gezegen \"Kızıl Gezegen\" olarak bilinir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Venüs"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mars"
+        },
+        {
+          "marker": "clubs",
+          "text": "Jüpiter"
+        },
+        {
+          "marker": "spades",
+          "text": "Satürn"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-03",
+      "text": "Dünyanın en büyük canlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Köpek balığı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mavi balina"
+        },
+        {
+          "marker": "spades",
+          "text": "Zürafa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-04",
+      "text": "Bitkiler besin üretmek için hangi işlemi yapar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Solunum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sindirim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Terleme"
+        },
+        {
+          "marker": "spades",
+          "text": "Fotosentez"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-05",
+      "text": "Güneş'e en yakın gezegen hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Merkür"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Venüs"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dünya"
+        },
+        {
+          "marker": "spades",
+          "text": "Mars"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-06",
+      "text": "Hangisi bir sürüngendir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kurbağa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kaplumbağa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yarasa"
+        },
+        {
+          "marker": "spades",
+          "text": "Penguen"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-07",
+      "text": "Elmas hangi elementten oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Demir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Altın"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karbon"
+        },
+        {
+          "marker": "spades",
+          "text": "Silisyum"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-08",
+      "text": "Kemiklerimizde en çok hangi mineral bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Demir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Potasyum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sodyum"
+        },
+        {
+          "marker": "spades",
+          "text": "Kalsiyum"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-09",
+      "text": "Yarasalar karanlıkta yollarını nasıl bulur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kokuyla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ses dalgalarıyla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Isıyla"
+        },
+        {
+          "marker": "spades",
+          "text": "Yıldızlara bakarak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-10",
+      "text": "İnsan vücudunun yaklaşık yüzde kaçı sudur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "%20"
+        },
+        {
+          "marker": "diamonds",
+          "text": "%40"
+        },
+        {
+          "marker": "clubs",
+          "text": "%60"
+        },
+        {
+          "marker": "spades",
+          "text": "%90"
+        }
+      ],
+      "correct": "clubs"
+    }
+  ]
+}

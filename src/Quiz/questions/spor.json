@@ -1,0 +1,237 @@
+{
+  "id": "spor",
+  "title": "Spor",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "sp-01",
+      "text": "Bir basketbol takımı sahada kaç oyuncuyla oynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dört"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Altı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Yedi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-02",
+      "text": "Olimpiyat Oyunları kaç yılda bir düzenlenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-03",
+      "text": "Olimpiyat bayrağında kaç halka vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altı"
+        },
+        {
+          "marker": "spades",
+          "text": "Üç"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-04",
+      "text": "Voleybolda bir takım sahada kaç oyuncu bulundurur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Altı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yedi"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-05",
+      "text": "Wimbledon tenis turnuvası hangi ülkede yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "ABD"
+        },
+        {
+          "marker": "clubs",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "spades",
+          "text": "Avustralya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-06",
+      "text": "Naim Süleymanoğlu hangi sporda olimpiyat şampiyonu oldu?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Halter"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güreş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Boks"
+        },
+        {
+          "marker": "spades",
+          "text": "Atletizm"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-07",
+      "text": "Kırkpınar Yağlı Güreşleri hangi ilimizde yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bursa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kırklareli"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tekirdağ"
+        },
+        {
+          "marker": "spades",
+          "text": "Edirne"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-08",
+      "text": "Maraton koşusunun mesafesi yaklaşık kaç kilometredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "21"
+        },
+        {
+          "marker": "diamonds",
+          "text": "42"
+        },
+        {
+          "marker": "clubs",
+          "text": "50"
+        },
+        {
+          "marker": "spades",
+          "text": "100"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-09",
+      "text": "Bir satranç tahtasında kaç kare vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "36"
+        },
+        {
+          "marker": "diamonds",
+          "text": "81"
+        },
+        {
+          "marker": "clubs",
+          "text": "100"
+        },
+        {
+          "marker": "spades",
+          "text": "64"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-10",
+      "text": "Tour de France hangi sporun yarışıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bisiklet"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koşu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yüzme"
+        },
+        {
+          "marker": "spades",
+          "text": "Kayak"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}
