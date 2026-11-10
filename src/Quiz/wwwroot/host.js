@@ -1,21 +1,36 @@
 /*
- * The TV screen. It opens a room, shows the code, starts the round, owns the countdown
- * and walks the room through question -> reveal -> finished. Players never advance anything.
+ * The host's console: a phone that drives the room. The television (tv.html) is the display and
+ * paints the game; this page paints none of it, because the host is looking at the television like
+ * everyone else. What it owns is the pacing — the countdown that closes a question, the beat after
+ * everyone has answered, the beat after a reveal — and the buttons: start, pause, next, close.
  *
- * There are no timers on the server: when this page's countdown reaches zero it calls
- * CloseQuestion itself. The host key is typed once and kept in sessionStorage, so a reload
- * re-sends it, asks the hub for the room as it stands now, and paints itself back.
+ * It never speaks to the television directly. A room is opened on a screen this console has claimed
+ * with the four-digit code that screen is showing, and from then on the hub sends the two of them
+ * the same room messages.
+ *
+ * There are no timers on the server: when this page's countdown reaches zero it calls CloseQuestion
+ * itself. The host key is typed once and kept in sessionStorage, so a phone that slept mid-round
+ * re-sends it, asks the hub for the room as it stands, and comes back to its controls.
+ *
+ * Which is why "Displayed" matters here more than anywhere: owning the pacing means that if the
+ * television falls out of the room and nothing says so, this page asks, closes and advances
+ * questions in front of nobody. So it is a state and not a moment: while this page believes the
+ * room has no television in it, nothing here moves the round on of its own accord, however many
+ * times the host steps it by hand. The clock is the exception, and deliberately: it goes on
+ * counting the room's own deadline down, because the host has to know where the question stands;
+ * what it does not do is act when it gets to zero. Every control stays live; the round starts
+ * carrying itself again when the display comes back.
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
-
-/* The order the four markers are drawn in. Glyph and colour come from app.css. */
-const MARKERS = ['hearts', 'diamonds', 'clubs', 'spades'];
 
 /* Everyone has answered: the beat the room gets to see the last tap land before the reveal. */
 const EVERYONE_IN_MS = 3000;
 /* How long the reveal stays up — the bars and the standings — before the round moves on by itself. */
 const REVEAL_MS = 6000;
+
+/* Under this many seconds left, the clock on the console says so without being read. */
+const CLOCK_LOW_S = 5;
 
 const STORE_KEY = 'quiz.hostKey';
 const STORE_CODE = 'quiz.code';
@@ -24,13 +39,13 @@ const STORE_DEADLINE = 'quiz.deadline';
 
 const el = (id) => document.getElementById(id);
 
-const views = {
-  setup: el('view-setup'),
-  lobby: el('view-lobby'),
-  question: el('view-question'),
-  reveal: el('view-reveal'),
-  finished: el('view-finished'),
-};
+/*
+ * Two screens on this page: the form that claims a television and opens a room, and the console
+ * proper. The room's phase is state.view, as it is on the television, because the pacing is written
+ * in terms of it — but all four phases are drawn in the one section, since what changes between
+ * them here is a line of text and which button is up.
+ */
+const RUN_VIEWS = ['lobby', 'question', 'reveal', 'finished'];
 
 const state = {
   // 'resuming' paints nothing: it is the moment between asking the hub for the room and hearing back.
@@ -38,15 +53,16 @@ const state = {
   code: null,
   hostKey: null,
   setId: null,
+  claimed: false,   // a screen has been claimed and no room opened on it yet
   sets: [],         // { id, title, language } from GET /sets; their titles are content, not UI strings
   players: [],      // [{ name, score }], from RoomState
   answered: 0,      // AnswerCount, host screens only
   seated: 0,        // how many players that count is out of
-  question: null,   // the QuestionStarted payload
+  question: null,   // the QuestionStarted payload: which question of how many, and whether it is the last
   paused: false,    // the room's clock is stopped, which the server knows too
-  reveal: null,     // the Revealed payload
-  standings: [],    // from RoundFinished
+  display: true,    // the room still has a television in it; the server is what knows
   error: '',
+  repair: null,
   connection: '',   // reconnecting / disconnected notice
 };
 
@@ -89,7 +105,7 @@ function rememberDeadline(index, at) {
 
 /*
  * A remembered deadline is a promise about wall-clock time, and a paused room has stopped spending
- * it. Rather than keep a stale one, drop it: a screen reloading into a paused question is then told
+ * it. Rather than keep a stale one, drop it: a console reloading into a paused question is then told
  * what is left by the room itself, which is the number that stood still.
  */
 function forgetDeadline() {
@@ -101,7 +117,7 @@ function forgetDeadline() {
 /*
  * The deadline this page set for this very question, if it is the page that set it. A reload must
  * not hand the players a fresh twenty seconds: the room goes on refusing answers after the original
- * limit, so the extra time would be a lie. A screen that never ran this question has nothing stored
+ * limit, so the extra time would be a lie. A console that never ran this question has nothing stored
  * and falls back to the full limit.
  */
 function recallDeadline(index) {
@@ -127,6 +143,17 @@ function stopCountdown() {
   frozen = 0;
 }
 
+/*
+ * The clock runs whether or not the room has a television in it, and it is the room's own deadline
+ * it counts down: the number here is the number over there, so a host whose screen has dropped out
+ * still knows where the question stands rather than reading a picture of when it dropped.
+ *
+ * What a room nobody can see does not get is the act at zero. Closing the question is the guarded
+ * part, not the counting — so the tick reaches the deadline, paints it and stays there until the
+ * display comes back, and then closes on the very next tick. Which is why a live question needs no
+ * re-arming when a television is re-seated: its clock never stopped. Stopping it is what freezing
+ * does, and freezing belongs to the pause alone.
+ */
 function startCountdown(index, at) {
   stopCountdown();
   deadline = at;
@@ -134,7 +161,7 @@ function startCountdown(index, at) {
   drawClock();
   ticker = setInterval(() => {
     drawClock();
-    if (Date.now() >= deadline) {
+    if (Date.now() >= deadline && state.display) {
       stopCountdown();
       closeQuestion();
     }
@@ -158,11 +185,11 @@ function freezeCountdown() {
 /*
  * Starts it again with exactly what was left, never with the whole limit — and starts it even when
  * what was left is nothing, because a question frozen at zero still has to close, and the next tick
- * is what does it. This screen has no other way to close a question by hand.
+ * is what does it. This page has no other way to close a question by hand.
  *
  * A running ticker is what tells a frozen clock from one that was never frozen, since zero left and
- * never frozen both read as `frozen === 0`: freezing always stops the ticker, so a screen with one
- * still running has nothing to thaw. Without that, a stray resume — a second screen on the same
+ * never frozen both read as `frozen === 0`: freezing always stops the ticker, so a console with one
+ * still running has nothing to thaw. Without that, a stray resume — a second console on the same
  * key, or one that lands between a reload's QuestionStarted and its Paused — would restart the
  * countdown with nothing on it and close a running question a tick later.
  */
@@ -175,7 +202,10 @@ function thawCountdown() {
 
 function drawClock(ms = deadline - Date.now()) {
   const left = Math.max(0, Math.ceil(ms / 1000));
-  el('tag-clock').textContent = t('clock', left);
+  const clock = el('tag-clock');
+  clock.textContent = t('clock', left);
+  // The last few seconds, said in a colour rather than in a word: the host is watching the room.
+  clock.classList.toggle('low', left <= CLOCK_LOW_S && !state.paused);
 }
 
 /* ---------- pacing: the two beats that carry the round on its own ---------- */
@@ -206,15 +236,17 @@ function cancelPacing() {
 }
 
 /* Everyone seated has answered the question that is open. A paused room is waiting for its host,
- * not for its players, so it is never ready to close on its own. */
+ * not for its players, so it is never ready to close on its own — and a room with no television in
+ * it is waiting for a screen, not for a beat: closing early would close it in front of nobody. */
 function everyoneIsIn() {
-  return state.view === 'question' && !state.paused && state.seated > 0 && state.answered >= state.seated;
+  return state.display && state.view === 'question' && !state.paused
+    && state.seated > 0 && state.answered >= state.seated;
 }
 
 /* The beat before the reveal. Already armed means the room was already full: a second count saying
  * the same thing must not push it back. */
 function armEveryoneIn() {
-  if (everyoneIn) return;
+  if (everyoneIn || !state.display) return;
   everyoneIn = setTimeout(() => {
     everyoneIn = 0;
     closeQuestion();
@@ -223,10 +255,29 @@ function armEveryoneIn() {
 
 /* The beat after it. Its caller has just shown the reveal, which is what cleared the question's. */
 function armNextUp() {
+  if (nextUp || !state.display) return;
   nextUp = setTimeout(() => {
     nextUp = 0;
     advance();
   }, REVEAL_MS);
+}
+
+/*
+ * The room can be seen again, so the beat this phase wants starts now. The clock is not here: a
+ * live question's has been counting the room's own deadline down all along, and the display coming
+ * back is enough for the next tick to close it — including one whose time went while the screen was
+ * away. What is left to arm is the beat the room may have earned while nobody could see it: the
+ * last tap can have landed with the screen gone, and no further AnswerCount is coming to say so.
+ *
+ * Not a resume: a paused room stays paused and its clock stays frozen until the host presses the
+ * button, because the host is the one who knows the room is looking at the television again — which
+ * is what everyoneIsIn() asks for the question, and what leaves a paused one alone here. A reveal
+ * gets its beat from this moment, because the television has only just begun painting the answer.
+ * Called for every "Displayed true", and safe to call twice: neither beat is armed a second time.
+ */
+function rearm() {
+  if (everyoneIsIn()) armEveryoneIn();
+  else if (state.view === 'reveal') armNextUp();
 }
 
 /* ---------- hub ---------- */
@@ -234,32 +285,24 @@ function armNextUp() {
 const conn = new signalR.HubConnectionBuilder()
   .withUrl('/hub')
   .withAutomaticReconnect()
-  // Warnings and worse only: the client chats at Information level, and a living-room
-  // screen has no console to read it in.
+  // Warnings and worse only: the client chats at Information level, and a phone in a dark
+  // living room has no console to read it in.
   .configureLogging(signalR.LogLevel.Warning)
   .build();
 
 conn.on('RoomState', (players, phase) => {
   state.players = players ?? [];
-  // The question and reveal payloads own those two views; RoomState only refreshes the roster.
-  if (phase === 'lobby') {
-    show('lobby');
-  } else if (phase === 'finished') {
-    // A page that resumed a finished room never saw RoundFinished, so order the roster itself.
-    if (state.standings.length === 0) {
-      state.standings = [...state.players].sort((a, b) => b.score - a.score);
-    }
-    show('finished');
-  } else {
-    render();
-  }
+  // The question and reveal payloads own those two phases; RoomState only refreshes the roster.
+  if (phase === 'lobby') show('lobby');
+  else if (phase === 'finished') show('finished');
+  else render();
 });
 
 conn.on('AnswerCount', (answered, total) => {
   // Both numbers come from the server: total counts seated players, answered the ones in.
   state.answered = answered;
   state.seated = total;
-  drawTopbar();
+  drawRun();
 
   // Nobody is left to wait for, so there is nothing for the rest of the limit to buy: close after a
   // beat instead. The countdown stays the backstop — a phone that went to sleep never answers, and
@@ -271,16 +314,15 @@ conn.on('AnswerCount', (answered, total) => {
 
 conn.on('QuestionStarted', (question) => {
   state.question = question;
-  // A resume during the reveal sends the question with no time on it, only so this screen knows what
-  // was asked — which question of how many, and what the winning option says. Nothing is open, so
-  // nothing is painted here and no countdown runs: the Revealed that follows does the painting.
+  // A resume during the reveal sends the question with no time on it, only so this page knows which
+  // question of how many is being revealed, and whether it is the last. Nothing is open, so no
+  // countdown runs: the Revealed that follows is what moves the console on.
   if (question.limitSeconds <= 0) return;
 
-  state.reveal = null;
   state.answered = 0;
   state.paused = false;
   show('question');
-  // A screen that has run this question already counts its own deadline down. One arriving fresh
+  // A console that has run this question already counts its own deadline down. One arriving fresh
   // uses limitSeconds, which on a resume is what the room says is left, not the whole limit.
   const at = (resuming ? recallDeadline(question.index) : null) ?? Date.now() + question.limitSeconds * 1000;
   startCountdown(question.index, at);
@@ -302,37 +344,77 @@ conn.on('Paused', (paused) => {
   render();
 });
 
+/*
+ * Whether the room still has a television in it. This page paints none of the game, so without
+ * being told it would go on pacing a round nobody can see: the countdown would reach zero, close
+ * question one, and six seconds later open question two in front of nothing.
+ *
+ * It is state, not a moment. While it is false nothing on this page moves the round on for itself —
+ * not this handler's cancel, which only clears what was already armed, but both beats, which ask
+ * state.display before arming, and the tick, which asks it before closing a question at zero. That
+ * is what holds for the rest of the round: one press of resume or next moves the round by exactly
+ * that one press, and never hands the pacing back. The host keeps every control, because stepping
+ * a displayless round deliberately is the host's to choose; what is gone is the console doing it
+ * on its own.
+ *
+ * What this does not touch is the clock. Freezing is the pause's job and nothing else's — and in
+ * the ordinary way of losing a television the clock does freeze, because the server pauses the room
+ * and the Paused that follows is what stops it. A host who resumes anyway, with the screen still
+ * gone, keeps a clock that counts: it is the room's deadline, the room is spending it, and the
+ * number here is the number the television would be showing. Freezing it here instead would have
+ * shown an optimistic one and, worse, left nothing able to reach zero afterwards.
+ *
+ * Coming back is not resuming, but it is what re-arms the beats; the clock needs nothing, having
+ * never stopped.
+ */
+conn.on('Displayed', (present) => {
+  state.display = Boolean(present);
+  if (state.display) {
+    rearm();
+  } else {
+    // All that is left to do: a beat already armed would otherwise close or advance in front of
+    // nobody. The clock goes on, and the tick is what asks before acting.
+    cancelPacing();
+    // And the re-pair line goes with it. "The screen is back in the room" is only cleared by a
+    // change of phase, so a television that leaves again in the same question would otherwise
+    // leave that confirmation sitting under the notice that contradicts it.
+    state.repair = null;
+  }
+  render();
+});
+
 conn.on('RoomClosed', () => {
-  // The room is gone for everyone, including this screen: back to the form, ready to open another.
+  // The room is gone for everyone, the television included: back to the form, ready to claim the
+  // code the television is showing again and open another room on it. That code is a new one, and
+  // ending the room drops the claim on its screen server-side, so the claim this page was holding
+  // is spent too: saying otherwise would be telling the host not to type the code they can see.
+  state.claimed = false;
   stopCountdown();
   cancelPacing();
   forgetDeadline();
   forgetRoom();
   state.question = null;
-  state.reveal = null;
-  state.standings = [];
   state.paused = false;
+  state.display = true;
   state.error = '';
   show('setup');
 });
 
-conn.on('Revealed', (reveal) => {
+conn.on('Revealed', () => {
   stopCountdown();
-  // The room drops its pause when the question closes, and so does the screen.
+  // The room drops its pause when the question closes, and so does the console.
   state.paused = false;
-  state.reveal = reveal;
   show('reveal');
-  // Armed after show(), which is what cleared the question's own timer. A screen that reloads during
-  // a reveal is sent this again and arms it too, so a refresh at the wrong moment does not stall the
-  // round. The last question's reveal advances the same way: that is what ends the round.
+  // Armed after show(), which is what cleared the question's own timer. A console that reloads
+  // during a reveal is sent this again and arms it too, so a phone waking at the wrong moment does
+  // not stall the round. The last question's reveal advances the same way: that is what ends it.
   armNextUp();
 });
 
-conn.on('RoundFinished', (standings) => {
+conn.on('RoundFinished', () => {
   stopCountdown();
   state.paused = false;
-  // The round is over: the standings stay up until the host asks for a new room. Nothing is armed here.
-  state.standings = standings ?? [];
+  // The standings are the television's to show. Nothing is armed here: the round is over.
   show('finished');
 });
 
@@ -344,9 +426,11 @@ conn.onreconnecting(() => {
 });
 
 conn.onreconnected(() => {
-  // A reconnected connection is in no groups, and this one may have missed what happened while it
-  // was away, so it asks for the room again. Resuming changes nothing in the room.
+  // A reconnected connection is a new connection: it is in no groups, and any claim it was holding
+  // belonged to the one that is gone. So it asks for the room again — which is enough for the
+  // console, because the room remembers which screen it was opened on.
   state.connection = '';
+  state.claimed = false;
   render();
   resume();
 });
@@ -354,26 +438,41 @@ conn.onreconnected(() => {
 conn.onclose(() => {
   stopCountdown();
   cancelPacing();
+  state.claimed = false;
   state.connection = t('disconnected');
   render();
 });
 
 /* ---------- actions ---------- */
 
+/*
+ * Claims the television showing `code`. A room can only be opened on a claimed screen, and the same
+ * call puts a television that has reloaded back into the room this console is already running — the
+ * one thing that screen asks for when it comes back up.
+ */
+async function claimScreen(code) {
+  await conn.invoke('ClaimScreen', code, state.hostKey);
+  state.claimed = true;
+}
+
 async function createRoom(hostKey, setId) {
+  // Opened on a screen that was claimed a moment ago, so the room has a television in it — set
+  // before the invoke, because the hub says "Displayed false" during it when that screen has gone
+  // in the meantime, and this would otherwise paint over the one thing the console must not lose.
+  state.display = true;
   state.code = await conn.invoke('CreateRoom', hostKey, setId);
   state.hostKey = hostKey;
   state.setId = setId;
+  // Opening the room spends the claim: the next room needs the next code the television shows.
+  state.claimed = false;
   state.players = [];
   state.question = null;
-  state.reveal = null;
-  state.standings = [];
   remember();
   show('lobby');
 }
 
 /* Host actions are quietly ignored by the server when they do not fit the phase, so a
- * double click needs no guard here. A room that has gone (expired, or the server restarted)
+ * double press needs no guard here. A room that has gone (expired, or the server restarted)
  * is the one failure worth acting on: forget it and ask for the key again. */
 async function hostAction(method) {
   try {
@@ -381,7 +480,7 @@ async function hostAction(method) {
     state.error = '';
     render();
   } catch (error) {
-    state.error = errorText(error);
+    state.error = error;
     if (String(error?.message ?? '').includes('no-such-room')) {
       forgetRoom();
       show('setup');
@@ -393,15 +492,16 @@ async function hostAction(method) {
 
 /*
  * Takes the room back after a reload or a dropped connection: re-sends the key (which re-joins the
- * host groups) and asks the hub to send this screen the room as it stands. ResumeHost is read-only,
- * so a screen coming back cannot start, close or advance anything.
+ * host groups) and asks the hub to send this console the room as it stands. ResumeHost is read-only,
+ * so a console coming back cannot start, close or advance anything — and it needs no screen, because
+ * the television is still in the room on its own connection.
  */
 let resuming = false;
 
 /*
  * Load-bearing ordering: the hub's sends for this resume reach the client before the invoke's own
  * completion, so every QuestionStarted that belongs to a resume is handled while this flag is still
- * true. Do not move the reset, or awaken it after other awaits — a resumed screen would then throw
+ * true. Do not move the reset, or awaken it after other awaits — a resumed console would then throw
  * away the deadline it was already counting down and restart the question's clock.
  */
 async function resume() {
@@ -412,7 +512,7 @@ async function resume() {
     state.error = '';
   } catch (error) {
     // The room has gone, or this key no longer drives it: ask for a room again.
-    state.error = errorText(error);
+    state.error = error;
     forgetRoom();
     show('setup');
   } finally {
@@ -428,7 +528,7 @@ async function loadSets() {
     state.sets = await response.json();
   } catch (error) {
     state.sets = [];
-    state.error = t('errGeneric');
+    state.error = error;
     console.error('could not load the question sets', error);
   }
   render();
@@ -438,20 +538,30 @@ const startRound = () => hostAction('StartRound');
 const closeQuestion = () => hostAction('CloseQuestion');
 const advance = () => hostAction('AdvanceQuestion');
 /* The room is the one that decides: this only asks, and the Paused that comes back is what moves
- * the screen. A press that does not fit the phase is ignored by the hub, like every other. */
+ * the console. A press that does not fit the phase is ignored by the hub, like every other. */
 const togglePause = () => hostAction(state.paused ? 'ResumeRound' : 'PauseRound');
 
 el('form-open').addEventListener('submit', async (event) => {
   event.preventDefault();
   const form = event.target;
+  const code = form.elements.pairCode.value.trim();
   const hostKey = form.elements.hostKey.value;
   const setId = form.elements.setId.value;
   form.elements.hostKey.blur();
   try {
     state.error = '';
+    state.hostKey = hostKey;
+    // No code typed and no screen in hand is left to the server to answer: it says "no-screen",
+    // which is the plainest way this page can put it.
+    if (code) {
+      await claimScreen(code);
+      // The code is spent the moment the claim succeeds. Leaving it in the field would send a retry
+      // after a failed CreateRoom back to ClaimScreen with a dead code; state.claimed carries the claim.
+      form.elements.pairCode.value = '';
+    }
     await createRoom(hostKey, setId);
   } catch (error) {
-    state.error = errorText(error);
+    state.error = error;
     render();
   }
 });
@@ -463,26 +573,37 @@ el('next').addEventListener('click', () => {
   advance();
 });
 
-/* A new room reuses the key and set already in hand, so the host types nothing again. */
-async function newRoom() {
-  try {
-    state.error = '';
-    await createRoom(state.hostKey, state.setId);
-  } catch (error) {
-    state.error = errorText(error);
-    forgetRoom();
-    show('setup');
-  }
-}
-
-el('new-room').addEventListener('click', newRoom);
 el('pause').addEventListener('click', togglePause);
+
+/* ---------- putting a television that reloaded back into the room ---------- */
+
+el('repair-open').addEventListener('click', () => {
+  const form = el('form-repair');
+  form.hidden = !form.hidden;
+  state.repair = null;
+  drawRepair();
+  if (!form.hidden) form.elements.pairCode.focus();
+});
+
+el('form-repair').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const form = event.target;
+  try {
+    await claimScreen(form.elements.pairCode.value.trim());
+    form.elements.pairCode.value = '';
+    form.hidden = true;
+    state.repair = { done: true };
+  } catch (error) {
+    state.repair = { error };
+  }
+  drawRepair();
+});
 
 /*
  * Closing the room ends the game for everyone in it, so it takes two presses: the first arms the
- * button and says so, the second does it. A dialog would read badly on a TV and block nothing
- * usefully; this says the same thing in the room's own language. The arming lapses on its own, and
- * on any change of phase, so a button left armed is not waiting to end the next round.
+ * button and says so, the second does it. A dialog would be one more thing to hit on a phone and
+ * block nothing usefully; this says the same thing in the room's own language. The arming lapses on
+ * its own, and on any change of phase, so a button left armed is not waiting to end the next round.
  */
 const CLOSE_ARMED_MS = 5000;
 let closeArmed = 0;
@@ -511,52 +632,42 @@ function show(view) {
   cancelPacing();
   clearTimeout(closeArmed);
   closeArmed = 0;
+  el('form-repair').hidden = true;
+  state.repair = null;
+  stopCountdown();
   state.view = view;
   render();
 }
 
+/* The re-pair line is a confirmation or an error; it keeps what happened so it can be redrawn in
+ * the language now chosen. */
+function drawRepair() {
+  const status = el('repair-status');
+  const { done, error } = state.repair ?? {};
+  set(status, done ? t('rePairDone') : error ? errorText(error) : '');
+  status.classList.toggle('error', Boolean(error));
+}
+
 function render() {
-  for (const [name, section] of Object.entries(views)) section.hidden = name !== state.view;
+  const running = RUN_VIEWS.includes(state.view);
+  el('view-setup').hidden = state.view !== 'setup';
+  el('view-run').hidden = !running;
 
-  drawTopbar();
-  drawControls();
-  if (state.view === 'setup') drawSetup();
-  if (state.view === 'lobby') drawLobby();
-  if (state.view === 'question') drawQuestion();
-  if (state.view === 'reveal') drawReveal();
-  if (state.view === 'finished') drawBoard(el('final-board'), state.standings);
-}
-
-/* The two controls that belong to the host alone. They are on this page, which the key protects. */
-function drawControls() {
-  const open = state.code !== null && state.view !== 'setup' && state.view !== 'resuming';
-  el('controls').hidden = !open;
-
-  const pause = el('pause');
-  pause.hidden = state.view !== 'question';
-  pause.textContent = t(state.paused ? 'resumeButton' : 'pauseButton');
-
-  const close = el('close-room');
-  close.textContent = t(closeArmed ? 'closeRoomConfirm' : 'closeRoomButton');
-  close.dataset.armed = String(Boolean(closeArmed));
-}
-
-function drawTopbar() {
-  const playing = state.view === 'question' || state.view === 'reveal';
-
-  set(el('tag-room'), state.code && state.view !== 'setup' ? t('roomTag', state.code) : '');
-  set(el('tag-question'), playing && state.question
-    ? t('questionCounter', state.question.index + 1, state.question.total)
-    : '');
-
-  if (state.view === 'question') set(el('tag-answered'), t('answeredCounter', state.answered, state.seated));
-  else if (state.view === 'reveal') set(el('tag-answered'), t('closedTag'));
-  else set(el('tag-answered'), '');
-
-  el('tag-clock').hidden = state.view !== 'question';
-  document.body.classList.toggle('paused', state.paused);
-  el('paused-banner').hidden = !state.paused;
+  set(el('tag-room'), state.code && running ? t('roomTag', state.code) : '');
   set(el('tag-connection'), state.connection);
+  document.body.classList.toggle('paused', state.paused);
+
+  drawRepair();
+  if (state.view === 'setup') drawSetup();
+  if (running) {
+    drawRun();
+    drawControls();
+  }
+}
+
+/* state.error holds what went wrong, not its words, so a language switch can say it again. */
+function errorOf(error) {
+  return error ? errorText(error) : '';
 }
 
 function set(node, text) {
@@ -574,111 +685,75 @@ function drawSetup() {
   // Nothing can be opened before the sets are known, so do not pretend otherwise.
   el('form-open').querySelector('button').disabled = state.sets.length === 0;
 
+  // The television's own address, so the host knows what to open over there before anything else.
+  el('tv-hint').textContent = t('tvHint', `${location.host}/tv`);
+  // A console that still holds a screen says so, and then the code field is the way to swap screens
+  // rather than the only way forward.
+  el('setup-paired').hidden = !state.claimed;
+
   // Only ever prefill an untouched field: a redraw must not overwrite what is being typed.
   const field = el('form-open').elements.hostKey;
   if (field.value === '' && document.activeElement !== field) field.value = state.hostKey ?? '';
-  el('setup-error').textContent = state.error;
+  el('setup-error').textContent = errorOf(state.error);
 }
 
-function drawLobby() {
-  el('lobby-code').textContent = state.code ?? '';
-  el('lobby-where').textContent = t('joinAt', location.host);
+/*
+ * What the console says while a room is open. Every line here has to help the host act: the phase,
+ * because the buttons mean different things in each one; the clock, because the host is the one who
+ * closes a question; how many have answered, because that is what says whether waiting is worth it;
+ * and which question of how many, because that is what says whether the evening is nearly over.
+ * The question and its options are deliberately absent — they are on the television.
+ */
+function drawRun() {
+  const phases = { lobby: 'phaseLobby', question: 'phaseQuestion', reveal: 'phaseReveal', finished: 'finishedHeading' };
+  el('phase').textContent = t(phases[state.view] ?? 'phaseLobby');
 
-  const pills = el('lobby-players');
-  pills.replaceChildren(...state.players.map((player) => {
-    const pill = document.createElement('span');
-    pill.className = 'pill';
-    pill.textContent = player.name;
-    return pill;
-  }));
+  el('tag-clock').hidden = state.view !== 'question';
+  set(el('tag-question'), (state.view === 'question' || state.view === 'reveal') && state.question
+    ? t('questionCounter', state.question.index + 1, state.question.total)
+    : '');
 
+  if (state.view === 'question') set(el('tag-answered'), t('answeredCounter', state.answered, state.seated));
+  else if (state.view === 'reveal') set(el('tag-answered'), t('closedTag'));
+  else set(el('tag-answered'), '');
+
+  set(el('phase-detail'), detail());
+  // Its words are static, so applyStatic keeps them in the language chosen; this says when to look.
+  el('display-gone').hidden = state.display;
+  set(el('run-error'), errorOf(state.error));
+}
+
+function detail() {
+  if (state.paused) return t('pausedBanner');
+  if (state.view === 'lobby') {
+    return state.players.length === 0 ? t('waitingForPlayers') : t('playerCount', state.players.length);
+  }
+  // Nothing opens by itself while the room has no television in it, so do not promise that it will.
+  if (state.view === 'reveal') return state.display ? t('revealHint') : '';
+  if (state.view === 'finished') return t('newRoomHint');
+  return '';
+}
+
+/* The buttons. Only the ones that do something in this phase are up, so there is nothing to aim
+ * past: a phone is held in one hand and pressed with one thumb. */
+function drawControls() {
+  const start = el('start');
   // The server refuses to start an empty room, so the button only appears once someone is in.
-  const empty = state.players.length === 0;
-  el('start').hidden = empty;
-  const status = el('lobby-status');
-  set(status, empty ? t('waitingForPlayers') : '');
-  if (state.error) set(status, state.error);
-  status.classList.toggle('error', Boolean(state.error));
-}
+  start.hidden = state.view !== 'lobby' || state.players.length === 0;
+  start.textContent = t('startButton');
 
-function drawQuestion() {
-  const question = state.question;
-  if (!question) return;
-  el('question-text').textContent = question.text;
-  el('question-options').replaceChildren(...question.options.map(optionCard));
-}
-
-function optionCard(option) {
-  const card = document.createElement('div');
-  card.className = 'opt';
-  card.dataset.marker = option.marker;
-
-  const glyph = document.createElement('span');
-  glyph.className = 'glyph';
-
-  const text = document.createElement('span');
-  text.textContent = option.text;
-
-  card.append(glyph, text);
-  return card;
-}
-
-function drawReveal() {
-  const reveal = state.reveal;
-  if (!reveal) return;
-
-  el('reveal-glyph').dataset.marker = reveal.correct;
-  const correct = state.question?.options.find((option) => option.marker === reveal.correct);
-  el('reveal-text').textContent = correct?.text ?? '';
-
-  const counts = MARKERS.map((marker) => reveal.distribution[marker] ?? 0);
-  const most = Math.max(1, ...counts);
-  el('reveal-bars').replaceChildren(...MARKERS.map((marker, i) => {
-    const column = document.createElement('div');
-    column.className = 'b';
-    column.dataset.marker = marker;
-
-    const glyph = document.createElement('span');
-    glyph.className = 'glyph';
-
-    const fill = document.createElement('span');
-    fill.className = 'fill';
-    fill.style.height = `${Math.round((counts[i] / most) * 100)}%`;
-
-    const n = document.createElement('span');
-    n.className = 'n';
-    n.textContent = String(counts[i]);
-
-    column.append(glyph, fill, n);
-    return column;
-  }));
-
-  drawBoard(el('reveal-board'), reveal.standings);
-
+  const next = el('next');
+  next.hidden = state.view !== 'reveal';
   const last = state.question && state.question.index + 1 >= state.question.total;
-  el('next').textContent = last ? t('resultsButton') : t('nextButton');
-}
+  next.textContent = t(last ? 'resultsButton' : 'nextButton');
 
-function drawBoard(list, standings) {
-  list.classList.toggle('dense', standings.length > 8);
-  list.replaceChildren(...standings.map((player, i) => {
-    const row = document.createElement('li');
+  const pause = el('pause');
+  pause.hidden = state.view !== 'question';
+  pause.textContent = t(state.paused ? 'resumeButton' : 'pauseButton');
 
-    const who = document.createElement('span');
-    const rank = document.createElement('span');
-    rank.className = 'rank';
-    rank.textContent = String(i + 1);
-    const name = document.createElement('span');
-    name.textContent = player.name;
-    who.append(rank, name);
-
-    const score = document.createElement('span');
-    score.className = 'score';
-    score.textContent = String(player.score);
-
-    row.append(who, score);
-    return row;
-  }));
+  const close = el('close-room');
+  close.textContent = t(closeArmed ? 'closeRoomConfirm' : 'closeRoomButton');
+  close.dataset.armed = String(Boolean(closeArmed));
 }
 
 /* ---------- start ---------- */
@@ -694,7 +769,7 @@ const stored = recall();
 state.hostKey = stored.hostKey;
 state.setId = stored.setId;
 state.code = stored.code;
-// A screen that is about to resume shows nothing rather than a form it is going to replace.
+// A console that is about to resume shows nothing rather than a form it is going to replace.
 show(stored.hostKey && stored.code ? 'resuming' : 'setup');
 
 try {

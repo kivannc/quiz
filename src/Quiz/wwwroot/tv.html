@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<!-- The title, like every other visible string, is set from i18n.js. -->
+<title>Quiz</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body class="tv">
+<!--
+  The television. It is a display and nothing else: there is no field, no button and no language
+  switch on this page, because the only thing anyone has in front of it is a remote control. The
+  host's phone is the console; this screen shows a four-digit code until a phone claims it, and
+  from then on it paints whatever the room is doing.
+-->
+<main class="panel">
+  <div class="inner">
+
+    <div class="topbar">
+      <span id="tag-room" hidden></span>
+      <span id="tag-question" hidden></span>
+      <span id="tag-answered" hidden></span>
+      <span class="clock" id="tag-clock" hidden></span>
+      <span class="status" id="tag-connection" hidden></span>
+    </div>
+
+    <!-- 1 · nobody is driving this screen yet: the code the host types into a phone -->
+    <section class="view pair" id="view-pairing" hidden>
+      <div class="label" data-i18n="pairTag"></div>
+      <div class="pcode" id="pair-code"></div>
+      <div class="where" id="pair-where" hidden></div>
+      <p class="status" id="pair-status" hidden></p>
+      <p class="status" id="pair-rejoin" hidden></p>
+    </section>
+
+    <!-- 2 · a phone has claimed it, and the room is on its way -->
+    <section class="view pair" id="view-paired" hidden>
+      <h1 class="paired" data-i18n="pairedHeading"></h1>
+      <p class="where" data-i18n="pairedHint"></p>
+    </section>
+
+    <!-- 3 · lobby: the other code, the one the players type -->
+    <section class="view lobby" id="view-lobby" hidden>
+      <div class="label kod" data-i18n="roomCodeTag"></div>
+      <div class="code" id="lobby-code"></div>
+      <div class="where" id="lobby-where"></div>
+      <div class="pills" id="lobby-players"></div>
+      <p class="status" id="lobby-status" hidden></p>
+    </section>
+
+    <!-- 4 · a question is open. The clock here only shows the console's countdown. -->
+    <section class="view" id="view-question" hidden>
+      <p class="paused-banner" id="paused-banner" hidden>
+        <span data-i18n="pausedBanner"></span>
+        <span class="sub" data-i18n="pausedHint"></span>
+      </p>
+      <p class="question"><span class="caret">&gt;</span> <span id="question-text"></span><span class="block">&nbsp;</span></p>
+      <div class="options" id="question-options"></div>
+    </section>
+
+    <!-- 5 · the question is over -->
+    <section class="view" id="view-reveal" hidden>
+      <p class="answer"><span data-i18n="correctIs"></span> <span class="glyph" id="reveal-glyph"></span> <span class="opt-text" id="reveal-text"></span></p>
+      <div class="bars" id="reveal-bars"></div>
+      <ol class="board" id="reveal-board"></ol>
+    </section>
+
+    <!-- 6 · the round is over -->
+    <section class="view finished" id="view-finished" hidden>
+      <h1 data-i18n="finishedHeading"></h1>
+      <ol class="board" id="final-board"></ol>
+    </section>
+
+  </div>
+</main>
+
+<script src="lib/signalr/signalr.min.js"></script>
+<script type="module" src="tv.js"></script>
+</body>
+</html>

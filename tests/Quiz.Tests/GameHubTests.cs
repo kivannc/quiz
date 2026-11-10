@@ -20,6 +20,7 @@ public sealed class GameHubTests : IDisposable
 
     private readonly List<HubConnection> _connections = [];
     private readonly List<WebApplicationFactory<Program>> _factories = [];
+    private readonly Dictionary<HubConnection, WebApplicationFactory<Program>> _factoryOf = [];
 
     public void Dispose()
     {
@@ -52,6 +53,7 @@ public sealed class GameHubTests : IDisposable
             .AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)))
             .Build();
         _connections.Add(connection);
+        _factoryOf[connection] = factory;
         await connection.StartAsync();
         return connection;
     }
@@ -97,8 +99,21 @@ public sealed class GameHubTests : IDisposable
     private static async Task Barrier(HubConnection connection) =>
         await Assert.ThrowsAsync<HubException>(() => connection.InvokeAsync<string>("Join", "0000", "barrier"));
 
-    private static async Task<string> Open(HubConnection host, string setId = "genel-kultur") =>
-        await host.InvokeAsync<string>("CreateRoom", HostKey, setId);
+    /// <summary>Opens a room from <paramref name="host"/>, the way a console must: with a television it has claimed.</summary>
+    private async Task<string> Open(HubConnection host, string setId = "genel-kultur")
+    {
+        await ClaimAScreen(host);
+        return await host.InvokeAsync<string>("CreateRoom", HostKey, setId);
+    }
+
+    /// <summary>Connects a television, has it show a code, and has <paramref name="console"/> claim it.</summary>
+    private async Task<HubConnection> ClaimAScreen(HubConnection console)
+    {
+        var screen = await Connect(_factoryOf[console]);
+        var pairing = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+        await console.InvokeAsync("ClaimScreen", pairing.Code, HostKey);
+        return screen;
+    }
 
     private static async Task<HubException> Refused(Func<Task> call) => await Assert.ThrowsAsync<HubException>(call);
 
@@ -221,8 +236,10 @@ public sealed class GameHubTests : IDisposable
     {
         var factory = Factory(("QUIZ_MAX_ROOMS", "1"));
         var host = await Connect(factory);
+        await ClaimAScreen(host);
         Assert.Contains("unknown-set", (await Refused(() => host.InvokeAsync<string>("CreateRoom", HostKey, "nope"))).Message);
-        await Open(host);
+        await host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        await ClaimAScreen(host);
         Assert.Contains("too-many-rooms", (await Refused(() => host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur"))).Message);
     }
 
@@ -815,12 +832,27 @@ public sealed class GameHubTests : IDisposable
         await host.InvokeAsync("CloseQuestion", code, HostKey);
 
         var reveal = await revealed.Next();
-        Assert.Equal(["correct", "distribution", "standings"], reveal.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(["index", "correct", "distribution", "standings"], reveal.EnumerateObject().Select(p => p.Name));
+        // The phone subtracts the total it had when this question opened, so it has to be able to tell
+        // that this reveal is about that question and not a later one it never saw open.
+        Assert.Equal(0, reveal.GetProperty("index").GetInt32());
         var distribution = reveal.GetProperty("distribution");
         Assert.Equal(["hearts", "diamonds", "clubs", "spades"], distribution.EnumerateObject().Select(p => p.Name));
         Assert.Equal(1, distribution.GetProperty("clubs").GetInt32());
         Assert.Equal(0, distribution.GetProperty("hearts").GetInt32());
         Assert.Equal(["name", "score"], reveal.GetProperty("standings")[0].EnumerateObject().Select(p => p.Name));
+    }
+
+    [Fact]
+    public async Task The_television_answers_at_the_short_address_a_remote_can_type()
+    {
+        // "/tv" is the one address anybody enters on that device, and it is a route rather than a
+        // static file, so nothing else would notice if a deployment moved the web root underneath it.
+        var response = await Factory().CreateClient().GetAsync("/tv");
+
+        Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("text/html", response.Content.Headers.ContentType?.MediaType);
+        Assert.Contains("tv.js", await response.Content.ReadAsStringAsync());
     }
 
     [Fact]

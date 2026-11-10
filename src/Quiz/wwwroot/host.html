@@ -8,24 +8,36 @@
 <title>Quiz</title>
 <link rel="stylesheet" href="app.css">
 </head>
-<body class="tv">
-<!-- The TV / laptop screen: the host drives the round from here. -->
+<body class="console">
+<!--
+  The host's console: a remote control for the television, laid out for a phone held in one hand.
+  Everything the room looks at — the question, the four options, the answer, the standings — is on
+  the television (tv.html) and none of it is repeated here. What this page carries is the pacing:
+  which phase the room is in, the clock it counts down itself, how many have answered, and the
+  buttons. The information sits at the top and the buttons at the bottom, where the thumb is.
+-->
 <main class="panel">
   <div class="inner">
 
-    <div class="topbar">
+    <div class="bar">
       <span id="tag-room" hidden></span>
-      <span id="tag-question" hidden></span>
-      <span id="tag-answered" hidden></span>
-      <span class="clock" id="tag-clock" hidden></span>
       <span class="status" id="tag-connection" hidden></span>
       <span id="langs"></span>
     </div>
 
-    <!-- 1 · open a room -->
+    <!-- 1 · claim the television, then open a room on it -->
     <section class="view" id="view-setup" hidden>
       <form class="form" id="form-open" autocomplete="off">
         <h1 data-i18n="openHeading"></h1>
+        <p class="hint" id="tv-hint"></p>
+        <label class="field">
+          <span class="k" data-i18n="pairCodeLabel"></span>
+          <!-- Four digits, so a phone offers the number pad rather than a keyboard. Not required:
+               a console that already holds a screen needs no code, and one that holds none is told
+               so by the server in words rather than by a browser tooltip. -->
+          <input name="pairCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off">
+        </label>
+        <p class="status ok" id="setup-paired" hidden data-i18n="pairedAlready"></p>
         <label class="field">
           <span class="k" data-i18n="hostKeyLabel"></span>
           <input name="hostKey" type="password" autocomplete="off" required>
@@ -39,50 +51,54 @@
       </form>
     </section>
 
-    <!-- 2 · lobby -->
-    <section class="view lobby" id="view-lobby" hidden>
-      <div class="label kod" data-i18n="codeTag"></div>
-      <div class="code" id="lobby-code"></div>
-      <div class="where" id="lobby-where"></div>
-      <div class="pills" id="lobby-players"></div>
-      <p class="status" id="lobby-status" hidden></p>
-      <button class="cta go" type="button" id="start" data-i18n="startButton" hidden></button>
-    </section>
+    <!-- 2 · the room is open: what the host needs in order to act, and the buttons that act -->
+    <section class="view" id="view-run" hidden>
+      <div class="now">
+        <div class="label" id="phase"></div>
+        <div class="clock" id="tag-clock" hidden></div>
+        <div class="counts">
+          <span id="tag-question" hidden></span>
+          <span id="tag-answered" hidden></span>
+        </div>
+        <p class="detail" id="phase-detail" hidden></p>
+        <!--
+          The room has no television in it any more. It belongs here, where the host reads the room,
+          because it is the one thing on this page that has to be noticed without being looked for:
+          the console owns the pacing, so a host who does not know would go on driving a room nobody
+          can see. Every button below it stays live — closing the room, or carrying on deliberately,
+          are both the host's to choose.
+        -->
+        <div class="gone" id="display-gone" hidden role="alert">
+          <p class="label" data-i18n="displayGone"></p>
+          <p class="detail" data-i18n="displayGoneHint"></p>
+        </div>
+      </div>
 
-    <!-- 3 · a question is open -->
-    <section class="view" id="view-question" hidden>
-      <p class="paused-banner" id="paused-banner" hidden>
-        <span data-i18n="pausedBanner"></span>
-        <span class="sub" data-i18n="pausedHint"></span>
-      </p>
-      <p class="question"><span class="caret">&gt;</span> <span id="question-text"></span><span class="block">&nbsp;</span></p>
-      <div class="options" id="question-options"></div>
-    </section>
+      <div class="acts">
+        <p class="error" id="run-error" role="alert"></p>
+        <button class="cta go" type="button" id="start" hidden></button>
+        <button class="cta" type="button" id="next" hidden></button>
+        <button class="ghost" type="button" id="pause" hidden></button>
+        <button class="ghost danger" type="button" id="close-room"></button>
 
-    <!-- 4 · the question is over -->
-    <section class="view" id="view-reveal" hidden>
-      <p class="answer"><span data-i18n="correctIs"></span> <span class="glyph" id="reveal-glyph"></span> <span class="opt-text" id="reveal-text"></span></p>
-      <div class="bars" id="reveal-bars"></div>
-      <ol class="board" id="reveal-board"></ol>
-      <div class="row-end">
-        <button class="cta" type="button" id="next"></button>
+        <!--
+          A television that reloaded has fallen out of the room and shows a fresh code, asking for
+          it to be typed in: claiming it again is what puts it back. Folded away, because it is
+          needed rarely and the four buttons above are what the evening is driven with.
+        -->
+        <button class="ghost small" type="button" id="repair-open" data-i18n="rePairButton"></button>
+        <form class="repair" id="form-repair" autocomplete="off" hidden>
+          <p class="hint" data-i18n="rePairHint"></p>
+          <label class="field">
+            <span class="k" data-i18n="pairCodeLabel"></span>
+            <input name="pairCode" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" required>
+          </label>
+          <button class="ghost" type="submit" data-i18n="pairButton"></button>
+        </form>
+        <!-- Outside the form, because what it has to say most often is that the form is done with. -->
+        <p class="status" id="repair-status" hidden></p>
       </div>
     </section>
-
-    <!-- 5 · the round is over -->
-    <section class="view finished" id="view-finished" hidden>
-      <h1 data-i18n="finishedHeading"></h1>
-      <ol class="board" id="final-board"></ol>
-      <div class="row-end">
-        <button class="cta" type="button" id="new-room" data-i18n="newRoomButton"></button>
-      </div>
-    </section>
-
-    <!-- the host's controls, on this screen only: the key is what protects them -->
-    <div class="controls" id="controls" hidden>
-      <button class="ghost" type="button" id="pause" hidden></button>
-      <button class="ghost danger" type="button" id="close-room"></button>
-    </div>
 
   </div>
 </main>

@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Quiz.Game;
 using Quiz.Hosting;
 using Quiz.Hubs;
+using Quiz.Pairing;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -30,6 +31,13 @@ var createAttemptsPerMinute = Setting("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", 5);
 // Built here, not lazily in DI, so a bad value stops startup like every other limit.
 var createThrottle = new JoinThrottle(TimeProvider.System, createAttemptsPerMinute);
 
+var claimAttemptsPerMinute = Setting("QUIZ_CLAIM_ATTEMPTS_PER_MINUTE", 10);
+var claimThrottle = new JoinThrottle(TimeProvider.System, claimAttemptsPerMinute);
+// Constructed here for the same reason: PairingOptions validates itself, so a bad value stops startup.
+var pairingOptions = new PairingOptions(
+    lifetime: TimeSpan.FromSeconds(Setting("QUIZ_PAIRING_SECONDS", 120)),
+    issuesPerMinute: Setting("QUIZ_PAIRING_ISSUES_PER_MINUTE", 10));
+
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton(options);
 builder.Services.AddSingleton<IQuestionSetSource>(
@@ -39,6 +47,9 @@ builder.Services.AddSingleton<ConnectionRooms>();
 builder.Services.AddSingleton<IHostAuthorizer>(new KeyHostAuthorizer(hostKey));
 builder.Services.AddSingleton(sp => new JoinThrottle(sp.GetRequiredService<TimeProvider>(), options.JoinAttemptsPerMinute));
 builder.Services.AddKeyedSingleton(GameHub.CreateThrottleKey, createThrottle);
+builder.Services.AddKeyedSingleton(GameHub.ClaimThrottleKey, claimThrottle);
+builder.Services.AddSingleton(pairingOptions);
+builder.Services.AddSingleton<PairingStore>();
 builder.Services.AddHostedService<IdleRoomSweeper>();
 
 // Markers and phases travel as camelCase words ("hearts", "lobby"), matching the question files.
@@ -68,6 +79,11 @@ app.MapGet("/healthz", () => Results.Ok());
 // a set's id, title and language are not secret, and the questions themselves are not sent.
 app.MapGet("/sets", (IQuestionSetSource sets) =>
     Results.Ok(sets.All().Select(s => new { s.Id, s.Title, s.Language })));
+// The television's address is typed in with a remote, so the screen answers at "/tv" as well as at
+// "/tv.html". It is the one address anybody enters on that device, and ".html" is four keystrokes
+// too many on a remote control.
+app.MapGet("/tv", (IWebHostEnvironment env) =>
+    Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html"));
 app.MapHub<GameHub>("/hub");
 
 app.Run();

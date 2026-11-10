@@ -46,6 +46,21 @@
         <button class="buzz" type="button" data-marker="clubs" aria-pressed="false"><span class="glyph"></span></button>
         <button class="buzz" type="button" data-marker="spades" aria-pressed="false"><span class="glyph"></span></button>
       </div>
+
+      <!--
+        What this player earned, in the buzzers' place and only while the TV is revealing the answer.
+        The glyph and the number are sized from join.js, which scales them with the points; the wash
+        and the glow behind them are sized by the same scale.
+      -->
+      <div class="result" id="result" hidden>
+        <div class="wash"></div>
+        <div class="glow"></div>
+        <div class="mid">
+          <span class="glyph" id="result-glyph"></span>
+          <p class="pts" id="result-points"></p>
+          <p class="total" id="result-total"></p>
+        </div>
+      </div>
     </section>
 
   </div>
