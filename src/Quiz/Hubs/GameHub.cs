@@ -61,11 +61,14 @@ public sealed class GameHub(
         if (pairings.Claim(code) is not ClaimResult.Claimed claimed) throw new HubException("no-such-code");
 
         var screen = claimed.ScreenConnectionId;
-        await Clients.Client(screen).SendAsync("Paired");
+        // A connection that claims its own code would satisfy CreateRoom's "has a screen" rule with no
+        // television at all. Refused like any other code that cannot be used.
+        if (screen == Context.ConnectionId) throw new HubException("no-such-code");
 
         // False means the screen disconnected after its code was claimed: the code is spent and nothing
         // is left to drive, which is what "no such code" already says.
         if (!connections.Pair(Context.ConnectionId, screen)) throw new HubException("no-such-code");
+        await Clients.Client(screen).SendAsync("Paired");
 
         // A console that is already running a room is re-seating a television that reloaded: it must
         // see that room at once, without a key and without anything else being asked of the host. The
@@ -301,9 +304,10 @@ public sealed class GameHub(
     {
         // SignalR drops a gone connection's groups itself, so this only clears the mirror of them, which
         // would otherwise keep an entry for every connection the process has ever seen.
-        connections.Forget(Context.ConnectionId);
-        // A code nobody claimed would otherwise be claimable for a connection that no longer exists.
+        // A code nobody claimed would otherwise be claimable for a connection that no longer exists. First,
+        // so that a connection no longer reading as connected has certainly lost its code too.
         pairings.Forget(Context.ConnectionId);
+        connections.Forget(Context.ConnectionId);
         return base.OnDisconnectedAsync(exception);
     }
 

@@ -8,11 +8,12 @@ namespace Quiz.Hubs;
 /// that opens a second room — or a phone that joins one — would go on hearing the room it left, and be
 /// repainted by it. This is the memory <see cref="GameHub"/> needs to leave the old groups first.
 ///
-/// A third relationship is not about groups: a console that has claimed a pairing code remembers the
-/// screen it claimed until it opens a room, so <c>CreateRoom</c> knows which television to seat.
-///
-/// It mirrors the groups and decides nothing: a missing entry only ever means there is no old group to
-/// leave, which is also what every connection starts out as.
+/// Two parts of it are not a mirror and do decide something. A console that has claimed a pairing code
+/// remembers the screen it claimed until it opens a room, and a missing entry there means "no screen":
+/// <c>CreateRoom</c> refuses without one. <see cref="Pair"/> enforces that a screen answers to one console
+/// and that a gone screen cannot be claimed, which is why it also keeps the set of connections that are up
+/// under the same lock. The room entries (playing, hosting) remain a plain mirror: a missing one only means
+/// there is no old group to leave, which is also what every connection starts out as.
 /// </summary>
 public sealed class ConnectionRooms
 {
@@ -45,6 +46,12 @@ public sealed class ConnectionRooms
     public void Connected(string connectionId)
     {
         lock (_screenGate) _live.Add(connectionId);
+    }
+
+    /// <summary>Whether the connection is up, as far as <see cref="Connected"/> and <see cref="Forget"/> know.</summary>
+    public bool IsConnected(string connectionId)
+    {
+        lock (_screenGate) return _live.Contains(connectionId);
     }
 
     /// <summary>The screen this console has claimed and not yet opened a room on, if any.</summary>

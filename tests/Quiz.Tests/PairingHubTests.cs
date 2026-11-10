@@ -154,6 +154,31 @@ public sealed class PairingHubTests : IDisposable
     }
 
     [Fact]
+    public async Task The_claim_throttle_counts_a_wrong_key_and_answers_before_the_key_is_checked()
+    {
+        var factory = Factory(("QUIZ_CLAIM_ATTEMPTS_PER_MINUTE", "2"));
+        var attacker = await Connect(factory, "203.0.113.9");
+
+        for (var i = 0; i < 2; i++)
+            Assert.Contains("forbidden", (await Refused(() => Claim(attacker, "1000", "guess-number-" + i + "-0000"))).Message);
+
+        // Out of allowance: even another wrong guess is answered "throttled", not "forbidden".
+        Assert.Contains("throttled", (await Refused(() => Claim(attacker, "1000", "guess-number-2-0000"))).Message);
+    }
+
+    [Fact]
+    public async Task A_connection_cannot_claim_its_own_code_to_satisfy_the_no_screen_rule()
+    {
+        var factory = Factory();
+        var both = await Connect(factory);
+
+        var code = await both.InvokeAsync<string>("OpenScreen");
+        Assert.Contains("no-such-code", (await Refused(() => Claim(both, code))).Message);
+
+        Assert.Contains("no-screen", (await Refused(() => Create(both))).Message);
+    }
+
+    [Fact]
     public async Task A_screen_that_cannot_get_a_code_is_told_so_without_saying_why()
     {
         var factory = Factory(("QUIZ_PAIRING_ISSUES_PER_MINUTE", "1"));
@@ -292,15 +317,16 @@ public sealed class PairingHubTests : IDisposable
         var factory = Factory();
         var screen = await Connect(factory);
         var code = await screen.InvokeAsync<string>("OpenScreen");
+        var id = screen.ConnectionId!;
+        var connections = factory.Services.GetRequiredService<ConnectionRooms>();
+        var store = factory.Services.GetRequiredService<PairingStore>();
 
         await screen.StopAsync();
-        // Nothing observable says the server has finished with the disconnect, and looking at the code
-        // consumes it, so give it a moment and then look once: a code still held would be handed to the
-        // console as a connection that is gone.
-        await Task.Delay(500);
 
-        var console = await Connect(factory);
-        Assert.Contains("no-such-code", (await Refused(() => Claim(console, code))).Message);
+        // The hub forgets the code before it forgets the connection, so once the connection reads as gone
+        // the code must already be gone from the store itself. Looked at once, because looking consumes.
+        await Eventually(() => !connections.IsConnected(id));
+        Assert.IsType<ClaimResult.NoSuchCode>(store.Claim(code));
     }
 
     [Fact]
@@ -380,9 +406,13 @@ public sealed class PairingHubTests : IDisposable
     {
         var factory = Factory();
         var console = await Connect(factory);
+        Task<string> WrongKey() => console.InvokeAsync<string>("CreateRoom", "not-the-key-at-all-0000", "genel-kultur");
 
-        Assert.Contains("forbidden", (await Refused(() =>
-            console.InvokeAsync<string>("CreateRoom", "not-the-key-at-all-0000", "genel-kultur"))).Message);
+        Assert.Contains("forbidden", (await Refused(WrongKey)).Message);
+
+        var screen = await Connect(factory);
+        await Claim(console, await screen.InvokeAsync<string>("OpenScreen"));
+        Assert.Contains("forbidden", (await Refused(WrongKey)).Message);
     }
 
     [Fact]
@@ -450,9 +480,12 @@ public sealed class PairingHubTests : IDisposable
             factory.Services.GetRequiredService<ConnectionRooms>(),
             pairings,
             Microsoft.Extensions.Logging.Abstractions.NullLogger<Quiz.Hosting.IdleRoomSweeper>.Instance);
-        Assert.NotNull(pairings.Issue("screen-1", "client-1"));
+        var early = pairings.Issue("screen-1", "client-1")!;
+        await sweeper.SweepOnceAsync();
+        // A sweeper that freed codes unconditionally would have taken this one.
+        Assert.IsType<ClaimResult.Claimed>(pairings.Claim(early));
 
-        await sweeper.SweepOnceAsync(); // not expired yet: nothing to free
+        Assert.NotNull(pairings.Issue("screen-2", "client-1"));
         clock.Advance(TimeSpan.FromMinutes(6));
         await sweeper.SweepOnceAsync();
 

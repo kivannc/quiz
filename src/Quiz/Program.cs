@@ -35,7 +35,7 @@ var claimAttemptsPerMinute = Setting("QUIZ_CLAIM_ATTEMPTS_PER_MINUTE", 10);
 var claimThrottle = new JoinThrottle(TimeProvider.System, claimAttemptsPerMinute);
 // Constructed here for the same reason: PairingOptions validates itself, so a bad value stops startup.
 var pairingOptions = new PairingOptions(
-    lifetime: TimeSpan.FromSeconds(Setting("QUIZ_PAIRING_SECONDS", 300)),
+    lifetime: TimeSpan.FromSeconds(Setting("QUIZ_PAIRING_SECONDS", 120)),
     issuesPerMinute: Setting("QUIZ_PAIRING_ISSUES_PER_MINUTE", 10));
 
 builder.Services.AddSingleton(TimeProvider.System);
