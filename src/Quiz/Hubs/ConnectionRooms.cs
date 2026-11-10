@@ -24,6 +24,11 @@ public sealed class ConnectionRooms
     private readonly Dictionary<string, string> _screens = new(StringComparer.Ordinal);
     private readonly object _screenGate = new();
 
+    // Connections that are up, kept only so a claim cannot be recorded for a screen that has already gone:
+    // without it, a screen disconnecting between "claimed" and "paired" would leave the console holding a
+    // television that no longer exists. Guarded by _screenGate, like the links it protects.
+    private readonly HashSet<string> _live = new(StringComparer.Ordinal);
+
     /// <summary>The room this connection is seated in, if it is seated in one.</summary>
     public string? Playing(string connectionId) => _playing.GetValueOrDefault(connectionId);
 
@@ -36,6 +41,12 @@ public sealed class ConnectionRooms
     /// <summary>Makes this connection <paramref name="code"/>'s host screen and returns the room it hosted, if that was another one.</summary>
     public string? Host(string connectionId, string code) => Move(_hosting, connectionId, code);
 
+    /// <summary>Notes that a connection is up. <see cref="Forget"/> is its counterpart.</summary>
+    public void Connected(string connectionId)
+    {
+        lock (_screenGate) _live.Add(connectionId);
+    }
+
     /// <summary>The screen this console has claimed and not yet opened a room on, if any.</summary>
     public string? Screen(string consoleConnectionId)
     {
@@ -45,17 +56,21 @@ public sealed class ConnectionRooms
     /// <summary>
     /// Records that a console has claimed a screen, replacing any screen it held before. A screen answers
     /// to one console: if another console held this one, that claim is dropped, so two phones can never
-    /// both be driving the same television.
+    /// both be driving the same television. Returns false, and records nothing, if the screen has
+    /// already disconnected.
     /// </summary>
-    public void Pair(string consoleConnectionId, string screenConnectionId)
+    public bool Pair(string consoleConnectionId, string screenConnectionId)
     {
         lock (_screenGate)
         {
+            if (!_live.Contains(screenConnectionId)) return false;
+
             foreach (var (console, screen) in _screens.ToList())
             {
                 if (screen == screenConnectionId) _screens.Remove(console);
             }
             _screens[consoleConnectionId] = screenConnectionId;
+            return true;
         }
     }
 
@@ -92,6 +107,7 @@ public sealed class ConnectionRooms
         // From either side: a console that is gone has no claim, and a screen that is gone cannot be driven.
         lock (_screenGate)
         {
+            _live.Remove(connectionId);
             _screens.Remove(connectionId);
             foreach (var (console, screen) in _screens.ToList())
             {

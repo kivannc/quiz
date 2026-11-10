@@ -409,4 +409,54 @@ public sealed class PairingHubTests : IDisposable
 
         Assert.ThrowsAny<Exception>(() => factory.Server);
     }
+
+    [Fact]
+    public void A_claim_cannot_be_recorded_for_a_screen_that_has_already_disconnected()
+    {
+        var connections = new ConnectionRooms();
+        connections.Connected("screen");
+        connections.Connected("console");
+
+        // The race: the code was claimed, then the screen went away before the claim was recorded.
+        connections.Forget("screen");
+
+        Assert.False(connections.Pair("console", "screen"));
+        Assert.Null(connections.Screen("console"));
+    }
+
+    [Fact]
+    public void A_claim_on_a_live_screen_is_recorded_and_goes_with_either_side()
+    {
+        var connections = new ConnectionRooms();
+        connections.Connected("screen");
+
+        Assert.True(connections.Pair("console", "screen"));
+        Assert.Equal("screen", connections.Screen("console"));
+
+        connections.Forget("screen");
+        Assert.Null(connections.Screen("console"));
+        Assert.False(connections.Pair("console", "screen")); // and it stays gone
+    }
+
+    [Fact]
+    public async Task The_sweeper_frees_pairing_codes_that_expired_unclaimed()
+    {
+        var clock = new Microsoft.Extensions.Time.Testing.FakeTimeProvider(new DateTimeOffset(2026, 11, 10, 12, 0, 0, TimeSpan.Zero));
+        var pairings = new PairingStore(clock, new PairingOptions(TimeSpan.FromMinutes(5), 100));
+        var factory = Factory();
+        var sweeper = new Quiz.Hosting.IdleRoomSweeper(
+            factory.Services.GetRequiredService<Quiz.Game.RoomStore>(),
+            factory.Services.GetRequiredService<IHubContext<GameHub>>(),
+            factory.Services.GetRequiredService<ConnectionRooms>(),
+            pairings,
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<Quiz.Hosting.IdleRoomSweeper>.Instance);
+        Assert.NotNull(pairings.Issue("screen-1", "client-1"));
+
+        await sweeper.SweepOnceAsync(); // not expired yet: nothing to free
+        clock.Advance(TimeSpan.FromMinutes(6));
+        await sweeper.SweepOnceAsync();
+
+        // Had the sweeper not freed it, this sweep would find it and report one.
+        Assert.Equal(0, pairings.SweepExpired());
+    }
 }

@@ -63,7 +63,9 @@ public sealed class GameHub(
         var screen = claimed.ScreenConnectionId;
         await Clients.Client(screen).SendAsync("Paired");
 
-        connections.Pair(Context.ConnectionId, screen);
+        // False means the screen disconnected after its code was claimed: the code is spent and nothing
+        // is left to drive, which is what "no such code" already says.
+        if (!connections.Pair(Context.ConnectionId, screen)) throw new HubException("no-such-code");
 
         // A console that is already running a room is re-seating a television that reloaded: it must
         // see that room at once, without a key and without anything else being asked of the host. The
@@ -287,6 +289,12 @@ public sealed class GameHub(
             await groups.RemoveFromGroupAsync(id, code);
             await groups.RemoveFromGroupAsync(id, HostGroup(code));
         }
+    }
+
+    public override Task OnConnectedAsync()
+    {
+        connections.Connected(Context.ConnectionId);
+        return base.OnConnectedAsync();
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)

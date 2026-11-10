@@ -25,40 +25,46 @@ public sealed class IdleRoomSweeper(
         {
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
-                try
-                {
-                    var expired = pairings.SweepExpired();
-                    if (expired > 0) log.LogInformation("Swept {Count} expired pairing code(s)", expired);
-                }
-                catch (Exception error) when (error is not OperationCanceledException)
-                {
-                    // Expired codes are refused on access anyway, so a failed sweep costs memory, not
-                    // correctness; an exception escaping here would end the server.
-                    log.LogError(error, "Could not sweep expired pairing codes");
-                }
-
-                var removed = rooms.SweepIdle();
-                foreach (var code in removed)
-                {
-                    try
-                    {
-                        await GameHub.Ended(hub.Clients, hub.Groups, connections, code);
-                    }
-                    catch (Exception error) when (error is not OperationCanceledException)
-                    {
-                        // That room is already out of the store, so there is nothing to put back and
-                        // nothing to retry; the rooms after it still have to be told. An exception
-                        // escaping here would end this service, and with the default
-                        // BackgroundServiceExceptionBehavior that ends the server.
-                        log.LogError(error, "Could not tell room {Code} that it closed", code);
-                    }
-                }
-                if (removed.Count > 0) log.LogInformation("Swept {Count} idle room(s)", removed.Count);
+                await SweepOnceAsync();
             }
         }
         catch (OperationCanceledException)
         {
             // Shutting down.
         }
+    }
+
+    /// <summary>One pass: expired pairing codes, then idle rooms. Public so a test can run it without waiting a minute.</summary>
+    public async Task SweepOnceAsync()
+    {
+        try
+        {
+            var expired = pairings.SweepExpired();
+            if (expired > 0) log.LogInformation("Swept {Count} expired pairing code(s)", expired);
+        }
+        catch (Exception error) when (error is not OperationCanceledException)
+        {
+            // Expired codes are refused on access anyway, so a failed sweep costs memory, not
+            // correctness; an exception escaping here would end the server.
+            log.LogError(error, "Could not sweep expired pairing codes");
+        }
+
+        var removed = rooms.SweepIdle();
+        foreach (var code in removed)
+        {
+            try
+            {
+                await GameHub.Ended(hub.Clients, hub.Groups, connections, code);
+            }
+            catch (Exception error) when (error is not OperationCanceledException)
+            {
+                // That room is already out of the store, so there is nothing to put back and
+                // nothing to retry; the rooms after it still have to be told. An exception
+                // escaping here would end this service, and with the default
+                // BackgroundServiceExceptionBehavior that ends the server.
+                log.LogError(error, "Could not tell room {Code} that it closed", code);
+            }
+        }
+        if (removed.Count > 0) log.LogInformation("Swept {Count} idle room(s)", removed.Count);
     }
 }
