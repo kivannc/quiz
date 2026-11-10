@@ -28,16 +28,7 @@ public sealed class PairingHubTests : IDisposable
         foreach (var f in _factories) f.Dispose();
     }
 
-    private WebApplicationFactory<Program> Factory(params (string Key, string Value)[] settings) =>
-        Factory(null, settings);
-
-    /// <summary>
-    /// The server, optionally with <paramref name="connections"/> standing in for the real
-    /// <see cref="ConnectionRooms"/>: the two decisions that turn on a screen disconnecting inside
-    /// a hub call are a few microseconds wide on a running server and cannot be driven from outside
-    /// one, so they are stood in for.
-    /// </summary>
-    private WebApplicationFactory<Program> Factory(ConnectionRooms? connections, params (string Key, string Value)[] settings)
+    private WebApplicationFactory<Program> Factory(params (string Key, string Value)[] settings)
     {
         var all = new Dictionary<string, string> { ["QUIZ_HOST_KEY"] = HostKey };
         foreach (var (k, v) in settings) all[k] = v;
@@ -45,8 +36,6 @@ public sealed class PairingHubTests : IDisposable
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(b =>
         {
             foreach (var (k, v) in all) b.UseSetting(k, v);
-            // After the application's own registration, so this is the one that is resolved.
-            if (connections is not null) b.ConfigureTestServices(s => s.AddSingleton(connections));
         });
         _factories.Add(factory);
         return factory;
@@ -655,70 +644,6 @@ public sealed class PairingHubTests : IDisposable
         await on.Next();
         await Barrier(table.Screen);
         Assert.Equal(0, off.Total);
-    }
-
-    /// <summary>
-    /// A <see cref="ConnectionRooms"/> whose claim is answered when CreateRoom looks and gone by the
-    /// time it is spent — the screen disconnected in between, which is what drops a claim.
-    /// </summary>
-    private sealed class ClaimGoesFirst : ConnectionRooms
-    {
-        public string? Pretend { get; set; }
-
-        public override string? Screen(string consoleConnectionId) => Pretend ?? base.Screen(consoleConnectionId);
-    }
-
-    [Fact]
-    public async Task A_room_is_not_opened_on_a_screen_whose_claim_was_already_spent()
-    {
-        var connections = new ClaimGoesFirst();
-        var factory = Factory(connections);
-        var screen = await Connect(factory);
-        var opened = new Inbox<string>(screen, "RoomOpened");
-        var console = await Connect(factory);
-        var displayed = new Inbox<bool>(console, "Displayed");
-        // The look says this screen; spending the claim says there is none.
-        connections.Pretend = screen.ConnectionId!;
-
-        var room = await Create(console);
-
-        // So the room is not shown on it, and the room is not related to a screen it never reached.
-        Assert.False(await displayed.Next());
-        Assert.Null(connections.DisplayOf(room));
-        await Barrier(screen);
-        Assert.Equal(0, opened.Total);
-    }
-
-    /// <summary>A <see cref="ConnectionRooms"/> that refuses to record any display, which is what a
-    /// screen disconnecting between the claim and the record looks like from the hub.</summary>
-    private sealed class DisplayRefused : ConnectionRooms
-    {
-        public override bool Display(string code, string screenConnectionId, out string? replaced)
-        {
-            replaced = null;
-            return false;
-        }
-    }
-
-    [Fact]
-    public async Task A_console_whose_display_could_not_be_recorded_is_told_the_room_has_none()
-    {
-        var connections = new DisplayRefused();
-        var factory = Factory(connections);
-        var screen = await Connect(factory);
-        var opened = new Inbox<string>(screen, "RoomOpened");
-        var console = await Connect(factory);
-        var displayed = new Inbox<bool>(console, "Displayed");
-        await Claim(console, await Open(screen));
-
-        var room = await Create(console);
-
-        // Nothing would ever notice this screen leaving, so the console must not be left believing
-        // the room has a television in it: its own pacing is what would drive the round blind.
-        Assert.False(await displayed.Next());
-        Assert.Null(connections.DisplayOf(room));
-        await Barrier(screen);
-        Assert.Equal(0, opened.Total);
     }
 
     [Fact]

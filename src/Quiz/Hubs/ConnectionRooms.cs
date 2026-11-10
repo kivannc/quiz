@@ -16,12 +16,8 @@ namespace Quiz.Hubs;
 /// the moment the claim is spent: that is the only thing that relates a room back to its television, so it
 /// is what notices one leaving. The room entries (playing, hosting) remain a plain mirror: a missing one
 /// only means there is no old group to leave, which is also what every connection starts out as.
-///
-/// Not sealed, and two of its members are virtual, only so a test can stand in for them: both
-/// decisions that turn on a screen disconnecting inside a hub call are a few microseconds wide on a
-/// running server and cannot be driven from outside one.
 /// </summary>
-public class ConnectionRooms
+public sealed class ConnectionRooms
 {
     private readonly ConcurrentDictionary<string, string> _playing = new();
     private readonly ConcurrentDictionary<string, string> _hosting = new();
@@ -76,7 +72,7 @@ public class ConnectionRooms
     }
 
     /// <summary>The screen this console has claimed and not yet opened a room on, if any.</summary>
-    public virtual string? Screen(string consoleConnectionId)
+    public string? Screen(string consoleConnectionId)
     {
         lock (_screenGate) return _screens.GetValueOrDefault(consoleConnectionId);
     }
@@ -134,7 +130,7 @@ public class ConnectionRooms
     /// same screen is being seated into it again. It is always a connection that is up: the guard
     /// above records no other kind, and <see cref="Forget"/> takes the entry out with the screen.
     /// </summary>
-    public virtual bool Display(string code, string screenConnectionId, out string? replaced)
+    public bool Display(string code, string screenConnectionId, out string? replaced)
     {
         lock (_screenGate)
         {

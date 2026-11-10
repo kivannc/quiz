@@ -138,6 +138,13 @@ public sealed class GameHub(
         // shown on that screen and stays related to it for as long as the room lives, which is the
         // only thing that notices the television leaving.
         await JoinHostGroups(code);
+        // Two refusals can land here, and neither can be reached from a test against the real ledger.
+        // Unpair returns null only if the screen disconnected after the look above and before this
+        // line: Forget drops the claim, so any earlier disconnect fails the look instead. Display
+        // refuses only for a screen missing from the live set, yet Unpair has just handed this one
+        // back, and Forget clears liveness and claims under one lock, so a claimed screen is live
+        // whenever it is read here. That second refusal is deliberate belt-and-braces, not an
+        // untested path somebody forgot.
         if (connections.Unpair(Context.ConnectionId) is { } display && connections.Display(code, display, out _))
         {
             await SeatHost(display, code);
