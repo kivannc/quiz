@@ -15,9 +15,11 @@
  * Which is why "Displayed" matters here more than anywhere: owning the pacing means that if the
  * television falls out of the room and nothing says so, this page asks, closes and advances
  * questions in front of nobody. So it is a state and not a moment: while this page believes the
- * room has no television in it, nothing here arms a beat or a tick, however many times the host
- * steps the round by hand. Every control stays live; the automation does not come back until the
- * display does.
+ * room has no television in it, nothing here moves the round on of its own accord, however many
+ * times the host steps it by hand. The clock is the exception, and deliberately: it goes on
+ * counting the room's own deadline down, because the host has to know where the question stands;
+ * what it does not do is act when it gets to zero. Every control stays live; the round starts
+ * carrying itself again when the display comes back.
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
@@ -133,42 +135,33 @@ let deadline = 0;
 let ticker = 0;
 // What was left of the clock when it was frozen, in milliseconds; 0 when it is running.
 let frozen = 0;
-/*
- * Whether the question's clock is spending time — which is not the same as having a ticker. A
- * console that has no television in the room still has a deadline, and still says how long is left,
- * because the host needs to know where the question stands; what it does not have is the tick that
- * would reach that deadline and close the question in front of nobody.
- */
-let running = false;
 
 function stopCountdown() {
   clearInterval(ticker);
   ticker = 0;
   deadline = 0;
   frozen = 0;
-  running = false;
-}
-
-function startCountdown(index, at) {
-  stopCountdown();
-  deadline = at;
-  running = true;
-  rememberDeadline(index, at);
-  drawClock();
-  startTicking();
 }
 
 /*
- * Starts the tick for a deadline that is already running, and only while the room has a television
- * in it: reaching zero is what closes the question, and nothing on this page closes a question the
- * room has not seen. The deadline is untouched, so the tick a returning display starts is the one
- * the question has been counting towards all along, never a fresh limit.
+ * The clock runs whether or not the room has a television in it, and it is the room's own deadline
+ * it counts down: the number here is the number over there, so a host whose screen has dropped out
+ * still knows where the question stands rather than reading a picture of when it dropped.
+ *
+ * What a room nobody can see does not get is the act at zero. Closing the question is the guarded
+ * part, not the counting — so the tick reaches the deadline, paints it and stays there until the
+ * display comes back, and then closes on the very next tick. Which is why a live question needs no
+ * re-arming when a television is re-seated: its clock never stopped. Stopping it is what freezing
+ * does, and freezing belongs to the pause alone.
  */
-function startTicking() {
-  if (ticker || !running || !state.display) return;
+function startCountdown(index, at) {
+  stopCountdown();
+  deadline = at;
+  rememberDeadline(index, at);
+  drawClock();
   ticker = setInterval(() => {
     drawClock();
-    if (Date.now() >= deadline) {
+    if (Date.now() >= deadline && state.display) {
       stopCountdown();
       closeQuestion();
     }
@@ -181,11 +174,10 @@ function startTicking() {
  * room stopped, so it is a shade short, which is the safe direction.
  */
 function freezeCountdown() {
-  if (!running) return;
+  if (!ticker) return;
   frozen = Math.max(0, deadline - Date.now());
   clearInterval(ticker);
   ticker = 0;
-  running = false;
   forgetDeadline();
   drawClock(frozen);
 }
@@ -195,14 +187,14 @@ function freezeCountdown() {
  * what was left is nothing, because a question frozen at zero still has to close, and the next tick
  * is what does it. This page has no other way to close a question by hand.
  *
- * A clock that is already running is what tells a frozen one from one that was never frozen, since
- * zero left and never frozen both read as `frozen === 0`: freezing always stops it, so a console
- * whose clock is still spending time has nothing to thaw. Without that, a stray resume — a second
- * console on the same key, or one that lands between a reload's QuestionStarted and its Paused —
- * would restart the countdown with nothing on it and close a running question a tick later.
+ * A running ticker is what tells a frozen clock from one that was never frozen, since zero left and
+ * never frozen both read as `frozen === 0`: freezing always stops the ticker, so a console with one
+ * still running has nothing to thaw. Without that, a stray resume — a second console on the same
+ * key, or one that lands between a reload's QuestionStarted and its Paused — would restart the
+ * countdown with nothing on it and close a running question a tick later.
  */
 function thawCountdown() {
-  if (!state.question || running) return;
+  if (!state.question || ticker) return;
   const left = frozen;
   frozen = 0;
   startCountdown(state.question.index, Date.now() + left);
@@ -271,21 +263,21 @@ function armNextUp() {
 }
 
 /*
- * The room can be seen again, so what this phase wants running starts now. Not a resume: a paused
- * room stays paused until the host presses the button, because the host is the one who knows the
- * room is looking at the television again. A live question gets its own deadline back — the one a
- * reload resumes from, never the full limit — and a reveal gets its beat from this moment, because
- * the television has only just begun painting the answer. Called for every "Displayed true", and
- * safe to call twice: neither the tick nor either beat is armed a second time.
+ * The room can be seen again, so the beat this phase wants starts now. The clock is not here: a
+ * live question's has been counting the room's own deadline down all along, and the display coming
+ * back is enough for the next tick to close it — including one whose time went while the screen was
+ * away. What is left to arm is the beat the room may have earned while nobody could see it: the
+ * last tap can have landed with the screen gone, and no further AnswerCount is coming to say so.
+ *
+ * Not a resume: a paused room stays paused and its clock stays frozen until the host presses the
+ * button, because the host is the one who knows the room is looking at the television again — which
+ * is what everyoneIsIn() asks for the question, and what leaves a paused one alone here. A reveal
+ * gets its beat from this moment, because the television has only just begun painting the answer.
+ * Called for every "Displayed true", and safe to call twice: neither beat is armed a second time.
  */
 function rearm() {
-  if (state.view === 'question') {
-    if (state.paused) return;
-    startTicking();
-    if (everyoneIsIn()) armEveryoneIn();
-  } else if (state.view === 'reveal') {
-    armNextUp();
-  }
+  if (everyoneIsIn()) armEveryoneIn();
+  else if (state.view === 'reveal') armNextUp();
 }
 
 /* ---------- hub ---------- */
@@ -357,24 +349,31 @@ conn.on('Paused', (paused) => {
  * being told it would go on pacing a round nobody can see: the countdown would reach zero, close
  * question one, and six seconds later open question two in front of nothing.
  *
- * It is state, not a moment. While it is false nothing on this page arms a beat or a tick for
- * itself — not this handler's cancel, which only clears what was already armed, but every arming
- * function, which asks state.display first. That is what holds for the rest of the round: one
- * press of resume or next moves the round by exactly that one press, and never hands the pacing
- * back. The host keeps every control, because stepping a displayless round deliberately is the
- * host's to choose; what is gone is the console doing it on its own.
+ * It is state, not a moment. While it is false nothing on this page moves the round on for itself —
+ * not this handler's cancel, which only clears what was already armed, but both beats, which ask
+ * state.display before arming, and the tick, which asks it before closing a question at zero. That
+ * is what holds for the rest of the round: one press of resume or next moves the round by exactly
+ * that one press, and never hands the pacing back. The host keeps every control, because stepping
+ * a displayless round deliberately is the host's to choose; what is gone is the console doing it
+ * on its own.
  *
- * Coming back is not resuming, but it is what re-arms: whatever the phase legitimately wants
- * running starts again, and a paused room stays paused for the host to resume.
+ * What this does not touch is the clock. Freezing is the pause's job and nothing else's — and in
+ * the ordinary way of losing a television the clock does freeze, because the server pauses the room
+ * and the Paused that follows is what stops it. A host who resumes anyway, with the screen still
+ * gone, keeps a clock that counts: it is the room's deadline, the room is spending it, and the
+ * number here is the number the television would be showing. Freezing it here instead would have
+ * shown an optimistic one and, worse, left nothing able to reach zero afterwards.
+ *
+ * Coming back is not resuming, but it is what re-arms the beats; the clock needs nothing, having
+ * never stopped.
  */
 conn.on('Displayed', (present) => {
   state.display = Boolean(present);
   if (state.display) {
     rearm();
   } else {
-    // Mid-question the Paused that comes with this freezes the clock too; in a reveal there is
-    // nothing to pause, and cancelling the beat is the only thing between here and a blind advance.
-    freezeCountdown();
+    // All that is left to do: a beat already armed would otherwise close or advance in front of
+    // nobody. The clock goes on, and the tick is what asks before acting.
     cancelPacing();
   }
   render();

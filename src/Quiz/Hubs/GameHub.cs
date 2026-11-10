@@ -106,6 +106,11 @@ public sealed class GameHub(
             // never a television the room does not have. And nothing else: a round stopped when the
             // display went stays stopped, because the host is the one who knows the room is looking
             // at it again.
+            //
+            // Last, unlike the one in ResumeHost: nothing above repaints a console, so there is no
+            // arming to get ahead of here — and a replaced television is still in the host group
+            // until Unseat takes it out, so sending this any earlier would send a screen a message
+            // it has no handler for.
             await Consoles(hosted).SendAsync("Displayed", connections.DisplayOf(hosted) is not null);
         }
     }
@@ -138,13 +143,16 @@ public sealed class GameHub(
         // shown on that screen and stays related to it for as long as the room lives, which is the
         // only thing that notices the television leaving.
         await JoinHostGroups(code);
-        // Two refusals can land here, and neither can be reached from a test against the real ledger.
-        // Unpair returns null only if the screen disconnected after the look above and before this
-        // line: Forget drops the claim, so any earlier disconnect fails the look instead. Display
-        // refuses only for a screen missing from the live set, yet Unpair has just handed this one
-        // back, and Forget clears liveness and claims under one lock, so a claimed screen is live
-        // whenever it is read here. That second refusal is deliberate belt-and-braces, not an
-        // untested path somebody forgot.
+        // Two refusals can land here, and neither can be reached from a test against the real ledger:
+        // both are the same race — this console's screen disconnecting partway through this very
+        // method — caught between two separate takings of _screenGate, which is the one lock under
+        // which Forget drops a screen's claim and its liveness together.
+        // Unpair returns null when the screen went after the Screen look above, the guard that
+        // spends nothing. Display refuses when it went after Unpair handed the screen back, since
+        // by then the claim is gone and released and only the live set is left to read. The second
+        // window is the narrower of the two, not a different kind of thing. Both refusals are
+        // deliberate belt-and-braces, not untested paths somebody forgot, and both end in the same
+        // honest "Displayed false" below.
         if (connections.Unpair(Context.ConnectionId) is { } display && connections.Display(code, display, out _))
         {
             await SeatHost(display, code);
@@ -193,13 +201,16 @@ public sealed class GameHub(
         var room = HostRoom(code, hostKey);
         await JoinHostGroups(code);
 
+        // Whether the room still has a television in it, which a console that has been away cannot
+        // know and has to: its own pacing is what would otherwise advance a room nobody can see.
+        // Before the repaint, because a console starts out believing the room has one and it is the
+        // repaint that arms its pacing — the question arms the countdown, the reveal arms the beat
+        // that opens the next one. Told afterwards, there is a message's worth of room in which it
+        // paces a room it has not yet heard nobody can see.
+        await Clients.Caller.SendAsync("Displayed", connections.DisplayOf(code) is not null);
         // Each accessor takes the room's lock on its own, so a phase that moves on mid-call means a
         // slightly stale paint, which the next broadcast corrects. Nothing here can get it wrong.
         await Repaint(room, Clients.Caller);
-        // Whether the room still has a television in it, which a console that has been away cannot
-        // know and has to: its own pacing is what would otherwise advance a room nobody can see.
-        // After the repaint, so it lands on a console that has just been shown a reveal.
-        await Clients.Caller.SendAsync("Displayed", connections.DisplayOf(code) is not null);
     }
 
     // Paints whatever is on a host screen now onto one connection, and only that one.

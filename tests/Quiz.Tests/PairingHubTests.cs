@@ -5,7 +5,6 @@ using System.Threading.Channels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Quiz.Hubs;
 using Quiz.Pairing;
@@ -617,6 +616,53 @@ public sealed class PairingHubTests : IDisposable
         var gone = new Inbox<bool>(again, "Displayed");
         await again.InvokeAsync("ResumeHost", table.Room, HostKey);
         Assert.False(await gone.Next());
+    }
+
+    // The order the messages of one resume arrive in, by method name: the console arms its pacing
+    // from the room it is shown, and "Displayed" is what says whether that pacing may act.
+    private static Inbox<string> Sequence(HubConnection c, params string[] methods) =>
+        new(record =>
+        {
+            foreach (var method in methods)
+            {
+                var name = method;
+                c.On<JsonElement?>(name, _ => record(name));
+            }
+        });
+
+    [Fact]
+    public async Task A_resumed_console_hears_about_the_display_before_the_question_it_is_resuming_into()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        await table.Console.InvokeAsync("StartRound", table.Room, HostKey);
+
+        var returning = await Connect(factory);
+        var order = Sequence(returning, "Displayed", "QuestionStarted");
+        await returning.InvokeAsync("ResumeHost", table.Room, HostKey);
+
+        // A console starts out believing the room has a television in it, and QuestionStarted is
+        // what arms its countdown: told second, there is a message's worth of room — one 200 ms
+        // tick — in which it paces a room it has not yet been told nobody can see.
+        Assert.Equal("Displayed", await order.Next());
+        Assert.Equal("QuestionStarted", await order.Next());
+    }
+
+    [Fact]
+    public async Task A_resumed_console_hears_about_the_display_before_the_reveal_it_is_resuming_into()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        await table.Console.InvokeAsync("StartRound", table.Room, HostKey);
+        await table.Console.InvokeAsync("CloseQuestion", table.Room, HostKey);
+
+        var returning = await Connect(factory);
+        var order = Sequence(returning, "Displayed", "Revealed");
+        await returning.InvokeAsync("ResumeHost", table.Room, HostKey);
+
+        // Same gap in the other phase: Revealed is what arms the beat that opens the next question.
+        Assert.Equal("Displayed", await order.Next());
+        Assert.Equal("Revealed", await order.Next());
     }
 
     [Fact]
