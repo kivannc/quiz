@@ -1,0 +1,237 @@
+{
+  "id": "hayvanlar",
+  "title": "Hayvanlar",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "hv-01",
+      "text": "Hangi kuş uçamaz?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kartal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Serçe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Martı"
+        },
+        {
+          "marker": "spades",
+          "text": "Penguen"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-02",
+      "text": "Karada yaşayan en büyük hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zürafa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gergedan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fil"
+        },
+        {
+          "marker": "spades",
+          "text": "Su aygırı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-03",
+      "text": "En uzun boyunlu hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zürafa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Deve"
+        },
+        {
+          "marker": "clubs",
+          "text": "At"
+        },
+        {
+          "marker": "spades",
+          "text": "Lama"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-04",
+      "text": "En hızlı kara hayvanı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Aslan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çita"
+        },
+        {
+          "marker": "clubs",
+          "text": "At"
+        },
+        {
+          "marker": "spades",
+          "text": "Antilop"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-05",
+      "text": "Yavrusunu karnındaki kesede taşıyan hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Panda"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zebra"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tembel hayvan"
+        },
+        {
+          "marker": "spades",
+          "text": "Kanguru"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-06",
+      "text": "Ahtapotun kaç kolu vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "On"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-07",
+      "text": "Yunuslar hangi hayvan grubundandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Memeli"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Balık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sürüngen"
+        },
+        {
+          "marker": "spades",
+          "text": "Amfibi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-08",
+      "text": "Bir arı kovanında yumurtaları kim bırakır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İşçi arı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kraliçe arı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Erkek arı"
+        },
+        {
+          "marker": "spades",
+          "text": "Bekçi arı"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-09",
+      "text": "Devenin hörgücünde ne depolanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Su"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kas"
+        },
+        {
+          "marker": "spades",
+          "text": "Yağ"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-10",
+      "text": "Kurbağa yavrusuna ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İribaş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Larva"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tırtıl"
+        },
+        {
+          "marker": "spades",
+          "text": "Koza"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}

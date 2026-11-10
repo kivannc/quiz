@@ -830,11 +830,12 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
         var sets = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-        Assert.Equal(9, sets.GetArrayLength());
+        Assert.Equal(13, sets.GetArrayLength());
         Assert.Equal(
             [
                 "atasozleri-ve-deyimler", "bilim-ve-doga", "cografya", "edebiyat", "genel-kultur",
-                "muzik-ve-film", "spor", "tarih", "yemek-ve-mutfak",
+                "hayvanlar", "icatlar-ve-teknoloji", "muzik-ve-film", "sanat-ve-mimari",
+                "sayilar-ve-mantik", "spor", "tarih", "yemek-ve-mutfak",
             ],
             sets.EnumerateArray().Select(set => set.GetProperty("id").GetString()).Order(StringComparer.Ordinal));
 
