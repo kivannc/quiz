@@ -121,12 +121,10 @@ conn.on('Seated', (name, score) => {
   state.name = name;
   state.score = score;
   if (state.phase === 'join') state.phase = 'lobby';
-  // A seat handed back mid-round comes with the score it already has, and during a reveal that score
-  // already includes the points being revealed. Nothing here can tell those points apart from the
-  // total, so the result screen says it does not know rather than showing a number that would be
-  // wrong; the next question makes it knowable again.
-  state.baseline = null;
-  state.reveal = null;
+  // A seat handed back mid-round comes with the score it already has, which during a reveal already
+  // includes the points being revealed: the total in memory is no longer a before. What was stored
+  // when the question opened still is, and the reveal says which question it belongs to.
+  clearResult();
   remember();
   render();
 });
@@ -152,8 +150,7 @@ conn.on('RoomClosed', () => {
   state.index = null;
   state.pending = null;
   state.chosen = null;
-  state.baseline = null;
-  state.reveal = null;
+  clearResult();
   state.paused = false;
   state.error = '';
   state.notice = t('roomClosed');
@@ -198,8 +195,7 @@ conn.on('Revealed', (reveal) => {
 conn.on('RoundFinished', (standings) => {
   state.phase = 'finished';
   state.paused = false;
-  state.baseline = null;
-  state.reveal = null;
+  clearResult();
   takeScore(standings);
   render();
 });
@@ -222,6 +218,15 @@ conn.onclose(() => {
   render();
 });
 
+/*
+ * The result and the total it would be worked out from both belong to one question, so they go
+ * together: out of a seat handed back, out of a round that has ended, out of a room that has closed.
+ */
+function clearResult() {
+  state.baseline = null;
+  state.reveal = null;
+}
+
 /* The standings are the only place a player's own score comes from. */
 function takeScore(standings) {
   const mine = (standings ?? []).find((player) => player.name === state.name);
@@ -236,23 +241,27 @@ function unnumbered() {
 /*
  * This player's own result for the question that just closed: the suit they tapped, and what it
  * earned. A reveal carries totals, so the points are the difference from the total this phone had
- * before the question opened. While the page has been watching, that total is in memory and the
- * answer is certain. After a reload or a rejoin it is not, and the stored one stands in: it was
- * written when a question opened, but nothing in a reveal says which question it is answering, so
- * it is only trusted when this phone's own answer is among the ones this reveal counted. A phone
- * that sat out a whole question has neither, and shows the result without a number.
+ * before that question opened — and the only safe way to use such a total is to know which question
+ * it was taken for, because a phone that missed a question opening (a locked screen, a dropped
+ * socket) still holds the one before it, and subtracting that would hand the player a confident
+ * number made of two questions. So both the total in memory and the one in storage are used only
+ * when they were taken for the question this reveal is closing. Anything else shows no number.
  */
 function resultOf(reveal) {
   const mine = (reveal.standings ?? []).find((player) => player.name === state.name);
   if (!mine) return unnumbered();
 
-  if (state.baseline !== null) return earnedFrom(mine.score - state.baseline, state.chosen);
+  // What this page watched open. A tap the room took but has not acknowledged yet is still this
+  // player's answer, so the suit comes from the tap in flight when there is one.
+  if (state.baseline !== null && state.index === reveal.index) {
+    return earnedFrom(mine.score - state.baseline, state.chosen ?? state.pending);
+  }
 
+  // Nothing in memory for this question: the figure written when it opened stands in, which is what
+  // carries a reload through the reveal.
   const open = recallOpen();
-  if (!open) return unnumbered();
-  const marker = recallTap(open.index);
-  if (marker && !(reveal.distribution?.[marker] > 0)) return unnumbered();
-  return earnedFrom(mine.score - open.baseline, marker);
+  if (!open || open.index !== reveal.index) return unnumbered();
+  return earnedFrom(mine.score - open.baseline, recallTap(open.index));
 }
 
 function earnedFrom(points, marker) {
@@ -414,10 +423,15 @@ function paintResult(result) {
     ? (Math.min(Math.max(result.points, POINTS_FLOOR), POINTS_CEILING) - POINTS_FLOOR) / (POINTS_CEILING - POINTS_FLOOR)
     : 0;
 
-  // The suit's own colour, and the wash and the glow in it, belong to an answer that earned something.
-  if (earned && result.marker) box.dataset.marker = result.marker;
+  // Colour belongs to the suit, so a result with no suit to name has no wash and no glow — but it
+  // keeps the size its score earned, and the plain colour of a number that counted. Grey is kept for
+  // a result that earned nothing, where it agrees with the number beside it.
+  const tinted = earned && Boolean(result.marker);
+  if (tinted) box.dataset.marker = result.marker;
   else delete box.dataset.marker;
-  box.style.setProperty('--o', earned ? between(WASH, fraction).toFixed(3) : '0');
+  if (earned) box.dataset.earned = '';
+  else delete box.dataset.earned;
+  box.style.setProperty('--o', tinted ? between(WASH, fraction).toFixed(3) : '0');
 
   glyph.hidden = !result.marker;
   if (result.marker) {

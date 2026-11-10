@@ -427,9 +427,10 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
   color: var(--muted);
   letter-spacing: .1em;
 }
-/* No suit colour means nothing was earned: the tap is still shown, but faintly, and in grey. */
+/* A tap that earned nothing keeps its shape but loses its colour, and the number agrees with it:
+   grey marks nothing earned, never merely nothing to colour. */
 .phone .result:not([data-marker]) .glyph { color: var(--dim); opacity: .45; }
-.phone .result:not([data-marker]) .pts { color: var(--muted); }
+.phone .result:not([data-earned]) .pts { color: var(--muted); }
 
 @media (prefers-reduced-motion: no-preference) {
   .phone .result .mid { animation: result-in .22s ease-out both; }

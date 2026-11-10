@@ -10,7 +10,14 @@ public sealed record PlayerView(string Name, int Score);
 
 public sealed record QuestionView(int Index, int Total, string Text, IReadOnlyList<Option> Options, int LimitSeconds);
 
+/// <summary>
+/// What a closed question looks like to every screen. <paramref name="Index"/> is the question it
+/// closes, counted the way <see cref="QuestionView"/> counts: a reveal carries totals rather than
+/// the points just earned, so a phone works out what it earned by subtracting the total it had
+/// before that question — and the index is the only thing that says which question that was.
+/// </summary>
 public sealed record RevealView(
+    int Index,
     Marker Correct,
     IReadOnlyDictionary<Marker, int> Distribution,
     IReadOnlyList<PlayerView> Standings);
@@ -278,6 +285,7 @@ public sealed class Room
 
 
             _reveal = new RevealView(
+                _questionIndex,
                 _set.Questions[_questionIndex].Correct,
                 new ReadOnlyDictionary<Marker, int>(distribution),
                 Standings); // the lock is reentrant; Standings owns the ordering rule

@@ -381,6 +381,22 @@ public sealed class RoomTests
     }
 
     [Fact]
+    public void CloseQuestion_names_the_question_it_closes()
+    {
+        var room = StartedRoom("Ada");
+
+        Assert.Equal(0, room.CloseQuestion().Index);
+        Assert.True(room.Advance());
+        Assert.Equal(1, room.CloseQuestion().Index);
+        Assert.True(room.Advance());
+        Assert.Equal(2, room.CloseQuestion().Index);
+
+        // The same counting QuestionStarted uses, because the phone matches one against the other to
+        // know whether the total it kept belongs to the question being revealed.
+        Assert.Equal(2, room.CurrentQuestion!.Index);
+    }
+
+    [Fact]
     public void CloseQuestion_with_no_answers_reports_all_four_markers_at_zero()
     {
         var room = StartedRoom("Ada");

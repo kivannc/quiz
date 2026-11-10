@@ -815,7 +815,10 @@ public sealed class GameHubTests : IDisposable
         await host.InvokeAsync("CloseQuestion", code, HostKey);
 
         var reveal = await revealed.Next();
-        Assert.Equal(["correct", "distribution", "standings"], reveal.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(["index", "correct", "distribution", "standings"], reveal.EnumerateObject().Select(p => p.Name));
+        // The phone subtracts the total it had when this question opened, so it has to be able to tell
+        // that this reveal is about that question and not a later one it never saw open.
+        Assert.Equal(0, reveal.GetProperty("index").GetInt32());
         var distribution = reveal.GetProperty("distribution");
         Assert.Equal(["hearts", "diamonds", "clubs", "spades"], distribution.EnumerateObject().Select(p => p.Name));
         Assert.Equal(1, distribution.GetProperty("clubs").GetInt32());

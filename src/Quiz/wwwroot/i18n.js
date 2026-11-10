@@ -35,7 +35,7 @@ const STRINGS = {
     scoreOf: (score) => `${score} p`,
     // The result screen, shown while the TV reveals the answer.
     pointsEarned: (points) => `+${points}`,
-    totalScore: (score) => `TOPLAM ${score}`,
+    totalScore: (score) => `TOPLAM ${grouped(score)}`,
 
     // --- TV ---
     hostTitle: 'Quiz — Sunucu',
@@ -98,7 +98,7 @@ const STRINGS = {
     scoreOf: (score) => `${score} p`,
     // The result screen, shown while the TV reveals the answer.
     pointsEarned: (points) => `+${points}`,
-    totalScore: (score) => `TOTAL ${score}`,
+    totalScore: (score) => `TOTAL ${grouped(score)}`,
 
     // --- TV ---
     hostTitle: 'Quiz — Host',
@@ -141,6 +141,15 @@ const STRINGS = {
     errGeneric: 'something went wrong, try again',
   },
 };
+
+/**
+ * Thousands split by a space, as the running total is written on the phone's result screen: 3 480.
+ * The space is non-breaking, so the number never wraps in the middle of itself, and it is a space
+ * rather than a dot or a comma because those swap meaning between the two languages.
+ */
+function grouped(n) {
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+}
 
 /** Two digits, so the TV's counters and countdown do not jump about. */
 function pad(n) {
