@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Quiz.Game;
+using Quiz.Pairing;
 
 namespace Quiz.Hubs;
 
@@ -17,26 +18,75 @@ namespace Quiz.Hubs;
 /// <see cref="Room"/> is strict about phases and throws when asked for something that makes no sense. A double-clicked
 /// button or a reloaded page re-sending an action is normal here, so host actions check the phase first and quietly
 /// ignore what does not apply. Failures a page can act on are <see cref="HubException"/>s with a short code.
+///
+/// Screens and consoles: the television shows nothing but a pairing code (<see cref="OpenScreen"/>) and
+/// the host's phone, the console, claims it (<see cref="ClaimScreen"/>). The console keeps that claim
+/// until it opens a room, and <see cref="CreateRoom"/> then seats both connections in the room's host
+/// groups, so every host-bound message reaches the screen and the console alike.
 /// </summary>
 public sealed class GameHub(
     RoomStore rooms,
     IHostAuthorizer hosts,
     ConnectionRooms connections,
     JoinThrottle joinThrottle,
-    [FromKeyedServices(GameHub.CreateThrottleKey)] JoinThrottle createThrottle) : Hub
+    [FromKeyedServices(GameHub.CreateThrottleKey)] JoinThrottle createThrottle,
+    PairingStore pairings,
+    [FromKeyedServices(GameHub.ClaimThrottleKey)] JoinThrottle claimThrottle) : Hub
 {
     public const string CreateThrottleKey = "create-room";
+    public const string ClaimThrottleKey = "claim-screen";
 
     private const int MaxNameLength = 24;
 
     private static string HostGroup(string code) => code + ":host";
 
-    /// <summary>Opens a room and returns its code. Throws "throttled", "forbidden", "unknown-set" or "too-many-rooms".</summary>
+    /// <summary>
+    /// Gives a television a four-digit pairing code to show. The only failure is "pairing-unavailable",
+    /// which covers both a throttled caller and a full code space: the screen cannot act on the
+    /// difference, so it is not told one.
+    /// </summary>
+    public Task<string> OpenScreen() =>
+        Task.FromResult(pairings.Issue(Context.ConnectionId, ClientKey()) ?? throw new HubException("pairing-unavailable"));
+
+    /// <summary>
+    /// Makes the caller the console of the screen showing <paramref name="code"/>. Throws "throttled",
+    /// "forbidden" or "no-such-code". The key is checked before the code is looked up, and a wrong key
+    /// leaves the code untouched, so neither can be used to learn which codes are live — and the attempts
+    /// are counted per client, because a hit does not merely reveal a code, it takes the television.
+    /// </summary>
+    public async Task ClaimScreen(string code, string hostKey)
+    {
+        if (!claimThrottle.Allow(ClientKey())) throw new HubException("throttled");
+        if (!hosts.IsHost(hostKey)) throw new HubException("forbidden");
+        if (pairings.Claim(code) is not ClaimResult.Claimed claimed) throw new HubException("no-such-code");
+
+        var screen = claimed.ScreenConnectionId;
+        await Clients.Client(screen).SendAsync("Paired");
+
+        connections.Pair(Context.ConnectionId, screen);
+
+        // A console that is already running a room is re-seating a television that reloaded: it must
+        // see that room at once, without a key and without anything else being asked of the host. The
+        // claim above stays, so the same console can still open a new room on this screen afterwards.
+        if (connections.Hosting(Context.ConnectionId) is { } hosted && rooms.Find(hosted) is { } room)
+        {
+            await SeatHost(screen, hosted);
+            await Clients.Client(screen).SendAsync("RoomOpened", hosted);
+            await Repaint(room, Clients.Client(screen));
+        }
+    }
+
+    /// <summary>
+    /// Opens a room and returns its code. Throws "throttled", "forbidden", "no-screen", "unknown-set" or
+    /// "too-many-rooms". A room is only ever opened on a claimed screen, because the question and its
+    /// options are shown nowhere else.
+    /// </summary>
     public async Task<string> CreateRoom(string hostKey, string setId)
     {
         // Counted before the key is checked, so guessing the key is what gets limited.
         if (!createThrottle.Allow(ClientKey())) throw new HubException("throttled");
         if (!hosts.IsHost(hostKey)) throw new HubException("forbidden");
+        var screen = connections.Screen(Context.ConnectionId) ?? throw new HubException("no-screen");
 
         var code = rooms.Create(setId) switch
         {
@@ -45,7 +95,12 @@ public sealed class GameHub(
             _ => throw new HubException("unknown-set"),
         };
 
+        // The claim is spent only now, so a refused set or a full server leaves it for the retry.
+        connections.Unpair(Context.ConnectionId);
         await JoinHostGroups(code);
+        await SeatHost(screen, code);
+        // The screen has only ever been told "Paired", and a room code is not in any host-bound message.
+        await Clients.Client(screen).SendAsync("RoomOpened", code);
         return code;
     }
 
@@ -83,7 +138,13 @@ public sealed class GameHub(
 
         // Each accessor takes the room's lock on its own, so a phase that moves on mid-call means a
         // slightly stale paint, which the next broadcast corrects. Nothing here can get it wrong.
-        await Clients.Caller.SendAsync("RoomState", room.Players, PhaseName(room.Phase));
+        await Repaint(room, Clients.Caller);
+    }
+
+    // Paints whatever is on a host screen now onto one connection, and only that one.
+    private async Task Repaint(Room room, ISingleClientProxy target)
+    {
+        await target.SendAsync("RoomState", room.Players, PhaseName(room.Phase));
 
         if (room.Phase == RoomPhase.Question && room.CurrentQuestion is { } question)
         {
@@ -93,11 +154,11 @@ public sealed class GameHub(
             // closes a shade early rather than a shade late, and never below one second, which is
             // reserved to mean "for context only" below.
             var left = Math.Max(1, (int)(room.Remaining ?? TimeSpan.Zero).TotalSeconds);
-            await Clients.Caller.SendAsync("QuestionStarted", question with { LimitSeconds = left });
-            await Clients.Caller.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
+            await target.SendAsync("QuestionStarted", question with { LimitSeconds = left });
+            await target.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
             // Only when it is: a screen starts out running, and what it was sent above is the time that
             // is left, which a paused room has stopped spending. Without this it would spend it.
-            if (room.Paused) await Clients.Caller.SendAsync("Paused", true);
+            if (room.Paused) await target.SendAsync("Paused", true);
         }
         else if (room.CurrentReveal is { } reveal)
         {
@@ -106,12 +167,12 @@ public sealed class GameHub(
             // can say which question this is and read the winning option out; limitSeconds 0 means
             // "context, nothing is open", and the reveal that follows is what gets painted.
             if (room.CurrentQuestion is { } asked)
-                await Clients.Caller.SendAsync("QuestionStarted", asked with { LimitSeconds = 0 });
-            await Clients.Caller.SendAsync("Revealed", reveal);
+                await target.SendAsync("QuestionStarted", asked with { LimitSeconds = 0 });
+            await target.SendAsync("Revealed", reveal);
         }
         else if (room.Phase == RoomPhase.Finished)
         {
-            await Clients.Caller.SendAsync("RoundFinished", room.Standings);
+            await target.SendAsync("RoundFinished", room.Standings);
         }
     }
 
@@ -233,6 +294,8 @@ public sealed class GameHub(
         // SignalR drops a gone connection's groups itself, so this only clears the mirror of them, which
         // would otherwise keep an entry for every connection the process has ever seen.
         connections.Forget(Context.ConnectionId);
+        // A code nobody claimed would otherwise be claimable for a connection that no longer exists.
+        pairings.Forget(Context.ConnectionId);
         return base.OnDisconnectedAsync(exception);
     }
 
@@ -264,33 +327,35 @@ public sealed class GameHub(
         return RoomOrThrow(code);
     }
 
-    private async Task JoinHostGroups(string code)
+    private Task JoinHostGroups(string code) => SeatHost(Context.ConnectionId, code);
+
+    /// <summary>Makes <paramref name="connectionId"/> the host screen of the room, leaving the one it hosted before.</summary>
+    private async Task SeatHost(string connectionId, string code)
     {
         // Driving a room is becoming its host screen, so whatever room this connection was the host screen
         // of before, it is not any more: leave that one's groups before joining these. Re-joining the room
         // it is already hosting reports no move and leaves nothing.
-        if (connections.Host(Context.ConnectionId, code) is { } left)
+        if (connections.Host(connectionId, code) is { } left)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, HostGroup(left));
-            await LeaveRoomGroup(left);
+            await Groups.RemoveFromGroupAsync(connectionId, HostGroup(left));
+            await LeaveRoomGroup(connectionId, left);
         }
 
-        await Groups.AddToGroupAsync(Context.ConnectionId, code);
-        await Groups.AddToGroupAsync(Context.ConnectionId, HostGroup(code));
+        await Groups.AddToGroupAsync(connectionId, code);
+        await Groups.AddToGroupAsync(connectionId, HostGroup(code));
     }
 
     /// <summary>Seats this connection in the room's group, leaving the one it was playing in first.</summary>
     private async Task JoinPlayerGroup(string code)
     {
-        if (connections.Play(Context.ConnectionId, code) is { } left) await LeaveRoomGroup(left);
+        if (connections.Play(Context.ConnectionId, code) is { } left) await LeaveRoomGroup(Context.ConnectionId, left);
         await Groups.AddToGroupAsync(Context.ConnectionId, code);
     }
 
     // The room's own group carries the question and the reveal, and a connection can be in it as a player
     // or as the host screen. Only leave it once neither of those points at that room any more.
-    private async Task LeaveRoomGroup(string code)
+    private async Task LeaveRoomGroup(string id, string code)
     {
-        var id = Context.ConnectionId;
         if (connections.Playing(id) == code || connections.Hosting(id) == code) return;
         await Groups.RemoveFromGroupAsync(id, code);
     }

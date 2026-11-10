@@ -20,6 +20,7 @@ public sealed class GameHubTests : IDisposable
 
     private readonly List<HubConnection> _connections = [];
     private readonly List<WebApplicationFactory<Program>> _factories = [];
+    private readonly Dictionary<HubConnection, WebApplicationFactory<Program>> _factoryOf = [];
 
     public void Dispose()
     {
@@ -52,6 +53,7 @@ public sealed class GameHubTests : IDisposable
             .AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)))
             .Build();
         _connections.Add(connection);
+        _factoryOf[connection] = factory;
         await connection.StartAsync();
         return connection;
     }
@@ -97,8 +99,21 @@ public sealed class GameHubTests : IDisposable
     private static async Task Barrier(HubConnection connection) =>
         await Assert.ThrowsAsync<HubException>(() => connection.InvokeAsync<string>("Join", "0000", "barrier"));
 
-    private static async Task<string> Open(HubConnection host, string setId = "genel-kultur") =>
-        await host.InvokeAsync<string>("CreateRoom", HostKey, setId);
+    /// <summary>Opens a room from <paramref name="host"/>, the way a console must: with a television it has claimed.</summary>
+    private async Task<string> Open(HubConnection host, string setId = "genel-kultur")
+    {
+        await ClaimAScreen(host);
+        return await host.InvokeAsync<string>("CreateRoom", HostKey, setId);
+    }
+
+    /// <summary>Connects a television, has it show a code, and has <paramref name="console"/> claim it.</summary>
+    private async Task<HubConnection> ClaimAScreen(HubConnection console)
+    {
+        var screen = await Connect(_factoryOf[console]);
+        var pairing = await screen.InvokeAsync<string>("OpenScreen");
+        await console.InvokeAsync("ClaimScreen", pairing, HostKey);
+        return screen;
+    }
 
     private static async Task<HubException> Refused(Func<Task> call) => await Assert.ThrowsAsync<HubException>(call);
 
@@ -221,8 +236,10 @@ public sealed class GameHubTests : IDisposable
     {
         var factory = Factory(("QUIZ_MAX_ROOMS", "1"));
         var host = await Connect(factory);
+        await ClaimAScreen(host);
         Assert.Contains("unknown-set", (await Refused(() => host.InvokeAsync<string>("CreateRoom", HostKey, "nope"))).Message);
-        await Open(host);
+        await host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        await ClaimAScreen(host);
         Assert.Contains("too-many-rooms", (await Refused(() => host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur"))).Message);
     }
 
