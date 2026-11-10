@@ -14,7 +14,10 @@
  *
  * Which is why "Displayed" matters here more than anywhere: owning the pacing means that if the
  * television falls out of the room and nothing says so, this page asks, closes and advances
- * questions in front of nobody. On that message the pacing stops and the host is told.
+ * questions in front of nobody. So it is a state and not a moment: while this page believes the
+ * room has no television in it, nothing here arms a beat or a tick, however many times the host
+ * steps the round by hand. Every control stays live; the automation does not come back until the
+ * display does.
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
@@ -130,19 +133,39 @@ let deadline = 0;
 let ticker = 0;
 // What was left of the clock when it was frozen, in milliseconds; 0 when it is running.
 let frozen = 0;
+/*
+ * Whether the question's clock is spending time — which is not the same as having a ticker. A
+ * console that has no television in the room still has a deadline, and still says how long is left,
+ * because the host needs to know where the question stands; what it does not have is the tick that
+ * would reach that deadline and close the question in front of nobody.
+ */
+let running = false;
 
 function stopCountdown() {
   clearInterval(ticker);
   ticker = 0;
   deadline = 0;
   frozen = 0;
+  running = false;
 }
 
 function startCountdown(index, at) {
   stopCountdown();
   deadline = at;
+  running = true;
   rememberDeadline(index, at);
   drawClock();
+  startTicking();
+}
+
+/*
+ * Starts the tick for a deadline that is already running, and only while the room has a television
+ * in it: reaching zero is what closes the question, and nothing on this page closes a question the
+ * room has not seen. The deadline is untouched, so the tick a returning display starts is the one
+ * the question has been counting towards all along, never a fresh limit.
+ */
+function startTicking() {
+  if (ticker || !running || !state.display) return;
   ticker = setInterval(() => {
     drawClock();
     if (Date.now() >= deadline) {
@@ -158,10 +181,11 @@ function startCountdown(index, at) {
  * room stopped, so it is a shade short, which is the safe direction.
  */
 function freezeCountdown() {
-  if (!ticker) return;
+  if (!running) return;
   frozen = Math.max(0, deadline - Date.now());
   clearInterval(ticker);
   ticker = 0;
+  running = false;
   forgetDeadline();
   drawClock(frozen);
 }
@@ -171,14 +195,14 @@ function freezeCountdown() {
  * what was left is nothing, because a question frozen at zero still has to close, and the next tick
  * is what does it. This page has no other way to close a question by hand.
  *
- * A running ticker is what tells a frozen clock from one that was never frozen, since zero left and
- * never frozen both read as `frozen === 0`: freezing always stops the ticker, so a console with one
- * still running has nothing to thaw. Without that, a stray resume — a second console on the same
- * key, or one that lands between a reload's QuestionStarted and its Paused — would restart the
- * countdown with nothing on it and close a running question a tick later.
+ * A clock that is already running is what tells a frozen one from one that was never frozen, since
+ * zero left and never frozen both read as `frozen === 0`: freezing always stops it, so a console
+ * whose clock is still spending time has nothing to thaw. Without that, a stray resume — a second
+ * console on the same key, or one that lands between a reload's QuestionStarted and its Paused —
+ * would restart the countdown with nothing on it and close a running question a tick later.
  */
 function thawCountdown() {
-  if (!state.question || ticker) return;
+  if (!state.question || running) return;
   const left = frozen;
   frozen = 0;
   startCountdown(state.question.index, Date.now() + left);
@@ -220,15 +244,17 @@ function cancelPacing() {
 }
 
 /* Everyone seated has answered the question that is open. A paused room is waiting for its host,
- * not for its players, so it is never ready to close on its own. */
+ * not for its players, so it is never ready to close on its own — and a room with no television in
+ * it is waiting for a screen, not for a beat: closing early would close it in front of nobody. */
 function everyoneIsIn() {
-  return state.view === 'question' && !state.paused && state.seated > 0 && state.answered >= state.seated;
+  return state.display && state.view === 'question' && !state.paused
+    && state.seated > 0 && state.answered >= state.seated;
 }
 
 /* The beat before the reveal. Already armed means the room was already full: a second count saying
  * the same thing must not push it back. */
 function armEveryoneIn() {
-  if (everyoneIn) return;
+  if (everyoneIn || !state.display) return;
   everyoneIn = setTimeout(() => {
     everyoneIn = 0;
     closeQuestion();
@@ -237,10 +263,29 @@ function armEveryoneIn() {
 
 /* The beat after it. Its caller has just shown the reveal, which is what cleared the question's. */
 function armNextUp() {
+  if (nextUp || !state.display) return;
   nextUp = setTimeout(() => {
     nextUp = 0;
     advance();
   }, REVEAL_MS);
+}
+
+/*
+ * The room can be seen again, so what this phase wants running starts now. Not a resume: a paused
+ * room stays paused until the host presses the button, because the host is the one who knows the
+ * room is looking at the television again. A live question gets its own deadline back — the one a
+ * reload resumes from, never the full limit — and a reveal gets its beat from this moment, because
+ * the television has only just begun painting the answer. Called for every "Displayed true", and
+ * safe to call twice: neither the tick nor either beat is armed a second time.
+ */
+function rearm() {
+  if (state.view === 'question') {
+    if (state.paused) return;
+    startTicking();
+    if (everyoneIsIn()) armEveryoneIn();
+  } else if (state.view === 'reveal') {
+    armNextUp();
+  }
 }
 
 /* ---------- hub ---------- */
@@ -312,13 +357,21 @@ conn.on('Paused', (paused) => {
  * being told it would go on pacing a round nobody can see: the countdown would reach zero, close
  * question one, and six seconds later open question two in front of nothing.
  *
- * Coming back is not resuming and nothing is re-armed for it. Mid-question the room itself is
- * paused, so the round waits for the resume button; in a reveal the host presses next. Either way
- * the one who decides the room is looking at the television again is the host.
+ * It is state, not a moment. While it is false nothing on this page arms a beat or a tick for
+ * itself — not this handler's cancel, which only clears what was already armed, but every arming
+ * function, which asks state.display first. That is what holds for the rest of the round: one
+ * press of resume or next moves the round by exactly that one press, and never hands the pacing
+ * back. The host keeps every control, because stepping a displayless round deliberately is the
+ * host's to choose; what is gone is the console doing it on its own.
+ *
+ * Coming back is not resuming, but it is what re-arms: whatever the phase legitimately wants
+ * running starts again, and a paused room stays paused for the host to resume.
  */
 conn.on('Displayed', (present) => {
   state.display = Boolean(present);
-  if (!state.display) {
+  if (state.display) {
+    rearm();
+  } else {
     // Mid-question the Paused that comes with this freezes the clock too; in a reveal there is
     // nothing to pause, and cancelling the beat is the only thing between here and a blind advance.
     freezeCountdown();
@@ -400,6 +453,10 @@ async function claimScreen(code) {
 }
 
 async function createRoom(hostKey, setId) {
+  // Opened on a screen that was claimed a moment ago, so the room has a television in it — set
+  // before the invoke, because the hub says "Displayed false" during it when that screen has gone
+  // in the meantime, and this would otherwise paint over the one thing the console must not lose.
+  state.display = true;
   state.code = await conn.invoke('CreateRoom', hostKey, setId);
   state.hostKey = hostKey;
   state.setId = setId;
@@ -407,8 +464,6 @@ async function createRoom(hostKey, setId) {
   state.claimed = false;
   state.players = [];
   state.question = null;
-  // Opened on a screen that was claimed a moment ago, so the room has a television in it.
-  state.display = true;
   remember();
   show('lobby');
 }

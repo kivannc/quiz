@@ -16,8 +16,12 @@ namespace Quiz.Hubs;
 /// the moment the claim is spent: that is the only thing that relates a room back to its television, so it
 /// is what notices one leaving. The room entries (playing, hosting) remain a plain mirror: a missing one
 /// only means there is no old group to leave, which is also what every connection starts out as.
+///
+/// Not sealed, and two of its members are virtual, only so a test can stand in for them: both
+/// decisions that turn on a screen disconnecting inside a hub call are a few microseconds wide on a
+/// running server and cannot be driven from outside one.
 /// </summary>
-public sealed class ConnectionRooms
+public class ConnectionRooms
 {
     private readonly ConcurrentDictionary<string, string> _playing = new();
     private readonly ConcurrentDictionary<string, string> _hosting = new();
@@ -50,6 +54,15 @@ public sealed class ConnectionRooms
     /// <summary>Makes this connection <paramref name="code"/>'s host screen and returns the room it hosted, if that was another one.</summary>
     public string? Host(string connectionId, string code) => Move(_hosting, connectionId, code);
 
+    /// <summary>
+    /// Forgets that a connection was the host screen of <paramref name="code"/>, if it still is.
+    /// For a television another one has replaced as a room's display: it is being taken out of that
+    /// room's groups, and the mirror of them has to agree, or the next room this screen is seated
+    /// into would leave the groups of a room it is no longer in and keep its own.
+    /// </summary>
+    public void Unhost(string connectionId, string code) =>
+        _hosting.TryRemove(new KeyValuePair<string, string>(connectionId, code));
+
     /// <summary>Notes that a connection is up. <see cref="Forget"/> is its counterpart.</summary>
     public void Connected(string connectionId)
     {
@@ -63,7 +76,7 @@ public sealed class ConnectionRooms
     }
 
     /// <summary>The screen this console has claimed and not yet opened a room on, if any.</summary>
-    public string? Screen(string consoleConnectionId)
+    public virtual string? Screen(string consoleConnectionId)
     {
         lock (_screenGate) return _screens.GetValueOrDefault(consoleConnectionId);
     }
@@ -106,16 +119,36 @@ public sealed class ConnectionRooms
     /// screen, and a screen being seated back into a room it fell out of. A television shows one room:
     /// any other room this screen was the display of is dropped, so the room a gone screen leaves
     /// without one is never ambiguous.
+    ///
+    /// Returns false, and records nothing, if the screen has already disconnected — the same rule
+    /// <see cref="Pair"/> holds, and for a heavier reason: an entry naming a connection that is gone
+    /// is one <see cref="Forget"/> will never match again, so nothing would ever notice that room
+    /// losing its television, and the console would carry the round on with no display in the room
+    /// at all. A caller that is refused has to say so rather than leave a console believing in a
+    /// screen the room does not have.
+    ///
+    /// <paramref name="replaced"/> is the screen that was showing this room and has just lost it:
+    /// another television claimed into a live room, with the first still in the room's groups and
+    /// still painting the game. Taking it out of them is the caller's part, and this is the only
+    /// thing that names the connection to take out. Null when the room had no display, and when the
+    /// same screen is being seated into it again. It is always a connection that is up: the guard
+    /// above records no other kind, and <see cref="Forget"/> takes the entry out with the screen.
     /// </summary>
-    public void Display(string code, string screenConnectionId)
+    public virtual bool Display(string code, string screenConnectionId, out string? replaced)
     {
         lock (_screenGate)
         {
+            replaced = null;
+            if (!_live.Contains(screenConnectionId)) return false;
+
             foreach (var (room, screen) in _displays.ToList())
             {
                 if (screen == screenConnectionId) _displays.Remove(room);
             }
+            // After the loop above, so re-seating the room's own screen reports nothing replaced.
+            if (_displays.TryGetValue(code, out var was)) replaced = was;
             _displays[code] = screenConnectionId;
+            return true;
         }
     }
 

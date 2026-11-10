@@ -90,6 +90,9 @@ const STRINGS = {
     // Said for every refusal, because the server deliberately tells the screen no more than this.
     pairFailed: 'eşleştirme başlatılamadı, yeniden denenecek',
     rejoinHint: (code) => `ekran oda ${code} ile eşleşmişti, kodu gir ve geri dönsün`,
+    // Said instead of the line above when the room was taken by another television rather than lost
+    // to a reload: the room is still being played, just not here, and this code brings it back.
+    roomMovedHint: (code) => `oda ${code} başka bir ekrana geçti, geri almak için bu kodu gir`,
     pairedHeading: 'TELEFON BAĞLANDI',
     pairedHint: 'oda bekleniyor',
     // The code the PLAYERS type, labelled on the television as the room's own.
@@ -190,6 +193,9 @@ const STRINGS = {
     // Said for every refusal, because the server deliberately tells the screen no more than this.
     pairFailed: 'could not start pairing, trying again',
     rejoinHint: (code) => `this screen was paired with room ${code}; type the code to put it back`,
+    // Said instead of the line above when the room was taken by another television rather than lost
+    // to a reload: the room is still being played, just not here, and this code brings it back.
+    roomMovedHint: (code) => `room ${code} moved to another screen; type this code to bring it back`,
     pairedHeading: 'PHONE CONNECTED',
     pairedHint: 'waiting for the room',
     // The code the PLAYERS type, labelled on the television as the room's own.

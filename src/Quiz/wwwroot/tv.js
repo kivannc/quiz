@@ -62,6 +62,7 @@ const state = {
   codeFailed: false, // the last OpenScreen was refused
   room: null,        // the room this screen is in, from RoomOpened
   wasIn: null,       // the room it was painting before a reload or a reconnect
+  taken: false,      // it lost that room to another screen rather than to a reload of its own
   players: [],       // [{ name, score }], from RoomState
   answered: 0,       // from AnswerCount
   seated: 0,         // how many players that count is out of
@@ -93,6 +94,7 @@ function rememberRoom(code) {
 function forgetRoom() {
   state.room = null;
   state.wasIn = null;
+  state.taken = false;
   try {
     sessionStorage.removeItem(STORE_ROOM);
   } catch { /* nothing to forget */ }
@@ -267,6 +269,24 @@ conn.on('RoomClosed', () => {
   state.standings = [];
   state.paused = false;
   forgetRoom();
+  show('pairing');
+});
+
+conn.on('RoomTaken', (code) => {
+  /*
+   * Another television has been claimed into the room this screen was painting, so the room is on
+   * that screen now and this one is out of it. The room has not ended — telling a screen three
+   * metres away that it closed would be a lie — so this says which room moved on and goes back to
+   * offering a pairing code, which is the only way into any room and so the way back into this one.
+   */
+  stopClock();
+  state.question = null;
+  state.reveal = null;
+  state.standings = [];
+  state.paused = false;
+  forgetRoom();
+  state.wasIn = code ?? null;
+  state.taken = true;
   show('pairing');
 });
 
@@ -448,7 +468,11 @@ function drawPairing() {
   status.classList.toggle('big', state.codeFailed && waiting);
 
   // Only ever beside a code: on its own it would tell the room to type something that is not there.
-  set(el('pair-rejoin'), state.wasIn && !waiting ? t('rejoinHint', state.wasIn) : '');
+  // Which of the two lines it is depends on how the room was lost: a reload of this screen, or
+  // another screen taking the room, which is a different thing to say and a different thing to do.
+  set(el('pair-rejoin'), state.wasIn && !waiting
+    ? t(state.taken ? 'roomMovedHint' : 'rejoinHint', state.wasIn)
+    : '');
 }
 
 /* Where the host's console lives, which is the one thing this screen asks anybody to do. */

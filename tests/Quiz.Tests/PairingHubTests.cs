@@ -5,6 +5,7 @@ using System.Threading.Channels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Quiz.Hubs;
 using Quiz.Pairing;
@@ -27,7 +28,16 @@ public sealed class PairingHubTests : IDisposable
         foreach (var f in _factories) f.Dispose();
     }
 
-    private WebApplicationFactory<Program> Factory(params (string Key, string Value)[] settings)
+    private WebApplicationFactory<Program> Factory(params (string Key, string Value)[] settings) =>
+        Factory(null, settings);
+
+    /// <summary>
+    /// The server, optionally with <paramref name="connections"/> standing in for the real
+    /// <see cref="ConnectionRooms"/>: the two decisions that turn on a screen disconnecting inside
+    /// a hub call are a few microseconds wide on a running server and cannot be driven from outside
+    /// one, so they are stood in for.
+    /// </summary>
+    private WebApplicationFactory<Program> Factory(ConnectionRooms? connections, params (string Key, string Value)[] settings)
     {
         var all = new Dictionary<string, string> { ["QUIZ_HOST_KEY"] = HostKey };
         foreach (var (k, v) in settings) all[k] = v;
@@ -35,6 +45,8 @@ public sealed class PairingHubTests : IDisposable
         var factory = new WebApplicationFactory<Program>().WithWebHostBuilder(b =>
         {
             foreach (var (k, v) in all) b.UseSetting(k, v);
+            // After the application's own registration, so this is the one that is resolved.
+            if (connections is not null) b.ConfigureTestServices(s => s.AddSingleton(connections));
         });
         _factories.Add(factory);
         return factory;
@@ -619,11 +631,102 @@ public sealed class PairingHubTests : IDisposable
     }
 
     [Fact]
+    public async Task A_second_television_claimed_into_a_live_room_takes_it_off_the_first()
+    {
+        var factory = Factory();
+        var table = await Seated(factory);
+        var taken = new Inbox<string>(table.Screen, "RoomTaken");
+        var off = new Inbox<JsonElement>(table.Screen, "Revealed");
+        await table.Console.InvokeAsync("StartRound", table.Room, HostKey);
+
+        var second = await Connect(factory);
+        var opened = new Inbox<string>(second, "RoomOpened");
+        var on = new Inbox<JsonElement>(second, "Revealed");
+        await Claim(table.Console, await Open(second));
+
+        Assert.Equal(table.Room, await opened.Next());
+        // The first screen is out of the room it was painting, and told so in its own terms: the
+        // room has not closed, it has moved to another screen.
+        Assert.Equal(table.Room, await taken.Next());
+
+        // And nothing in the room reaches it again, or two televisions in one house would be
+        // showing the same question and only one of them would notice losing it.
+        await table.Console.InvokeAsync("CloseQuestion", table.Room, HostKey);
+        await on.Next();
+        await Barrier(table.Screen);
+        Assert.Equal(0, off.Total);
+    }
+
+    /// <summary>
+    /// A <see cref="ConnectionRooms"/> whose claim is answered when CreateRoom looks and gone by the
+    /// time it is spent — the screen disconnected in between, which is what drops a claim.
+    /// </summary>
+    private sealed class ClaimGoesFirst : ConnectionRooms
+    {
+        public string? Pretend { get; set; }
+
+        public override string? Screen(string consoleConnectionId) => Pretend ?? base.Screen(consoleConnectionId);
+    }
+
+    [Fact]
+    public async Task A_room_is_not_opened_on_a_screen_whose_claim_was_already_spent()
+    {
+        var connections = new ClaimGoesFirst();
+        var factory = Factory(connections);
+        var screen = await Connect(factory);
+        var opened = new Inbox<string>(screen, "RoomOpened");
+        var console = await Connect(factory);
+        var displayed = new Inbox<bool>(console, "Displayed");
+        // The look says this screen; spending the claim says there is none.
+        connections.Pretend = screen.ConnectionId!;
+
+        var room = await Create(console);
+
+        // So the room is not shown on it, and the room is not related to a screen it never reached.
+        Assert.False(await displayed.Next());
+        Assert.Null(connections.DisplayOf(room));
+        await Barrier(screen);
+        Assert.Equal(0, opened.Total);
+    }
+
+    /// <summary>A <see cref="ConnectionRooms"/> that refuses to record any display, which is what a
+    /// screen disconnecting between the claim and the record looks like from the hub.</summary>
+    private sealed class DisplayRefused : ConnectionRooms
+    {
+        public override bool Display(string code, string screenConnectionId, out string? replaced)
+        {
+            replaced = null;
+            return false;
+        }
+    }
+
+    [Fact]
+    public async Task A_console_whose_display_could_not_be_recorded_is_told_the_room_has_none()
+    {
+        var connections = new DisplayRefused();
+        var factory = Factory(connections);
+        var screen = await Connect(factory);
+        var opened = new Inbox<string>(screen, "RoomOpened");
+        var console = await Connect(factory);
+        var displayed = new Inbox<bool>(console, "Displayed");
+        await Claim(console, await Open(screen));
+
+        var room = await Create(console);
+
+        // Nothing would ever notice this screen leaving, so the console must not be left believing
+        // the room has a television in it: its own pacing is what would drive the round blind.
+        Assert.False(await displayed.Next());
+        Assert.Null(connections.DisplayOf(room));
+        await Barrier(screen);
+        Assert.Equal(0, opened.Total);
+    }
+
+    [Fact]
     public void A_rooms_display_is_remembered_and_the_room_it_leaves_is_named_when_it_goes()
     {
         var connections = new ConnectionRooms();
         connections.Connected("screen");
-        connections.Display("1618", "screen");
+        connections.Display("1618", "screen", out _);
 
         Assert.Equal("screen", connections.DisplayOf("1618"));
         // What the hub acts on: the room the gone connection was the display of, and nothing for any
@@ -637,11 +740,49 @@ public sealed class PairingHubTests : IDisposable
     public void A_television_shows_one_room_at_a_time()
     {
         var connections = new ConnectionRooms();
-        connections.Display("1618", "screen");
-        connections.Display("2718", "screen");
+        connections.Connected("screen");
+        connections.Display("1618", "screen", out _);
+        connections.Display("2718", "screen", out _);
 
         Assert.Null(connections.DisplayOf("1618"));
         Assert.Equal("screen", connections.DisplayOf("2718"));
+    }
+
+    [Fact]
+    public void A_rooms_display_cannot_be_recorded_for_a_screen_that_has_already_gone()
+    {
+        var connections = new ConnectionRooms();
+        connections.Connected("screen");
+
+        // The race: the screen disconnected while the hub was still working on the call that was
+        // about to record it. Recording it anyway would name a connection nothing can ever notice
+        // leaving again, and the room would be driven blind for the rest of its life.
+        connections.Forget("screen");
+
+        Assert.False(connections.Display("1618", "screen", out var replaced));
+        Assert.Null(replaced);
+        Assert.Null(connections.DisplayOf("1618"));
+    }
+
+    [Fact]
+    public void Taking_a_rooms_display_names_the_screen_it_replaced()
+    {
+        var connections = new ConnectionRooms();
+        connections.Connected("first");
+        connections.Connected("second");
+
+        Assert.True(connections.Display("1618", "first", out var nothing));
+        Assert.Null(nothing); // the room had no television in it
+
+        Assert.True(connections.Display("1618", "second", out var replaced));
+
+        // The first screen is up and still painting the room: taking it out of the room's groups is
+        // the hub's part, and this is the only thing that says which connection to take out.
+        Assert.Equal("first", replaced);
+        Assert.Equal("second", connections.DisplayOf("1618"));
+        // Seating the same screen again replaces nothing; it would be taken out of its own room.
+        Assert.True(connections.Display("1618", "second", out var itself));
+        Assert.Null(itself);
     }
 
     [Fact]
@@ -650,7 +791,7 @@ public sealed class PairingHubTests : IDisposable
         var connections = new ConnectionRooms();
         connections.Connected("screen");
         connections.Host("console", "1618");
-        connections.Display("1618", "screen");
+        connections.Display("1618", "screen", out _);
         Assert.True(connections.Pair("console", "screen"));
 
         connections.ForgetRoom("1618");
