@@ -1,5 +1,5 @@
 /*
- * Every visible string on both screens, in both languages, and the switch between them.
+ * Every visible string on every screen, in both languages, and the switch between them.
  * Nothing user-visible is written into the markup: elements carry data-i18n="key" and
  * applyStatic() fills them, while anything with numbers in it is a function called from
  * the page. Turkish is the default; the choice is remembered in localStorage.
@@ -64,6 +64,21 @@ const STRINGS = {
     closeRoomButton: 'ODAYI KAPAT',
     closeRoomConfirm: 'EMİN MİSİN?',
 
+    // --- the television: a display with no input on it, so it shows a pairing code first ---
+    tvTitle: 'Quiz — Ekran',
+    // The code the HOST types into a phone. Never the room code, which carries the word "oda".
+    pairTag: '[ EKRAN KODU ]',
+    pairHint: (url) => `telefonunda ${url} adresini aç ve bu kodu gir`,
+    // Said for every refusal, because the server deliberately tells the screen no more than this.
+    pairFailed: 'eşleştirme başlatılamadı, yeniden denenecek',
+    rejoinHint: (code) => `ekran oda ${code} ile eşleşmişti, kodu gir ve geri dönsün`,
+    pairedHeading: 'TELEFON BAĞLANDI',
+    pairedHint: 'oda bekleniyor',
+    // The code the PLAYERS type, labelled on the television as the room's own.
+    roomCodeTag: '[ ODA KODU ]',
+    // The television retries by itself, so it never tells a room to go and reload anything.
+    tvOffline: 'sunucuya ulaşılamıyor, yeniden denenecek',
+
     // --- both: connection and errors ---
     reconnecting: 'bağlantı koptu, yeniden bağlanılıyor…',
     disconnected: 'bağlantı kurulamadı, sayfayı yenile',
@@ -126,6 +141,21 @@ const STRINGS = {
     pausedHint: 'the game is waiting',
     closeRoomButton: 'CLOSE ROOM',
     closeRoomConfirm: 'ARE YOU SURE?',
+
+    // --- the television: a display with no input on it, so it shows a pairing code first ---
+    tvTitle: 'Quiz — Screen',
+    // The code the HOST types into a phone. Never the room code, which carries the word "room".
+    pairTag: '[ SCREEN CODE ]',
+    pairHint: (url) => `open ${url} on your phone and type this code`,
+    // Said for every refusal, because the server deliberately tells the screen no more than this.
+    pairFailed: 'could not start pairing, trying again',
+    rejoinHint: (code) => `this screen was paired with room ${code}; type the code to put it back`,
+    pairedHeading: 'PHONE CONNECTED',
+    pairedHint: 'waiting for the room',
+    // The code the PLAYERS type, labelled on the television as the room's own.
+    roomCodeTag: '[ ROOM CODE ]',
+    // The television retries by itself, so it never tells a room to go and reload anything.
+    tvOffline: 'cannot reach the server, trying again',
 
     // --- both: connection and errors ---
     reconnecting: 'connection lost, reconnecting…',

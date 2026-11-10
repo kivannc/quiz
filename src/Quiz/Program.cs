@@ -79,6 +79,11 @@ app.MapGet("/healthz", () => Results.Ok());
 // a set's id, title and language are not secret, and the questions themselves are not sent.
 app.MapGet("/sets", (IQuestionSetSource sets) =>
     Results.Ok(sets.All().Select(s => new { s.Id, s.Title, s.Language })));
+// The television's address is typed in with a remote, so the screen answers at "/tv" as well as at
+// "/tv.html". It is the one address anybody enters on that device, and ".html" is four keystrokes
+// too many on a remote control.
+app.MapGet("/tv", (IWebHostEnvironment env) =>
+    Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html"));
 app.MapHub<GameHub>("/hub");
 
 app.Run();
