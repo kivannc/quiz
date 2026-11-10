@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Security.Cryptography;
 
 namespace Quiz.Game;
 
@@ -43,6 +44,8 @@ public sealed class Room
 
     private readonly object _gate = new();
     private readonly QuestionSet _set;
+    // The questions this round plays: drawn from the set by Start, empty until then.
+    private IReadOnlyList<Question> _questions = [];
     private readonly TimeProvider _clock;
     private readonly int _maxPlayers;
     private readonly TimeSpan _questionLimit;
@@ -70,6 +73,13 @@ public sealed class Room
     /// Past this the room ages from the end of the grace like any other, and is reclaimed and told so.
     /// </summary>
     public static readonly TimeSpan PauseGrace = TimeSpan.FromHours(4);
+
+    /// <summary>
+    /// How many questions one round plays. A set is a pool rather than a round: a category holds far more
+    /// than this, and <see cref="Start"/> draws this many from it, so the same category played twice is not
+    /// the same questions. A pool smaller than a round plays whole.
+    /// </summary>
+    public const int QuestionsPerRound = 10;
 
     public Room(string code, QuestionSet set, TimeProvider clock, int maxPlayers, TimeSpan questionLimit)
     {
@@ -147,8 +157,8 @@ public sealed class Room
             lock (_gate)
             {
                 if (_phase is not (RoomPhase.Question or RoomPhase.Reveal)) return null;
-                var q = _set.Questions[_questionIndex];
-                return new QuestionView(_questionIndex, _set.Questions.Count, q.Text, q.Options, (int)_questionLimit.TotalSeconds);
+                var q = _questions[_questionIndex];
+                return new QuestionView(_questionIndex, _questions.Count, q.Text, q.Options, (int)_questionLimit.TotalSeconds);
             }
         }
     }
@@ -193,18 +203,35 @@ public sealed class Room
         }
     }
 
-    /// <summary>Opens the first question. Refused outside the lobby or with nobody seated.</summary>
+    /// <summary>
+    /// Opens the first question. Refused outside the lobby or with nobody seated.
+    /// Draws the round's questions, so a room that starts a second time plays a different draw.
+    /// </summary>
     public bool Start()
     {
         lock (_gate)
         {
             if (_phase != RoomPhase.Lobby || _seats.Count == 0) return false;
 
+            _questions = Draw();
             _questionIndex = 0;
             OpenQuestion();
             Touch();
             return true;
         }
+    }
+
+    /// <summary>
+    /// A round's questions: <see cref="QuestionsPerRound"/> of the set, in a random order, each at most
+    /// once. A set smaller than a round plays whole, which is what a one-question test set is.
+    /// The same generator the room codes are drawn with, for no better reason than that a game has one
+    /// source of chance; a question draw asks nothing of it that a shuffle could not give.
+    /// </summary>
+    private IReadOnlyList<Question> Draw()
+    {
+        var pool = _set.Questions.ToArray();
+        RandomNumberGenerator.Shuffle(pool.AsSpan());
+        return new ReadOnlyCollection<Question>(pool.Take(Math.Min(QuestionsPerRound, pool.Length)).ToList());
     }
 
     /// <summary>
@@ -226,7 +253,7 @@ public sealed class Room
             var elapsed = Elapsed();
             if (elapsed > _questionLimit) return false;
 
-            var correct = marker == _set.Questions[_questionIndex].Correct;
+            var correct = marker == _questions[_questionIndex].Correct;
             _answers[seat] = new GivenAnswer(marker, Scoring.Points(correct, elapsed, _questionLimit));
             Touch();
             return true;
@@ -286,7 +313,7 @@ public sealed class Room
 
             _reveal = new RevealView(
                 _questionIndex,
-                _set.Questions[_questionIndex].Correct,
+                _questions[_questionIndex].Correct,
                 new ReadOnlyDictionary<Marker, int>(distribution),
                 Standings); // the lock is reentrant; Standings owns the ordering rule
             _phase = RoomPhase.Reveal;
@@ -310,7 +337,7 @@ public sealed class Room
             if (_phase != RoomPhase.Reveal) throw new InvalidOperationException($"Nothing to advance from (phase: {_phase}).");
 
             Touch();
-            if (_questionIndex + 1 >= _set.Questions.Count)
+            if (_questionIndex + 1 >= _questions.Count)
             {
                 _phase = RoomPhase.Finished;
                 return false;

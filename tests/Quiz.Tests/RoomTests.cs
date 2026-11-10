@@ -9,23 +9,35 @@ public sealed class RoomTests
 
     private readonly FakeTimeProvider _clock = new(new DateTimeOffset(2026, 11, 9, 12, 0, 0, TimeSpan.Zero));
 
-    // Ten questions; question i is correct on Marker i % 4 so tests can pick right and wrong answers.
-    private static QuestionSet TenQuestions()
+    // Ten questions, every one of them correct on Hearts. A room draws its round out of the set it is
+    // given (see Room.QuestionsPerRound), so a test cannot know which question it is looking at - only
+    // that Hearts answers it and the other three markers do not. Pool(count, varyCorrect: true) marks
+    // the questions apart again, for the tests that have to tell them apart.
+    private static QuestionSet TenQuestions() => Pool(10);
+
+    /// <summary>
+    /// A set of <paramref name="count"/> questions, each "Question i?" with all four markers as options.
+    /// Correct on Hearts throughout, or, with <paramref name="varyCorrect"/>, question i correct on
+    /// marker i % 4 - so a reveal that names the wrong question's marker can be caught.
+    /// </summary>
+    private static QuestionSet Pool(int count, bool varyCorrect = false)
     {
-        var questions = Enumerable.Range(0, 10).Select(i => new Question(
+        var questions = Enumerable.Range(0, count).Select(i => new Question(
             $"q{i}",
             QuestionType.MultipleChoice,
             $"Question {i}?",
             Enum.GetValues<Marker>().Select(m => new Option(m, $"{m} {i}")).ToList(),
-            (Marker)(i % 4))).ToList();
+            varyCorrect ? (Marker)(i % 4) : Marker.Hearts)).ToList();
         return new QuestionSet("test", "Test", "en", questions);
     }
 
     private Room NewRoom(int maxPlayers = 8) => new("ABCD", TenQuestions(), _clock, maxPlayers, Limit);
 
-    private Room StartedRoom(params string[] names)
+    private Room StartedRoom(params string[] names) => StartedRoom(TenQuestions(), names);
+
+    private Room StartedRoom(QuestionSet set, params string[] names)
     {
-        var room = NewRoom();
+        var room = new Room("ABCD", set, _clock, 8, Limit);
         foreach (var name in names) room.Join(name, "conn-" + name);
         Assert.True(room.Start());
         return room;
@@ -46,7 +58,7 @@ public sealed class RoomTests
     public void Joining_again_with_the_same_name_rejoins_the_same_seat_keeping_the_score()
     {
         var room = StartedRoom("Ada", "Bob");
-        room.Answer("conn-Ada", Marker.Hearts);   // q0 is correct on Hearts
+        room.Answer("conn-Ada", Marker.Hearts);   // Hearts answers whichever question was drawn
         room.CloseQuestion();
         var scoreBefore = room.Players.Single(p => p.Name == "Ada").Score;
         Assert.True(scoreBefore > 0);
@@ -261,7 +273,7 @@ public sealed class RoomTests
         Assert.NotNull(q);
         Assert.Equal(0, q.Index);
         Assert.Equal(10, q.Total);
-        Assert.Equal("Question 0?", q.Text);
+        Assert.Contains(q.Text, TenQuestions().Questions.Select(x => x.Text));
         Assert.Equal(20, q.LimitSeconds);
         Assert.Equal(4, q.Options.Count);
     }
@@ -485,10 +497,10 @@ public sealed class RoomTests
         Assert.True(room.Advance());
 
         Assert.Equal(0, room.AnswerCount);
-        Assert.Equal("Question 1?", room.CurrentQuestion!.Text);
+        Assert.Contains(room.CurrentQuestion!.Text, TenQuestions().Questions.Select(x => x.Text));
         // Only the new question's clock matters: this is well inside its limit, though 25s after Start.
         _clock.Advance(TimeSpan.FromSeconds(5));
-        Assert.True(room.Answer("conn-Ada", Marker.Diamonds));   // q1 is correct on Diamonds
+        Assert.True(room.Answer("conn-Ada", Marker.Diamonds));
     }
 
     [Fact]
@@ -576,7 +588,7 @@ public sealed class RoomTests
         var room = StartedRoom("Ada");
         Assert.True(room.Pause());
 
-        Assert.False(room.Answer("conn-Ada", Marker.Hearts)); // q0 is correct on Hearts
+        Assert.False(room.Answer("conn-Ada", Marker.Hearts)); // right marker, refused all the same
 
         room.Resume();
         Assert.True(room.Answer("conn-Ada", Marker.Hearts));
@@ -593,7 +605,7 @@ public sealed class RoomTests
         room.Resume();
         _clock.Advance(TimeSpan.FromSeconds(2));
 
-        Assert.True(room.Answer("conn-Ada", Marker.Hearts)); // q0 is correct on Hearts
+        Assert.True(room.Answer("conn-Ada", Marker.Hearts));
         room.CloseQuestion();
 
         // Six seconds of question ran, so that is what it is worth — not ten minutes, which would
@@ -693,5 +705,74 @@ public sealed class RoomTests
         room.Answer("c1", Marker.Hearts); // wrong phase
 
         Assert.Equal(last, room.LastActivity);
+    }
+
+    /// <summary>Walks a started room to the end, returning the text of every question it showed, in order.</summary>
+    private static List<string> QuestionsShown(Room room)
+    {
+        var shown = new List<string>();
+        while (room.CurrentQuestion is { } q)
+        {
+            shown.Add(q.Text);
+            room.CloseQuestion();
+            if (!room.Advance()) break;
+        }
+        return shown;
+    }
+
+    [Fact]
+    public void A_round_plays_ten_of_a_larger_pool_and_no_question_twice()
+    {
+        var room = StartedRoom(Pool(40), "Ada");
+
+        Assert.Equal(Room.QuestionsPerRound, room.CurrentQuestion!.Total);
+
+        var shown = QuestionsShown(room);
+
+        Assert.Equal(Room.QuestionsPerRound, shown.Count);
+        Assert.Equal(shown.Count, shown.Distinct().Count());
+        Assert.Subset(Pool(40).Questions.Select(q => q.Text).ToHashSet(), shown.ToHashSet());
+        Assert.Equal(RoomPhase.Finished, room.Phase);
+    }
+
+    [Fact]
+    public void A_pool_smaller_than_a_round_plays_whole()
+    {
+        var room = StartedRoom(Pool(3), "Ada");
+
+        Assert.Equal(3, room.CurrentQuestion!.Total);
+
+        Assert.Equal(3, QuestionsShown(room).Count);
+        Assert.Equal(RoomPhase.Finished, room.Phase);
+    }
+
+    [Fact]
+    public void Two_rooms_on_the_same_pool_do_not_play_the_same_questions()
+    {
+        // Forty questions, ten drawn: the odds of two rounds drawing the same ten in the same order are
+        // one in forty-permute-ten, which is a few thousand million million. A repeat means it is not drawing.
+        var first = QuestionsShown(StartedRoom(Pool(40), "Ada"));
+        var second = QuestionsShown(StartedRoom(Pool(40), "Bob"));
+
+        Assert.NotEqual(first, second);
+    }
+
+    [Fact]
+    public void Every_reveal_names_the_correct_marker_of_the_question_that_was_shown()
+    {
+        // Question i is correct on marker i % 4 here, so a room that answered from the set instead of
+        // from its own draw would name a marker belonging to some other question.
+        var pool = Pool(40, varyCorrect: true);
+        var correctOf = pool.Questions.ToDictionary(q => q.Text, q => q.Correct);
+        var room = StartedRoom(pool, "Ada");
+
+        while (room.CurrentQuestion is { } q)
+        {
+            var reveal = room.CloseQuestion();
+            Assert.Equal(correctOf[q.Text], reveal.Correct);
+            if (!room.Advance()) break;
+        }
+
+        Assert.Equal(RoomPhase.Finished, room.Phase);
     }
 }

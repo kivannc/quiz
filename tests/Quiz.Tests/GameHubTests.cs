@@ -100,6 +100,20 @@ public sealed class GameHubTests : IDisposable
         await Assert.ThrowsAsync<HubException>(() => connection.InvokeAsync<string>("Join", "0000", "barrier"));
 
     /// <summary>Opens a room from <paramref name="host"/>, the way a console must: with a television it has claimed.</summary>
+    /// <summary>
+    /// Which marker answers the question a screen was sent, looked up in the shipped set by its text.
+    /// A room draws its ten questions out of a set that holds far more (see <see cref="Room.QuestionsPerRound"/>),
+    /// so a test is told which question it got rather than deciding it in advance.
+    /// </summary>
+    private static string CorrectMarkerOf(JsonElement question, string setId = "genel-kultur")
+    {
+        var text = question.GetProperty("text").GetString();
+        var set = new JsonQuestionSetSource(ShippedQuestions.Directory).ById(setId);
+        Assert.NotNull(set);
+        var asked = Assert.Single(set.Questions.Where(q => q.Text == text));
+        return JsonNamingPolicy.CamelCase.ConvertName(asked.Correct.ToString());
+    }
+
     private async Task<string> Open(HubConnection host, string setId = "genel-kultur")
     {
         await ClaimAScreen(host);
@@ -152,12 +166,12 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal("Ada", state.Players[0].GetProperty("name").GetString());
 
         await host.InvokeAsync("StartRound", code, HostKey);
-        await questions.Next();
-        await player.InvokeAsync("Answer", code, "clubs"); // gk-01: the capital of Turkey is Ankara (clubs)
+        var correct = CorrectMarkerOf(await questions.Next());
+        await player.InvokeAsync("Answer", code, correct);
         await host.InvokeAsync("CloseQuestion", code, HostKey);
 
         var reveal = await revealed.Next();
-        Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
+        Assert.Equal(correct, reveal.GetProperty("correct").GetString());
         var standing = reveal.GetProperty("standings")[0];
         Assert.Equal("Ada", standing.GetProperty("name").GetString());
         Assert.True(standing.GetProperty("score").GetInt32() > 0);
@@ -772,9 +786,11 @@ public sealed class GameHubTests : IDisposable
         var host = await Connect(factory);
         var code = await Open(host);
         var phone = await Connect(factory);
+        var asked = new Inbox<JsonElement>(phone, "QuestionStarted");
         await phone.InvokeAsync<string>("Join", code, "Ada");
         await host.InvokeAsync("StartRound", code, HostKey);
-        await phone.InvokeAsync("Answer", code, "clubs");
+        var correct = CorrectMarkerOf(await asked.Next());
+        await phone.InvokeAsync("Answer", code, correct);
         await host.InvokeAsync("CloseQuestion", code, HostKey);
 
         var reloaded = await Connect(factory);
@@ -782,7 +798,7 @@ public sealed class GameHubTests : IDisposable
         var reveals = new Inbox<JsonElement>(reloaded, "Revealed");
         await reloaded.InvokeAsync<string>("Join", code, "Ada");
         var reveal = await reveals.Next();
-        Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
+        Assert.Equal(correct, reveal.GetProperty("correct").GetString());
         Assert.True(reveal.GetProperty("standings")[0].GetProperty("score").GetInt32() > 0);
         await Barrier(reloaded);
         Assert.Equal(0, questions.Total);
@@ -862,14 +878,12 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
 
         var sets = JsonDocument.Parse(await response.Content.ReadAsStringAsync()).RootElement;
-        Assert.Equal(21, sets.GetArrayLength());
+        Assert.Equal(11, sets.GetArrayLength());
         Assert.Equal(
             [
-                "atasozleri-ve-deyimler", "bayraklar-ve-baskentler", "bilim-ve-doga",
-                "bitkiler-ve-tarim", "cografya", "edebiyat", "genel-kultur", "hayvanlar",
-                "icatlar-ve-teknoloji", "meslekler-ve-aletler", "mitoloji", "muzik-ve-film",
-                "oyunlar", "sanat-ve-mimari", "sayilar-ve-mantik", "spor", "tarih", "turk-dili",
-                "ulasim-ve-araclar", "vucudumuz", "yemek-ve-mutfak",
+                "atasozleri-ve-deyimler", "bilim-ve-doga", "cografya-ve-dunya", "dil-ve-edebiyat",
+                "genel-kultur", "hayvanlar-ve-bitkiler", "icatlar-ve-ulasim", "sanat-muzik-ve-film",
+                "spor-ve-oyunlar", "tarih-ve-mitoloji", "yemek-ve-mutfak",
             ],
             sets.EnumerateArray().Select(set => set.GetProperty("id").GetString()).Order(StringComparer.Ordinal));
 
@@ -973,7 +987,7 @@ public sealed class GameHubTests : IDisposable
         Assert.False(context.TryGetProperty("correct", out _)); // still no answer on this wire
 
         var reveal = await reveals.Next();
-        Assert.Equal("clubs", reveal.GetProperty("correct").GetString());
+        Assert.Equal(CorrectMarkerOf(context), reveal.GetProperty("correct").GetString());
         await Barrier(reloaded);
         Assert.Equal(1, questions.Total); // the context, and nothing else
 
