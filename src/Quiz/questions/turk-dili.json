@@ -1,0 +1,237 @@
+{
+  "id": "turk-dili",
+  "title": "Türk Dili",
+  "language": "tr",
+  "questions": [
+    {
+      "id": "td-01",
+      "text": "\"Güzel\" kelimesinin zıt anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hoş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zarif"
+        },
+        {
+          "marker": "spades",
+          "text": "Çirkin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-02",
+      "text": "Soru cümlelerinin sonuna hangi işaret konur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nokta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Virgül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Soru işareti"
+        },
+        {
+          "marker": "spades",
+          "text": "Ünlem"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "td-03",
+      "text": "\"Siyah\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koyu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gri"
+        },
+        {
+          "marker": "spades",
+          "text": "Mor"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "td-04",
+      "text": "Hangisi bir fiildir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Masa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koşmak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güzel"
+        },
+        {
+          "marker": "spades",
+          "text": "Hızlı"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "td-05",
+      "text": "\"Hediye\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Emanet"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ödül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bağış"
+        },
+        {
+          "marker": "spades",
+          "text": "Armağan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-06",
+      "text": "Türk alfabesinde kaç harf vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "29"
+        },
+        {
+          "marker": "diamonds",
+          "text": "26"
+        },
+        {
+          "marker": "clubs",
+          "text": "31"
+        },
+        {
+          "marker": "spades",
+          "text": "33"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "td-07",
+      "text": "\"Okul\" kelimesinin eş anlamlısı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dershane"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sınıf"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mektep"
+        },
+        {
+          "marker": "spades",
+          "text": "Medrese"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "td-08",
+      "text": "\"Ben, sen, o\" hangi sözcük türüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sıfat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zamir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zarf"
+        },
+        {
+          "marker": "spades",
+          "text": "Edat"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "td-09",
+      "text": "Türk alfabesinde kaç ünlü harf vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dokuz"
+        },
+        {
+          "marker": "clubs",
+          "text": "On"
+        },
+        {
+          "marker": "spades",
+          "text": "Sekiz"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "td-10",
+      "text": "\"Kitapları\" kelimesinde kaç hece vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dört"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "İki"
+        }
+      ],
+      "correct": "hearts"
+    }
+  ]
+}
