@@ -10,7 +10,8 @@ namespace Quiz.Hubs;
 ///
 /// Groups: every participant is in group <c>code</c>; host screens are also in <c>code + ":host"</c>,
 /// which is where <c>AnswerCount</c> and <c>RoomState</c> go. Every host action carries the key and re-joins
-/// the caller to both groups, so a reloaded TV page resumes simply by re-sending it. Joining a room is also
+/// the caller to both groups (the two things a room's own television may say, <see cref="TimeUp"/> and
+/// <see cref="RevealRead"/>, carry none: being the screen the room is shown on is the authority), so a reloaded TV page resumes simply by re-sending it. Joining a room is also
 /// leaving the one before it: SignalR never takes a connection out of a group on its own, so without that a
 /// TV that opened a second room would still be painted by the first, and <see cref="ConnectionRooms"/> is
 /// what remembers which groups to leave.
@@ -165,8 +166,8 @@ public sealed class GameHub(
         else
         {
             // The room is open and has no television in it: the screen went inside the moment it
-            // took to open it. The console owns the pacing, so it has to hear that rather than
-            // assume the screen whose code it typed a second ago; the re-pair panel is the way back.
+            // took to open it. The console is where the host is looking, so it has to hear that rather
+            // than assume the screen whose code it typed a second ago; the re-pair panel is the way back.
             await Clients.Caller.SendAsync("Displayed", false);
         }
         return code;
@@ -205,11 +206,9 @@ public sealed class GameHub(
         await JoinHostGroups(code);
 
         // Whether the room still has a television in it, which a console that has been away cannot
-        // know and has to: its own pacing is what would otherwise advance a room nobody can see.
-        // Before the repaint, because a console starts out believing the room has one and it is the
-        // repaint that arms its pacing — the question arms the countdown, the reveal arms the beat
-        // that opens the next one. Told afterwards, there is a message's worth of room in which it
-        // paces a room it has not yet heard nobody can see.
+        // know and has to say: the television is what carries the round, so a room without one is
+        // waiting, and the console is where the host is offered the way back. Before the repaint,
+        // so the notice is up by the time the room is.
         await Clients.Caller.SendAsync("Displayed", connections.DisplayOf(code) is not null);
         // Each accessor takes the room's lock on its own, so a phase that moves on mid-call means a
         // slightly stale paint, which the next broadcast corrects. Nothing here can get it wrong.
@@ -279,17 +278,61 @@ public sealed class GameHub(
     {
         var room = HostRoom(code, hostKey);
         await JoinHostGroups(code);
-        if (room.Phase != RoomPhase.Question) return;
-        if (!Try(room.CloseQuestion, out var reveal)) return;
-
-        await Clients.Group(code).SendAsync("Revealed", reveal);
-        await SendRoomState(room);
+        await Close(room);
     }
 
     public async Task AdvanceQuestion(string code, string hostKey)
     {
         var room = HostRoom(code, hostKey);
         await JoinHostGroups(code);
+        await MoveOn(room);
+    }
+
+    /// <summary>
+    /// The room's television says the question it is showing has run out: its time is up, or everyone
+    /// has answered and the beat after the last tap has passed. The television is what paces a round,
+    /// because it is the one screen a round cannot be played without — a console is a phone, and a
+    /// phone gets locked, or put in a pocket, or used to play — so the clock that closes a question is
+    /// the clock the room is looking at.
+    ///
+    /// It carries no key: a screen is in a room by having been claimed into it, and only the screen the
+    /// room is shown on may say this ("forbidden" otherwise). It names the question it means, so a
+    /// timer that outlived its question cannot close the next one, and a paused room is left alone:
+    /// that one is waiting for its host, not for a clock.
+    /// </summary>
+    public async Task TimeUp(string code, int round, int index)
+    {
+        var room = DisplayedRoom(code);
+        if (room.Paused || room.Phase != RoomPhase.Question || !Showing(room, round, index)) return;
+        await Close(room);
+    }
+
+    /// <summary>
+    /// The room's television says the reveal it is showing has been up long enough, and the round goes
+    /// on: to the next question, or to the standings after the last. Same rules as <see cref="TimeUp"/>:
+    /// only the room's own screen, and only for the reveal it names.
+    /// </summary>
+    public async Task RevealRead(string code, int round, int index)
+    {
+        var room = DisplayedRoom(code);
+        if (room.Phase != RoomPhase.Reveal || !Showing(room, round, index)) return;
+        await MoveOn(room);
+    }
+
+    private static bool Showing(Room room, int round, int index) =>
+        room.CurrentQuestion is { } shown && shown.Round == round && shown.Index == index;
+
+    private async Task Close(Room room)
+    {
+        if (room.Phase != RoomPhase.Question) return;
+        if (!Try(room.CloseQuestion, out var reveal)) return;
+
+        await Clients.Group(room.Code).SendAsync("Revealed", reveal);
+        await SendRoomState(room);
+    }
+
+    private async Task MoveOn(Room room)
+    {
         if (room.Phase != RoomPhase.Reveal) return;
         if (!Try(room.Advance, out var another)) return;
 
@@ -299,7 +342,7 @@ public sealed class GameHub(
         }
         else
         {
-            await Clients.Group(code).SendAsync("RoundFinished", room.Standings);
+            await Clients.Group(room.Code).SendAsync("RoundFinished", room.Standings);
         }
         await SendRoomState(room);
     }
@@ -407,8 +450,9 @@ public sealed class GameHub(
     /// A room's television has left it — reloaded, or a blink of Wi-Fi, which are the same thing here:
     /// a reconnected screen is a new connection in no groups. Nothing may carry the round on while
     /// nobody in the room can see it, so an open question is paused, which stops the room's own clock
-    /// and locks the players' buzzers; in the reveal there is no clock to stop, and not advancing is
-    /// the console's part, which it cannot do without being told. So the console is told either way.
+    /// and locks the players' buzzers; in the reveal there is no clock to stop, and nothing advances
+    /// because the television was what would have. The console is told either way, since the host
+    /// holding it is the one who can put a screen back.
     ///
     /// Coming back is deliberately not the reverse of this: <see cref="ClaimScreen"/> says the display
     /// is back and the host presses resume, because the host is the one who can see the room.
@@ -485,6 +529,14 @@ public sealed class GameHub(
     {
         if (!hosts.IsHost(hostKey)) throw new HubException("forbidden");
         return RoomOrThrow(code);
+    }
+
+    /// <summary>The room, for the screen it is shown on and for nobody else.</summary>
+    private Room DisplayedRoom(string code)
+    {
+        var room = RoomOrThrow(code);
+        if (connections.DisplayOf(code) != Context.ConnectionId) throw new HubException("forbidden");
+        return room;
     }
 
     private Task JoinHostGroups(string code) => SeatHost(Context.ConnectionId, code);

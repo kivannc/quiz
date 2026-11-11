@@ -1,18 +1,26 @@
 /*
- * The television: the display half of the game, and nothing else. It opens one address, shows a
- * four-digit pairing code, and waits for the host's phone to claim it. From then on the console
- * drives the round and this page only paints what the room sends — lobby, question, reveal,
- * standings. There is nothing to type here and nothing to press, which is the whole point: a TV
- * remote is the worst input device in the house.
+ * The television: the display half of the game. It opens one address, shows a four-digit pairing
+ * code, and waits for the host's phone to claim it. From then on it paints what the room sends —
+ * lobby, question, reveal, standings. There is nothing to type here and nothing to press, which is
+ * the whole point: a TV remote is the worst input device in the house.
  *
- * Two things this page deliberately does not do. It never calls a host action, so its countdown is
- * a picture of the console's clock rather than a timer that closes anything: when it reaches zero
- * it stops and the question stays up until the console closes it. And it never asks for the host
- * key — a screen is put into a room by being claimed, never by proving anything.
+ * It is also what paces the round. The countdown on this screen is the one that closes the question,
+ * the beat after the last answer is counted here, and so is the time a reveal stays up. That used to
+ * be the console's job, and a console is a phone: it gets locked, it gets put in a pocket, and the
+ * person holding it wants to play, in another tab — and a browser stops the timers of a page nobody
+ * is looking at, so the round stopped with it. The television is the one screen a round cannot be
+ * played without, so whenever its timers are not running there is nobody reading the question
+ * either. The clock the room watches is now the clock that acts.
+ *
+ * What it still never does is ask for the host key: a screen is put into a room by being claimed,
+ * never by proving anything, and the hub lets the screen a room is shown on say two things about it
+ * and no more — this question's time is up, this reveal has been read. Starting, pausing, skipping
+ * ahead and closing the room stay with the console.
  */
 
 import { t, applyStatic, onLangChange, setLang } from './i18n.js';
 import { qrSvg } from './qr.js';
+import { keepAwake } from './awake.js';
 
 /* The order the four markers are drawn in. Glyph and colour come from app.css. */
 const MARKERS = ['hearts', 'diamonds', 'clubs', 'spades'];
@@ -41,6 +49,12 @@ const CODE_RETRY_MS = 15_000;
 const CLAIMED_WITHOUT_ROOM_MS = 120_000;
 /* While the hub cannot be reached at all. A TV is left on; it has to keep trying by itself. */
 const RECONNECT_MS = 5_000;
+
+/* Everyone has answered: the beat the room gets to see the last tap land before the reveal. */
+const EVERYONE_IN_MS = 3_000;
+/* How long the reveal stays up — the answer, who chose what, and who earned what — before the round
+ * moves on by itself. Long enough to find the lit card, say "I knew it" and look for a name. */
+const REVEAL_MS = 9_000;
 
 /* The room this screen was painting, so a reload can say which room it fell out of. */
 const STORE_ROOM = 'quiz.tv.room';
@@ -110,7 +124,7 @@ function recallRoom() {
   }
 }
 
-/* ---------- the clock, which is a display and not a timer ---------- */
+/* ---------- the clock, which closes the question ---------- */
 
 let deadline = 0;
 let ticker = 0;
@@ -118,7 +132,7 @@ let ticker = 0;
 let frozen = 0;
 // What the bar is full at: the time this screen was first told the open question had left.
 let span = 0;
-/* Under this many seconds the clock and the bar change colour, as the console's clock does. */
+/* Under this many seconds the clock and the bar change colour, and so does the console's copy. */
 const CLOCK_LOW_S = 5;
 
 function stopClock() {
@@ -129,9 +143,9 @@ function stopClock() {
 }
 
 /*
- * Counts down what the room says is left and stops at zero. Nothing happens at zero: the console is
- * the one that closes a question, and this screen showing t-00s for a moment is the truth — the
- * question is over and the reveal is on its way.
+ * Counts down what the room says is left, and at zero tells the room so, which is what closes the
+ * question. The number stays at zero for the moment that takes: the question is over and the reveal
+ * is on its way.
  */
 function startClock(ms) {
   stopClock();
@@ -142,6 +156,7 @@ function startClock(ms) {
     if (Date.now() >= deadline) {
       clearInterval(ticker);
       ticker = 0;
+      timeUp();
     }
   }, 200);
 }
@@ -155,14 +170,18 @@ function freezeClock() {
   drawClock(frozen);
 }
 
-/* Starts it again with exactly what was left, never with the whole limit. */
+/*
+ * Starts it again with exactly what was left, never with the whole limit. Nothing left means the
+ * question ran out at the very moment the room was stopped, and the room did not close it then
+ * because a paused room is waiting for its host: it has to be told again now, or nothing ever would.
+ */
 function thawClock() {
   if (!state.question || ticker) return;
   const left = frozen;
   frozen = 0;
   if (left <= 0) {
-    // Either it ran out while the room was stopped, or it was never frozen. Nothing to count.
     drawClock(0);
+    timeUp();
     return;
   }
   startClock(left);
@@ -172,10 +191,78 @@ function drawClock(ms = deadline - Date.now()) {
   const left = Math.max(0, ms);
   const seconds = Math.ceil(left / 1000);
   el('tag-clock').textContent = t('clock', seconds);
-  // The same time as a length. It is a picture of the console's countdown like the number is, and
-  // it empties to nothing at the moment the number reaches zero.
+  // The same time as a length: it empties to nothing at the moment the number reaches zero.
   el('timebar-fill').style.width = `${span > 0 ? Math.min(100, (left / span) * 100) : 0}%`;
   document.body.classList.toggle('low', seconds <= CLOCK_LOW_S && !state.paused);
+}
+
+/* ---------- pacing: what carries the round on by itself ---------- */
+
+/*
+ * Two one-shot timers, never more than one of them armed: a question closes early once everyone is
+ * in, and a reveal hands the round on once it has been read. A timer left over from the screen
+ * before would fire into the next one, so show() drops both on every change of screen — and the hub
+ * is told which question or reveal is meant, so one that fires late anyway moves nothing.
+ */
+let everyoneIn = 0;
+let nextUp = 0;
+
+function cancelEveryoneIn() {
+  clearTimeout(everyoneIn);
+  everyoneIn = 0;
+}
+
+function cancelPacing() {
+  cancelEveryoneIn();
+  clearTimeout(nextUp);
+  nextUp = 0;
+}
+
+/* Everyone seated has answered the question that is up. A paused room is waiting for its host, not
+ * for its players, so it is never ready to close by itself. */
+function everyoneIsIn() {
+  return state.view === 'question' && !state.paused && state.seated > 0 && state.answered >= state.seated;
+}
+
+/* The beat before the reveal, or none. Already armed means the room was already full: a second
+ * count saying the same thing must not push it back. */
+function paceQuestion() {
+  if (!everyoneIsIn()) {
+    cancelEveryoneIn();
+    return;
+  }
+  if (everyoneIn) return;
+  everyoneIn = setTimeout(() => {
+    everyoneIn = 0;
+    timeUp();
+  }, EVERYONE_IN_MS);
+}
+
+/* The question on screen is over. Said to the room rather than done here: the room decides, and it
+ * ignores this for a question that is paused, already closed, or not the one it has open. */
+function timeUp() {
+  const question = state.question;
+  if (state.view !== 'question' || state.paused || !question || !state.room) return;
+  say('TimeUp', question.round, question.index);
+}
+
+/* The reveal on screen has been read: on to the next question, or to the standings after the last. */
+function revealRead() {
+  const reveal = state.reveal;
+  if (state.view !== 'reveal' || !reveal || !state.room) return;
+  say('RevealRead', reveal.round, reveal.index);
+}
+
+/*
+ * A refusal is not shown to a room full of people, and is not retried: the only ways to be refused
+ * are to have fallen out of the room, which puts a pairing code on this screen anyway, or to have
+ * lost the connection, which does the same when it comes back. Being claimed again re-sends the
+ * question or the reveal, and that starts these timers afresh.
+ */
+function say(method, round, index) {
+  conn.invoke(method, state.room, round, index).catch((error) => {
+    console.error(`the room did not take ${method}`, error);
+  });
 }
 
 /* ---------- hub ---------- */
@@ -218,6 +305,7 @@ conn.on('RoundReset', () => {
   // Another round in the same room. The lobby that follows is what this screen paints; this only
   // drops what belonged to the round that is over, so its podium cannot be shown for the next one.
   stopClock();
+  cancelPacing();
   state.question = null;
   state.reveal = null;
   state.standings = [];
@@ -246,6 +334,10 @@ conn.on('AnswerCount', (answered, total) => {
   state.answered = answered;
   state.seated = total;
   drawTopbar();
+  // Nobody is left to wait for, so there is nothing for the rest of the limit to buy: close after a
+  // beat instead. The countdown stays the backstop — a phone that went to sleep never answers, and
+  // the question still closes at zero.
+  paceQuestion();
 });
 
 conn.on('QuestionStarted', (question) => {
@@ -268,8 +360,17 @@ conn.on('QuestionStarted', (question) => {
 
 conn.on('Paused', (paused) => {
   state.paused = Boolean(paused);
-  if (state.paused) freezeClock();
-  else thawClock();
+  if (state.paused) {
+    // Nothing of its own may happen while the room waits: not the countdown, and not the beat that
+    // closes a question everyone has answered.
+    freezeClock();
+    cancelPacing();
+  } else {
+    thawClock();
+    // The room may have filled up while it was stopped, or before it stopped: either way the beat
+    // starts now, since no further AnswerCount is coming to start it.
+    paceQuestion();
+  }
   render();
 });
 
@@ -279,6 +380,13 @@ conn.on('Revealed', (reveal) => {
   state.paused = false;
   state.reveal = reveal;
   show('reveal');
+  // Armed after show(), which is what dropped the question's own timer. A screen claimed into a room
+  // during a reveal is sent this too, and its nine seconds start then: it has only just begun
+  // painting the answer. The last question's reveal moves on the same way, which is what ends the round.
+  nextUp = setTimeout(() => {
+    nextUp = 0;
+    revealRead();
+  }, REVEAL_MS);
 });
 
 conn.on('RoundFinished', (standings) => {
@@ -413,9 +521,10 @@ async function openScreen() {
 
 function show(view) {
   // Every change of screen comes through here, so this is where the timers of the screen being left
-  // die: a pairing code is not refreshed while a question is up, and a claim that became a room is
-  // no longer waiting to be given up on.
+  // die: a pairing code is not refreshed while a question is up, a claim that became a room is no
+  // longer waiting to be given up on, and a beat armed for one question does not fire into the next.
   clearPairingTimers();
+  cancelPacing();
   // A reveal and a podium are built once and then left alone; leaving the screen is what lets the
   // next one be built.
   if (view !== 'reveal') delete el('view-reveal').dataset.shown;
@@ -447,6 +556,10 @@ function render() {
   if (state.view === 'question') drawQuestion();
   if (state.view === 'reveal') drawReveal();
   if (state.view === 'finished') drawFinished();
+
+  // A television that is really a laptop must not dim and sleep in the middle of a round it is
+  // pacing. Only while it is in a room: a screen left on its pairing code overnight may sleep.
+  keepAwake(state.room !== null);
 }
 
 function drawTopbar() {

@@ -1,37 +1,28 @@
 /*
- * The host's console: a phone that drives the room. The television (tv.html) is the display and
- * paints the game; this page paints none of it, because the host is looking at the television like
- * everyone else. What it owns is the pacing — the countdown that closes a question, the beat after
- * everyone has answered, the beat after a reveal — and the buttons: start, pause, next, close.
+ * The host's console: the phone that opens a room and holds its buttons. The television (tv.html) is
+ * the display and paints the game; this page paints none of it, because the host is looking at the
+ * television like everyone else.
  *
  * It never speaks to the television directly. A room is opened on a screen this console has claimed
  * with the four-digit code that screen is showing, and from then on the hub sends the two of them
  * the same room messages.
  *
- * There are no timers on the server: when this page's countdown reaches zero it calls CloseQuestion
- * itself. That makes this phone the one thing the round cannot do without, so it is kept awake for
- * as long as a room is open (awake.js). The host key is typed once and remembered by the phone, so
- * one that slept mid-round anyway re-sends it, asks the hub for the room as it stands, and comes
- * back to its controls.
+ * What it does not do is pace the round. It used to: the countdown that closed a question and the
+ * beats between questions ran here, and a browser stops the timers of a page nobody is looking at —
+ * so a host who locked the phone, or opened another tab to play, stopped the round for the whole
+ * room. The television carries the round now (see tv.js). This page shows where the round stands
+ * and offers what only a person can decide: start, pause, move on sooner, another round, close.
+ * Its clock is a picture of the television's, and nothing happens here when it reaches zero.
  *
- * Which is why "Displayed" matters here more than anywhere: owning the pacing means that if the
- * television falls out of the room and nothing says so, this page asks, closes and advances
- * questions in front of nobody. So it is a state and not a moment: while this page believes the
- * room has no television in it, nothing here moves the round on of its own accord, however many
- * times the host steps it by hand. The clock is the exception, and deliberately: it goes on
- * counting the room's own deadline down, because the host has to know where the question stands;
- * what it does not do is act when it gets to zero. Every control stays live; the round starts
- * carrying itself again when the display comes back.
+ * The host key is typed once and remembered by the phone, so a console that was away re-sends it,
+ * asks the hub for the room as it stands, and comes back to its controls.
+ *
+ * "Displayed" is whether the room still has a television in it. The round does not move by itself
+ * without one — there is nothing to move it — and this page says so and offers the way back, since
+ * the host is the one holding the phone that can claim a screen.
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
-import { keepAwake } from './awake.js';
-
-/* Everyone has answered: the beat the room gets to see the last tap land before the reveal. */
-const EVERYONE_IN_MS = 3000;
-/* How long the reveal stays up — the answer, who chose what, and who earned what — before the round
- * moves on by itself. Long enough to find the lit card, say "I knew it" and look for a name. */
-const REVEAL_MS = 9000;
 
 /* Under this many seconds left, the clock on the console says so without being read. */
 const CLOCK_LOW_S = 5;
@@ -45,9 +36,9 @@ const el = (id) => document.getElementById(id);
 
 /*
  * Two screens on this page: the form that claims a television and opens a room, and the console
- * proper. The room's phase is state.view, as it is on the television, because the pacing is written
- * in terms of it — but all four phases are drawn in the one section, since what changes between
- * them here is a line of text and which button is up.
+ * proper. The room's phase is state.view, as it is on the television — but all four phases are
+ * drawn in the one section, since what changes between them here is a line of text and which
+ * button is up.
  */
 const RUN_VIEWS = ['lobby', 'question', 'reveal', 'finished'];
 
@@ -155,7 +146,7 @@ function recallDeadline(question) {
   }
 }
 
-/* ---------- the countdown, which belongs to this page ---------- */
+/* ---------- the clock, which is a picture of the television's ---------- */
 
 let deadline = 0;
 let ticker = 0;
@@ -170,15 +161,8 @@ function stopCountdown() {
 }
 
 /*
- * The clock runs whether or not the room has a television in it, and it is the room's own deadline
- * it counts down: the number here is the number over there, so a host whose screen has dropped out
- * still knows where the question stands rather than reading a picture of when it dropped.
- *
- * What a room nobody can see does not get is the act at zero. Closing the question is the guarded
- * part, not the counting — so the tick reaches the deadline, paints it and stays there until the
- * display comes back, and then closes on the very next tick. Which is why a live question needs no
- * re-arming when a television is re-seated: its clock never stopped. Stopping it is what freezing
- * does, and freezing belongs to the pause alone.
+ * Counts the room's own deadline down and stops at zero. Nothing happens at zero: the television is
+ * what closes a question, and this page only lets the host see how long is left without looking up.
  */
 function startCountdown(question, at) {
   stopCountdown();
@@ -187,9 +171,9 @@ function startCountdown(question, at) {
   drawClock();
   ticker = setInterval(() => {
     drawClock();
-    if (Date.now() >= deadline && state.display) {
-      stopCountdown();
-      closeQuestion();
+    if (Date.now() >= deadline) {
+      clearInterval(ticker);
+      ticker = 0;
     }
   }, 200);
 }
@@ -208,21 +192,15 @@ function freezeCountdown() {
   drawClock(frozen);
 }
 
-/*
- * Starts it again with exactly what was left, never with the whole limit — and starts it even when
- * what was left is nothing, because a question frozen at zero still has to close, and the next tick
- * is what does it. This page has no other way to close a question by hand.
- *
- * A running ticker is what tells a frozen clock from one that was never frozen, since zero left and
- * never frozen both read as `frozen === 0`: freezing always stops the ticker, so a console with one
- * still running has nothing to thaw. Without that, a stray resume — a second console on the same
- * key, or one that lands between a reload's QuestionStarted and its Paused — would restart the
- * countdown with nothing on it and close a running question a tick later.
- */
+/* Starts it again with exactly what was left, never with the whole limit. */
 function thawCountdown() {
   if (!state.question || ticker) return;
   const left = frozen;
   frozen = 0;
+  if (left <= 0) {
+    drawClock(0);
+    return;
+  }
   startCountdown(state.question, Date.now() + left);
 }
 
@@ -234,84 +212,12 @@ function drawClock(ms = deadline - Date.now()) {
   clock.classList.toggle('low', left <= CLOCK_LOW_S && !state.paused);
 }
 
-/* ---------- pacing: the two beats that carry the round on its own ---------- */
-
-/*
- * Two one-shot timers, never more than one of them armed: a question closes early once everyone is
- * in, and a reveal hands the round on once it has been read. Both call the same host actions the
- * buttons do, and the hub ignores a host action that does not fit the phase — but a timer left over
- * from the phase before would fire into the next one and skip a question, so show() drops both on
- * every view change and the reveal arms its own only after that.
- */
-let everyoneIn = 0;
-let nextUp = 0;
-
-function cancelEveryoneIn() {
-  clearTimeout(everyoneIn);
-  everyoneIn = 0;
-}
-
-function cancelNextUp() {
-  clearTimeout(nextUp);
-  nextUp = 0;
-}
-
-function cancelPacing() {
-  cancelEveryoneIn();
-  cancelNextUp();
-}
-
-/* Everyone seated has answered the question that is open. A paused room is waiting for its host,
- * not for its players, so it is never ready to close on its own — and a room with no television in
- * it is waiting for a screen, not for a beat: closing early would close it in front of nobody. */
-function everyoneIsIn() {
-  return state.display && state.view === 'question' && !state.paused
-    && state.seated > 0 && state.answered >= state.seated;
-}
-
-/* The beat before the reveal. Already armed means the room was already full: a second count saying
- * the same thing must not push it back. */
-function armEveryoneIn() {
-  if (everyoneIn || !state.display) return;
-  everyoneIn = setTimeout(() => {
-    everyoneIn = 0;
-    closeQuestion();
-  }, EVERYONE_IN_MS);
-}
-
-/* The beat after it. Its caller has just shown the reveal, which is what cleared the question's. */
-function armNextUp() {
-  if (nextUp || !state.display) return;
-  nextUp = setTimeout(() => {
-    nextUp = 0;
-    advance();
-  }, REVEAL_MS);
-}
-
-/*
- * The room can be seen again, so the beat this phase wants starts now. The clock is not here: a
- * live question's has been counting the room's own deadline down all along, and the display coming
- * back is enough for the next tick to close it — including one whose time went while the screen was
- * away. What is left to arm is the beat the room may have earned while nobody could see it: the
- * last tap can have landed with the screen gone, and no further AnswerCount is coming to say so.
- *
- * Not a resume: a paused room stays paused and its clock stays frozen until the host presses the
- * button, because the host is the one who knows the room is looking at the television again — which
- * is what everyoneIsIn() asks for the question, and what leaves a paused one alone here. A reveal
- * gets its beat from this moment, because the television has only just begun painting the answer.
- * Called for every "Displayed true", and safe to call twice: neither beat is armed a second time.
- */
-function rearm() {
-  if (everyoneIsIn()) armEveryoneIn();
-  else if (state.view === 'reveal') armNextUp();
-}
-
 /* ---------- hub ---------- */
 
 const conn = new signalR.HubConnectionBuilder()
   .withUrl('/hub')
-  // Never gives up, like the television. This phone carries the pacing, so the round is stopped
-  // for exactly as long as it is away — and it must come back by itself, not by being reloaded.
+  // Never gives up, like the television. The round goes on without this phone, but its buttons do
+  // not: it must come back by itself, not by being reloaded.
   .withAutomaticReconnect({
     nextRetryDelayInMilliseconds: (context) => [0, 2_000, 5_000][context.previousRetryCount] ?? 10_000,
   })
@@ -333,13 +239,6 @@ conn.on('AnswerCount', (answered, total) => {
   state.answered = answered;
   state.seated = total;
   drawRun();
-
-  // Nobody is left to wait for, so there is nothing for the rest of the limit to buy: close after a
-  // beat instead. The countdown stays the backstop — a phone that went to sleep never answers, and
-  // the question still closes at zero. Any other count leaves the beat unarmed, which in practice
-  // means the 0-of-n a question opens with: nobody can join a round in progress and raise the total.
-  if (everyoneIsIn()) armEveryoneIn();
-  else cancelEveryoneIn();
 });
 
 conn.on('QuestionStarted', (question) => {
@@ -360,56 +259,29 @@ conn.on('QuestionStarted', (question) => {
 
 conn.on('Paused', (paused) => {
   state.paused = Boolean(paused);
-  if (state.paused) {
-    // Nothing of its own may happen while the room waits: not the countdown, and not the beat that
-    // closes a question everyone has answered.
-    freezeCountdown();
-    cancelPacing();
-  } else {
-    thawCountdown();
-    // The room may have filled up while it was stopped, or before it stopped: either way the beat
-    // starts now, since no further AnswerCount is coming to start it.
-    if (everyoneIsIn()) armEveryoneIn();
-  }
+  if (state.paused) freezeCountdown();
+  else thawCountdown();
   render();
 });
 
 /*
- * Whether the room still has a television in it. This page paints none of the game, so without
- * being told it would go on pacing a round nobody can see: the countdown would reach zero, close
- * question one, and six seconds later open question two in front of nothing.
+ * Whether the room still has a television in it. The television is what carries the round, so
+ * without one nothing moves by itself; the server pauses an open question when its screen goes, and
+ * the Paused that follows is what stops the clock here. This page's part is to say so, and to put
+ * the way back in the host's hand: the field for the code the television is showing.
  *
- * It is state, not a moment. While it is false nothing on this page moves the round on for itself —
- * not this handler's cancel, which only clears what was already armed, but both beats, which ask
- * state.display before arming, and the tick, which asks it before closing a question at zero. That
- * is what holds for the rest of the round: one press of resume or next moves the round by exactly
- * that one press, and never hands the pacing back. The host keeps every control, because stepping
- * a displayless round deliberately is the host's to choose; what is gone is the console doing it
- * on its own.
- *
- * What this does not touch is the clock. Freezing is the pause's job and nothing else's — and in
- * the ordinary way of losing a television the clock does freeze, because the server pauses the room
- * and the Paused that follows is what stops it. A host who resumes anyway, with the screen still
- * gone, keeps a clock that counts: it is the room's deadline, the room is spending it, and the
- * number here is the number the television would be showing. Freezing it here instead would have
- * shown an optimistic one and, worse, left nothing able to reach zero afterwards.
- *
- * Coming back is not resuming, but it is what re-arms the beats; the clock needs nothing, having
- * never stopped.
+ * Coming back is not resuming. A paused room stays paused until the host presses the button,
+ * because the host is the one who knows the room is looking at the television again.
  */
 conn.on('Displayed', (present) => {
   state.display = Boolean(present);
   if (state.display) {
     // Back — by the form below, or by a scan that opened another tab. Either way the form is done.
     el('form-repair').hidden = true;
-    rearm();
   } else {
-    // All that is left to do: a beat already armed would otherwise close or advance in front of
-    // nobody. The clock goes on, and the tick is what asks before acting.
-    cancelPacing();
-    // And the re-pair line goes with it. "The screen is back in the room" is only cleared by a
-    // change of phase, so a television that leaves again in the same question would otherwise
-    // leave that confirmation sitting under the notice that contradicts it.
+    // "The screen is back in the room" is only cleared by a change of phase, so a television that
+    // leaves again in the same question would otherwise leave that confirmation sitting under the
+    // notice that contradicts it.
     state.repair = null;
   }
   render();
@@ -429,7 +301,6 @@ conn.on('RoomClosed', () => {
   // is spent too: saying otherwise would be telling the host not to type the code they can see.
   state.claimed = false;
   stopCountdown();
-  cancelPacing();
   forgetDeadline();
   forgetRoom();
   state.question = null;
@@ -443,23 +314,18 @@ conn.on('Revealed', () => {
   stopCountdown();
   // The room drops its pause when the question closes, and so does the console.
   state.paused = false;
+  // The television moves the round on from here; the button below does it sooner.
   show('reveal');
-  // Armed after show(), which is what cleared the question's own timer. A console that reloads
-  // during a reveal is sent this again and arms it too, so a phone waking at the wrong moment does
-  // not stall the round. The last question's reveal advances the same way: that is what ends it.
-  armNextUp();
 });
 
 conn.on('RoundFinished', () => {
   stopCountdown();
   state.paused = false;
-  // The standings are the television's to show. Nothing is armed here: the round is over.
+  // The standings are the television's to show.
   show('finished');
 });
 
 conn.onreconnecting(() => {
-  // An invoke now would only fail. Resuming re-sends AnswerCount or Revealed, which arms it again.
-  cancelPacing();
   state.connection = t('reconnecting');
   render();
 });
@@ -476,7 +342,6 @@ conn.onreconnected(() => {
 
 conn.onclose(() => {
   stopCountdown();
-  cancelPacing();
   state.claimed = false;
   state.connection = t('disconnected');
   render();
@@ -605,7 +470,6 @@ async function loadSets() {
 }
 
 const startRound = () => hostAction('StartRound');
-const closeQuestion = () => hostAction('CloseQuestion');
 const advance = () => hostAction('AdvanceQuestion');
 /* The room is the one that decides: this only asks, and the Paused that comes back is what moves
  * the console. A press that does not fit the phase is ignored by the hub, like every other. */
@@ -637,11 +501,9 @@ el('form-open').addEventListener('submit', async (event) => {
 });
 
 el('start').addEventListener('click', startRound);
-/* Moving on sooner by hand must not leave the automatic advance to fire into the next question. */
-el('next').addEventListener('click', () => {
-  cancelNextUp();
-  advance();
-});
+/* Moving on sooner than the television would. The television names the reveal it means when its own
+ * beat fires, so one that fires after this press moves nothing. */
+el('next').addEventListener('click', advance);
 
 el('pause').addEventListener('click', togglePause);
 
@@ -720,9 +582,8 @@ el('close-room').addEventListener('click', () => {
 /* ---------- rendering ---------- */
 
 function show(view) {
-  // Every phase change comes through here, so this is where a timer armed for the phase being left
-  // dies. Callers that want one for the phase they are entering arm it after calling show().
-  cancelPacing();
+  // Every phase change comes through here, so this is where what belonged to the phase being left
+  // is dropped: an armed close button, an open re-pair form, the clock.
   clearTimeout(closeArmed);
   closeArmed = 0;
   el('form-repair').hidden = true;
@@ -756,8 +617,6 @@ function render() {
     drawRun();
     drawControls();
   }
-  // The round is paced from this phone, so it must not go to sleep while a room is open.
-  keepAwake(running && state.view !== 'finished');
 }
 
 /* state.error holds what went wrong, not its words, so a language switch can say it again. */
