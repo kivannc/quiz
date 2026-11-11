@@ -1,16 +1,17 @@
 /*
- * Keeps a phone's screen on while it has a part in a round.
+ * Keeps a screen on while it has a part in a round.
  *
- * It matters most on the console. The host is watching the television, not the phone, so the phone
- * dims and locks within a minute — and a locked phone runs no timers. The countdown that closes a
- * question and the beat that opens the next one both live on that phone, so the whole room would
- * sit in front of a question that never closes until somebody noticed and woke it. A player's phone
- * is held awake for a smaller reason: one that locks between two questions has to be unlocked and
- * reconnected before it can answer the next, and the clock is already running.
+ * It matters most on the television, when the television is a laptop: the round is paced from that
+ * page, nobody touches the laptop while a game is on, and a machine that dims and sleeps in the
+ * middle of a question takes the question with it. A player's phone is held awake for a smaller
+ * reason: one that locks between two questions has to be unlocked and reconnected before it can
+ * answer the next, and the clock is already running. The console is not held awake at all, since
+ * nothing waits for it.
  *
  * The browser gives the lock up by itself whenever the page is hidden, so it is asked for again each
- * time the page comes back. Where the browser has no such thing (or refuses, as it may on a low
- * battery), nothing here fails: the phone simply behaves as it did before.
+ * time the page comes back. Where the browser has no such thing (as on most real televisions, which
+ * do not sleep anyway) or refuses, as it may on a low battery, nothing here fails: the screen simply
+ * behaves as it did before.
  */
 
 let wanted = false;

@@ -1250,4 +1250,124 @@ public sealed class GameHubTests : IDisposable
         });
         Assert.ThrowsAny<Exception>(() => factory.CreateClient());
     }
+
+    /* ---------- the television paces the round ---------- */
+
+    /// <summary>A room with one player in it and a question open, and the television it is shown on.</summary>
+    private async Task<(HubConnection Host, HubConnection Screen, HubConnection Phone, string Code)> RoomWithAQuestionOpen()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var screen = await ClaimAScreen(host);
+        var code = await host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        var phone = await Connect(factory);
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        return (host, screen, phone, code);
+    }
+
+    [Fact]
+    public async Task The_television_closes_the_question_it_is_showing_and_moves_on_from_its_reveal()
+    {
+        var (_, screen, phone, code) = await RoomWithAQuestionOpen();
+        var questions = new Inbox<JsonElement>(phone, "QuestionStarted");
+        var reveals = new Inbox<JsonElement>(phone, "Revealed");
+
+        // No key anywhere in this: the screen is in the room by having been claimed into it.
+        await screen.InvokeAsync("TimeUp", code, 1, 0);
+        var reveal = await reveals.Next();
+        Assert.Equal(0, reveal.GetProperty("index").GetInt32());
+
+        await screen.InvokeAsync("RevealRead", code, 1, 0);
+        var next = await questions.Next();
+        Assert.Equal(1, next.GetProperty("index").GetInt32());
+    }
+
+    [Fact]
+    public async Task A_television_timer_that_outlived_its_question_moves_nothing()
+    {
+        var (_, screen, phone, code) = await RoomWithAQuestionOpen();
+        var questions = new Inbox<JsonElement>(phone, "QuestionStarted");
+        var reveals = new Inbox<JsonElement>(phone, "Revealed");
+
+        // A reveal that is not up yet cannot be read, and a question from another round is not this one.
+        await screen.InvokeAsync("RevealRead", code, 1, 0);
+        await screen.InvokeAsync("TimeUp", code, 2, 0);
+        await screen.InvokeAsync("TimeUp", code, 1, 1);
+        await Barrier(phone);
+        Assert.Equal(0, reveals.Total);
+
+        await screen.InvokeAsync("TimeUp", code, 1, 0);
+        await reveals.Next();
+        await screen.InvokeAsync("RevealRead", code, 1, 0);
+        await questions.Next();
+
+        // The second question is open now. Everything the first one's timers could still say is late:
+        // none of it may close the question the room has only just been asked, or skip past it.
+        await screen.InvokeAsync("TimeUp", code, 1, 0);
+        await screen.InvokeAsync("RevealRead", code, 1, 0);
+        await screen.InvokeAsync("RevealRead", code, 1, 1);
+        await Barrier(phone);
+        Assert.Equal(1, reveals.Total);
+        Assert.Equal(1, questions.Total);
+    }
+
+    [Fact]
+    public async Task Only_the_screen_a_room_is_shown_on_may_pace_it()
+    {
+        var (host, _, phone, code) = await RoomWithAQuestionOpen();
+        var reveals = new Inbox<JsonElement>(phone, "Revealed");
+
+        // A player, the console itself, and a television that is switched on but in no room.
+        var stranger = await Connect(_factoryOf[host]);
+        await stranger.InvokeAsync<ScreenPairing>("OpenScreen");
+        foreach (var caller in new[] { phone, host, stranger })
+        {
+            Assert.Contains("forbidden", (await Refused(() => caller.InvokeAsync("TimeUp", code, 1, 0))).Message);
+            Assert.Contains("forbidden", (await Refused(() => caller.InvokeAsync("RevealRead", code, 1, 0))).Message);
+        }
+        Assert.Contains("no-such-room", (await Refused(() => stranger.InvokeAsync("TimeUp", "0000", 1, 0))).Message);
+
+        await Barrier(phone);
+        Assert.Equal(0, reveals.Total);
+    }
+
+    [Fact]
+    public async Task A_paused_question_is_not_closed_by_the_television()
+    {
+        var (host, screen, phone, code) = await RoomWithAQuestionOpen();
+        var reveals = new Inbox<JsonElement>(phone, "Revealed");
+
+        await host.InvokeAsync("PauseRound", code, HostKey);
+        await screen.InvokeAsync("TimeUp", code, 1, 0);
+        await Barrier(phone);
+        Assert.Equal(0, reveals.Total);
+
+        await host.InvokeAsync("ResumeRound", code, HostKey);
+        await screen.InvokeAsync("TimeUp", code, 1, 0);
+        await reveals.Next();
+    }
+
+    [Fact]
+    public async Task The_television_carries_a_whole_round_to_its_standings_with_no_console_in_it()
+    {
+        var (host, screen, phone, code) = await RoomWithAQuestionOpen();
+        var finished = new Inbox<JsonElement>(phone, "RoundFinished");
+        var questions = new Inbox<JsonElement>(phone, "QuestionStarted");
+
+        // The console that opened the room is gone for good: locked, in a pocket, or playing.
+        await host.DisposeAsync();
+
+        for (var index = 0; index < Room.QuestionsPerRound; index++)
+        {
+            await screen.InvokeAsync("TimeUp", code, 1, index);
+            await screen.InvokeAsync("RevealRead", code, 1, index);
+        }
+
+        var standings = await finished.Next();
+        Assert.Equal("Ada", standings[0].GetProperty("name").GetString());
+        await Barrier(phone);
+        Assert.Equal(Room.QuestionsPerRound - 1, questions.Total);
+        Assert.Equal(1, finished.Total);
+    }
 }

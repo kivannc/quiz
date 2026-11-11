@@ -12,9 +12,9 @@ Three static pages, served by the app itself. `/tv` is the **television**: a dis
 and no button on it, because the only thing in front of it is a remote control. It shows a
 four-digit screen code until a phone claims it, and from then on the game — lobby, question,
 reveal, and a podium for the first three at the end. `/host.html` is the **console**: the host's phone, laid out for one hand. It
-claims the television with the code on screen, opens the room on it, and then carries the pacing
-and the buttons — start, pause, next, close — and none of the game, because the host is looking at
-the television like everyone else. `/` is the **player's phone**: room code and name, then four
+claims the television with the code on screen, opens the room on it, and then holds the buttons —
+start, pause, next, close — and none of the game, because the host is looking at the television
+like everyone else. `/` is the **player's phone**: room code and name, then four
 suit buzzers and nothing else.
 
 Nobody has to type an address off a television. The screen code and the room code each come with
@@ -23,17 +23,23 @@ second opens the join form the same way. The digits stay on screen for whoever w
 The QR encoder is `wwwroot/qr.js`, written for this game: byte mode, level L, versions 1 to 5.
 
 A room can only be opened on a claimed screen, which is why the console asks for the screen code
-first, and the key is only ever typed into the console — once per phone, which remembers it. The console drives the round and owns the
-countdown; the server keeps no timers. A question closes three seconds after the last player has
-answered, with the countdown as the backstop for a phone that never does, and a reveal gives way to
-the next question nine seconds later — the button on the console moves it on sooner. A pause stops
+first, and the key is only ever typed into the console — once per phone, which remembers it. The television paces the round: the countdown it shows is the one that closes the question, and
+the server keeps no timers. A question closes three seconds after the last player has answered,
+with the countdown as the backstop for a phone that never does, and a reveal gives way to the next
+question nine seconds later — the button on the console moves it on sooner. The pacing is on the
+television and not on the console because a console is a phone: it gets locked, or its owner opens
+another tab to play, and a browser stops the timers of a page nobody is looking at. The television
+is the one screen a round cannot be played without, so a round with a host who is also a player,
+or whose phone is in a pocket, carries on. The hub lets the screen a room is shown on say two
+things about it, with no key — this question's time is up, this reveal has been read — and each
+names the question it means, so a late timer moves nothing. A pause stops
 the clock in the room itself, so the time spent waiting costs the players nothing and answers are
 refused until it starts again, and closing a room ends it for everyone, frees its code and sends
 the television back to a screen code. When a round ends the console offers another one in the same
 room, from any set: everyone keeps their seat, the scores start from nothing, the lobby is open to
 latecomers again, and the room does not ask a question it has already asked until the set runs out.
-Because the pacing lives on the console, that phone is kept
-awake for as long as a room is open; so are the players' phones while they are in one.
+The players' phones are kept awake while they are in a room; the console is not, since nothing
+waits for it.
 
 Both halves come back on their own. A console reloaded mid-round re-sends its key, asks the hub for
 the room as it stands and paints itself back with the countdown it was already running, paused if
