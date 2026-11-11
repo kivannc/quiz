@@ -1,0 +1,24 @@
+name: test
+
+# Runs the tests on every pull request and on main, so "green" is something a pull request shows
+# rather than something somebody remembers having run.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - run: dotnet test
