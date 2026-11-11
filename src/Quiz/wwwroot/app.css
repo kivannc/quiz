@@ -84,11 +84,12 @@ body {
 
 /* ---- the four markers: glyph and colour, defined once ---- */
 
-/* --tint is the TV card's fill, --tint-up the phone buzzer's: both washes, not colour blocks. */
-[data-marker='hearts']   { --c: var(--crimson);  --tint: rgba(255, 47, 58, .07);   --tint-up: rgba(255, 47, 58, .10); }
-[data-marker='diamonds'] { --c: var(--amber);    --tint: rgba(255, 179, 71, .07);  --tint-up: rgba(255, 179, 71, .10); }
-[data-marker='clubs']    { --c: var(--teal);     --tint: rgba(74, 214, 195, .07);  --tint-up: rgba(74, 214, 195, .10); }
-[data-marker='spades']   { --c: var(--lavender); --tint: rgba(179, 156, 255, .07); --tint-up: rgba(179, 156, 255, .10); }
+/* --tint is the TV card's fill, --tint-up the phone buzzer's: both washes, not colour blocks.
+   --tint-hot is the card that turned out to be the answer: still a wash, but one that is seen. */
+[data-marker='hearts']   { --c: var(--crimson);  --tint: rgba(255, 47, 58, .07);   --tint-up: rgba(255, 47, 58, .10);   --tint-hot: rgba(255, 47, 58, .30); }
+[data-marker='diamonds'] { --c: var(--amber);    --tint: rgba(255, 179, 71, .07);  --tint-up: rgba(255, 179, 71, .10);  --tint-hot: rgba(255, 179, 71, .28); }
+[data-marker='clubs']    { --c: var(--teal);     --tint: rgba(74, 214, 195, .07);  --tint-up: rgba(74, 214, 195, .10);  --tint-hot: rgba(74, 214, 195, .26); }
+[data-marker='spades']   { --c: var(--lavender); --tint: rgba(179, 156, 255, .07); --tint-up: rgba(179, 156, 255, .10); --tint-hot: rgba(179, 156, 255, .30); }
 
 .glyph { color: var(--c); line-height: 1; }
 [data-marker='hearts'] > .glyph::before,   .glyph[data-marker='hearts']::before   { content: '\2665'; }
@@ -160,7 +161,9 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
   color: var(--muted);
   letter-spacing: .12em;
 }
-.tv .topbar .clock { color: var(--amber); font-variant-numeric: tabular-nums; }
+.tv .topbar .clock { color: var(--amber); font-variant-numeric: tabular-nums; font-size: 2.4em; font-weight: 600; line-height: 1; }
+/* the last few seconds, said in a colour, as on the console */
+.tv.low .topbar .clock { color: var(--crimson); }
 .tv .topbar > * { white-space: nowrap; }
 
 .tv .view { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
@@ -177,6 +180,18 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
  * room reads that), and the shape (two pairs with a gap against one solid block of four).
  */
 .tv .pair { align-items: center; justify-content: center; text-align: center; gap: 0; }
+
+/*
+ * A code to type and a code to scan, side by side on the two screens that ask a phone to come to
+ * them. The QR is dark on white whatever the page looks like, because that is what a camera reads;
+ * it is kept to a modest square so the digits beside it are still the first thing seen.
+ */
+.tv .duo { display: flex; align-items: center; justify-content: center; gap: clamp(28px, 5vw, 96px); }
+.tv .duo .scan { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; }
+.tv .duo .qr { width: clamp(120px, 17vw, 300px); border-radius: 8px; overflow: hidden; line-height: 0; }
+.tv .duo .qr svg { display: block; width: 100%; height: auto; }
+.tv .duo .scan .label { font-size: clamp(11px, 1vw, 17px); margin-top: 1em; }
+.tv .duo .main { min-width: 0; }
 .tv .pair .label { font-size: clamp(11px, 1vw, 17px); }
 .tv .pair .pcode {
   display: flex;
@@ -194,7 +209,7 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .tv .pair .pcode span { margin-right: -.08em; }
 /* no code to show yet, or the one that was up outlived itself: the slot keeps its size */
 .tv .pair .pcode.waiting { color: var(--dim); }
-.tv .pair .where { font-size: clamp(12px, 1.1vw, 20px); color: var(--muted); letter-spacing: .1em; }
+.tv .pair .where { font-size: clamp(13px, 1.5vw, 26px); color: var(--muted); letter-spacing: .08em; }
 .tv .pair .status { font-size: clamp(11px, 1.05vw, 18px); letter-spacing: .08em; margin: clamp(14px, 2.4vh, 32px) 0 0; }
 /* when it stands in for the code, it is read from the sofa like the code is */
 .tv .pair .status.big { font-size: clamp(16px, 2vw, 34px); max-width: 46ch; }
@@ -214,7 +229,9 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
   /* the letter-spacing hangs off the last digit; pull it back to stay centred */
   text-indent: .18em;
 }
-.tv .lobby .where { font-size: clamp(11px, .95vw, 16px); color: var(--muted); letter-spacing: .1em; }
+/* The address is the one thing here a whole room has to type, so it is sized to be read from the
+   sofa: a little under the option cards, far over the labels. */
+.tv .lobby .where { font-size: clamp(15px, 1.9vw, 34px); color: var(--fg); letter-spacing: .06em; margin-top: .2em; }
 .tv .pills {
   display: flex;
   flex-wrap: wrap;
@@ -257,28 +274,72 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 }
 .tv .opt .glyph { font-size: 1.25em; }
 
-/* reveal */
-.tv .answer { font-size: clamp(16px, 1.6vw, 28px); color: var(--muted); }
-.tv .answer .opt-text { color: var(--fg); }
-.tv .answer .glyph { font-size: 1.15em; }
+/* The time left as a length across the top of the question: read at a glance, from anywhere. */
+.tv .timebar { height: clamp(4px, .7vh, 9px); background: var(--hairline); border-radius: 99px; overflow: hidden; }
+.tv .timebar span { display: block; height: 100%; width: 100%; background: var(--amber); border-radius: 99px; transition: width .2s linear; }
+.tv.low .timebar span { background: var(--crimson); }
+.tv.paused .timebar span { background: var(--muted); }
 
-.tv .bars { display: flex; align-items: flex-end; gap: clamp(10px, 1.4vw, 24px); flex: 0 0 clamp(110px, 26vh, 240px); }
-.tv .bars .b { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; height: 100%; text-align: center; }
-.tv .bars .b .fill { background: var(--c); border-radius: 4px 4px 0 0; min-height: 3px; }
-.tv .bars .b .n { font-size: clamp(12px, 1.1vw, 20px); color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
-.tv .bars .b .glyph { font-size: clamp(26px, 2.6vw, 46px); margin-bottom: 8px; }
+/* reveal: the same question and the same four cards, saying something new */
+.tv .question.asked { font-size: clamp(20px, 2.7vw, 46px); color: rgba(255, 255, 255, .78); }
+.tv .opt .n { margin-left: auto; padding-left: 1em; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* the ones that were not it step back, the one that was fills in */
+.tv .opt.wrong { opacity: .34; }
+.tv .opt.right {
+  background: var(--tint-hot);
+  border-color: var(--c);
+  box-shadow: 0 0 0 1px var(--c), 0 0 clamp(18px, 3vw, 54px) var(--tint-hot);
+  font-weight: 600;
+}
+.tv .opt.right .n { color: var(--fg); }
 
 .tv .board { list-style: none; margin: 0 auto; padding: 0; width: min(760px, 100%); font-size: clamp(14px, 1.5vw, 26px); }
-.tv .board li { display: flex; justify-content: space-between; gap: 16px; padding: .4em 0; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+.tv .board li { display: flex; align-items: baseline; gap: 16px; padding: .4em 0; border-bottom: 1px solid rgba(255, 255, 255, .06); }
 .tv .board li:last-child { border-bottom: 0; }
+.tv .board .who { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tv .board .rank { color: var(--muted); margin-right: .8em; }
-.tv .board .score { font-variant-numeric: tabular-nums; }
+.tv .board .score { font-variant-numeric: tabular-nums; min-width: 5ch; text-align: right; }
+/* what the question just closed was worth to each player; teal when it was worth something */
+.tv .board .gain { font-variant-numeric: tabular-nums; color: var(--dim); min-width: 5ch; text-align: right; }
+.tv .board .gain[data-earned] { color: var(--teal); }
 .tv .board.dense { width: min(1040px, 100%); font-size: clamp(12px, 1.1vw, 19px); columns: 2; column-gap: clamp(20px, 3vw, 60px); }
 .tv .board.dense li { break-inside: avoid; }
 
-.tv .finished h1 { font-size: clamp(22px, 2.6vw, 44px); font-weight: 600; letter-spacing: .14em; margin: 0 0 .6em; text-align: center; }
-/* the standings are the whole screen here, so they sit in the middle of it like the reveal does */
-.tv .finished { gap: clamp(14px, 2vh, 28px); justify-content: center; }
+/*
+ * the round is over: a podium. The first three stand on blocks whose heights are their places, the
+ * winner in the middle and in the colour the room code was in, and everyone else is listed below.
+ */
+.tv .finished { position: relative; align-items: center; justify-content: center; gap: clamp(14px, 2.4vh, 32px); }
+.tv .finished > .label { font-size: clamp(12px, 1.3vw, 22px); }
+.tv .podium { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: center; gap: clamp(10px, 1.6vw, 28px); width: 100%; }
+.tv .step { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 0 1 clamp(150px, 22vw, 400px); min-width: 0; }
+.tv .step[data-place='1'] { flex-basis: clamp(210px, 34vw, 640px); }
+.tv .step .label { font-size: clamp(11px, 1.1vw, 19px); color: var(--coral); margin-bottom: .5em; }
+.tv .step .name { font-size: clamp(17px, 2.2vw, 38px); font-weight: 500; line-height: 1.15; max-width: 100%; overflow-wrap: anywhere; }
+.tv .step[data-place='1'] .name { font-size: clamp(30px, 5vw, 88px); font-weight: 600; color: var(--coral); }
+.tv .step .score { font-size: clamp(14px, 1.6vw, 28px); color: var(--muted); font-variant-numeric: tabular-nums; margin: .25em 0 .6em; }
+.tv .step[data-place='1'] .score { font-size: clamp(18px, 2.4vw, 42px); color: var(--fg); }
+.tv .step .block {
+  width: 100%;
+  height: clamp(44px, 9vh, 96px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: .15em;
+  font-size: clamp(20px, 3vw, 52px);
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid var(--hairline);
+  border-top: 3px solid var(--muted);
+  border-radius: 7px 7px 0 0;
+}
+.tv .step[data-place='2'] .block { height: clamp(70px, 15vh, 160px); }
+.tv .step[data-place='1'] .block { height: clamp(100px, 22vh, 230px); color: var(--coral); border-top-color: var(--coral); background: rgba(255, 107, 74, .10); }
+.tv .finished .board { position: relative; z-index: 1; }
+
+/* The suits that fall behind it. Still, and so not drawn at all, unless motion is welcome. */
+.tv .rain { display: none; }
 
 /* --- paused: said on the television, because that is where the room is looking --- */
 
@@ -308,6 +369,36 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 @media (prefers-reduced-motion: no-preference) {
   .tv .paused-banner { animation: breathe 1.8s ease-in-out infinite; }
   @keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+
+  /* the reveal: the wrong cards step back, the right one lands, then the standings arrive */
+  .tv .opt.wrong { animation: step-back .5s ease-out both; }
+  .tv .opt.right { animation: land .6s cubic-bezier(.2, .9, .3, 1.3) both; }
+  .tv #reveal-board { animation: arrive .5s ease-out .7s both; }
+  @keyframes step-back { from { opacity: 1; } to { opacity: .34; } }
+  @keyframes land { 0% { transform: scale(1); } 45% { transform: scale(1.045); } 100% { transform: scale(1); } }
+  @keyframes arrive { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+  /* the podium is built from third place up, so the room has a moment to wonder who is first */
+  .tv .step { animation: rise .7s cubic-bezier(.2, .9, .3, 1.15) both; }
+  .tv .step[data-place='3'] { animation-delay: .4s; }
+  .tv .step[data-place='2'] { animation-delay: 1.3s; }
+  .tv .step[data-place='1'] { animation-delay: 2.3s; }
+  .tv .finished .board { animation: arrive .6s ease-out 3.2s both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+
+  .tv .rain { display: block; position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .tv .rain .glyph {
+    position: absolute;
+    top: -12vh;
+    font-size: calc(var(--scale, 1) * clamp(16px, 2.2vw, 40px));
+    opacity: 0;
+    animation: fall var(--fall, 7s) linear calc(2.8s + var(--wait, 0s)) infinite;
+  }
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    8% { opacity: .5; }
+    100% { transform: translateY(125vh) rotate(50deg); opacity: .35; }
+  }
 }
 
 /* ======================= the host's console ======================= */
@@ -528,7 +619,17 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .phone .result:not([data-marker]) .glyph { color: var(--dim); opacity: .45; }
 .phone .result:not([data-earned]) .pts { color: var(--muted); }
 
+/* --- the round is over: where this player finished, in the buzzers' place --- */
+.phone .final { flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 0; text-align: center; }
+.phone .final .place { margin: 0; font-size: clamp(76px, 36vw, 160px); font-weight: 600; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.phone .final .of { margin: 14px 0 0; font-size: 13px; color: var(--muted); letter-spacing: .16em; text-transform: uppercase; }
+.phone .final .total { margin: 18px 0 0; font-size: 13px; color: var(--muted); letter-spacing: .1em; }
+/* first place, in the colour the television gives its winner */
+.phone .final[data-won] .place { color: var(--coral); }
+.phone .final[data-won] .of { color: var(--coral); font-weight: 700; }
+
 @media (prefers-reduced-motion: no-preference) {
+  .phone .final { animation: result-in .3s ease-out both; }
   .phone .result .mid { animation: result-in .22s ease-out both; }
   @keyframes result-in { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
 }

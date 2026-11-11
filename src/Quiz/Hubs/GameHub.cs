@@ -445,6 +445,10 @@ public sealed class GameHub(
             // Its buzzers would otherwise look live while the room is refusing every tap.
             if (room.Paused) await Clients.Caller.SendAsync("Paused", true);
         }
+        // A seat handed back after the last question would otherwise be painted as a lobby, with a
+        // score nobody explained and a promise that the round is about to start.
+        else if (room.Phase == RoomPhase.Finished)
+            await Clients.Caller.SendAsync("RoundFinished", room.Standings);
     }
 
     private Room RoomOrThrow(string code) => rooms.Find(code) ?? throw new HubException("no-such-room");

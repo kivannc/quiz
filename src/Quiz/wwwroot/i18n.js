@@ -36,6 +36,10 @@ const STRINGS = {
     // The result screen, shown while the TV reveals the answer.
     pointsEarned: (points) => `+${points}`,
     totalScore: (score) => `TOPLAM ${grouped(score)}`,
+    // The phone's last screen: where this player finished.
+    finalPlace: (rank) => `${rank}.`,
+    finalOf: (count) => `${count} oyuncu arasında`,
+    youWon: 'KAZANDIN',
 
     // --- the host's console, and the game strings the two screens draw from ---
     hostTitle: 'Quiz — Sunucu',
@@ -63,7 +67,7 @@ const STRINGS = {
     playerCount: (n) => `${n} oyuncu`,
     revealHint: 'sonraki soru birazdan açılıyor',
     newRoomHint: 'yeni oda için odayı kapat, sonra ekranda çıkan yeni kodu gir',
-    joinAt: (host) => `telefonundan ${host} adresine gir`,
+    joinAt: (host) => `telefonundan ${host} adresini aç`,
     waitingForPlayers: 'oyuncu bekleniyor',
     startButton: 'BAŞLAT',
     roomTag: (code) => `[ oda ${code} ]`,
@@ -71,7 +75,6 @@ const STRINGS = {
     answeredCounter: (answered, total) => `cevaplayan ${answered}/${total}`,
     clock: (seconds) => `t-${pad(seconds)}s`,
     closedTag: 'kapandı',
-    correctIs: 'Doğru cevap:',
     nextButton: 'SONRAKİ SORU',
     resultsButton: 'SONUÇLAR',
     finishedHeading: 'TUR BİTTİ',
@@ -87,6 +90,10 @@ const STRINGS = {
     // The code the HOST types into a phone. Never the room code, which carries the word "oda".
     pairTag: '[ EKRAN KODU ]',
     pairHint: (url) => `telefonunda ${url} adresini aç ve bu kodu gir`,
+    // Under both QR codes: the same thing the address beside it says, for a phone with a camera.
+    scanTag: '[ ya da okut ]',
+    winnerTag: '[ KAZANAN ]',
+    gained: (points) => `+${points}`,
     // Said for every refusal, because the server deliberately tells the screen no more than this.
     pairFailed: 'eşleştirme başlatılamadı, yeniden denenecek',
     rejoinHint: (code) => `ekran oda ${code} ile eşleşmişti, kodu gir ve geri dönsün`,
@@ -139,6 +146,10 @@ const STRINGS = {
     // The result screen, shown while the TV reveals the answer.
     pointsEarned: (points) => `+${points}`,
     totalScore: (score) => `TOTAL ${grouped(score)}`,
+    // The phone's last screen: where this player finished.
+    finalPlace: (rank) => `${rank}${rank % 100 >= 11 && rank % 100 <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][rank % 10] ?? 'th')}`,
+    finalOf: (count) => `of ${count} player${count === 1 ? '' : 's'}`,
+    youWon: 'YOU WON',
 
     // --- the host's console, and the game strings the two screens draw from ---
     hostTitle: 'Quiz — Host',
@@ -174,7 +185,6 @@ const STRINGS = {
     answeredCounter: (answered, total) => `answered ${answered}/${total}`,
     clock: (seconds) => `t-${pad(seconds)}s`,
     closedTag: 'closed',
-    correctIs: 'Correct answer:',
     nextButton: 'NEXT QUESTION',
     resultsButton: 'RESULTS',
     finishedHeading: 'ROUND OVER',
@@ -190,6 +200,10 @@ const STRINGS = {
     // The code the HOST types into a phone. Never the room code, which carries the word "room".
     pairTag: '[ SCREEN CODE ]',
     pairHint: (url) => `open ${url} on your phone and type this code`,
+    // Under both QR codes: the same thing the address beside it says, for a phone with a camera.
+    scanTag: '[ or scan ]',
+    winnerTag: '[ WINNER ]',
+    gained: (points) => `+${points}`,
     // Said for every refusal, because the server deliberately tells the screen no more than this.
     pairFailed: 'could not start pairing, trying again',
     rejoinHint: (code) => `this screen was paired with room ${code}; type the code to put it back`,
