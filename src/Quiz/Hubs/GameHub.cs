@@ -89,6 +89,10 @@ public sealed class GameHub(
     {
         if (!awaitThrottle.Allow(ClientKey())) throw new HubException("throttled");
         if (pairings.ScreenShowing(screenCode) is not { } screen) throw new HubException("no-such-code");
+        // One television at a time: a phone that waited somewhere else before is not waiting there
+        // any more, and must not be told that screen's rooms, or that it has gone.
+        if (!(Context.Items.TryGetValue(WaitingAt, out var before) && Equals(before, screen))) await StopWaiting();
+        Context.Items[WaitingAt] = screen;
         await Groups.AddToGroupAsync(Context.ConnectionId, WaitingGroup(screen));
         // Remembered for this connection, for ClaimScreen: the phone may turn out to be the one that
         // opens the room, and by the time it has typed a key the code it scanned has been replaced.
@@ -96,6 +100,16 @@ public sealed class GameHub(
     }
 
     private const string AwaitedScreen = "awaited-screen";
+    // Which screen's waiting group this connection is in. Apart from the item above on purpose:
+    // that one is spent by a claim, this one by no longer waiting.
+    private const string WaitingAt = "waiting-at";
+
+    /// <summary>The wait is over: this connection is in a room, or has gone to wait elsewhere.</summary>
+    private async Task StopWaiting()
+    {
+        if (!Context.Items.Remove(WaitingAt, out var screen)) return;
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, WaitingGroup((string)screen!));
+    }
 
     /// <summary>
     /// Makes the caller the console of the screen showing <paramref name="code"/>. Throws "throttled",
@@ -239,6 +253,9 @@ public sealed class GameHub(
             // same phone, most often — still has four buzzers on screen that the room now refuses,
             // and nothing else would ever tell it why.
             foreach (var former in displaced) await Clients.Client(former).SendAsync("SeatTaken");
+            // In a room, so no longer in front of a television waiting for one: what that screen
+            // does next — another room, or going away — is not this phone's business any more.
+            await StopWaiting();
 
             await JoinPlayerGroup(code);
             var seat = room.Players.First(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
@@ -496,12 +513,13 @@ public sealed class GameHub(
         // A code nobody claimed would otherwise be claimable for a connection that no longer exists. First,
         // so that a connection no longer reading as connected has certainly lost its code too.
         pairings.Forget(Context.ConnectionId);
-        // If this was a television, the phones waiting in front of it are waiting for a connection
-        // that no longer exists: it comes back as a new one, showing a new code, and a room opened
-        // there would never reach them. They are told, and go back to "scan it again".
-        await Clients.Group(WaitingGroup(Context.ConnectionId)).SendAsync("ScreenGone");
         // The one thing about a gone connection that a room has to act on: it was the television.
         if (connections.Forget(Context.ConnectionId) is { } blinded) await DisplayGone(blinded);
+        // If this was a television, the phones waiting in front of it are waiting for a connection
+        // that no longer exists: it comes back as a new one, showing a new code, and a room opened
+        // there would never reach them. They are told, and go back to "scan it again". After the
+        // room's own bookkeeping, which must not depend on a courtesy to the phones.
+        await Clients.Group(WaitingGroup(Context.ConnectionId)).SendAsync("ScreenGone");
         await base.OnDisconnectedAsync(exception);
     }
 

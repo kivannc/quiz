@@ -298,8 +298,12 @@ conn.on('ScreenGone', () => {
  * by scanning the television a second time. The room would refuse every tap from here, so this page
  * stops being a buzzer rather than looking like a broken one — and stops for good, connection and
  * all, because a page that reconnected later would take the seat back from the tab that is in use.
- * The form is left holding the room and the name: entering them here again is a decision to play
- * from this tab after all, and a reload is what carries it out.
+ *
+ * It may also be somebody else entirely: a seat is found by its name, so a second Ali who joins takes
+ * the first one's. The form is therefore left holding the room and the name, and says both ways out.
+ * Entering them as they stand is a decision to play from this tab after all; changing the name is
+ * sitting down as someone else. Either is carried out by a reload, which comes up as whatever the
+ * form said — see the submit handler.
  */
 let displaced = false;
 // Whether this page has done what it came for yet; see arrive(), at the end.
@@ -549,6 +553,9 @@ async function join(code, name) {
   }
   state.error = result === 'roomFull' ? t('errRoomFull') : t('errRoundInProgress');
   state.phase = 'join';
+  // Not in that room and not on its way back to it: nothing is left to rejoin.
+  state.code = null;
+  state.name = null;
   forget();
   render();
 }
@@ -561,7 +568,12 @@ async function join(code, name) {
  * to start, pause or close it, since there is no way to become the host of a room one did not open.
  */
 const REJOIN_RETRY_MS = 10_000;
+/* Two minutes of asking. Each try is counted against the household's shared allowance, and a
+ * refusal that lasts longer than that is not one that asking again will cure: the form is left
+ * with the error, and a reload or a look at the page starts over. */
+const REJOIN_RETRIES = 12;
 let retry = 0;
+let retried = 0;
 
 async function rejoin() {
   clearTimeout(retry);
@@ -569,6 +581,7 @@ async function rejoin() {
   if (displaced || !state.code || !state.name) return;
   try {
     await join(state.code, state.name);
+    retried = 0;
   } catch (error) {
     const message = String(error?.message ?? '');
     if (message.includes('no-such-room') || message.includes('invalid-name')) {
@@ -585,7 +598,10 @@ async function rejoin() {
     state.error = errorText(error);
     render();
     // A connection that dropped has its own way back, which ends here again.
-    if (conn.state === signalR.HubConnectionState.Connected) retry = setTimeout(rejoin, REJOIN_RETRY_MS);
+    if (conn.state === signalR.HubConnectionState.Connected && retried < REJOIN_RETRIES) {
+      retried++;
+      retry = setTimeout(rejoin, REJOIN_RETRY_MS);
+    }
     return;
   }
   if (state.phase !== 'join' && isHost()) await resumeHost();
@@ -823,18 +839,38 @@ el('form-join').addEventListener('submit', async (event) => {
   const code = form.elements.code.value.trim();
   const name = form.elements.name.value.trim();
 
-  // This tab gave its seat up to another one and closed its connection. Asking for it back is a
-  // reload: the page comes up again as what the tab remembers being, and takes the seat.
-  if (displaced) {
-    location.reload();
-    return;
-  }
   // "required" is satisfied by a space; the room is not.
   if (!name) {
     state.error = t('errInvalidName');
     render();
     form.elements.name.focus();
     return;
+  }
+  // This tab lost its seat to another connection and closed its own. What the form says now is
+  // what it comes back as: the same name takes the seat back, a different one sits down beside
+  // whoever has it. The tab's memory is rewritten first, because that is what a reload reads —
+  // left alone, it would bring back the old name whatever had been typed over it.
+  if (displaced) {
+    if (!/^[0-9]{4}$/.test(code)) {
+      state.error = t('errCodeNeeded');
+      render();
+      return;
+    }
+    try {
+      sessionStorage.setItem(STORE_CODE, code);
+      sessionStorage.setItem(STORE_NAME, name);
+      sessionStorage.removeItem(STORE_TAP);
+      sessionStorage.removeItem(STORE_OPEN);
+    } catch { /* the reload then asks for them again */ }
+    location.reload();
+    return;
+  }
+  // Whatever this page was still trying to get back to, the form now says otherwise.
+  clearTimeout(retry);
+  retry = 0;
+  if (state.phase === 'join') {
+    state.code = null;
+    state.name = null;
   }
 
   if (state.screen) {
@@ -916,7 +952,9 @@ for (const buzzer of el('buzzers').querySelectorAll('.buzz')) {
 /* ---------- rendering ---------- */
 
 function render() {
-  const view = state.phase === 'join' ? 'join' : 'play';
+  // A page that lost its seat stays on the form whatever arrives in the moment before its
+  // connection has finished closing: a question painted over that notice would be a dead buzzer.
+  const view = state.phase === 'join' || displaced ? 'join' : 'play';
   for (const [name, section] of Object.entries(views)) section.hidden = name !== view;
 
   el('bar-me').textContent = state.name && view === 'play' ? state.name : '';

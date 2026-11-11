@@ -78,7 +78,14 @@ var app = builder.Build();
 
 app.UseForwardedHeaders();
 app.UseDefaultFiles();
-app.UseStaticFiles();
+// The pages are a handful of files that depend on each other and are replaced together by a
+// release: a page kept from last week beside a script fetched today is a script looking for a
+// button that is not there. "no-cache" does not mean "do not keep it" — it means ask first, and the
+// answer is nearly always a 304 with no body — so every phone gets a set of files that belong together.
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = context => context.Context.Response.Headers.CacheControl = "no-cache",
+});
 app.MapGet("/healthz", () => Results.Ok());
 // The host screen offers a choice of set, so it has to know what there is. No key is asked for:
 // a set's id, title and language are not secret, and the questions themselves are not sent.
@@ -87,8 +94,11 @@ app.MapGet("/sets", (IQuestionSetSource sets) =>
 // The television's address is typed in with a remote, so the screen answers at "/tv" as well as at
 // "/tv.html". It is the one address anybody enters on that device, and ".html" is four keystrokes
 // too many on a remote control.
-app.MapGet("/tv", (IWebHostEnvironment env) =>
-    Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html"));
+app.MapGet("/tv", (HttpContext http, IWebHostEnvironment env) =>
+{
+    http.Response.Headers.CacheControl = "no-cache";
+    return Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html");
+});
 app.MapHub<GameHub>("/hub");
 
 app.Run();

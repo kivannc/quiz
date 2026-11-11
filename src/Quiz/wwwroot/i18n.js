@@ -50,7 +50,7 @@ const STRINGS = {
     errScreenCodeGone: 'televizyondaki kod değişti, yeniden okut',
     // The host's buttons on the phone that opened the room.
     hostDisplayGone: 'televizyon odadan düştü · ekrandaki kodu bu telefonla okut ya da buraya yaz',
-    seatTaken: 'bu oyun başka bir sekmede açıldı · buradan devam etmek için GİR',
+    seatTaken: 'bu ad başka bir telefonda ya da sekmede oynuyor · buradan devam etmek için GİR, başka biriysen adını değiştir',
     hostLobby: 'herkes girince başlat',
 
     // --- the host's console, and the game strings the two screens draw from ---
@@ -173,7 +173,7 @@ const STRINGS = {
     errScreenCodeGone: 'the code on the television has changed; scan it again',
     // The host's buttons on the phone that opened the room.
     hostDisplayGone: 'the television left the room · scan the code on it with this phone, or type it here',
-    seatTaken: 'this game was opened in another tab · press ENTER to carry on from here',
+    seatTaken: 'this name is playing on another phone or tab · press ENTER to carry on from here, or change the name if that is not you',
     hostLobby: 'start when everyone is in',
 
     // --- the host's console, and the game strings the two screens draw from ---
