@@ -12,6 +12,7 @@
  */
 
 import { t, applyStatic, onLangChange, setLang } from './i18n.js';
+import { qrSvg } from './qr.js';
 
 /* The order the four markers are drawn in. Glyph and colour come from app.css. */
 const MARKERS = ['hearts', 'diamonds', 'clubs', 'spades'];
@@ -69,6 +70,7 @@ const state = {
   question: null,    // the QuestionStarted payload
   reveal: null,      // the Revealed payload
   standings: [],     // from RoundFinished
+  before: null,      // name -> total when the open question opened, so the reveal can say who earned what
   paused: false,
   connection: '',    // reconnecting / disconnected notice
 };
@@ -114,6 +116,10 @@ let deadline = 0;
 let ticker = 0;
 // What was left of the clock when the room was paused, in milliseconds; 0 when it is running.
 let frozen = 0;
+// What the bar is full at: the time this screen was first told the open question had left.
+let span = 0;
+/* Under this many seconds the clock and the bar change colour, as the console's clock does. */
+const CLOCK_LOW_S = 5;
 
 function stopClock() {
   clearInterval(ticker);
@@ -163,7 +169,13 @@ function thawClock() {
 }
 
 function drawClock(ms = deadline - Date.now()) {
-  el('tag-clock').textContent = t('clock', Math.max(0, Math.ceil(ms / 1000)));
+  const left = Math.max(0, ms);
+  const seconds = Math.ceil(left / 1000);
+  el('tag-clock').textContent = t('clock', seconds);
+  // The same time as a length. It is a picture of the console's countdown like the number is, and
+  // it empties to nothing at the moment the number reaches zero.
+  el('timebar-fill').style.width = `${span > 0 ? Math.min(100, (left / span) * 100) : 0}%`;
+  document.body.classList.toggle('low', seconds <= CLOCK_LOW_S && !state.paused);
 }
 
 /* ---------- hub ---------- */
@@ -186,6 +198,7 @@ conn.on('Paired', () => {
 });
 
 conn.on('RoomOpened', (code) => {
+  state.before = null;
   state.room = code;
   state.wasIn = null;
   rememberRoom(code);
@@ -233,9 +246,13 @@ conn.on('QuestionStarted', (question) => {
   state.reveal = null;
   state.answered = 0;
   state.paused = false;
+  // The totals as they stand before this question is scored: the roster was refreshed after the
+  // last reveal, so what it holds now is exactly the "before" the next reveal is measured from.
+  state.before = new Map(state.players.map((player) => [player.name, player.score]));
   show('question');
   // What the room says is left, which on a screen arriving mid-question is not the whole limit.
-  startClock(question.limitSeconds * 1000);
+  span = question.limitSeconds * 1000;
+  startClock(span);
 });
 
 conn.on('Paused', (paused) => {
@@ -388,6 +405,14 @@ function show(view) {
   // die: a pairing code is not refreshed while a question is up, and a claim that became a room is
   // no longer waiting to be given up on.
   clearPairingTimers();
+  // A reveal and a podium are built once and then left alone; leaving the screen is what lets the
+  // next one be built.
+  if (view !== 'reveal') delete el('view-reveal').dataset.shown;
+  if (view !== 'finished') {
+    delete el('view-finished').dataset.shown;
+    el('rain').replaceChildren();
+  }
+  if (view !== 'question') document.body.classList.remove('low');
   state.view = view;
 
   if (view === 'pairing') {
@@ -410,7 +435,7 @@ function render() {
   if (state.view === 'lobby') drawLobby();
   if (state.view === 'question') drawQuestion();
   if (state.view === 'reveal') drawReveal();
-  if (state.view === 'finished') drawBoard(el('final-board'), state.standings);
+  if (state.view === 'finished') drawFinished();
 }
 
 function drawTopbar() {
@@ -459,6 +484,9 @@ function drawPairing() {
   code.classList.toggle('waiting', waiting);
 
   set(el('pair-where'), waiting ? '' : t('pairHint', consoleAddress()));
+  // The same code as something to point a camera at: it opens the console with the four digits in
+  // the field. Never beside a dead code, for the reason the address is not.
+  drawQr(el('pair-scan'), el('pair-qr'), waiting ? null : `${location.origin}/host.html?pair=${state.code}`);
 
   const status = el('pair-status');
   set(status, state.codeFailed ? t('pairFailed') : '');
@@ -480,9 +508,36 @@ function consoleAddress() {
   return `${location.host}/host.html`;
 }
 
+/*
+ * Draws `address` as a QR code into `box`, or hides `frame` when there is nothing to scan. The code
+ * is only rebuilt when the address changes: every render comes through here, and a code that was
+ * redrawn on each one would flicker under a camera trying to read it. An address this encoder
+ * cannot draw hides the frame too — the typed code beside it still works, and a wrong code would not.
+ */
+function drawQr(frame, box, address) {
+  if (!address) {
+    frame.hidden = true;
+    box.replaceChildren();
+    delete box.dataset.address;
+    return;
+  }
+  if (box.dataset.address !== address) {
+    try {
+      box.replaceChildren(qrSvg(address));
+      box.dataset.address = address;
+    } catch (error) {
+      console.error('could not draw the QR code', error);
+      frame.hidden = true;
+      return;
+    }
+  }
+  frame.hidden = false;
+}
+
 function drawLobby() {
   el('lobby-code').textContent = state.room ?? '';
   el('lobby-where').textContent = t('joinAt', location.host);
+  drawQr(el('lobby-scan'), el('lobby-qr'), state.room ? `${location.origin}/?code=${state.room}` : null);
 
   const pills = el('lobby-players');
   pills.replaceChildren(...state.players.map((player) => {
@@ -518,58 +573,138 @@ function optionCard(option) {
   return card;
 }
 
+/*
+ * The reveal keeps the question and its four cards where they were and changes what they say: the
+ * right one is lit, the others step back, and each carries how many chose it. The room was looking
+ * at exactly these cards a moment ago, so the answer lands where the eyes already are — and whoever
+ * was reading the question aloud can still see what was asked.
+ *
+ * Under it, the standings with what each player just earned. A reveal carries totals, so the gain is
+ * the difference from the totals this screen held when the question opened; a screen seated during
+ * the reveal never held them and shows the totals alone.
+ *
+ * Built once per reveal: the roster refresh that follows every reveal comes back through render(),
+ * and rebuilding the cards would start their animation again in the middle of being read.
+ */
 function drawReveal() {
   const reveal = state.reveal;
   if (!reveal) return;
 
-  el('reveal-glyph').dataset.marker = reveal.correct;
-  const correct = state.question?.options.find((option) => option.marker === reveal.correct);
-  el('reveal-text').textContent = correct?.text ?? '';
+  const view = el('view-reveal');
+  const signature = `${state.room}:${reveal.index}:${document.documentElement.lang}`;
+  if (view.dataset.shown === signature) return;
+  view.dataset.shown = signature;
 
-  const counts = MARKERS.map((marker) => reveal.distribution[marker] ?? 0);
-  const most = Math.max(1, ...counts);
-  el('reveal-bars').replaceChildren(...MARKERS.map((marker, i) => {
-    const column = document.createElement('div');
-    column.className = 'b';
-    column.dataset.marker = marker;
+  el('reveal-question').textContent = state.question?.text ?? '';
 
-    const glyph = document.createElement('span');
-    glyph.className = 'glyph';
-
-    const fill = document.createElement('span');
-    fill.className = 'fill';
-    fill.style.height = `${Math.round((counts[i] / most) * 100)}%`;
-
+  const options = state.question?.options ?? MARKERS.map((marker) => ({ marker, text: '' }));
+  el('reveal-options').replaceChildren(...options.map((option) => {
+    const card = optionCard(option);
+    card.classList.add(option.marker === reveal.correct ? 'right' : 'wrong');
     const n = document.createElement('span');
     n.className = 'n';
-    n.textContent = String(counts[i]);
-
-    column.append(glyph, fill, n);
-    return column;
+    n.textContent = String(reveal.distribution[option.marker] ?? 0);
+    card.append(n);
+    return card;
   }));
 
-  drawBoard(el('reveal-board'), reveal.standings);
+  drawBoard(el('reveal-board'), reveal.standings, { before: state.before });
 }
 
-function drawBoard(list, standings) {
+/*
+ * A list of standings. `offset` is how many places stand above the first row, for the list under the
+ * podium; `before` is the totals the gains are measured from, when this screen knows them.
+ */
+function drawBoard(list, standings, { offset = 0, before = null } = {}) {
   list.classList.toggle('dense', standings.length > 8);
   list.replaceChildren(...standings.map((player, i) => {
     const row = document.createElement('li');
 
     const who = document.createElement('span');
+    who.className = 'who';
     const rank = document.createElement('span');
     rank.className = 'rank';
-    rank.textContent = String(i + 1);
+    rank.textContent = String(offset + i + 1);
     const name = document.createElement('span');
     name.textContent = player.name;
     who.append(rank, name);
+    row.append(who);
+
+    if (before?.has(player.name)) {
+      const earned = player.score - before.get(player.name);
+      const gain = document.createElement('span');
+      gain.className = 'gain';
+      gain.textContent = t('gained', Math.max(0, earned));
+      if (earned > 0) gain.dataset.earned = '';
+      row.append(gain);
+    }
 
     const score = document.createElement('span');
     score.className = 'score';
     score.textContent = String(player.score);
-
-    row.append(who, score);
+    row.append(score);
     return row;
+  }));
+}
+
+/* How many suits fall behind the podium. Enough to fill a television, few enough to stay calm. */
+const RAIN = 36;
+
+/*
+ * The end of the round: the first three on a podium, built up from third place to first so the room
+ * gets a moment to wonder, and everyone else in a list underneath. The stylesheet owns the timing;
+ * each step only carries its place. Built once per set of standings, for the reason the reveal is.
+ */
+function drawFinished() {
+  const view = el('view-finished');
+  const signature = `${state.room}:${JSON.stringify(state.standings)}:${document.documentElement.lang}`;
+  if (view.dataset.shown === signature) return;
+  view.dataset.shown = signature;
+
+  const top = state.standings.slice(0, 3);
+  // Second, first, third: the winner stands in the middle, as on any podium.
+  const order = [top[1], top[0], top[2]];
+  el('podium').replaceChildren(...order.map((player, i) => {
+    if (!player) return null;
+    const place = [2, 1, 3][i];
+    const step = document.createElement('div');
+    step.className = 'step';
+    step.dataset.place = String(place);
+
+    if (place === 1) {
+      const tag = document.createElement('div');
+      tag.className = 'label';
+      tag.textContent = t('winnerTag');
+      step.append(tag);
+    }
+    const name = document.createElement('div');
+    name.className = 'name';
+    name.textContent = player.name;
+    const score = document.createElement('div');
+    score.className = 'score';
+    score.textContent = String(player.score);
+    const block = document.createElement('div');
+    block.className = 'block';
+    block.textContent = String(place);
+    step.append(name, score, block);
+    return step;
+  }).filter(Boolean));
+
+  const rest = state.standings.slice(3);
+  el('final-board').hidden = rest.length === 0;
+  drawBoard(el('final-board'), rest, { offset: 3 });
+
+  // The four suits, falling. Each gets its own lane, speed and size here; the stylesheet moves
+  // them, and does not move them at all for anyone who has asked their device for less motion.
+  el('rain').replaceChildren(...Array.from({ length: RAIN }, (_, i) => {
+    const drop = document.createElement('span');
+    drop.className = 'glyph';
+    drop.dataset.marker = MARKERS[i % MARKERS.length];
+    drop.style.left = `${((i * 61) % 100) + Math.random() * 2}%`;
+    drop.style.setProperty('--fall', `${5 + Math.random() * 5}s`);
+    drop.style.setProperty('--wait', `${(Math.random() * 6).toFixed(2)}s`);
+    drop.style.setProperty('--scale', (0.6 + Math.random() * 1.2).toFixed(2));
+    return drop;
   }));
 }
 

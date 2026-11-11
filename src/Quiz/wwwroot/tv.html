@@ -28,9 +28,19 @@
 
     <!-- 1 · nobody is driving this screen yet: the code the host types into a phone -->
     <section class="view pair" id="view-pairing" hidden>
-      <div class="label" data-i18n="pairTag"></div>
-      <div class="pcode" id="pair-code"></div>
-      <div class="where" id="pair-where" hidden></div>
+      <!-- The code to type and the code to scan say the same thing; whichever is quicker for the
+           phone in hand. The scan opens the console with the four digits already in the field. -->
+      <div class="duo">
+        <div class="scan" id="pair-scan" hidden>
+          <div class="qr" id="pair-qr"></div>
+          <div class="label" data-i18n="scanTag"></div>
+        </div>
+        <div class="main">
+          <div class="label" data-i18n="pairTag"></div>
+          <div class="pcode" id="pair-code"></div>
+          <div class="where" id="pair-where" hidden></div>
+        </div>
+      </div>
       <p class="status" id="pair-status" hidden></p>
       <p class="status" id="pair-rejoin" hidden></p>
     </section>
@@ -43,9 +53,17 @@
 
     <!-- 3 · lobby: the other code, the one the players type -->
     <section class="view lobby" id="view-lobby" hidden>
-      <div class="label kod" data-i18n="roomCodeTag"></div>
-      <div class="code" id="lobby-code"></div>
-      <div class="where" id="lobby-where"></div>
+      <div class="duo">
+        <div class="scan" id="lobby-scan" hidden>
+          <div class="qr" id="lobby-qr"></div>
+          <div class="label" data-i18n="scanTag"></div>
+        </div>
+        <div class="main">
+          <div class="label kod" data-i18n="roomCodeTag"></div>
+          <div class="code" id="lobby-code"></div>
+          <div class="where" id="lobby-where"></div>
+        </div>
+      </div>
       <div class="pills" id="lobby-players"></div>
       <p class="status" id="lobby-status" hidden></p>
     </section>
@@ -56,20 +74,25 @@
         <span data-i18n="pausedBanner"></span>
         <span class="sub" data-i18n="pausedHint"></span>
       </p>
+      <!-- The time left as a length, because a number in a corner is not read from a sofa. -->
+      <div class="timebar" id="timebar"><span id="timebar-fill"></span></div>
       <p class="question"><span class="caret">&gt;</span> <span id="question-text"></span><span class="block">&nbsp;</span></p>
       <div class="options" id="question-options"></div>
     </section>
 
-    <!-- 5 · the question is over -->
+    <!-- 5 · the question is over: the same question and the same four cards, with the answer lit
+         and every card saying how many chose it, and then who earned what -->
     <section class="view" id="view-reveal" hidden>
-      <p class="answer"><span data-i18n="correctIs"></span> <span class="glyph" id="reveal-glyph"></span> <span class="opt-text" id="reveal-text"></span></p>
-      <div class="bars" id="reveal-bars"></div>
+      <p class="question asked"><span class="caret">&gt;</span> <span id="reveal-question"></span></p>
+      <div class="options revealed" id="reveal-options"></div>
       <ol class="board" id="reveal-board"></ol>
     </section>
 
     <!-- 6 · the round is over -->
     <section class="view finished" id="view-finished" hidden>
-      <h1 data-i18n="finishedHeading"></h1>
+      <div class="rain" id="rain" aria-hidden="true"></div>
+      <div class="label" data-i18n="finishedHeading"></div>
+      <div class="podium" id="podium"></div>
       <ol class="board" id="final-board"></ol>
     </section>
 

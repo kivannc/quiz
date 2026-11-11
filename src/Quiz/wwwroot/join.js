@@ -7,11 +7,14 @@
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
+import { keepAwake } from './awake.js';
 
 const STORE_CODE = 'quiz.code';
 const STORE_NAME = 'quiz.name';
 const STORE_TAP = 'quiz.tap';
 const STORE_OPEN = 'quiz.open';
+/* The name last played under, kept across evenings so the form only asks for it once. */
+const STORE_LAST_NAME = 'quiz.lastName';
 
 const el = (id) => document.getElementById(id);
 
@@ -30,6 +33,7 @@ const state = {
   chosen: null,     // the marker the room accepted for the current question
   baseline: null,   // this player's total before the open question is scored, or null when not knowable
   reveal: null,     // { marker, points } while the TV reveals the answer; points null means "not knowable"
+  final: null,      // { rank, of } once the round is over and this player is in the standings
   paused: false,    // the room's clock is stopped: taps are refused until it starts again
   error: '',
   notice: '',       // something that happened rather than something that went wrong
@@ -45,6 +49,9 @@ function remember() {
   } catch {
     // Without storage a reload just means typing the code again.
   }
+  try {
+    if (state.name) localStorage.setItem(STORE_LAST_NAME, state.name);
+  } catch { /* the form asks for the name again next time */ }
 }
 
 function forget() {
@@ -111,7 +118,12 @@ function recall() {
 
 const conn = new signalR.HubConnectionBuilder()
   .withUrl('/hub')
-  .withAutomaticReconnect()
+  // Never gives up, like the television: a Wi-Fi that drops for a minute, or the server restarting
+  // for a new version, must not leave a room of phones each asking to be reloaded by hand. Quick at
+  // first, then every ten seconds for as long as it takes.
+  .withAutomaticReconnect({
+    nextRetryDelayInMilliseconds: (context) => [0, 2_000, 5_000][context.previousRetryCount] ?? 10_000,
+  })
   // Warnings and worse only: the client chats at Information level, and a living-room
   // screen has no console to read it in.
   .configureLogging(signalR.LogLevel.Warning)
@@ -150,6 +162,7 @@ conn.on('RoomClosed', () => {
   state.index = null;
   state.pending = null;
   state.chosen = null;
+  state.final = null;
   clearResult();
   state.paused = false;
   state.error = '';
@@ -161,6 +174,7 @@ conn.on('QuestionStarted', (question) => {
   // The payload carries the question text and the options; this screen deliberately shows neither.
   // Its index is used only to tell this phone's own answer apart from an older one.
   state.phase = 'question';
+  state.final = null;
   state.index = question.index;
   state.paused = false;
   state.pending = null;
@@ -195,8 +209,14 @@ conn.on('Revealed', (reveal) => {
 conn.on('RoundFinished', (standings) => {
   state.phase = 'finished';
   state.paused = false;
+  // The last question's tap is not an answer to anything any more.
+  state.chosen = null;
+  state.pending = null;
   clearResult();
   takeScore(standings);
+  // Where this player finished. The standings arrive best first, so the place is the position.
+  const place = (standings ?? []).findIndex((player) => player.name === state.name);
+  state.final = place < 0 ? null : { rank: place + 1, of: standings.length };
   render();
 });
 
@@ -217,6 +237,25 @@ conn.onclose(() => {
   state.connection = t('disconnected');
   render();
 });
+
+/*
+ * A phone that was locked or put away comes back with its socket long gone, and sometimes with the
+ * reconnecting given up on by the browser rather than by this page. Coming back to the page is the
+ * moment to try again, so the player never has to know what a reload is.
+ */
+async function revive() {
+  if (document.visibilityState !== 'visible' || conn.state !== signalR.HubConnectionState.Disconnected) return;
+  try {
+    await conn.start();
+    state.connection = '';
+    render();
+    await rejoin();
+  } catch {
+    // Still unreachable. The notice stays, and the next time the page is looked at tries again.
+  }
+}
+document.addEventListener('visibilitychange', revive);
+window.addEventListener('online', revive);
 
 /*
  * The result and the total it would be worked out from both belong to one question, so they go
@@ -386,8 +425,30 @@ function render() {
   // The result takes the buzzers' place for as long as the room is revealing, and no longer. A paused
   // room and a closed one own this screen on their own terms, so neither has to argue with the result.
   const result = state.phase === 'closed' && !state.paused ? state.reveal : null;
-  el('buzzers').hidden = result !== null;
+  // And once the round is over there is nothing left to press: the place this player finished in
+  // takes the buzzers' place for good.
+  const final = state.phase === 'finished' ? state.final : null;
+  el('buzzers').hidden = result !== null || final !== null;
   paintResult(result);
+  paintFinal(final);
+
+  // Held awake for as long as this phone is in a room, so a screen that dims between two questions
+  // is not what costs a player the next one.
+  keepAwake(view === 'play' && state.phase !== 'finished');
+}
+
+/* The last screen: the place, and under it either that it is first or how many it is out of. */
+function paintFinal(final) {
+  const box = el('final');
+  box.hidden = final === null;
+  if (final === null) return;
+
+  const won = final.rank === 1 && final.of > 1;
+  if (won) box.dataset.won = '';
+  else delete box.dataset.won;
+  el('final-place').textContent = t('finalPlace', final.rank);
+  el('final-of').textContent = won ? t('youWon') : t('finalOf', final.of);
+  el('final-total').textContent = t('totalScore', state.score);
 }
 
 /*
@@ -484,10 +545,30 @@ try {
   console.error('could not reach the hub', error);
 }
 
+/*
+ * The television's QR code opens this page with the room code in the address, so a player who scans
+ * it has only a name to type — and not even that on a phone that has played before. The code is
+ * taken out of the address once read: it is spent the moment the room closes, and a reload or a
+ * bookmark must not keep offering it.
+ */
+const scanned = new URLSearchParams(location.search).get('code');
+if (scanned !== null) history.replaceState(null, '', location.pathname);
+
 /* A reload rejoins by itself, on the same path a dropped connection takes. */
 const stored = recall();
-if (stored.code && stored.name && conn.state === signalR.HubConnectionState.Connected) {
+const fresh = /^[0-9]{4}$/.test(scanned ?? '') && scanned !== stored.code;
+if (!fresh && stored.code && stored.name && conn.state === signalR.HubConnectionState.Connected) {
   state.code = stored.code;
   state.name = stored.name;
   await rejoin();
+}
+
+if (state.phase === 'join') {
+  const form = el('form-join');
+  if (fresh) form.elements.code.value = scanned;
+  try {
+    if (!form.elements.name.value) form.elements.name.value = localStorage.getItem(STORE_LAST_NAME) ?? '';
+  } catch { /* nothing remembered */ }
+  // The cursor goes to whichever of the two is still empty.
+  (form.elements.code.value ? form.elements.name : form.elements.code).focus();
 }

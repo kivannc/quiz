@@ -9,8 +9,10 @@
  * the same room messages.
  *
  * There are no timers on the server: when this page's countdown reaches zero it calls CloseQuestion
- * itself. The host key is typed once and kept in sessionStorage, so a phone that slept mid-round
- * re-sends it, asks the hub for the room as it stands, and comes back to its controls.
+ * itself. That makes this phone the one thing the round cannot do without, so it is kept awake for
+ * as long as a room is open (awake.js). The host key is typed once and remembered by the phone, so
+ * one that slept mid-round anyway re-sends it, asks the hub for the room as it stands, and comes
+ * back to its controls.
  *
  * Which is why "Displayed" matters here more than anywhere: owning the pacing means that if the
  * television falls out of the room and nothing says so, this page asks, closes and advances
@@ -23,11 +25,13 @@
  */
 
 import { t, applyStatic, mountLangSwitch, onLangChange, errorText } from './i18n.js';
+import { keepAwake } from './awake.js';
 
 /* Everyone has answered: the beat the room gets to see the last tap land before the reveal. */
 const EVERYONE_IN_MS = 3000;
-/* How long the reveal stays up — the bars and the standings — before the round moves on by itself. */
-const REVEAL_MS = 6000;
+/* How long the reveal stays up — the answer, who chose what, and who earned what — before the round
+ * moves on by itself. Long enough to find the lit card, say "I knew it" and look for a name. */
+const REVEAL_MS = 9000;
 
 /* Under this many seconds left, the clock on the console says so without being read. */
 const CLOCK_LOW_S = 5;
@@ -66,13 +70,26 @@ const state = {
   connection: '',   // reconnecting / disconnected notice
 };
 
-/* ---------- session memory ---------- */
+/* ---------- what this phone remembers ---------- */
+
+/*
+ * Kept for the phone rather than for the tab. Scanning the television's QR code opens a new tab,
+ * and that tab has to be the same console: it must find the room it is running, so that a
+ * television which reloaded is put back by the scan alone, and it must not ask for the key again
+ * every evening. The key is therefore at rest on the host's own phone — the one place it was already
+ * being typed — and nowhere else.
+ */
+const store = {
+  getItem(key) { return localStorage.getItem(key); },
+  setItem(key, value) { localStorage.setItem(key, value); },
+  removeItem(key) { localStorage.removeItem(key); },
+};
 
 function remember() {
   try {
-    sessionStorage.setItem(STORE_KEY, state.hostKey ?? '');
-    sessionStorage.setItem(STORE_CODE, state.code ?? '');
-    sessionStorage.setItem(STORE_SET, state.setId ?? '');
+    store.setItem(STORE_KEY, state.hostKey ?? '');
+    store.setItem(STORE_CODE, state.code ?? '');
+    store.setItem(STORE_SET, state.setId ?? '');
   } catch {
     // Without storage a reload simply cannot resume; everything else still works.
   }
@@ -81,16 +98,16 @@ function remember() {
 function forgetRoom() {
   state.code = null;
   try {
-    sessionStorage.removeItem(STORE_CODE);
+    store.removeItem(STORE_CODE);
   } catch { /* nothing to forget */ }
 }
 
 function recall() {
   try {
     return {
-      hostKey: sessionStorage.getItem(STORE_KEY) || null,
-      code: sessionStorage.getItem(STORE_CODE) || null,
-      setId: sessionStorage.getItem(STORE_SET) || null,
+      hostKey: store.getItem(STORE_KEY) || null,
+      code: store.getItem(STORE_CODE) || null,
+      setId: store.getItem(STORE_SET) || null,
     };
   } catch {
     return { hostKey: null, code: null, setId: null };
@@ -99,7 +116,7 @@ function recall() {
 
 function rememberDeadline(index, at) {
   try {
-    sessionStorage.setItem(STORE_DEADLINE, JSON.stringify({ code: state.code, index, at }));
+    store.setItem(STORE_DEADLINE, JSON.stringify({ code: state.code, index, at }));
   } catch { /* the countdown still runs; only a reload would have used this */ }
 }
 
@@ -110,7 +127,7 @@ function rememberDeadline(index, at) {
  */
 function forgetDeadline() {
   try {
-    sessionStorage.removeItem(STORE_DEADLINE);
+    store.removeItem(STORE_DEADLINE);
   } catch { /* nothing to forget */ }
 }
 
@@ -122,7 +139,7 @@ function forgetDeadline() {
  */
 function recallDeadline(index) {
   try {
-    const stored = JSON.parse(sessionStorage.getItem(STORE_DEADLINE) ?? 'null');
+    const stored = JSON.parse(store.getItem(STORE_DEADLINE) ?? 'null');
     return stored && stored.code === state.code && stored.index === index ? stored.at : null;
   } catch {
     return null;
@@ -284,7 +301,11 @@ function rearm() {
 
 const conn = new signalR.HubConnectionBuilder()
   .withUrl('/hub')
-  .withAutomaticReconnect()
+  // Never gives up, like the television. This phone carries the pacing, so the round is stopped
+  // for exactly as long as it is away — and it must come back by itself, not by being reloaded.
+  .withAutomaticReconnect({
+    nextRetryDelayInMilliseconds: (context) => [0, 2_000, 5_000][context.previousRetryCount] ?? 10_000,
+  })
   // Warnings and worse only: the client chats at Information level, and a phone in a dark
   // living room has no console to read it in.
   .configureLogging(signalR.LogLevel.Warning)
@@ -370,6 +391,8 @@ conn.on('Paused', (paused) => {
 conn.on('Displayed', (present) => {
   state.display = Boolean(present);
   if (state.display) {
+    // Back — by the form below, or by a scan that opened another tab. Either way the form is done.
+    el('form-repair').hidden = true;
     rearm();
   } else {
     // All that is left to do: a beat already armed would otherwise close or advance in front of
@@ -442,6 +465,25 @@ conn.onclose(() => {
   state.connection = t('disconnected');
   render();
 });
+
+/*
+ * A phone that was locked anyway comes back with its socket gone, and sometimes with the browser
+ * having given up on it. Looking at the page again is the moment to try, so the host never has to
+ * reload a console in the middle of a round.
+ */
+async function revive() {
+  if (document.visibilityState !== 'visible' || conn.state !== signalR.HubConnectionState.Disconnected) return;
+  try {
+    await conn.start();
+    state.connection = '';
+    render();
+    await resume();
+  } catch {
+    // Still unreachable. The notice stays, and the next look at the page tries again.
+  }
+}
+document.addEventListener('visibilitychange', revive);
+window.addEventListener('online', revive);
 
 /* ---------- actions ---------- */
 
@@ -663,6 +705,8 @@ function render() {
     drawRun();
     drawControls();
   }
+  // The round is paced from this phone, so it must not go to sleep while a room is open.
+  keepAwake(running && state.view !== 'finished');
 }
 
 /* state.error holds what went wrong, not its words, so a language switch can say it again. */
@@ -720,6 +764,9 @@ function drawRun() {
   set(el('phase-detail'), detail());
   // Its words are static, so applyStatic keeps them in the language chosen; this says when to look.
   el('display-gone').hidden = state.display;
+  // And the way back is put in the host's hand with it: the notice asks for the code the
+  // television is showing, so the field for that code opens rather than waiting to be found.
+  if (!state.display) el('form-repair').hidden = false;
   set(el('run-error'), errorOf(state.error));
 }
 
@@ -765,6 +812,14 @@ onLangChange(() => {
   render();
 });
 
+/*
+ * The television's QR code opens this page with its screen code in the address. Read once and taken
+ * out again: a screen code is spent the moment it is claimed, and a reload must not offer a dead one.
+ */
+const scanned = new URLSearchParams(location.search).get('pair');
+if (scanned !== null) history.replaceState(null, '', location.pathname);
+const pair = /^[0-9]{4}$/.test(scanned ?? '') ? scanned : null;
+
 const stored = recall();
 state.hostKey = stored.hostKey;
 state.setId = stored.setId;
@@ -787,3 +842,25 @@ if (conn.state === signalR.HubConnectionState.Connected) {
   await resume();
 }
 if (state.view === 'resuming') show('setup');
+
+if (pair) {
+  if (RUN_VIEWS.includes(state.view)) {
+    // This console is running a room and has just been handed a screen code: a television that
+    // reloaded and was scanned. Claiming it is all that is being asked, so it is done at once.
+    try {
+      await claimScreen(pair);
+      state.repair = { done: true };
+    } catch (error) {
+      state.repair = { error };
+      el('form-repair').elements.pairCode.value = pair;
+      el('form-repair').hidden = false;
+    }
+    drawRepair();
+  } else {
+    // No room yet: the code goes into the form, and what is left is the key (once per phone) and
+    // the question set.
+    const form = el('form-open');
+    form.elements.pairCode.value = pair;
+    (form.elements.hostKey.value ? form.elements.setId : form.elements.hostKey).focus();
+  }
+}
