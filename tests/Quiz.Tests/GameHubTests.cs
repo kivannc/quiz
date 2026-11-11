@@ -809,6 +809,37 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
+    public async Task A_phone_that_rejoins_after_the_round_gets_the_final_standings_on_that_connection_only()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var finished = new Inbox<JsonElement>(phone, "RoundFinished");
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+
+        var steps = 0;
+        while (finished.Total == 0)
+        {
+            Assert.True(++steps < 100, "the round never finished");
+            await host.InvokeAsync("CloseQuestion", code, HostKey);
+            await host.InvokeAsync("AdvanceQuestion", code, HostKey);
+            await Barrier(phone);
+        }
+
+        // The phone reloads on the final standings: without being told, it would paint a lobby.
+        var reloaded = await Connect(factory);
+        var again = new Inbox<JsonElement>(reloaded, "RoundFinished");
+        Assert.Equal("rejoined", await reloaded.InvokeAsync<string>("Join", code, "Ada"));
+        var standings = await again.Next();
+        Assert.Equal("Ada", standings[0].GetProperty("name").GetString());
+
+        await Barrier(phone);
+        Assert.Equal(1, finished.Total); // nobody else was sent it again
+    }
+
+    [Fact]
     public async Task A_lobby_join_is_not_sent_a_question()
     {
         var factory = Factory();
