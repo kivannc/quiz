@@ -967,4 +967,50 @@ public sealed class RoomTests
         Assert.Subset(second.ToHashSet(), unseen.ToHashSet());
         Assert.Equal(Room.QuestionsPerRound, second.Distinct().Count());
     }
+
+    [Fact]
+    public void A_set_that_has_run_out_starts_over_so_the_round_after_is_fresh_again()
+    {
+        // Twenty questions. Rounds one and two ask all of them; round three has to repeat ten. If the
+        // room then went on treating every question as asked, round four would be any ten at all -
+        // it must be exactly the ten that round three did not repeat.
+        var set = Pool(20);
+        var room = StartedRoom(set, "Ada");
+        PlayOut(room);
+        room.NewRound(set);
+        room.Start();
+        PlayOut(room);
+
+        room.NewRound(set);
+        room.Start();
+        var third = PlayOut(room);
+        room.NewRound(set);
+        room.Start();
+        var fourth = PlayOut(room);
+
+        Assert.Equal(20, third.Concat(fourth).Distinct().Count());
+    }
+
+    [Fact]
+    public void What_one_set_has_asked_does_not_count_against_another_set_that_numbers_its_questions_the_same()
+    {
+        // Question ids are only unique inside a set, and here both sets use q0, q1, ... A round from
+        // the small one in between must not make the big one think ten of its own have been asked:
+        // the big set's second round is the ten it has not asked, with nothing from its first.
+        var big = Pool(20);
+        var small = new QuestionSet("small", "Small", "en", Enumerable.Range(0, 10).Select(i => new Question(
+            $"q{i}", QuestionType.MultipleChoice, $"Small {i}?",
+            Enum.GetValues<Marker>().Select(m => new Option(m, $"{m} {i}")).ToList(), Marker.Hearts)).ToList());
+        var room = StartedRoom(big, "Ada");
+        var first = PlayOut(room);
+
+        room.NewRound(small);
+        room.Start();
+        PlayOut(room);
+        room.NewRound(big);
+        room.Start();
+        var second = PlayOut(room);
+
+        Assert.Empty(first.Intersect(second));
+    }
 }

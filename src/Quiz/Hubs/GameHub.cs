@@ -471,6 +471,12 @@ public sealed class GameHub(
         // score nobody explained and a promise that the round is about to start.
         else if (room.Phase == RoomPhase.Finished)
             await Clients.Caller.SendAsync("RoundFinished", room.Standings);
+        // And a seat handed back in a lobby may belong to a phone that slept through the podium and
+        // through the host starting another round: it is still showing where it finished, over a
+        // score that has gone back to nothing. Told that the round it remembers is over, it waits
+        // like everyone else. To a phone joining for the first time this says nothing it did not know.
+        else if (room.Phase == RoomPhase.Lobby)
+            await Clients.Caller.SendAsync("RoundReset", room.Players);
     }
 
     private Room RoomOrThrow(string code) => rooms.Find(code) ?? throw new HubException("no-such-room");

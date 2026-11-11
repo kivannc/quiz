@@ -898,6 +898,30 @@ public sealed class GameHubTests : IDisposable
     }
 
     [Fact]
+    public async Task A_phone_that_slept_through_the_new_round_is_told_about_it_when_it_comes_back()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var finished = new Inbox<JsonElement>(phone, "RoundFinished");
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await PlayOut(host, code, phone, finished);
+
+        // The phone locks on the podium and its connection goes; the host starts another round.
+        await phone.DisposeAsync();
+        await host.InvokeAsync("NewRound", code, HostKey, "genel-kultur");
+
+        var back = await Connect(factory);
+        var reset = new Inbox<JsonElement>(back, "RoundReset");
+        Assert.Equal("rejoined", await back.InvokeAsync<string>("Join", code, "Ada"));
+        var seats = await reset.Next();
+        Assert.Equal("Ada", seats[0].GetProperty("name").GetString());
+        Assert.Equal(0, seats[0].GetProperty("score").GetInt32());
+    }
+
+    [Fact]
     public async Task A_new_round_is_ignored_mid_round_and_refused_for_a_wrong_key_or_an_unknown_set()
     {
         var factory = Factory();
@@ -908,17 +932,21 @@ public sealed class GameHubTests : IDisposable
         var finished = new Inbox<JsonElement>(player, "RoundFinished");
         await player.InvokeAsync<string>("Join", code, "Ada");
         await host.InvokeAsync("StartRound", code, HostKey);
+        // Joining a lobby says where the seat stands, in the same words; what is counted here is
+        // what the refused requests add to that.
+        await Barrier(player);
+        var told = reset.Total;
 
         // A question is open: asking for a new round does nothing, like any host action out of phase.
         await host.InvokeAsync("NewRound", code, HostKey, "genel-kultur");
         await Barrier(player);
-        Assert.Equal(0, reset.Total);
+        Assert.Equal(told, reset.Total);
 
         await PlayOut(host, code, player, finished);
         Assert.Contains("forbidden", (await Refused(() => host.InvokeAsync("NewRound", code, "wrong-key-wrong-key", "genel-kultur"))).Message);
         Assert.Contains("unknown-set", (await Refused(() => host.InvokeAsync("NewRound", code, HostKey, "no-such-set"))).Message);
         await Barrier(player);
-        Assert.Equal(0, reset.Total);
+        Assert.Equal(told, reset.Total);
     }
 
     [Fact]
