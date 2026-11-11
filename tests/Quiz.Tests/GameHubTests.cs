@@ -609,7 +609,7 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(4, q.GetProperty("options").GetArrayLength());
         Assert.Equal(0, q.GetProperty("index").GetInt32());
         // The exact property set, so a leak under any name (answer, isRight, ...) fails here.
-        Assert.Equal(["index", "total", "text", "options", "limitSeconds"], q.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(["index", "total", "text", "options", "limitSeconds", "round"], q.EnumerateObject().Select(p => p.Name));
         foreach (var option in q.GetProperty("options").EnumerateArray())
             Assert.Equal(["marker", "text"], option.EnumerateObject().Select(p => p.Name));
         Assert.Equal(["hearts", "diamonds", "clubs", "spades"], q.GetProperty("options").EnumerateArray().Select(o => o.GetProperty("marker").GetString()));
@@ -839,6 +839,116 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(1, finished.Total); // nobody else was sent it again
     }
 
+    /// <summary>Walks an open round to its end from <paramref name="host"/>, watched from <paramref name="player"/>.</summary>
+    private async Task PlayOut(HubConnection host, string code, HubConnection player, Inbox<JsonElement> finished)
+    {
+        var before = finished.Total;
+        var steps = 0;
+        while (finished.Total == before)
+        {
+            Assert.True(++steps < 100, "the round never finished");
+            await host.InvokeAsync("CloseQuestion", code, HostKey);
+            await host.InvokeAsync("AdvanceQuestion", code, HostKey);
+            await Barrier(player);
+        }
+    }
+
+    [Fact]
+    public async Task A_new_round_takes_the_same_room_back_to_its_lobby_and_everyone_plays_again()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var hostState = RoomState(host);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        var questions = new Inbox<JsonElement>(player, "QuestionStarted");
+        var finished = new Inbox<JsonElement>(player, "RoundFinished");
+        var reset = new Inbox<JsonElement>(player, "RoundReset");
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        var first = await questions.Next();
+        Assert.Equal(1, first.GetProperty("round").GetInt32());
+        await player.InvokeAsync("Answer", code, CorrectMarkerOf(first));
+        await PlayOut(host, code, player, finished);
+        Assert.True((await finished.Next())[0].GetProperty("score").GetInt32() > 0);
+
+        await host.InvokeAsync("NewRound", code, HostKey, "bilim-ve-doga");
+
+        // The phone is told the round is over with, and how its seat stands now.
+        var seats = await reset.Next();
+        Assert.Equal("Ada", seats[0].GetProperty("name").GetString());
+        Assert.Equal(0, seats[0].GetProperty("score").GetInt32());
+
+        // The host screens are back in a lobby, with the same player in it and nothing on the board.
+        await Barrier(host);
+        (JsonElement Players, string Phase) state = default;
+        while (hostState.Total > 0 && state.Phase != "lobby") state = await hostState.Next();
+        while (state.Players[0].GetProperty("score").GetInt32() != 0) state = await hostState.Next();
+        Assert.Equal("lobby", state.Phase);
+        Assert.Equal("Ada", state.Players[0].GetProperty("name").GetString());
+
+        // A latecomer gets in, the same phone plays without joining again, and the questions are the new set's.
+        var late = await Connect(factory);
+        Assert.Equal("joined", await late.InvokeAsync<string>("Join", code, "Bob"));
+        await host.InvokeAsync("StartRound", code, HostKey);
+        JsonElement second;
+        do second = await questions.Next(); while (second.GetProperty("round").GetInt32() != 2);
+        Assert.Equal(0, second.GetProperty("index").GetInt32());
+        Assert.True(await player.InvokeAsync<bool>("Answer", code, CorrectMarkerOf(second, "bilim-ve-doga")));
+    }
+
+    [Fact]
+    public async Task A_phone_that_slept_through_the_new_round_is_told_about_it_when_it_comes_back()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var phone = await Connect(factory);
+        var finished = new Inbox<JsonElement>(phone, "RoundFinished");
+        await phone.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        await PlayOut(host, code, phone, finished);
+
+        // The phone locks on the podium and its connection goes; the host starts another round.
+        await phone.DisposeAsync();
+        await host.InvokeAsync("NewRound", code, HostKey, "genel-kultur");
+
+        var back = await Connect(factory);
+        var reset = new Inbox<JsonElement>(back, "RoundReset");
+        Assert.Equal("rejoined", await back.InvokeAsync<string>("Join", code, "Ada"));
+        var seats = await reset.Next();
+        Assert.Equal("Ada", seats[0].GetProperty("name").GetString());
+        Assert.Equal(0, seats[0].GetProperty("score").GetInt32());
+    }
+
+    [Fact]
+    public async Task A_new_round_is_ignored_mid_round_and_refused_for_a_wrong_key_or_an_unknown_set()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var player = await Connect(factory);
+        var reset = new Inbox<JsonElement>(player, "RoundReset");
+        var finished = new Inbox<JsonElement>(player, "RoundFinished");
+        await player.InvokeAsync<string>("Join", code, "Ada");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        // Joining a lobby says where the seat stands, in the same words; what is counted here is
+        // what the refused requests add to that.
+        await Barrier(player);
+        var told = reset.Total;
+
+        // A question is open: asking for a new round does nothing, like any host action out of phase.
+        await host.InvokeAsync("NewRound", code, HostKey, "genel-kultur");
+        await Barrier(player);
+        Assert.Equal(told, reset.Total);
+
+        await PlayOut(host, code, player, finished);
+        Assert.Contains("forbidden", (await Refused(() => host.InvokeAsync("NewRound", code, "wrong-key-wrong-key", "genel-kultur"))).Message);
+        Assert.Contains("unknown-set", (await Refused(() => host.InvokeAsync("NewRound", code, HostKey, "no-such-set"))).Message);
+        await Barrier(player);
+        Assert.Equal(told, reset.Total);
+    }
+
     [Fact]
     public async Task A_lobby_join_is_not_sent_a_question()
     {
@@ -883,7 +993,7 @@ public sealed class GameHubTests : IDisposable
         await host.InvokeAsync("CloseQuestion", code, HostKey);
 
         var reveal = await revealed.Next();
-        Assert.Equal(["index", "correct", "distribution", "standings"], reveal.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(["index", "correct", "distribution", "standings", "round"], reveal.EnumerateObject().Select(p => p.Name));
         // The phone subtracts the total it had when this question opened, so it has to be able to tell
         // that this reveal is about that question and not a later one it never saw open.
         Assert.Equal(0, reveal.GetProperty("index").GetInt32());

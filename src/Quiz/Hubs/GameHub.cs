@@ -32,6 +32,7 @@ namespace Quiz.Hubs;
 /// </summary>
 public sealed class GameHub(
     RoomStore rooms,
+    IQuestionSetSource sets,
     IHostAuthorizer hosts,
     ConnectionRooms connections,
     JoinThrottle joinThrottle,
@@ -304,6 +305,27 @@ public sealed class GameHub(
     }
 
     /// <summary>
+    /// Another round in the same room, from whichever set the host picks. The room goes back to its
+    /// lobby with everyone still seated and every score at nothing, so the evening carries on without
+    /// a new room, a new code or anybody joining again — and the television, still in the room, shows
+    /// the room code once more for whoever arrived late. Throws "unknown-set"; out of phase it does
+    /// nothing, like every other host action that does not fit.
+    /// </summary>
+    public async Task NewRound(string code, string hostKey, string setId)
+    {
+        var room = HostRoom(code, hostKey);
+        await JoinHostGroups(code);
+        var set = sets.ById(setId) ?? throw new HubException("unknown-set");
+        if (!room.NewRound(set)) return;
+
+        // The phones are told the round they were looking at is gone, with the seats as they stand
+        // now: a phone has no other way to learn its score went back to nothing. The host screens
+        // are in that group too and are sent the lobby right after, which is the message they act on.
+        await Clients.Group(code).SendAsync("RoundReset", room.Players);
+        await SendRoomState(room);
+    }
+
+    /// <summary>
     /// Stops the question's clock for the whole room. The room itself refuses answers while it is
     /// stopped, so the screen and the server agree about the time; out of phase, or already paused,
     /// this does nothing, like every other host action that does not fit.
@@ -449,6 +471,12 @@ public sealed class GameHub(
         // score nobody explained and a promise that the round is about to start.
         else if (room.Phase == RoomPhase.Finished)
             await Clients.Caller.SendAsync("RoundFinished", room.Standings);
+        // And a seat handed back in a lobby may belong to a phone that slept through the podium and
+        // through the host starting another round: it is still showing where it finished, over a
+        // score that has gone back to nothing. Told that the round it remembers is over, it waits
+        // like everyone else. To a phone joining for the first time this says nothing it did not know.
+        else if (room.Phase == RoomPhase.Lobby)
+            await Clients.Caller.SendAsync("RoundReset", room.Players);
     }
 
     private Room RoomOrThrow(string code) => rooms.Find(code) ?? throw new HubException("no-such-room");

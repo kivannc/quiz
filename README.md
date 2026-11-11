@@ -29,7 +29,10 @@ answered, with the countdown as the backstop for a phone that never does, and a 
 the next question nine seconds later — the button on the console moves it on sooner. A pause stops
 the clock in the room itself, so the time spent waiting costs the players nothing and answers are
 refused until it starts again, and closing a room ends it for everyone, frees its code and sends
-the television back to a screen code. Because the pacing lives on the console, that phone is kept
+the television back to a screen code. When a round ends the console offers another one in the same
+room, from any set: everyone keeps their seat, the scores start from nothing, the lobby is open to
+latecomers again, and the room does not ask a question it has already asked until the set runs out.
+Because the pacing lives on the console, that phone is kept
 awake for as long as a room is open; so are the players' phones while they are in one.
 
 Both halves come back on their own. A console reloaded mid-round re-sends its key, asks the hub for

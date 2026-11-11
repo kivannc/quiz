@@ -78,6 +78,12 @@
         <p class="error" id="run-error" role="alert"></p>
         <button class="cta go" type="button" id="start" hidden></button>
         <button class="cta" type="button" id="next" hidden></button>
+        <!-- The round is over: another one in the same room, from the set picked here. -->
+        <label class="field" id="again-field" hidden>
+          <span class="k" data-i18n="setLabel"></span>
+          <select id="again-set"></select>
+        </label>
+        <button class="cta go" type="button" id="again" hidden></button>
         <button class="ghost" type="button" id="pause" hidden></button>
         <button class="ghost danger" type="button" id="close-room"></button>
 

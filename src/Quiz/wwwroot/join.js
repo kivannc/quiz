@@ -29,6 +29,7 @@ const state = {
   name: null,       // as the server spells it back in Seated
   score: 0,
   index: null,      // which question is open, so a reload can tell whose answer it kept
+  round: null,      // and which round it belongs to: every round counts its questions from zero again
   pending: null,    // a tap on its way to the server, not yet taken
   chosen: null,     // the marker the room accepted for the current question
   baseline: null,   // this player's total before the open question is scored, or null when not knowable
@@ -65,7 +66,7 @@ function forget() {
 
 function rememberTap(index, marker) {
   try {
-    sessionStorage.setItem(STORE_TAP, JSON.stringify({ code: state.code, index, marker }));
+    sessionStorage.setItem(STORE_TAP, JSON.stringify({ code: state.code, round: state.round, index, marker }));
   } catch { /* the lock still holds for as long as this page lives */ }
 }
 
@@ -77,7 +78,7 @@ function rememberTap(index, marker) {
  */
 function rememberOpen(index, baseline) {
   try {
-    sessionStorage.setItem(STORE_OPEN, JSON.stringify({ code: state.code, index, baseline }));
+    sessionStorage.setItem(STORE_OPEN, JSON.stringify({ code: state.code, round: state.round, index, baseline }));
   } catch { /* the figure is still in memory for as long as this page lives */ }
 }
 
@@ -85,7 +86,7 @@ function recallOpen() {
   try {
     const stored = JSON.parse(sessionStorage.getItem(STORE_OPEN) ?? 'null');
     const usable = stored && stored.code === state.code
-      && Number.isInteger(stored.index) && Number.isInteger(stored.baseline);
+      && Number.isInteger(stored.round) && Number.isInteger(stored.index) && Number.isInteger(stored.baseline);
     return usable ? stored : null;
   } catch {
     return null;
@@ -96,11 +97,16 @@ function recallOpen() {
  * What this phone sent for this very question, if anything. Without it a reloaded player would see
  * four live buzzers, tap one, and watch the server quietly refuse the second answer — which reads
  * as a broken phone rather than as "you have already answered".
+ *
+ * The round is part of which question it was. A room plays several, each from question zero, and a
+ * tap remembered for the first question of one round must not lock the first question of the next.
  */
-function recallTap(index) {
+function recallTap(round, index) {
   try {
     const stored = JSON.parse(sessionStorage.getItem(STORE_TAP) ?? 'null');
-    return stored && stored.code === state.code && stored.index === index ? stored.marker : null;
+    return stored && stored.code === state.code && stored.round === round && stored.index === index
+      ? stored.marker
+      : null;
   } catch {
     return null;
   }
@@ -170,15 +176,37 @@ conn.on('RoomClosed', () => {
   render();
 });
 
+conn.on('RoundReset', (players) => {
+  // The host has started another round in the same room. This phone keeps its seat and its
+  // connection, so there is nothing to join: it goes back to waiting, with the score the room now
+  // holds for it, and with nothing left on screen from the round that is over.
+  state.phase = 'lobby';
+  state.index = null;
+  state.round = null;
+  state.pending = null;
+  state.chosen = null;
+  state.final = null;
+  state.paused = false;
+  state.error = '';
+  clearResult();
+  takeScore(players);
+  try {
+    sessionStorage.removeItem(STORE_TAP);
+    sessionStorage.removeItem(STORE_OPEN);
+  } catch { /* the round number keeps the old ones from being used anyway */ }
+  render();
+});
+
 conn.on('QuestionStarted', (question) => {
   // The payload carries the question text and the options; this screen deliberately shows neither.
   // Its index is used only to tell this phone's own answer apart from an older one.
   state.phase = 'question';
   state.final = null;
   state.index = question.index;
+  state.round = question.round;
   state.paused = false;
   state.pending = null;
-  state.chosen = recallTap(question.index);
+  state.chosen = recallTap(question.round, question.index);
   // The total as it stands before this question is scored. A reveal carries totals and not deltas,
   // so this is the only thing the points earned can be worked out from — in memory, and in storage
   // for a page that does not live long enough to use the one in memory.
@@ -292,15 +320,15 @@ function resultOf(reveal) {
 
   // What this page watched open. A tap the room took but has not acknowledged yet is still this
   // player's answer, so the suit comes from the tap in flight when there is one.
-  if (state.baseline !== null && state.index === reveal.index) {
+  if (state.baseline !== null && state.round === reveal.round && state.index === reveal.index) {
     return earnedFrom(mine.score - state.baseline, state.chosen ?? state.pending);
   }
 
   // Nothing in memory for this question: the figure written when it opened stands in, which is what
   // carries a reload through the reveal.
   const open = recallOpen();
-  if (!open || open.index !== reveal.index) return unnumbered();
-  return earnedFrom(mine.score - open.baseline, recallTap(open.index));
+  if (!open || open.round !== reveal.round || open.index !== reveal.index) return unnumbered();
+  return earnedFrom(mine.score - open.baseline, recallTap(open.round, open.index));
 }
 
 function earnedFrom(points, marker) {

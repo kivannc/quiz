@@ -214,6 +214,17 @@ conn.on('RoomOpened', (code) => {
   show('lobby');
 });
 
+conn.on('RoundReset', () => {
+  // Another round in the same room. The lobby that follows is what this screen paints; this only
+  // drops what belonged to the round that is over, so its podium cannot be shown for the next one.
+  stopClock();
+  state.question = null;
+  state.reveal = null;
+  state.standings = [];
+  state.before = null;
+  state.paused = false;
+});
+
 conn.on('RoomState', (players, phase) => {
   state.players = players ?? [];
   // The question and reveal payloads own those two views; RoomState only refreshes the roster.
@@ -591,7 +602,7 @@ function drawReveal() {
   if (!reveal) return;
 
   const view = el('view-reveal');
-  const signature = `${state.room}:${reveal.index}:${document.documentElement.lang}`;
+  const signature = `${state.room}:${reveal.round}:${reveal.index}:${document.documentElement.lang}`;
   if (view.dataset.shown === signature) return;
   view.dataset.shown = signature;
 

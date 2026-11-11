@@ -469,6 +469,8 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .console .acts { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
 .console .acts button { width: 100%; min-height: 54px; padding: 16px; font-size: 15px; }
 .console .acts .error { margin: 0 0 4px; font-size: 12px; text-align: center; }
+/* the set picker for another round sits on its button, not a form's width away from it */
+.console .acts .field { margin: 0; }
 /* Armed, the close button says what it is about to do; coral is the page's "this does something". */
 .console .acts .danger[data-armed='true'] { color: var(--coral); border-color: var(--coral); }
 /* the rarely-needed one: small print under the buttons rather than one more button among them */
