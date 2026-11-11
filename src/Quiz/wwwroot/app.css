@@ -511,6 +511,29 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .phone .field input { font-size: 16px; } /* 16px keeps iOS from zooming on focus */
 .phone .field input[name='code'] { letter-spacing: .4em; text-align: center; font-size: 26px; }
 
+/* In front of a television with no room on it yet: said where the room code would have been asked for. */
+.phone .join .at-screen { font-size: 12px; letter-spacing: .08em; color: var(--teal); margin: 0 0 18px; }
+.phone .join .at-screen.waiting { color: var(--amber); }
+.phone .join .open { margin-bottom: 0; }
+.phone .join .open .cta { margin-bottom: 0; }
+.phone .field select { font-size: 16px; }
+/* The way to the key field, in small print: a guest reads past it, the host is looking for it. */
+.phone .join .small { display: block; width: 100%; margin-top: 18px; padding: 8px; font-size: 11px; letter-spacing: .1em; border-color: transparent; }
+
+/* The host's buttons, under the buzzers on the phone that opened the room. */
+.phone .hostbar { display: flex; flex-direction: column; gap: 8px; flex: 0 0 auto; padding-top: 10px; border-top: 1px solid var(--hairline); }
+.phone .hostbar[hidden] { display: none; }
+.phone .hostbar .row { display: flex; gap: 8px; }
+.phone .hostbar .row button { flex: 1 1 0; min-height: 46px; padding: 10px 8px; font-size: 12px; letter-spacing: .1em; }
+.phone .hostbar .row button[hidden] { display: none; }
+.phone .hostbar .field { margin: 0; }
+.phone .hostbar .gone { margin: 0; font-size: 12px; color: var(--crimson); letter-spacing: .04em; text-align: center; }
+.phone .hostbar .error { margin: 0; font-size: 12px; text-align: center; }
+.phone .hostbar .repair { display: flex; gap: 8px; margin: 0; }
+.phone .hostbar .repair input { flex: 1 1 0; min-width: 0; font: inherit; font-size: 16px; letter-spacing: .3em; text-align: center; color: var(--fg); background: transparent; border: 1px solid var(--hairline); border-radius: 6px; padding: 8px; }
+.phone .hostbar .repair button { flex: 0 0 auto; padding: 8px 16px; font-size: 12px; letter-spacing: .1em; }
+.phone .hostbar .danger[data-armed='true'] { color: var(--coral); border-color: var(--coral); }
+
 .phone .play { gap: 12px; }
 .phone .play .status { font-size: 12px; text-align: center; letter-spacing: .08em; min-height: 1.4em; }
 

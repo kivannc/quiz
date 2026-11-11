@@ -40,6 +40,18 @@ const STRINGS = {
     finalPlace: (rank) => `${rank}.`,
     finalOf: (count) => `${count} oyuncu arasında`,
     youWon: 'KAZANDIN',
+    // One page for everyone: a phone in front of a television that has no room on it yet.
+    atScreen: 'televizyon bulundu · oda henüz açılmadı',
+    waitingForRoom: 'oda açılınca içeridesin',
+    openToggle: '[ odayı ben açacağım ]',
+    openToggleBack: '[ vazgeç, açılmasını bekleyeceğim ]',
+    errCodeNeeded: 'oda kodunu yaz ya da televizyondaki kodu okut',
+    errKeyNeeded: 'oda açmak için sunucu anahtarı gerekiyor',
+    errScreenCodeGone: 'televizyondaki kod değişti, yeniden okut',
+    // The host's buttons on the phone that opened the room.
+    hostDisplayGone: 'televizyon odadan düştü · ekrandaki kodu bu telefonla okut ya da buraya yaz',
+    seatTaken: 'bu ad başka bir telefonda ya da sekmede oynuyor · buradan devam etmek için GİR, başka biriysen adını değiştir',
+    hostLobby: 'herkes girince başlat',
 
     // --- the host's console, and the game strings the two screens draw from ---
     hostTitle: 'Quiz — Sunucu',
@@ -90,17 +102,17 @@ const STRINGS = {
     tvTitle: 'Quiz — Ekran',
     // The code the HOST types into a phone. Never the room code, which carries the word "oda".
     pairTag: '[ EKRAN KODU ]',
-    pairHint: (url) => `telefonunda ${url} adresini aç ve bu kodu gir`,
+    pairHint: (url) => `telefonunda ${url} adresini aç ve bu kodu yaz`,
     // Under both QR codes: the same thing the address beside it says, for a phone with a camera.
     scanTag: '[ ya da okut ]',
     winnerTag: '[ KAZANAN ]',
     gained: (points) => `+${points}`,
     // Said for every refusal, because the server deliberately tells the screen no more than this.
     pairFailed: 'eşleştirme başlatılamadı, yeniden denenecek',
-    rejoinHint: (code) => `ekran oda ${code} ile eşleşmişti, kodu gir ve geri dönsün`,
+    rejoinHint: (code) => `bu ekran oda ${code} içindeydi · odayı açan kişi kodu okutsun ya da telefonuna yazsın`,
     // Said instead of the line above when the room was taken by another television rather than lost
     // to a reload: the room is still being played, just not here, and this code brings it back.
-    roomMovedHint: (code) => `oda ${code} başka bir ekrana geçti, geri almak için bu kodu gir`,
+    roomMovedHint: (code) => `oda ${code} başka bir ekrana geçti · geri almak için odayı açan kişi bu kodu okutsun`,
     pairedHeading: 'TELEFON BAĞLANDI',
     pairedHint: 'oda bekleniyor',
     // The code the PLAYERS type, labelled on the television as the room's own.
@@ -151,6 +163,18 @@ const STRINGS = {
     finalPlace: (rank) => `${rank}${rank % 100 >= 11 && rank % 100 <= 13 ? 'th' : (['th', 'st', 'nd', 'rd'][rank % 10] ?? 'th')}`,
     finalOf: (count) => `of ${count} player${count === 1 ? '' : 's'}`,
     youWon: 'YOU WON',
+    // One page for everyone: a phone in front of a television that has no room on it yet.
+    atScreen: 'television found · no room on it yet',
+    waitingForRoom: 'you are in as soon as the room opens',
+    openToggle: '[ I will open the room ]',
+    openToggleBack: '[ never mind, I will wait for it ]',
+    errCodeNeeded: 'type the room code, or scan the code on the television',
+    errKeyNeeded: 'opening a room needs the host key',
+    errScreenCodeGone: 'the code on the television has changed; scan it again',
+    // The host's buttons on the phone that opened the room.
+    hostDisplayGone: 'the television left the room · scan the code on it with this phone, or type it here',
+    seatTaken: 'this name is playing on another phone or tab · press ENTER to carry on from here, or change the name if that is not you',
+    hostLobby: 'start when everyone is in',
 
     // --- the host's console, and the game strings the two screens draw from ---
     hostTitle: 'Quiz — Host',
@@ -208,10 +232,10 @@ const STRINGS = {
     gained: (points) => `+${points}`,
     // Said for every refusal, because the server deliberately tells the screen no more than this.
     pairFailed: 'could not start pairing, trying again',
-    rejoinHint: (code) => `this screen was paired with room ${code}; type the code to put it back`,
+    rejoinHint: (code) => `this screen was in room ${code} · whoever opened it scans this code or types it on their phone`,
     // Said instead of the line above when the room was taken by another television rather than lost
     // to a reload: the room is still being played, just not here, and this code brings it back.
-    roomMovedHint: (code) => `room ${code} moved to another screen; type this code to bring it back`,
+    roomMovedHint: (code) => `room ${code} moved to another screen · whoever opened it scans this code to bring it back`,
     pairedHeading: 'PHONE CONNECTED',
     pairedHint: 'waiting for the room',
     // The code the PLAYERS type, labelled on the television as the room's own.

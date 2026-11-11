@@ -9,8 +9,13 @@
 </head>
 <body class="phone">
 <!--
-  The phone: a buzzer, nothing more. The four suits carry no text and no letters, because
-  the question and the options are on the TV, which is the screen everyone shares.
+  The phone: a buzzer, and for one phone in the room a few buttons under it. The four suits carry
+  no text and no letters, because the question and the options are on the TV, which is the screen
+  everyone shares.
+
+  Everybody lands on this one page, whoever scans the television first. A guest types a name and is
+  in, or waits for the room if nobody has opened it yet. Whoever opens the room does it from here
+  too, takes a seat like everyone else, and gets the host's buttons at the bottom of the same screen.
 -->
 <main class="panel">
   <div class="inner">
@@ -25,16 +30,37 @@
       <form id="form-join" autocomplete="off">
         <h1 data-i18n="joinHeading"></h1>
         <p class="status notice" id="join-connection" hidden></p>
-        <label class="field">
+        <!-- Standing in front of a television with no room on it yet: said instead of a code field,
+             because the code that was scanned is the television's, not a room's. -->
+        <p class="status at-screen" id="at-screen" hidden></p>
+        <label class="field" id="code-field">
           <span class="k" data-i18n="codeLabel"></span>
-          <input name="code" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required>
+          <!-- Not "required" in the markup: a phone at a television has no room code to give, and the
+               page says what is missing in its own words. -->
+          <input name="code" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4">
         </label>
         <label class="field">
           <span class="k" data-i18n="nameLabel"></span>
           <input name="name" type="text" maxlength="24" required>
         </label>
-        <button class="cta" type="submit" data-i18n="joinButton"></button>
+
+        <!-- Opening the room, for the one phone that holds the key. Closed for everybody else, behind
+             a line of small print: a guest is never shown a key field they cannot fill. -->
+        <div class="open" id="open-panel" hidden>
+          <label class="field">
+            <span class="k" data-i18n="hostKeyLabel"></span>
+            <input name="hostKey" type="password" autocomplete="off">
+          </label>
+          <label class="field">
+            <span class="k" data-i18n="setLabel"></span>
+            <select name="setId" id="set-id"></select>
+          </label>
+          <button class="cta go" type="button" id="open-room" data-i18n="openButton"></button>
+        </div>
+
+        <button class="cta" type="submit" id="join-submit" data-i18n="joinButton"></button>
         <p class="error" id="join-error" role="alert"></p>
+        <button class="ghost small" type="button" id="open-toggle" hidden></button>
       </form>
     </section>
 
@@ -67,6 +93,34 @@
         <p class="place" id="final-place"></p>
         <p class="of" id="final-of"></p>
         <p class="total" id="final-total"></p>
+      </div>
+
+      <!--
+        The host's buttons, on the phone that opened the room and on no other. Only the ones that do
+        something right now are up, and they sit under the buzzers, where they cannot be hit by a
+        thumb that is aiming at an answer.
+      -->
+      <div class="hostbar" id="hostbar" hidden>
+        <p class="status gone" id="host-gone" hidden data-i18n="hostDisplayGone"></p>
+        <!-- The way back by hand, up only while the room has no television in it: scanning the code
+             on that screen does the same, but a camera may open another browser, and this phone is
+             the one that can put the screen back. -->
+        <form class="repair" id="host-repair" hidden autocomplete="off">
+          <input name="screenCode" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" data-i18n-placeholder="pairCodeLabel">
+          <button class="ghost" type="submit" data-i18n="pairButton"></button>
+        </form>
+        <p class="error" id="host-error" role="alert" hidden></p>
+        <label class="field" id="host-again-field" hidden>
+          <span class="k" data-i18n="setLabel"></span>
+          <select id="host-again-set"></select>
+        </label>
+        <div class="row">
+          <button class="cta go" type="button" id="host-start" hidden></button>
+          <button class="ghost" type="button" id="host-pause" hidden></button>
+          <button class="ghost" type="button" id="host-next" hidden></button>
+          <button class="cta go" type="button" id="host-again" hidden></button>
+          <button class="ghost danger" type="button" id="host-close" hidden></button>
+        </div>
       </div>
     </section>
 

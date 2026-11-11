@@ -185,8 +185,17 @@ public sealed class Room
     /// empty or whitespace throws). A name already in the room is a rejoin at any phase: the connection is
     /// remapped onto the existing seat and the score is kept. A new name needs a free seat and a lobby.
     /// </summary>
-    public JoinResult Join(string name, string connectionId)
+    public JoinResult Join(string name, string connectionId) => Join(name, connectionId, out _);
+
+    /// <summary>
+    /// As <see cref="Join(string, string)"/>, and says which connections the seat was taken from on a
+    /// rejoin. A seat belongs to one connection at a time, so a second tab or a second phone under the
+    /// same name leaves the first with buzzers the room refuses; whoever calls this can tell that
+    /// first one so, instead of leaving it to look broken.
+    /// </summary>
+    public JoinResult Join(string name, string connectionId, out IReadOnlyList<string> displaced)
     {
+        displaced = [];
         ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(connectionId);
         name = name.Trim();
@@ -196,10 +205,9 @@ public sealed class Room
         {
             if (_seatByName.TryGetValue(name, out var existing))
             {
-                foreach (var stale in _seatByConnection.Where(kv => kv.Value == existing).Select(kv => kv.Key).ToList())
-                {
-                    _seatByConnection.Remove(stale);
-                }
+                var stale = _seatByConnection.Where(kv => kv.Value == existing).Select(kv => kv.Key).ToList();
+                foreach (var gone in stale) _seatByConnection.Remove(gone);
+                displaced = stale.Where(id => id != connectionId).ToList();
                 _seatByConnection[connectionId] = existing;
                 Touch();
                 return JoinResult.Rejoined;

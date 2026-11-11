@@ -9,8 +9,9 @@ public abstract record ClaimResult
     public sealed record Claimed(string ScreenConnectionId) : ClaimResult;
 
     /// <summary>
-    /// Unknown, expired and already claimed are deliberately one case: whoever probes for codes
-    /// learns nothing from the answer.
+    /// Unknown, expired and already claimed are deliberately one case: a claim that fails says
+    /// nothing about why. (Whether a code is live at all can be asked without claiming it, see
+    /// <see cref="PairingStore.ScreenShowing"/>; what a failed claim keeps to itself is the rest.)
     /// </summary>
     public sealed record NoSuchCode : ClaimResult;
 }
@@ -21,8 +22,9 @@ public abstract record ClaimResult
 /// codes even though both are drawn from 1000..9999. There is no timer: a code past its lifetime is refused
 /// when someone asks for it, and <see cref="SweepExpired"/> (called on a schedule) frees the rest.
 /// <see cref="Claim"/> is lock-free and single-use (an atomic remove); <see cref="Issue"/>,
-/// <see cref="Forget"/> and <see cref="SweepExpired"/> share one lock so a screen's code replacement
-/// and code uniqueness cannot be raced past.
+/// <see cref="ClaimShownBy"/>, <see cref="Forget"/> and <see cref="SweepExpired"/> share one lock so a
+/// screen's code replacement and code uniqueness cannot be raced past. <see cref="ScreenShowing"/> is
+/// the one read that spends nothing.
 /// </summary>
 public sealed class PairingStore
 {
@@ -78,6 +80,37 @@ public sealed class PairingStore
         return entry.ExpiresAt > _clock.GetUtcNow()
             ? new ClaimResult.Claimed(entry.ScreenConnectionId)
             : new ClaimResult.NoSuchCode();
+    }
+
+    /// <summary>
+    /// The screen showing <paramref name="code"/>, or null for a code that is unknown or past its
+    /// lifetime. Unlike <see cref="Claim"/> it spends nothing: this is a phone asking which television
+    /// it is standing in front of, and the code must still be there for whoever opens the room.
+    /// </summary>
+    public string? ScreenShowing(string? code) =>
+        code is not null && _codes.TryGetValue(code, out var entry) && entry.ExpiresAt > _clock.GetUtcNow()
+            ? entry.ScreenConnectionId
+            : null;
+
+    /// <summary>
+    /// Claims whatever code <paramref name="screenConnectionId"/> is showing now, for a phone that has
+    /// already been in front of that screen (it named a live code of it a moment ago) and is still
+    /// holding the old one: a code on a television is replaced every couple of minutes, which is less
+    /// time than it takes to type a key for the first time. Single-use like <see cref="Claim"/>, and
+    /// refused the same way when the screen is showing nothing — it is in a room, or gone.
+    /// </summary>
+    public ClaimResult ClaimShownBy(string screenConnectionId)
+    {
+        lock (_gate)
+        {
+            var now = _clock.GetUtcNow();
+            foreach (var (code, entry) in _codes)
+            {
+                if (entry.ScreenConnectionId != screenConnectionId || !_codes.TryRemove(code, out _)) continue;
+                if (entry.ExpiresAt > now) return new ClaimResult.Claimed(screenConnectionId);
+            }
+            return new ClaimResult.NoSuchCode();
+        }
     }
 
     /// <summary>Drops the code a screen was holding, e.g. when its connection ends.</summary>

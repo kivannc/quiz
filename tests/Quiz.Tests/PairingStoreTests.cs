@@ -229,4 +229,43 @@ public sealed class PairingStoreTests
         Assert.Throws<ArgumentOutOfRangeException>(() => new PairingOptions(Lifetime, 0));
         _ = new PairingOptions(Lifetime, 1);
     }
+
+    [Fact]
+    public void Asking_which_screen_shows_a_code_spends_nothing_and_respects_its_lifetime()
+    {
+        var store = NewStore();
+        var code = Code(store.Issue("screen-1", "client-1"));
+
+        Assert.Equal("screen-1", store.ScreenShowing(code));
+        Assert.Equal("screen-1", store.ScreenShowing(code));
+        Assert.Null(store.ScreenShowing("0000"));
+        Assert.Null(store.ScreenShowing(null));
+        // Still there for whoever opens the room.
+        Assert.IsType<ClaimResult.Claimed>(store.Claim(code));
+        Assert.Null(store.ScreenShowing(code));
+
+        var late = Code(store.Issue("screen-2", "client-2"));
+        _clock.Advance(Lifetime);
+        Assert.Null(store.ScreenShowing(late));
+    }
+
+    [Fact]
+    public void Whatever_a_screen_is_showing_can_be_claimed_once_and_only_while_it_lives()
+    {
+        var store = NewStore();
+        var first = Code(store.Issue("screen-1", "client-1"));
+        var other = Code(store.Issue("screen-2", "client-2"));
+
+        Assert.Equal("screen-1", Assert.IsType<ClaimResult.Claimed>(store.ClaimShownBy("screen-1")).ScreenConnectionId);
+        // Spent, like a code claimed by its digits: by either road.
+        Assert.IsType<ClaimResult.NoSuchCode>(store.ClaimShownBy("screen-1"));
+        Assert.IsType<ClaimResult.NoSuchCode>(store.Claim(first));
+        // A screen showing nothing, and one nobody has heard of.
+        Assert.IsType<ClaimResult.NoSuchCode>(store.ClaimShownBy("screen-3"));
+        // The other screen's code is untouched by all of it.
+        Assert.Equal("screen-2", store.ScreenShowing(other));
+
+        _clock.Advance(Lifetime);
+        Assert.IsType<ClaimResult.NoSuchCode>(store.ClaimShownBy("screen-2"));
+    }
 }

@@ -31,6 +31,10 @@ var createAttemptsPerMinute = Setting("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", 5);
 // Built here, not lazily in DI, so a bad value stops startup like every other limit.
 var createThrottle = new JoinThrottle(TimeProvider.System, createAttemptsPerMinute);
 
+// Standing in front of a television is counted apart from joining a room, at the same rate: a
+// phone that scans a television does one and then the other, and a household shares one address.
+var awaitThrottle = new JoinThrottle(TimeProvider.System, options.JoinAttemptsPerMinute);
+
 var claimAttemptsPerMinute = Setting("QUIZ_CLAIM_ATTEMPTS_PER_MINUTE", 10);
 var claimThrottle = new JoinThrottle(TimeProvider.System, claimAttemptsPerMinute);
 // Constructed here for the same reason: PairingOptions validates itself, so a bad value stops startup.
@@ -48,6 +52,7 @@ builder.Services.AddSingleton<IHostAuthorizer>(new KeyHostAuthorizer(hostKey));
 builder.Services.AddSingleton(sp => new JoinThrottle(sp.GetRequiredService<TimeProvider>(), options.JoinAttemptsPerMinute));
 builder.Services.AddKeyedSingleton(GameHub.CreateThrottleKey, createThrottle);
 builder.Services.AddKeyedSingleton(GameHub.ClaimThrottleKey, claimThrottle);
+builder.Services.AddKeyedSingleton(GameHub.AwaitThrottleKey, awaitThrottle);
 builder.Services.AddSingleton(pairingOptions);
 builder.Services.AddSingleton<PairingStore>();
 builder.Services.AddHostedService<IdleRoomSweeper>();
@@ -73,7 +78,14 @@ var app = builder.Build();
 
 app.UseForwardedHeaders();
 app.UseDefaultFiles();
-app.UseStaticFiles();
+// The pages are a handful of files that depend on each other and are replaced together by a
+// release: a page kept from last week beside a script fetched today is a script looking for a
+// button that is not there. "no-cache" does not mean "do not keep it" — it means ask first, and the
+// answer is nearly always a 304 with no body — so every phone gets a set of files that belong together.
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = context => context.Context.Response.Headers.CacheControl = "no-cache",
+});
 app.MapGet("/healthz", () => Results.Ok());
 // The host screen offers a choice of set, so it has to know what there is. No key is asked for:
 // a set's id, title and language are not secret, and the questions themselves are not sent.
@@ -82,8 +94,11 @@ app.MapGet("/sets", (IQuestionSetSource sets) =>
 // The television's address is typed in with a remote, so the screen answers at "/tv" as well as at
 // "/tv.html". It is the one address anybody enters on that device, and ".html" is four keystrokes
 // too many on a remote control.
-app.MapGet("/tv", (IWebHostEnvironment env) =>
-    Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html"));
+app.MapGet("/tv", (HttpContext http, IWebHostEnvironment env) =>
+{
+    http.Response.Headers.CacheControl = "no-cache";
+    return Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html");
+});
 app.MapHub<GameHub>("/hub");
 
 app.Run();

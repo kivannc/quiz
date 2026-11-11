@@ -11,22 +11,35 @@ Question sets are plain JSON files in `src/Quiz/questions/`. Each set has an `id
 Three static pages, served by the app itself. `/tv` is the **television**: a display with no field
 and no button on it, because the only thing in front of it is a remote control. It shows a
 four-digit screen code until a phone claims it, and from then on the game — lobby, question,
-reveal, and a podium for the first three at the end. `/host.html` is the **console**: the host's phone, laid out for one hand. It
-claims the television with the code on screen, opens the room on it, and then holds the buttons —
-start, pause, next, close — and none of the game, because the host is looking at the television
-like everyone else. `/` is the **player's phone**: room code and name, then four
-suit buzzers and nothing else.
+reveal, and a podium for the first three at the end. `/` is the **phone**, the one page everybody
+uses: a name, then four suit buzzers and nothing else. It is also where a room is opened. Whoever
+holds the host key opens the room from that same form, takes a seat like everyone else, and gets
+a short row of buttons under the buzzers — start, pause, next, another round, close. The host
+plays; there is no second device to hold. `/host.html` is the older **console**, a page with the
+host's buttons and no seat, for somebody who wants to run a round without playing in it. The
+television no longer points at it.
 
-Nobody has to type an address off a television. The screen code and the room code each come with
-a QR code: scanning the first opens the console with the code already filled in, scanning the
-second opens the join form the same way. The digits stay on screen for whoever would rather type.
+Nobody has to type an address off a television, and nobody has to know who is supposed to scan
+first. The television shows one QR code at a time, and both open the phone page: its own screen
+code while it has no room on it, the room code once it has. A guest who scans before the room
+exists types a name and waits there — the hub tells that phone the room the moment one opens on
+that screen (`AwaitRoom`, then `RoomReady`), and it walks in by itself. A guest is never shown a
+key field: opening the room is behind a line of small print, which a phone that already holds the
+key finds open. The screen code is replaced about every two minutes, so a phone that has waited at
+a screen may claim whatever that screen is showing now; typing a key for the first time takes
+longer than a code lives. The digits stay on screen for whoever would rather type: the join form
+takes a room code or a screen code in the same field. A television that goes away while phones
+are waiting in front of it tells them so (`ScreenGone`), since it comes back as another connection
+with another code. Waiting needs no key, so it does say whether a screen code is live; it is
+counted per client like joining, and apart from it.
+
 The QR encoder is `wwwroot/qr.js`, written for this game: byte mode, level L, versions 1 to 5.
 
-A room can only be opened on a claimed screen, which is why the console asks for the screen code
-first, and the key is only ever typed into the console — once per phone, which remembers it. The television paces the round: the countdown it shows is the one that closes the question, and
+A room can only be opened on a claimed screen, which is why opening one starts from the code on the
+television, and the key is typed once per phone, which remembers it. The television paces the round: the countdown it shows is the one that closes the question, and
 the server keeps no timers. A question closes three seconds after the last player has answered,
 with the countdown as the backstop for a phone that never does, and a reveal gives way to the next
-question nine seconds later — the button on the console moves it on sooner. The pacing is on the
+question nine seconds later — the host's button moves it on sooner. The pacing is on the
 television and not on the console because a console is a phone: it gets locked, or its owner opens
 another tab to play, and a browser stops the timers of a page nobody is looking at. The television
 is the one screen a round cannot be played without, so a round with a host who is also a player,
@@ -35,18 +48,22 @@ things about it, with no key — this question's time is up, this reveal has bee
 names the question it means, so a late timer moves nothing. A pause stops
 the clock in the room itself, so the time spent waiting costs the players nothing and answers are
 refused until it starts again, and closing a room ends it for everyone, frees its code and sends
-the television back to a screen code. When a round ends the console offers another one in the same
+the television back to a screen code. When a round ends the host is offered another one in the same
 room, from any set: everyone keeps their seat, the scores start from nothing, the lobby is open to
 latecomers again, and the room does not ask a question it has already asked until the set runs out.
 The players' phones are kept awake while they are in a room; the console is not, since nothing
 waits for it.
 
-Both halves come back on their own. A console reloaded mid-round re-sends its key, asks the hub for
-the room as it stands and paints itself back with the countdown it was already running, paused if
-that is how it left it; it needs no screen code to do so, because the television is still in the
-room. A television that reloads has fallen out of it and shows a fresh screen code, saying which
-room it was in: typing that code into the console, or scanning it, puts it straight back,
-mid-question and all. Phones that lose the connection keep trying until it is back.
+Everything comes back on its own. A phone that reloads or loses its connection re-sends its name
+and is back in its seat with its score; the phone that opened the room is its host again in any
+tab of the same browser, because what makes it the host is remembered by the phone and not by
+the page. Only a room that has really gone ends that: being told to slow down, or losing the
+connection in the middle of asking, keeps the seat and the host's record and asks again. A seat
+belongs to one connection, so a second tab under the same name takes it and the first is told
+(`SeatTaken`) and stops, rather than showing buzzers the room refuses. A television that reloads
+has fallen out of the room and shows a fresh screen code, saying which room it was in: the host's
+phone says the television has gone and offers a field for that code, and scanning it does the
+same — either puts the screen straight back, mid-question and all. Phones that lose the connection keep trying until it is back.
 All three pages are plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm,
 no framework.
 
