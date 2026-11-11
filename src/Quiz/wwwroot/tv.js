@@ -607,10 +607,11 @@ function drawPairing() {
   }));
   code.classList.toggle('waiting', waiting);
 
-  set(el('pair-where'), waiting ? '' : t('pairHint', consoleAddress()));
-  // The same code as something to point a camera at: it opens the console with the four digits in
-  // the field. Never beside a dead code, for the reason the address is not.
-  drawQr(el('pair-scan'), el('pair-qr'), waiting ? null : `${location.origin}/host.html?pair=${state.code}`);
+  set(el('pair-where'), waiting ? '' : t('pairHint', location.host));
+  // The same code as something to point a camera at. It opens the page every phone uses — the one a
+  // guest joins from and the one a room is opened from — standing in front of this screen, so one
+  // code serves whoever scans it first. Never beside a dead code, for the reason the address is not.
+  drawQr(el('pair-scan'), el('pair-qr'), waiting ? null : `${location.origin}/?screen=${state.code}`);
 
   const status = el('pair-status');
   set(status, state.codeFailed ? t('pairFailed') : '');
@@ -625,11 +626,6 @@ function drawPairing() {
   set(el('pair-rejoin'), state.wasIn && !waiting
     ? t(state.taken ? 'roomMovedHint' : 'rejoinHint', state.wasIn)
     : '');
-}
-
-/* Where the host's console lives, which is the one thing this screen asks anybody to do. */
-function consoleAddress() {
-  return `${location.host}/host.html`;
 }
 
 /*

@@ -80,6 +80,37 @@ public sealed class PairingStore
             : new ClaimResult.NoSuchCode();
     }
 
+    /// <summary>
+    /// The screen showing <paramref name="code"/>, or null for a code that is unknown or past its
+    /// lifetime. Unlike <see cref="Claim"/> it spends nothing: this is a phone asking which television
+    /// it is standing in front of, and the code must still be there for whoever opens the room.
+    /// </summary>
+    public string? ScreenShowing(string? code) =>
+        code is not null && _codes.TryGetValue(code, out var entry) && entry.ExpiresAt > _clock.GetUtcNow()
+            ? entry.ScreenConnectionId
+            : null;
+
+    /// <summary>
+    /// Claims whatever code <paramref name="screenConnectionId"/> is showing now, for a phone that has
+    /// already been in front of that screen (it named a live code of it a moment ago) and is still
+    /// holding the old one: a code on a television is replaced every couple of minutes, which is less
+    /// time than it takes to type a key for the first time. Single-use like <see cref="Claim"/>, and
+    /// refused the same way when the screen is showing nothing — it is in a room, or gone.
+    /// </summary>
+    public ClaimResult ClaimShownBy(string screenConnectionId)
+    {
+        lock (_gate)
+        {
+            var now = _clock.GetUtcNow();
+            foreach (var (code, entry) in _codes)
+            {
+                if (entry.ScreenConnectionId != screenConnectionId || !_codes.TryRemove(code, out _)) continue;
+                if (entry.ExpiresAt > now) return new ClaimResult.Claimed(screenConnectionId);
+            }
+            return new ClaimResult.NoSuchCode();
+        }
+    }
+
     /// <summary>Drops the code a screen was holding, e.g. when its connection ends.</summary>
     public void Forget(string screenConnectionId)
     {

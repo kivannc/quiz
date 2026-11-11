@@ -49,6 +49,11 @@ public sealed class GameHub(
 
     private static string HostGroup(string code) => code + ":host";
 
+    // The phones standing in front of a television that has no room on it yet. Named after the
+    // screen's connection and not after its code: the code on screen is replaced every few minutes,
+    // and somebody who scanned the last one is still waiting for the same television.
+    private static string WaitingGroup(string screen) => "waiting:" + screen;
+
     /// <summary>
     /// Gives a television a four-digit pairing code to show, and how long it will last. The only failure
     /// is "pairing-unavailable", which covers both a throttled caller and a full code space: the screen
@@ -64,6 +69,28 @@ public sealed class GameHub(
             : throw new HubException("pairing-unavailable"));
 
     /// <summary>
+    /// A phone that has scanned a television with no room on it yet waits there: when a room opens on
+    /// that screen the phone is told its code ("RoomReady") and can walk straight in. This is what
+    /// lets one QR code on the television serve the whole evening, whoever scans it first — the person
+    /// who will open the room and the guests who can only wait for it land on the same page.
+    ///
+    /// Throws "throttled" or "no-such-code". It needs no key and gives nothing away but that the code
+    /// is live, which is the same thing joining a room tells anyone about a room code, and it is
+    /// counted against the same allowance. The code is not spent: it is still there to be claimed.
+    /// </summary>
+    public async Task AwaitRoom(string screenCode)
+    {
+        if (!joinThrottle.Allow(ClientKey())) throw new HubException("throttled");
+        if (pairings.ScreenShowing(screenCode) is not { } screen) throw new HubException("no-such-code");
+        await Groups.AddToGroupAsync(Context.ConnectionId, WaitingGroup(screen));
+        // Remembered for this connection, for ClaimScreen: the phone may turn out to be the one that
+        // opens the room, and by the time it has typed a key the code it scanned has been replaced.
+        Context.Items[AwaitedScreen] = screen;
+    }
+
+    private const string AwaitedScreen = "awaited-screen";
+
+    /// <summary>
     /// Makes the caller the console of the screen showing <paramref name="code"/>. Throws "throttled",
     /// "forbidden" or "no-such-code". The key is checked before the code is looked up, and a wrong key
     /// leaves the code untouched, so neither can be used to learn which codes are live — and the attempts
@@ -73,7 +100,12 @@ public sealed class GameHub(
     {
         if (!claimThrottle.Allow(ClientKey())) throw new HubException("throttled");
         if (!hosts.IsHost(hostKey)) throw new HubException("forbidden");
-        if (pairings.Claim(code) is not ClaimResult.Claimed claimed) throw new HubException("no-such-code");
+        // The code as given, or — for a phone that has been waiting at a screen since it scanned a code
+        // that has been replaced in the meantime — whatever that same screen is showing now.
+        var claim = pairings.Claim(code);
+        if (claim is not ClaimResult.Claimed && Context.Items.TryGetValue(AwaitedScreen, out var awaited))
+            claim = pairings.ClaimShownBy((string)awaited!);
+        if (claim is not ClaimResult.Claimed claimed) throw new HubException("no-such-code");
 
         var screen = claimed.ScreenConnectionId;
         // A connection that claims its own code would satisfy CreateRoom's "has a screen" rule with no
@@ -102,6 +134,8 @@ public sealed class GameHub(
                 if (replaced is not null) await Unseat(replaced, hosted);
                 await Clients.Client(screen).SendAsync("RoomOpened", hosted);
                 await Repaint(room, Clients.Client(screen));
+                // Whoever scanned this television while it was showing a code again is let in too.
+                await Clients.Group(WaitingGroup(screen)).SendAsync("RoomReady", hosted);
             }
             // The console has been saying the room had no television in it since the last one left.
             // Now it hears what the room has — which a refused record leaves exactly as it was, and
@@ -162,6 +196,10 @@ public sealed class GameHub(
             await SeatHost(display, code);
             // The screen has only ever been told "Paired", and a room code is not in any host-bound message.
             await Clients.Client(display).SendAsync("RoomOpened", code);
+            // The phones that scanned this television before it had a room. Not the caller, which
+            // may have been waiting there itself until it decided to open the room: it is handed
+            // the code as this call's answer.
+            await Clients.GroupExcept(WaitingGroup(display), new[] { Context.ConnectionId }).SendAsync("RoomReady", code);
         }
         else
         {

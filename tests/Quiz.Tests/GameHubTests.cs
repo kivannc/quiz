@@ -1373,4 +1373,150 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal(Room.QuestionsPerRound - 1, questions.Total);
         Assert.Equal(1, finished.Total);
     }
+
+    /* ---------- one code on the television for everybody ---------- */
+
+    [Fact]
+    public async Task A_phone_that_scanned_the_television_first_is_told_the_room_when_it_opens()
+    {
+        var factory = Factory();
+        var screen = await Connect(factory);
+        var shown = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+
+        // A guest scans before anybody has opened a room. No key, and the code is not spent by it.
+        var guest = await Connect(factory);
+        var ready = new Inbox<string>(guest, "RoomReady");
+        await guest.InvokeAsync("AwaitRoom", shown.Code);
+
+        // The person with the key scans the same code, waits there for a moment too, then opens it.
+        var opener = await Connect(factory);
+        var told = new Inbox<string>(opener, "RoomReady");
+        await opener.InvokeAsync("AwaitRoom", shown.Code);
+        await opener.InvokeAsync("ClaimScreen", shown.Code, HostKey);
+        var code = await opener.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+
+        Assert.Equal(code, await ready.Next());
+        Assert.Equal("joined", await guest.InvokeAsync<string>("Join", code, "Ada"));
+        // The opener has the code as its answer and is not told a second time.
+        await Barrier(opener);
+        Assert.Equal(0, told.Total);
+    }
+
+    [Fact]
+    public async Task Waiting_at_a_television_needs_a_live_code_and_hears_only_that_television()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var here = await Connect(factory);
+        var there = await Connect(factory);
+        var codeHere = (await here.InvokeAsync<ScreenPairing>("OpenScreen")).Code;
+        var codeThere = (await there.InvokeAsync<ScreenPairing>("OpenScreen")).Code;
+
+        var guest = await Connect(factory);
+        var ready = new Inbox<string>(guest, "RoomReady");
+        Assert.Contains("no-such-code", (await Refused(() => guest.InvokeAsync("AwaitRoom", "0000"))).Message);
+        await guest.InvokeAsync("AwaitRoom", codeHere);
+
+        // A room on the other television is none of this guest's business.
+        await host.InvokeAsync("ClaimScreen", codeThere, HostKey);
+        await host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        await Barrier(guest);
+        Assert.Equal(0, ready.Total);
+
+        // A code that has been claimed is no longer on any screen.
+        Assert.Contains("no-such-code", (await Refused(() => guest.InvokeAsync("AwaitRoom", codeThere))).Message);
+    }
+
+    [Fact]
+    public async Task Waiting_at_a_television_is_counted_against_the_join_allowance()
+    {
+        var factory = Factory(("QUIZ_JOIN_ATTEMPTS_PER_MINUTE", "2"));
+        var screen = await Connect(factory);
+        var shown = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+        var guest = await Connect(factory);
+
+        await guest.InvokeAsync("AwaitRoom", shown.Code);
+        await guest.InvokeAsync("AwaitRoom", shown.Code);
+        Assert.Contains("throttled", (await Refused(() => guest.InvokeAsync("AwaitRoom", shown.Code))).Message);
+    }
+
+    [Fact]
+    public async Task A_phone_that_scans_a_television_that_reloaded_is_told_the_room_once_it_is_back_in_it()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+
+        // The television reloaded: a new connection, showing a code again, with the round still on.
+        var reloaded = await Connect(factory);
+        var shown = await reloaded.InvokeAsync<ScreenPairing>("OpenScreen");
+        var guest = await Connect(factory);
+        var ready = new Inbox<string>(guest, "RoomReady");
+        await guest.InvokeAsync("AwaitRoom", shown.Code);
+
+        await host.InvokeAsync("ClaimScreen", shown.Code, HostKey);
+        Assert.Equal(code, await ready.Next());
+    }
+
+    [Fact]
+    public async Task The_phone_that_opens_a_room_can_sit_in_it_and_drive_it()
+    {
+        var factory = Factory();
+        var screen = await Connect(factory);
+        var shown = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+
+        // One connection for all of it: claim the screen, open the room, take a seat.
+        var phone = await Connect(factory);
+        var questions = new Inbox<JsonElement>(phone, "QuestionStarted");
+        var reveals = new Inbox<JsonElement>(phone, "Revealed");
+        var states = RoomState(phone);
+        await phone.InvokeAsync("ClaimScreen", shown.Code, HostKey);
+        var code = await phone.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        Assert.Equal("joined", await phone.InvokeAsync<string>("Join", code, "Ada"));
+
+        await phone.InvokeAsync("StartRound", code, HostKey);
+        var question = await questions.Next();
+        Assert.True(await phone.InvokeAsync<bool>("Answer", code, CorrectMarkerOf(question)));
+
+        // The television closes it, and the phone that is both host and player is scored like any other.
+        await screen.InvokeAsync("TimeUp", code, 1, 0);
+        var reveal = await reveals.Next();
+        Assert.True(reveal.GetProperty("standings")[0].GetProperty("score").GetInt32() > 0);
+
+        // It is in the room's group twice over, as its host and as a player, and still hears each
+        // thing once; and it hears what only a host is told, which is how it knows who has joined.
+        await Barrier(phone);
+        Assert.Equal(1, questions.Total);
+        Assert.Equal(1, reveals.Total);
+        Assert.True(states.Total > 0);
+    }
+
+    [Fact]
+    public async Task A_phone_waiting_at_a_television_can_still_claim_it_after_its_code_was_replaced()
+    {
+        var factory = Factory();
+        var screen = await Connect(factory);
+        var scanned = (await screen.InvokeAsync<ScreenPairing>("OpenScreen")).Code;
+
+        var phone = await Connect(factory);
+        await phone.InvokeAsync("AwaitRoom", scanned);
+        // The television replaces its code while the key is being typed.
+        var current = (await screen.InvokeAsync<ScreenPairing>("OpenScreen")).Code;
+
+        // A phone that was never in front of this screen gets nowhere with the old code...
+        var stranger = await Connect(factory);
+        if (scanned != current)
+            Assert.Contains("no-such-code", (await Refused(() => stranger.InvokeAsync("ClaimScreen", scanned, HostKey))).Message);
+        // ...and the one that was still needs the key.
+        Assert.Contains("forbidden", (await Refused(() => phone.InvokeAsync("ClaimScreen", scanned, "not-the-key"))).Message);
+
+        await phone.InvokeAsync("ClaimScreen", scanned, HostKey);
+        var code = await phone.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        Assert.Matches("^[0-9]{4}$", code);
+
+        // The screen is in a room now and shows no code: there is nothing left there to claim.
+        var late = await Connect(factory);
+        Assert.Contains("no-such-code", (await Refused(() => late.InvokeAsync("AwaitRoom", current))).Message);
+        Assert.Contains("no-such-code", (await Refused(() => phone.InvokeAsync("ClaimScreen", scanned, HostKey))).Message);
+    }
 }
