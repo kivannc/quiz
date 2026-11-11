@@ -1438,6 +1438,88 @@ public sealed class GameHubTests : IDisposable
         await guest.InvokeAsync("AwaitRoom", shown.Code);
         await guest.InvokeAsync("AwaitRoom", shown.Code);
         Assert.Contains("throttled", (await Refused(() => guest.InvokeAsync("AwaitRoom", shown.Code))).Message);
+
+        // Counted apart from joining: a phone that scans a television waits there and then joins, and
+        // the waiting must not have eaten the join. Two joins are still its to make.
+        for (var i = 0; i < 2; i++)
+            Assert.Contains("no-such-room", (await Refused(() => guest.InvokeAsync<string>("Join", "0000", "Ada"))).Message);
+        Assert.Contains("throttled", (await Refused(() => guest.InvokeAsync<string>("Join", "0000", "Ada"))).Message);
+    }
+
+    [Fact]
+    public async Task Phones_waiting_at_a_television_are_told_when_it_goes()
+    {
+        var factory = Factory();
+        var screen = await Connect(factory);
+        var shown = await screen.InvokeAsync<ScreenPairing>("OpenScreen");
+        var guest = await Connect(factory);
+        var gone = new Inbox<bool>(record => guest.On("ScreenGone", () => record(true)));
+        var elsewhere = await Connect(factory);
+        var unrelated = new Inbox<bool>(record => elsewhere.On("ScreenGone", () => record(true)));
+        await guest.InvokeAsync("AwaitRoom", shown.Code);
+
+        // A blink of Wi-Fi or a reload: the television comes back as another connection with another
+        // code, and a room opened there would never reach a phone waiting for this one.
+        await screen.DisposeAsync();
+
+        Assert.True(await gone.Next());
+        await Barrier(elsewhere);
+        Assert.Equal(0, unrelated.Total);
+    }
+
+    [Fact]
+    public async Task A_seat_taken_over_by_another_connection_tells_the_one_that_lost_it()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var code = await Open(host);
+        var first = await Connect(factory);
+        var lost = new Inbox<bool>(record => first.On("SeatTaken", () => record(true)));
+        Assert.Equal("joined", await first.InvokeAsync<string>("Join", code, "Ada"));
+
+        // Sending the name again from the same connection is not losing the seat.
+        Assert.Equal("rejoined", await first.InvokeAsync<string>("Join", code, "Ada"));
+        await Barrier(first);
+        Assert.Equal(0, lost.Total);
+
+        // A second tab under the same name takes it, and the first is told rather than left with
+        // buzzers the room refuses.
+        var second = await Connect(factory);
+        var kept = new Inbox<bool>(record => second.On("SeatTaken", () => record(true)));
+        Assert.Equal("rejoined", await second.InvokeAsync<string>("Join", code, "Ada"));
+        Assert.True(await lost.Next());
+
+        await host.InvokeAsync("StartRound", code, HostKey);
+        Assert.False(await first.InvokeAsync<bool>("Answer", code, "clubs"));
+        Assert.True(await second.InvokeAsync<bool>("Answer", code, "clubs"));
+        await Barrier(second);
+        Assert.Equal(0, kept.Total);
+    }
+
+    [Fact]
+    public async Task A_wait_is_spent_by_the_claim_it_bought_and_cannot_move_the_room_later()
+    {
+        var factory = Factory();
+        var here = await Connect(factory);
+        var scanned = (await here.InvokeAsync<ScreenPairing>("OpenScreen")).Code;
+        var phone = await Connect(factory);
+        await phone.InvokeAsync("AwaitRoom", scanned);
+        await phone.InvokeAsync("ClaimScreen", scanned, HostKey);
+        var code = await phone.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+
+        // The room moves to another television, so the first one is showing a code again.
+        var there = await Connect(factory);
+        var taken = new Inbox<string>(here, "RoomTaken");
+        await phone.InvokeAsync("ClaimScreen", (await there.InvokeAsync<ScreenPairing>("OpenScreen")).Code, HostKey);
+        Assert.Equal(code, await taken.Next());
+        await here.InvokeAsync<ScreenPairing>("OpenScreen");
+
+        // A wrong code from the host now is only a wrong code: it must not fall back to the screen
+        // this phone once waited at and pull the room off the television it is on.
+        var moved = new Inbox<string>(there, "RoomTaken");
+        Assert.Contains("no-such-code", (await Refused(() => phone.InvokeAsync("ClaimScreen", "0000", HostKey))).Message);
+        await Barrier(there);
+        Assert.Equal(0, moved.Total);
     }
 
     [Fact]

@@ -227,7 +227,8 @@ conn.on('RoomClosed', leaveRoom);
 function leaveRoom() {
   // Not an error and not a dead screen: the game ended, and this phone can join another room.
   forget();
-  forgetHosting();
+  // Only the record of the room being left: this phone may be a guest here and the host of another.
+  if (state.hosting?.code === state.code) forgetHosting();
   state.display = true;
   state.hostError = '';
   disarmClose();
@@ -280,7 +281,55 @@ conn.on('Displayed', (present) => {
   render();
 });
 
+/*
+ * The television this phone was waiting in front of has gone: reloaded, or a blink of its Wi-Fi. It
+ * comes back as another connection showing another code, and a room opened there would never reach
+ * a phone still waiting for the old one — so the phone stops waiting and says what to do.
+ */
+conn.on('ScreenGone', () => {
+  if (!state.screen) return;
+  leaveScreen();
+  state.error = t('errScreenCodeGone');
+  render();
+});
+
+/*
+ * This seat is being played from somewhere else now: another tab on this phone, most often, opened
+ * by scanning the television a second time. The room would refuse every tap from here, so this page
+ * stops being a buzzer rather than looking like a broken one — and stops for good, connection and
+ * all, because a page that reconnected later would take the seat back from the tab that is in use.
+ * The form is left holding the room and the name: entering them here again is a decision to play
+ * from this tab after all, and a reload is what carries it out.
+ */
+let displaced = false;
+// Whether this page has done what it came for yet; see arrive(), at the end.
+let arrived = false;
+
+conn.on('SeatTaken', () => {
+  displaced = true;
+  clearTimeout(retry);
+  const form = el('form-join');
+  form.elements.code.value = state.code ?? '';
+  form.elements.name.value = state.name ?? '';
+  state.phase = 'join';
+  state.code = null;
+  state.name = null;
+  state.pending = null;
+  state.chosen = null;
+  state.final = null;
+  state.paused = false;
+  clearResult();
+  leaveScreen();
+  state.error = '';
+  state.notice = t('seatTaken');
+  conn.stop();
+  render();
+});
+
 conn.on('RoundReset', (players) => {
+  // Not this page's round if it is on the form: an opener whose own seat was refused is among the
+  // room's host screens without being in the room, and must not be dropped into its lobby.
+  if (state.phase === 'join') return;
   // The host has started another round in the same room. This phone keeps its seat and its
   // connection, so there is nothing to join: it goes back to waiting, with the score the room now
   // holds for it, and with nothing left on screen from the round that is over.
@@ -340,6 +389,10 @@ conn.on('Revealed', (reveal) => {
   // Worked out before the new total is taken, because the old one is half of the subtraction.
   state.reveal = resultOf(reveal);
   takeScore(reveal.standings);
+  // Which question this was, for a page that arrived during the reveal and never saw it open: the
+  // host's button has to know whether what follows is another question or the standings.
+  state.index = reveal.index;
+  state.round = reveal.round;
   render();
 });
 
@@ -383,16 +436,24 @@ async function comeBack() {
       await enterScreen(state.screen);
       state.waiting = name;
       state.opening = opening;
-    } catch {
-      // The code it scanned has been replaced, and a new connection has never stood there.
+    } catch (error) {
+      // Most often the code it scanned has been replaced, and a new connection has never stood
+      // there. Anything else is said as what it is.
       leaveScreen();
-      state.error = t('errScreenCodeGone');
+      state.error = screenError(error);
     }
     render();
   }
 }
 
+/* A screen code that is on no television any more gets its own words: "scan it again". */
+function screenError(error) {
+  return String(error?.message ?? '').includes('no-such-code') ? t('errScreenCodeGone') : errorText(error);
+}
+
 conn.onclose(() => {
+  // Closed on purpose, by SeatTaken: the page has said why, and that is not "disconnected".
+  if (displaced) return;
   state.connection = t('disconnected');
   render();
 });
@@ -403,12 +464,16 @@ conn.onclose(() => {
  * moment to try again, so the player never has to know what a reload is.
  */
 async function revive() {
+  if (displaced) return;
   if (document.visibilityState !== 'visible' || conn.state !== signalR.HubConnectionState.Disconnected) return;
   try {
     await conn.start();
     state.connection = '';
     render();
-    await comeBack();
+    // A page whose very first connection failed has not arrived anywhere yet: what its address
+    // carried is still waiting to be used.
+    if (arrived) await comeBack();
+    else await arrive();
   } catch {
     // Still unreachable. The notice stays, and the next time the page is looked at tries again.
   }
@@ -488,20 +553,39 @@ async function join(code, name) {
   render();
 }
 
-/* Re-sends the name this phone already has. A room that has gone sends it back to the form. */
+/*
+ * Re-sends the name this phone already has. A room that has gone sends it back to the form — and
+ * only that does. Being told to slow down, or losing the connection in the middle of asking, says
+ * nothing about the room: the seat and, on the host's phone, the record that makes it the host are
+ * kept, and the asking is done again. Forgetting them here would leave a live room with nobody able
+ * to start, pause or close it, since there is no way to become the host of a room one did not open.
+ */
+const REJOIN_RETRY_MS = 10_000;
+let retry = 0;
+
 async function rejoin() {
-  if (!state.code || !state.name) return;
+  clearTimeout(retry);
+  retry = 0;
+  if (displaced || !state.code || !state.name) return;
   try {
     await join(state.code, state.name);
   } catch (error) {
-    if (state.hosting?.code === state.code) forgetHosting();
-    state.phase = 'join';
-    state.code = null;
-    state.name = null;
-    state.chosen = null;
+    const message = String(error?.message ?? '');
+    if (message.includes('no-such-room') || message.includes('invalid-name')) {
+      if (state.hosting?.code === state.code) forgetHosting();
+      state.phase = 'join';
+      state.code = null;
+      state.name = null;
+      state.chosen = null;
+      state.error = errorText(error);
+      forget();
+      render();
+      return;
+    }
     state.error = errorText(error);
-    forget();
     render();
+    // A connection that dropped has its own way back, which ends here again.
+    if (conn.state === signalR.HubConnectionState.Connected) retry = setTimeout(rejoin, REJOIN_RETRY_MS);
     return;
   }
   if (state.phase !== 'join' && isHost()) await resumeHost();
@@ -574,6 +658,9 @@ async function openRoom() {
     return;
   }
 
+  // Return in a field and the button are two ways here, and one room is all that is wanted.
+  if (openingNow) return;
+  openingNow = true;
   const button = el('open-room');
   button.disabled = true;
   try {
@@ -582,12 +669,15 @@ async function openRoom() {
       await conn.invoke('ClaimScreen', state.screen, hostKey);
       state.claimed = true;
     }
+    // Opened on a screen claimed a moment ago, so the room has a television in it — said before the
+    // call, because the hub says "Displayed false" during it when that screen has gone in the
+    // meantime, and saying it afterwards would paint over the one thing the host must not miss.
+    state.display = true;
     const code = await conn.invoke('CreateRoom', hostKey, setId);
     // Should taking the seat fail, the room is still open: the form is left holding its code.
     form.elements.code.value = code;
     state.hostKey = hostKey;
     state.setId = setId;
-    state.display = true;
     state.hostError = '';
     leaveScreen();
     // Before the seat is taken, so that the Seated which answers the join already finds a host.
@@ -596,12 +686,15 @@ async function openRoom() {
     await join(code, name);
   } catch (error) {
     // The one refusal worth its own words: the television has moved on to another code.
-    state.error = String(error?.message ?? '').includes('no-such-code') ? t('errScreenCodeGone') : errorText(error);
+    state.error = screenError(error);
     render();
   } finally {
+    openingNow = false;
     button.disabled = false;
   }
 }
+
+let openingNow = false;
 
 el('open-room').addEventListener('click', openRoom);
 
@@ -694,19 +787,55 @@ async function reseat(screenCode) {
     await conn.invoke('ClaimScreen', screenCode, state.hostKey);
     state.hostError = '';
   } catch (error) {
-    state.hostError = errorText(error);
+    state.hostError = screenError(error);
   }
   render();
 }
 
+/* The same thing by hand, for a camera that opens another browser or a host who would rather type:
+ * the field is up for exactly as long as the room has no television in it. */
+el('host-repair').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const field = event.target.elements.screenCode;
+  const code = field.value.trim();
+  if (!/^[0-9]{4}$/.test(code)) {
+    field.focus();
+    return;
+  }
+  await reseat(code);
+  if (!state.hostError) field.value = '';
+});
+
 // A join on its way: the button waits for the answer rather than taking a second press.
 let joining = false;
+
+/* A guest who is waiting for the room and changes the name is no longer waiting under the old one:
+ * the button comes back, and pressing it waits again under what the field says now. */
+el('form-join').elements.name.addEventListener('input', () => {
+  if (!state.waiting) return;
+  state.waiting = null;
+  render();
+});
 
 el('form-join').addEventListener('submit', async (event) => {
   event.preventDefault();
   const form = event.target;
   const code = form.elements.code.value.trim();
   const name = form.elements.name.value.trim();
+
+  // This tab gave its seat up to another one and closed its connection. Asking for it back is a
+  // reload: the page comes up again as what the tab remembers being, and takes the seat.
+  if (displaced) {
+    location.reload();
+    return;
+  }
+  // "required" is satisfied by a space; the room is not.
+  if (!name) {
+    state.error = t('errInvalidName');
+    render();
+    form.elements.name.focus();
+    return;
+  }
 
   if (state.screen) {
     // At a television with no room on it. Return in the name field means whichever button is up.
@@ -829,7 +958,9 @@ function render() {
 
   // Held awake for as long as this phone is in a room, so a screen that dims between two questions
   // is not what costs a player the next one.
-  keepAwake(view === 'play' && state.phase !== 'finished');
+  // And while it waits in front of a television: a phone that locks there comes back to a code that
+  // has been replaced, and its owner to a room everyone else is already in.
+  keepAwake((view === 'play' && state.phase !== 'finished') || Boolean(state.waiting));
 }
 
 /*
@@ -885,6 +1016,7 @@ function drawHostBar(shown) {
   if (!shown) return;
 
   el('host-gone').hidden = state.display;
+  el('host-repair').hidden = state.display;
   const error = el('host-error');
   error.textContent = state.hostError;
   error.hidden = state.hostError === '';
@@ -1043,38 +1175,50 @@ state.setId = host.setId;
 state.hosting = host.hosting;
 
 /*
- * The seat to take back. A reload rejoins by itself, on the same path a dropped connection takes —
- * and a phone that opened a room is that room's host in any tab, which is what lets a second scan
- * of the television (a new tab, with nothing of its own remembered) do the host's work.
+ * Arriving: taking back the seat this phone has, or standing in front of the television it scanned.
+ * Done once, on the first connection that works — which is usually the one at load, and otherwise
+ * the one revive() makes, so that a page opened in a moment without signal still does what its
+ * address asked for when the signal comes back.
  */
-const stored = recall();
-const seat = stored.code && stored.name ? stored : (state.hostKey && state.hosting) || { code: null, name: null };
-const connected = conn.state === signalR.HubConnectionState.Connected;
-const fresh = scannedRoom !== null && scannedRoom !== seat.code;
-if (!fresh && seat.code && seat.name && connected) {
-  state.code = seat.code;
-  state.name = seat.name;
-  await rejoin();
-  // A room this phone opened on another evening and never closed has long been swept. That is how
-  // most evenings end, not something that went wrong: the form comes up with nothing to say.
-  if (state.phase === 'join' && seat !== stored) state.error = '';
-}
-
-if (state.phase !== 'join') {
-  // In a room. A screen code in the address then means one thing: this is the host, and the
-  // television reloaded and is asking to be put back.
-  if (scannedScreen && isHost()) await reseat(scannedScreen);
-} else if (scannedScreen && connected) {
-  try {
-    await enterScreen(scannedScreen);
-  } catch (error) {
-    state.error = String(error?.message ?? '').includes('no-such-code') ? t('errScreenCodeGone') : errorText(error);
+async function arrive() {
+  arrived = true;
+  /*
+   * The seat to take back. A reload rejoins by itself, on the same path a dropped connection takes —
+   * and a phone that opened a room is that room's host in any tab, which is what lets a second scan
+   * of the television (a new tab, with nothing of its own remembered) do the host's work.
+   */
+  const stored = recall();
+  const seat = stored.code && stored.name ? stored : (state.hostKey && state.hosting) || { code: null, name: null };
+  const fresh = scannedRoom !== null && scannedRoom !== seat.code;
+  if (!fresh && seat.code && seat.name) {
+    state.code = seat.code;
+    state.name = seat.name;
+    await rejoin();
+    // A room this phone opened on another evening and never closed has long been swept. That is how
+    // most evenings end, not something that went wrong: the form comes up with nothing to say.
+    if (state.phase === 'join' && !state.code && seat !== stored) state.error = '';
   }
+
+  if (state.phase !== 'join') {
+    // In a room. A screen code in the address then means one thing: this is the host, and the
+    // television reloaded and is asking to be put back.
+    if (scannedScreen && isHost()) await reseat(scannedScreen);
+  } else if (scannedScreen && !state.code) {
+    try {
+      await enterScreen(scannedScreen);
+    } catch (error) {
+      state.error = screenError(error);
+    }
+  }
+
+  if (state.phase === 'join' && fresh) el('form-join').elements.code.value = scannedRoom;
+  fillForm();
 }
 
-if (state.phase === 'join') {
+/* The form as a phone first sees it: the name it played under last, and the cursor where it is needed. */
+function fillForm() {
+  if (state.phase !== 'join') return;
   const form = el('form-join');
-  if (fresh) form.elements.code.value = scannedRoom;
   try {
     if (!form.elements.name.value) form.elements.name.value = localStorage.getItem(STORE_LAST_NAME) ?? '';
   } catch { /* nothing remembered */ }
@@ -1083,3 +1227,6 @@ if (state.phase === 'join') {
   if (!form.elements.name.value || state.screen) form.elements.name.focus();
   else (form.elements.code.value ? form.elements.name : form.elements.code).focus();
 }
+
+if (conn.state === signalR.HubConnectionState.Connected) await arrive();
+else fillForm();

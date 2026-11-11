@@ -529,6 +529,9 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
 .phone .hostbar .field { margin: 0; }
 .phone .hostbar .gone { margin: 0; font-size: 12px; color: var(--crimson); letter-spacing: .04em; text-align: center; }
 .phone .hostbar .error { margin: 0; font-size: 12px; text-align: center; }
+.phone .hostbar .repair { display: flex; gap: 8px; margin: 0; }
+.phone .hostbar .repair input { flex: 1 1 0; min-width: 0; font: inherit; font-size: 16px; letter-spacing: .3em; text-align: center; color: var(--fg); background: transparent; border: 1px solid var(--hairline); border-radius: 6px; padding: 8px; }
+.phone .hostbar .repair button { flex: 0 0 auto; padding: 8px 16px; font-size: 12px; letter-spacing: .1em; }
 .phone .hostbar .danger[data-armed='true'] { color: var(--coral); border-color: var(--coral); }
 
 .phone .play { gap: 12px; }

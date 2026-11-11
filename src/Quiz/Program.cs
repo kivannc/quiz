@@ -31,6 +31,10 @@ var createAttemptsPerMinute = Setting("QUIZ_CREATE_ATTEMPTS_PER_MINUTE", 5);
 // Built here, not lazily in DI, so a bad value stops startup like every other limit.
 var createThrottle = new JoinThrottle(TimeProvider.System, createAttemptsPerMinute);
 
+// Standing in front of a television is counted apart from joining a room, at the same rate: a
+// phone that scans a television does one and then the other, and a household shares one address.
+var awaitThrottle = new JoinThrottle(TimeProvider.System, options.JoinAttemptsPerMinute);
+
 var claimAttemptsPerMinute = Setting("QUIZ_CLAIM_ATTEMPTS_PER_MINUTE", 10);
 var claimThrottle = new JoinThrottle(TimeProvider.System, claimAttemptsPerMinute);
 // Constructed here for the same reason: PairingOptions validates itself, so a bad value stops startup.
@@ -48,6 +52,7 @@ builder.Services.AddSingleton<IHostAuthorizer>(new KeyHostAuthorizer(hostKey));
 builder.Services.AddSingleton(sp => new JoinThrottle(sp.GetRequiredService<TimeProvider>(), options.JoinAttemptsPerMinute));
 builder.Services.AddKeyedSingleton(GameHub.CreateThrottleKey, createThrottle);
 builder.Services.AddKeyedSingleton(GameHub.ClaimThrottleKey, claimThrottle);
+builder.Services.AddKeyedSingleton(GameHub.AwaitThrottleKey, awaitThrottle);
 builder.Services.AddSingleton(pairingOptions);
 builder.Services.AddSingleton<PairingStore>();
 builder.Services.AddHostedService<IdleRoomSweeper>();

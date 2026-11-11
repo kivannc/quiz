@@ -9,8 +9,9 @@ public abstract record ClaimResult
     public sealed record Claimed(string ScreenConnectionId) : ClaimResult;
 
     /// <summary>
-    /// Unknown, expired and already claimed are deliberately one case: whoever probes for codes
-    /// learns nothing from the answer.
+    /// Unknown, expired and already claimed are deliberately one case: a claim that fails says
+    /// nothing about why. (Whether a code is live at all can be asked without claiming it, see
+    /// <see cref="PairingStore.ScreenShowing"/>; what a failed claim keeps to itself is the rest.)
     /// </summary>
     public sealed record NoSuchCode : ClaimResult;
 }
@@ -21,8 +22,9 @@ public abstract record ClaimResult
 /// codes even though both are drawn from 1000..9999. There is no timer: a code past its lifetime is refused
 /// when someone asks for it, and <see cref="SweepExpired"/> (called on a schedule) frees the rest.
 /// <see cref="Claim"/> is lock-free and single-use (an atomic remove); <see cref="Issue"/>,
-/// <see cref="Forget"/> and <see cref="SweepExpired"/> share one lock so a screen's code replacement
-/// and code uniqueness cannot be raced past.
+/// <see cref="ClaimShownBy"/>, <see cref="Forget"/> and <see cref="SweepExpired"/> share one lock so a
+/// screen's code replacement and code uniqueness cannot be raced past. <see cref="ScreenShowing"/> is
+/// the one read that spends nothing.
 /// </summary>
 public sealed class PairingStore
 {

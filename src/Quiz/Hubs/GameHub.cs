@@ -25,8 +25,8 @@ namespace Quiz.Hubs;
 /// until it opens a room, and <see cref="CreateRoom"/> then seats both connections in the room's host
 /// groups, so every host-bound message reaches the screen and the console alike. Past that moment the
 /// claim is spent, so the room's own tie to its television is <see cref="ConnectionRooms.Display"/>:
-/// without it nothing would notice a screen leaving, and the console — which owns the countdown and
-/// the beats between questions — would carry the round on with no display in the room at all. When one
+/// without it nothing would notice a screen leaving, and the host — whose phone would go on showing
+/// buttons — would never be told that the round has stopped because nothing is pacing it. When one
 /// goes, <see cref="DisplayGone"/> stops the round and says "Displayed false" to the host group.
 /// A room has one television: claiming a second one into a live room takes it off the first, which
 /// leaves the room's groups and goes back to showing a pairing code.
@@ -40,10 +40,12 @@ public sealed class GameHub(
     [FromKeyedServices(GameHub.CreateThrottleKey)] JoinThrottle createThrottle,
     PairingStore pairings,
     PairingOptions pairingOptions,
-    [FromKeyedServices(GameHub.ClaimThrottleKey)] JoinThrottle claimThrottle) : Hub
+    [FromKeyedServices(GameHub.ClaimThrottleKey)] JoinThrottle claimThrottle,
+    [FromKeyedServices(GameHub.AwaitThrottleKey)] JoinThrottle awaitThrottle) : Hub
 {
     public const string CreateThrottleKey = "create-room";
     public const string ClaimThrottleKey = "claim-screen";
+    public const string AwaitThrottleKey = "await-room";
 
     private const int MaxNameLength = 24;
 
@@ -74,13 +76,18 @@ public sealed class GameHub(
     /// lets one QR code on the television serve the whole evening, whoever scans it first — the person
     /// who will open the room and the guests who can only wait for it land on the same page.
     ///
-    /// Throws "throttled" or "no-such-code". It needs no key and gives nothing away but that the code
-    /// is live, which is the same thing joining a room tells anyone about a room code, and it is
-    /// counted against the same allowance. The code is not spent: it is still there to be claimed.
+    /// Throws "throttled" or "no-such-code". It needs no key, so it does tell a caller whether a
+    /// screen code is live — which <see cref="ClaimScreen"/> is careful not to — and a caller that
+    /// hits one is told the code of every room later opened on that screen for as long as both stay
+    /// connected. That is the price of one code for everybody, and it buys a stranger nothing a
+    /// room code would not: both are four digits, both are guessed at the same counted rate, and a
+    /// room code is what this ends in. It takes no television and drives nothing; that still needs
+    /// the key. Counted per client, apart from joining: a phone that scans a television does one and
+    /// then the other, and a whole household shares one address. The code is not spent.
     /// </summary>
     public async Task AwaitRoom(string screenCode)
     {
-        if (!joinThrottle.Allow(ClientKey())) throw new HubException("throttled");
+        if (!awaitThrottle.Allow(ClientKey())) throw new HubException("throttled");
         if (pairings.ScreenShowing(screenCode) is not { } screen) throw new HubException("no-such-code");
         await Groups.AddToGroupAsync(Context.ConnectionId, WaitingGroup(screen));
         // Remembered for this connection, for ClaimScreen: the phone may turn out to be the one that
@@ -106,6 +113,10 @@ public sealed class GameHub(
         if (claim is not ClaimResult.Claimed && Context.Items.TryGetValue(AwaitedScreen, out var awaited))
             claim = pairings.ClaimShownBy((string)awaited!);
         if (claim is not ClaimResult.Claimed claimed) throw new HubException("no-such-code");
+        // Spent with the claim it bought. Kept, it would turn every later wrong code from this
+        // connection into a claim on that same television — which by then may be showing a code
+        // again because the room has moved to another screen, and would be pulled back off it.
+        Context.Items.Remove(AwaitedScreen);
 
         var screen = claimed.ScreenConnectionId;
         // A connection that claims its own code would satisfy CreateRoom's "has a screen" rule with no
@@ -135,7 +146,8 @@ public sealed class GameHub(
                 await Clients.Client(screen).SendAsync("RoomOpened", hosted);
                 await Repaint(room, Clients.Client(screen));
                 // Whoever scanned this television while it was showing a code again is let in too.
-                await Clients.Group(WaitingGroup(screen)).SendAsync("RoomReady", hosted);
+                // Not the caller, which is the host putting the screen back and is in the room already.
+                await Clients.GroupExcept(WaitingGroup(screen), new[] { Context.ConnectionId }).SendAsync("RoomReady", hosted);
             }
             // The console has been saying the room had no television in it since the last one left.
             // Now it hears what the room has — which a refused record leaves exactly as it was, and
@@ -220,9 +232,14 @@ public sealed class GameHub(
         name = name?.Trim() ?? "";
         if (name.Length == 0 || name.Length > MaxNameLength) throw new HubException("invalid-name");
 
-        var result = room.Join(name, Context.ConnectionId);
+        var result = room.Join(name, Context.ConnectionId, out var displaced);
         if (result is JoinResult.Joined or JoinResult.Rejoined)
         {
+            // The seat has moved to this connection. Whatever held it before — another tab on the
+            // same phone, most often — still has four buzzers on screen that the room now refuses,
+            // and nothing else would ever tell it why.
+            foreach (var former in displaced) await Clients.Client(former).SendAsync("SeatTaken");
+
             await JoinPlayerGroup(code);
             var seat = room.Players.First(p => string.Equals(p.Name, name, StringComparison.OrdinalIgnoreCase));
             await Clients.Caller.SendAsync("Seated", seat.Name, seat.Score);
@@ -479,6 +496,10 @@ public sealed class GameHub(
         // A code nobody claimed would otherwise be claimable for a connection that no longer exists. First,
         // so that a connection no longer reading as connected has certainly lost its code too.
         pairings.Forget(Context.ConnectionId);
+        // If this was a television, the phones waiting in front of it are waiting for a connection
+        // that no longer exists: it comes back as a new one, showing a new code, and a room opened
+        // there would never reach them. They are told, and go back to "scan it again".
+        await Clients.Group(WaitingGroup(Context.ConnectionId)).SendAsync("ScreenGone");
         // The one thing about a gone connection that a room has to act on: it was the television.
         if (connections.Forget(Context.ConnectionId) is { } blinded) await DisplayGone(blinded);
         await base.OnDisconnectedAsync(exception);

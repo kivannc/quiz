@@ -102,6 +102,13 @@
       -->
       <div class="hostbar" id="hostbar" hidden>
         <p class="status gone" id="host-gone" hidden data-i18n="hostDisplayGone"></p>
+        <!-- The way back by hand, up only while the room has no television in it: scanning the code
+             on that screen does the same, but a camera may open another browser, and this phone is
+             the one that can put the screen back. -->
+        <form class="repair" id="host-repair" hidden autocomplete="off">
+          <input name="screenCode" type="text" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" data-i18n-placeholder="pairCodeLabel">
+          <button class="ghost" type="submit" data-i18n="pairButton"></button>
+        </form>
         <p class="error" id="host-error" role="alert" hidden></p>
         <label class="field" id="host-again-field" hidden>
           <span class="k" data-i18n="setLabel"></span>

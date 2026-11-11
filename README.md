@@ -25,10 +25,13 @@ code while it has no room on it, the room code once it has. A guest who scans be
 exists types a name and waits there — the hub tells that phone the room the moment one opens on
 that screen (`AwaitRoom`, then `RoomReady`), and it walks in by itself. A guest is never shown a
 key field: opening the room is behind a line of small print, which a phone that already holds the
-key finds open. The screen code is replaced every two minutes, so a phone that has waited at a
-screen may claim whatever that screen is showing now; typing a key for the first time takes longer
-than a code lives. The digits stay on screen for whoever would rather type, and the form takes
-either code in the same field.
+key finds open. The screen code is replaced about every two minutes, so a phone that has waited at
+a screen may claim whatever that screen is showing now; typing a key for the first time takes
+longer than a code lives. The digits stay on screen for whoever would rather type: the join form
+takes a room code or a screen code in the same field. A television that goes away while phones
+are waiting in front of it tells them so (`ScreenGone`), since it comes back as another connection
+with another code. Waiting needs no key, so it does say whether a screen code is live; it is
+counted per client like joining, and apart from it.
 
 The QR encoder is `wwwroot/qr.js`, written for this game: byte mode, level L, versions 1 to 5.
 
@@ -53,10 +56,14 @@ waits for it.
 
 Everything comes back on its own. A phone that reloads or loses its connection re-sends its name
 and is back in its seat with its score; the phone that opened the room is its host again in any
-tab, because what makes it the host is remembered by the phone and not by the page. A television
-that reloads has fallen out of the room and shows a fresh screen code, saying which room it was
-in: the host scanning that code is all it takes to put it straight back, mid-question and all,
-and the host's phone says so when the television has gone. Phones that lose the connection keep trying until it is back.
+tab of the same browser, because what makes it the host is remembered by the phone and not by
+the page. Only a room that has really gone ends that: being told to slow down, or losing the
+connection in the middle of asking, keeps the seat and the host's record and asks again. A seat
+belongs to one connection, so a second tab under the same name takes it and the first is told
+(`SeatTaken`) and stops, rather than showing buzzers the room refuses. A television that reloads
+has fallen out of the room and shows a fresh screen code, saying which room it was in: the host's
+phone says the television has gone and offers a field for that code, and scanning it does the
+same — either puts the screen straight back, mid-question and all. Phones that lose the connection keep trying until it is back.
 All three pages are plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm,
 no framework.
 

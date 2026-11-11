@@ -248,4 +248,24 @@ public sealed class PairingStoreTests
         _clock.Advance(Lifetime);
         Assert.Null(store.ScreenShowing(late));
     }
+
+    [Fact]
+    public void Whatever_a_screen_is_showing_can_be_claimed_once_and_only_while_it_lives()
+    {
+        var store = NewStore();
+        var first = Code(store.Issue("screen-1", "client-1"));
+        var other = Code(store.Issue("screen-2", "client-2"));
+
+        Assert.Equal("screen-1", Assert.IsType<ClaimResult.Claimed>(store.ClaimShownBy("screen-1")).ScreenConnectionId);
+        // Spent, like a code claimed by its digits: by either road.
+        Assert.IsType<ClaimResult.NoSuchCode>(store.ClaimShownBy("screen-1"));
+        Assert.IsType<ClaimResult.NoSuchCode>(store.Claim(first));
+        // A screen showing nothing, and one nobody has heard of.
+        Assert.IsType<ClaimResult.NoSuchCode>(store.ClaimShownBy("screen-3"));
+        // The other screen's code is untouched by all of it.
+        Assert.Equal("screen-2", store.ScreenShowing(other));
+
+        _clock.Advance(Lifetime);
+        Assert.IsType<ClaimResult.NoSuchCode>(store.ClaimShownBy("screen-2"));
+    }
 }
