@@ -114,9 +114,9 @@ function recall() {
   }
 }
 
-function rememberDeadline(index, at) {
+function rememberDeadline(question, at) {
   try {
-    store.setItem(STORE_DEADLINE, JSON.stringify({ code: state.code, index, at }));
+    store.setItem(STORE_DEADLINE, JSON.stringify({ code: state.code, round: question.round, index: question.index, at }));
   } catch { /* the countdown still runs; only a reload would have used this */ }
 }
 
@@ -135,12 +135,15 @@ function forgetDeadline() {
  * The deadline this page set for this very question, if it is the page that set it. A reload must
  * not hand the players a fresh twenty seconds: the room goes on refusing answers after the original
  * limit, so the extra time would be a lie. A console that never ran this question has nothing stored
- * and falls back to the full limit.
+ * and falls back to the full limit. "This very question" is the round and the index together: a
+ * room plays several rounds, and each counts its questions from zero.
  */
-function recallDeadline(index) {
+function recallDeadline(question) {
   try {
     const stored = JSON.parse(store.getItem(STORE_DEADLINE) ?? 'null');
-    return stored && stored.code === state.code && stored.index === index ? stored.at : null;
+    return stored && stored.code === state.code && stored.round === question.round && stored.index === question.index
+      ? stored.at
+      : null;
   } catch {
     return null;
   }
@@ -171,10 +174,10 @@ function stopCountdown() {
  * re-arming when a television is re-seated: its clock never stopped. Stopping it is what freezing
  * does, and freezing belongs to the pause alone.
  */
-function startCountdown(index, at) {
+function startCountdown(question, at) {
   stopCountdown();
   deadline = at;
-  rememberDeadline(index, at);
+  rememberDeadline(question, at);
   drawClock();
   ticker = setInterval(() => {
     drawClock();
@@ -214,7 +217,7 @@ function thawCountdown() {
   if (!state.question || ticker) return;
   const left = frozen;
   frozen = 0;
-  startCountdown(state.question.index, Date.now() + left);
+  startCountdown(state.question, Date.now() + left);
 }
 
 function drawClock(ms = deadline - Date.now()) {
@@ -345,8 +348,8 @@ conn.on('QuestionStarted', (question) => {
   show('question');
   // A console that has run this question already counts its own deadline down. One arriving fresh
   // uses limitSeconds, which on a resume is what the room says is left, not the whole limit.
-  const at = (resuming ? recallDeadline(question.index) : null) ?? Date.now() + question.limitSeconds * 1000;
-  startCountdown(question.index, at);
+  const at = (resuming ? recallDeadline(question) : null) ?? Date.now() + question.limitSeconds * 1000;
+  startCountdown(question, at);
 });
 
 conn.on('Paused', (paused) => {
@@ -404,6 +407,13 @@ conn.on('Displayed', (present) => {
     state.repair = null;
   }
   render();
+});
+
+conn.on('RoundReset', () => {
+  // Another round in the same room. The lobby that follows is what moves this page; this only
+  // drops the last question of the round that is over, so nothing is drawn from it.
+  state.question = null;
+  state.paused = false;
 });
 
 conn.on('RoomClosed', () => {
@@ -617,6 +627,29 @@ el('next').addEventListener('click', () => {
 
 el('pause').addEventListener('click', togglePause);
 
+/*
+ * Another round, in the same room and on the same television, from whichever set is picked. The room
+ * answers with its lobby, which is what moves this page; nothing is assumed here. The set is
+ * remembered as the phone's choice, so the picker opens on it next time.
+ */
+el('again').addEventListener('click', async () => {
+  const setId = el('again-set').value;
+  try {
+    await conn.invoke('NewRound', state.code, state.hostKey, setId);
+    state.setId = setId;
+    state.error = '';
+    remember();
+  } catch (error) {
+    state.error = error;
+    if (String(error?.message ?? '').includes('no-such-room')) {
+      forgetRoom();
+      show('setup');
+      return;
+    }
+  }
+  render();
+});
+
 /* ---------- putting a television that reloaded back into the room ---------- */
 
 el('repair-open').addEventListener('click', () => {
@@ -797,6 +830,20 @@ function drawControls() {
   const pause = el('pause');
   pause.hidden = state.view !== 'question';
   pause.textContent = t(state.paused ? 'resumeButton' : 'pauseButton');
+
+  // The round is over: the same room can play another, from any set. The picker is filled once,
+  // and opens on the set that was just played so that "again" is one press.
+  const finished = state.view === 'finished' && state.sets.length > 0;
+  const picker = el('again-set');
+  if (picker.options.length !== state.sets.length) {
+    picker.replaceChildren();
+    for (const item of state.sets) picker.add(new Option(item.title, item.id));
+    if (state.sets.some((item) => item.id === state.setId)) picker.value = state.setId;
+  }
+  el('again-field').hidden = !finished;
+  const again = el('again');
+  again.hidden = !finished;
+  again.textContent = t('againButton');
 
   const close = el('close-room');
   close.textContent = t(closeArmed ? 'closeRoomConfirm' : 'closeRoomButton');

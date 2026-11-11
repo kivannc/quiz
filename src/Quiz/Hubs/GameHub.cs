@@ -32,6 +32,7 @@ namespace Quiz.Hubs;
 /// </summary>
 public sealed class GameHub(
     RoomStore rooms,
+    IQuestionSetSource sets,
     IHostAuthorizer hosts,
     ConnectionRooms connections,
     JoinThrottle joinThrottle,
@@ -300,6 +301,27 @@ public sealed class GameHub(
         {
             await Clients.Group(code).SendAsync("RoundFinished", room.Standings);
         }
+        await SendRoomState(room);
+    }
+
+    /// <summary>
+    /// Another round in the same room, from whichever set the host picks. The room goes back to its
+    /// lobby with everyone still seated and every score at nothing, so the evening carries on without
+    /// a new room, a new code or anybody joining again — and the television, still in the room, shows
+    /// the room code once more for whoever arrived late. Throws "unknown-set"; out of phase it does
+    /// nothing, like every other host action that does not fit.
+    /// </summary>
+    public async Task NewRound(string code, string hostKey, string setId)
+    {
+        var room = HostRoom(code, hostKey);
+        await JoinHostGroups(code);
+        var set = sets.ById(setId) ?? throw new HubException("unknown-set");
+        if (!room.NewRound(set)) return;
+
+        // The phones are told the round they were looking at is gone, with the seats as they stand
+        // now: a phone has no other way to learn its score went back to nothing. The host screens
+        // are in that group too and are sent the lobby right after, which is the message they act on.
+        await Clients.Group(code).SendAsync("RoundReset", room.Players);
         await SendRoomState(room);
     }
 

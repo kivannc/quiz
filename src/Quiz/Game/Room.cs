@@ -9,22 +9,30 @@ public enum JoinResult { Joined, Rejoined, RoomFull, RoundInProgress }
 
 public sealed record PlayerView(string Name, int Score);
 
-public sealed record QuestionView(int Index, int Total, string Text, IReadOnlyList<Option> Options, int LimitSeconds);
+/// <summary>
+/// One question as the screens are sent it. <paramref name="Round"/> counts the rounds a room has
+/// played, from one: a room can play several, each numbering its questions from zero again, so the
+/// index alone no longer says which question this is — and a phone that remembers "I answered
+/// question 0" must not take that for an answer to the first question of the round after.
+/// </summary>
+public sealed record QuestionView(int Index, int Total, string Text, IReadOnlyList<Option> Options, int LimitSeconds, int Round);
 
 /// <summary>
 /// What a closed question looks like to every screen. <paramref name="Index"/> is the question it
 /// closes, counted the way <see cref="QuestionView"/> counts: a reveal carries totals rather than
 /// the points just earned, so a phone works out what it earned by subtracting the total it had
-/// before that question — and the index is the only thing that says which question that was.
+/// before that question — and the index, together with the <paramref name="Round"/> it was asked
+/// in, is the only thing that says which question that was.
 /// </summary>
 public sealed record RevealView(
     int Index,
     Marker Correct,
     IReadOnlyDictionary<Marker, int> Distribution,
-    IReadOnlyList<PlayerView> Standings);
+    IReadOnlyList<PlayerView> Standings,
+    int Round);
 
 /// <summary>
-/// One room: its players and one round of questions played in order.
+/// One room: its players and the rounds they play, one after another, each a run of questions in order.
 /// There are no timers here. The host's page owns the countdown and calls <see cref="CloseQuestion"/>;
 /// the room independently records when each question opened and refuses answers that arrive after the limit.
 /// A pause is state, not a scheduler: the clock the room measures the limit by simply leaves out the time
@@ -43,7 +51,13 @@ public sealed class Room
     private sealed record GivenAnswer(Marker Marker, int Points);
 
     private readonly object _gate = new();
-    private readonly QuestionSet _set;
+    // The set the next draw is made from: the one the room was opened with, until a new round names another.
+    private QuestionSet _set;
+    // Every question this room has asked, as "set/question", so a second round asks something else.
+    // It lives and dies with the room: nothing is remembered from one evening to the next.
+    private readonly HashSet<string> _asked = new(StringComparer.Ordinal);
+    // Which round this is, from one. Counted by Start, so a room in its first lobby is in round zero.
+    private int _round;
     // The questions this round plays: drawn from the set by Start, empty until then.
     private IReadOnlyList<Question> _questions = [];
     private readonly TimeProvider _clock;
@@ -158,7 +172,7 @@ public sealed class Room
             {
                 if (_phase is not (RoomPhase.Question or RoomPhase.Reveal)) return null;
                 var q = _questions[_questionIndex];
-                return new QuestionView(_questionIndex, _questions.Count, q.Text, q.Options, (int)_questionLimit.TotalSeconds);
+                return new QuestionView(_questionIndex, _questions.Count, q.Text, q.Options, (int)_questionLimit.TotalSeconds, _round);
             }
         }
     }
@@ -205,7 +219,7 @@ public sealed class Room
 
     /// <summary>
     /// Opens the first question. Refused outside the lobby or with nobody seated.
-    /// Draws the round's questions, so a room that starts a second time plays a different draw.
+    /// Draws the round's questions, so every round a room plays is a different draw.
     /// </summary>
     public bool Start()
     {
@@ -214,6 +228,7 @@ public sealed class Room
             if (_phase != RoomPhase.Lobby || _seats.Count == 0) return false;
 
             _questions = Draw();
+            _round++;
             _questionIndex = 0;
             OpenQuestion();
             Touch();
@@ -222,10 +237,46 @@ public sealed class Room
     }
 
     /// <summary>
+    /// Takes a finished room back to its lobby for another round, played from <paramref name="set"/>.
+    /// Everyone keeps their seat and their connection, so nobody joins again; the scores go back to
+    /// nothing, because a round ends on a podium and the next one has its own. Being a lobby again,
+    /// the room takes new players until the round starts — which is how somebody who arrived halfway
+    /// through the last one gets in. Refused (false) unless the round before has finished.
+    /// </summary>
+    public bool NewRound(QuestionSet set)
+    {
+        ArgumentNullException.ThrowIfNull(set);
+        if (set.Questions.Count == 0) throw new ArgumentException("A round needs at least one question.", nameof(set));
+
+        lock (_gate)
+        {
+            if (_phase != RoomPhase.Finished) return false;
+
+            _set = set;
+            foreach (var seat in _seats) seat.Score = 0;
+            _answers.Clear();
+            _reveal = null;
+            _questions = [];
+            _questionIndex = 0;
+            _pausedAt = null;
+            _pausedFor = TimeSpan.Zero;
+            _phase = RoomPhase.Lobby;
+            Touch();
+            return true;
+        }
+    }
+
+    /// <summary>
     /// A round's questions: <see cref="QuestionsPerRound"/> of the set, in a random order, each at most
     /// once. A set smaller than a round plays whole, which is what a one-question test set is.
-    /// Runs once per room, because <see cref="Start"/> is refused outside the lobby and nothing returns
-    /// a room to the lobby. Copies the set before shuffling, so rooms can share one.
+    /// Copies the set before shuffling, so rooms can share one.
+    ///
+    /// A room that plays several rounds does not ask a question twice while the set still has one it
+    /// has not asked: questions this room has not seen are drawn first, and only when they run out is
+    /// the round filled up from the ones it has. A set that has run out starts over from there, so
+    /// the round after is fresh again rather than made of leftovers. All of that is this room's own
+    /// memory; a new room knows nothing of it.
+    ///
     /// The same generator the room codes are drawn with, for no better reason than that a game has one
     /// source of chance; a question draw asks nothing of it that a shuffle could not give.
     /// </summary>
@@ -233,8 +284,24 @@ public sealed class Room
     {
         var pool = _set.Questions.ToArray();
         RandomNumberGenerator.Shuffle(pool.AsSpan());
-        return new ReadOnlyCollection<Question>(pool.Take(Math.Min(QuestionsPerRound, pool.Length)).ToList());
+        var count = Math.Min(QuestionsPerRound, pool.Length);
+
+        // Stable, so each half keeps the shuffle it was given: the unasked ones, then the rest.
+        var drawn = pool.OrderBy(q => _asked.Contains(Key(q)) ? 1 : 0).Take(count).ToArray();
+        if (drawn.Any(q => _asked.Contains(Key(q))))
+        {
+            // The set has run out. What this round repeats is forgotten along with everything else
+            // asked from this set, and the round itself is remembered below like any other.
+            _asked.RemoveWhere(key => key.StartsWith(_set.Id + "/", StringComparison.Ordinal));
+            // Without this the repeats would always be the round's last questions.
+            RandomNumberGenerator.Shuffle(drawn.AsSpan());
+        }
+        foreach (var q in drawn) _asked.Add(Key(q));
+        return new ReadOnlyCollection<Question>(drawn);
     }
+
+    // Question ids are only unique inside their own set.
+    private string Key(Question question) => _set.Id + "/" + question.Id;
 
     /// <summary>
     /// Records an answer. Refused (false) outside the Question phase, for an undefined marker, from an unknown connection, as a repeat
@@ -317,7 +384,8 @@ public sealed class Room
                 _questionIndex,
                 _questions[_questionIndex].Correct,
                 new ReadOnlyDictionary<Marker, int>(distribution),
-                Standings); // the lock is reentrant; Standings owns the ordering rule
+                Standings, // the lock is reentrant; Standings owns the ordering rule
+                _round);
             _phase = RoomPhase.Reveal;
             // The clock this pause was holding is over, so the room is not paused any more: nothing
             // outside the Question phase measures time, and a reveal must not be painted as paused.

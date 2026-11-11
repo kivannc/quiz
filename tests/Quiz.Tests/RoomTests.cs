@@ -826,4 +826,145 @@ public sealed class RoomTests
 
         Assert.Equal(RoomPhase.Finished, room.Phase);
     }
+
+    // ---- another round in the same room ----
+
+    /// <summary>Plays the open round to its end, answering nothing, and returns the questions it asked in order.</summary>
+    private static List<string> PlayOut(Room room)
+    {
+        var asked = new List<string>();
+        // Bounded by the size of a round: a round that will not end must fail here, not hang.
+        for (var step = 0; step <= Room.QuestionsPerRound; step++)
+        {
+            if (room.Phase == RoomPhase.Finished) return asked;
+            asked.Add(room.CurrentQuestion!.Text);
+            room.CloseQuestion();
+            room.Advance();
+        }
+        Assert.Fail("the round never finished");
+        return asked;
+    }
+
+    [Fact]
+    public void A_new_round_is_refused_until_the_round_before_it_has_finished()
+    {
+        var room = NewRoom();
+        room.Join("Ada", "c1");
+        Assert.False(room.NewRound(TenQuestions()));          // lobby
+
+        room.Start();
+        Assert.False(room.NewRound(TenQuestions()));          // question
+        room.CloseQuestion();
+        Assert.False(room.NewRound(TenQuestions()));          // reveal
+
+        Assert.Equal(RoomPhase.Reveal, room.Phase);
+    }
+
+    [Fact]
+    public void A_new_round_keeps_the_players_in_their_seats_and_starts_them_from_nothing()
+    {
+        var room = StartedRoom("Ada", "Bob");
+        room.Answer("conn-Ada", Marker.Hearts);
+        PlayOut(room);
+        Assert.True(room.Players.Single(p => p.Name == "Ada").Score > 0);
+
+        Assert.True(room.NewRound(TenQuestions()));
+
+        Assert.Equal(RoomPhase.Lobby, room.Phase);
+        Assert.Equal(new[] { new PlayerView("Ada", 0), new PlayerView("Bob", 0) }, room.Players);
+        Assert.Null(room.CurrentQuestion);
+        Assert.Null(room.CurrentReveal);
+
+        // The same connections still answer for the same seats: nobody has to join again.
+        Assert.True(room.Start());
+        Assert.True(room.Answer("conn-Bob", Marker.Hearts));
+        room.CloseQuestion();
+        Assert.True(room.Players.Single(p => p.Name == "Bob").Score > 0);
+    }
+
+    [Fact]
+    public void A_new_round_lets_a_latecomer_in_before_it_starts()
+    {
+        var room = StartedRoom("Ada");
+        Assert.Equal(JoinResult.RoundInProgress, room.Join("Late", "c-late"));
+        PlayOut(room);
+        Assert.Equal(JoinResult.RoundInProgress, room.Join("Late", "c-late"));
+
+        room.NewRound(TenQuestions());
+
+        Assert.Equal(JoinResult.Joined, room.Join("Late", "c-late"));
+    }
+
+    [Fact]
+    public void Every_round_is_numbered_so_a_screen_can_tell_question_one_from_question_one()
+    {
+        var room = StartedRoom("Ada");
+        Assert.Equal(1, room.CurrentQuestion!.Round);
+        Assert.Equal(1, room.CloseQuestion().Round);
+        room.Advance();
+        PlayOut(room);
+
+        room.NewRound(TenQuestions());
+        room.Start();
+
+        Assert.Equal(0, room.CurrentQuestion!.Index);
+        Assert.Equal(2, room.CurrentQuestion!.Round);
+        Assert.Equal(2, room.CloseQuestion().Round);
+    }
+
+    [Fact]
+    public void A_new_round_can_be_played_from_another_set()
+    {
+        var room = StartedRoom("Ada");
+        PlayOut(room);
+        var other = new QuestionSet("other", "Other", "en", Enumerable.Range(0, 10).Select(i => new Question(
+            $"o{i}", QuestionType.MultipleChoice, $"Other {i}?",
+            Enum.GetValues<Marker>().Select(m => new Option(m, $"{m} {i}")).ToList(), Marker.Spades)).ToList());
+
+        room.NewRound(other);
+        room.Start();
+
+        Assert.All(PlayOut(room), text => Assert.StartsWith("Other ", text));
+    }
+
+    [Fact]
+    public void Rounds_in_one_room_do_not_repeat_a_question_until_the_set_has_run_out()
+    {
+        // Forty questions are four rounds of ten: played in one room, they must be forty different ones.
+        var set = Pool(40);
+        var room = StartedRoom(set, "Ada");
+        var asked = PlayOut(room);
+        for (var round = 2; round <= 4; round++)
+        {
+            Assert.True(room.NewRound(set));
+            Assert.True(room.Start());
+            asked.AddRange(PlayOut(room));
+        }
+        Assert.Equal(40, asked.Count);
+        Assert.Equal(40, asked.Distinct().Count());
+
+        // The fifth round has nothing new left to ask, and is played anyway rather than refused.
+        Assert.True(room.NewRound(set));
+        Assert.True(room.Start());
+        var fifth = PlayOut(room);
+        Assert.Equal(Room.QuestionsPerRound, fifth.Distinct().Count());
+    }
+
+    [Fact]
+    public void A_set_that_runs_out_mid_draw_asks_what_is_left_before_anything_twice()
+    {
+        // Fifteen questions: the second round has five new ones, and must ask all five of them.
+        var set = Pool(15);
+        var room = StartedRoom(set, "Ada");
+        var first = PlayOut(room);
+
+        room.NewRound(set);
+        room.Start();
+        var second = PlayOut(room);
+
+        var unseen = set.Questions.Select(q => q.Text).Except(first).ToList();
+        Assert.Equal(5, unseen.Count);
+        Assert.Subset(second.ToHashSet(), unseen.ToHashSet());
+        Assert.Equal(Room.QuestionsPerRound, second.Distinct().Count());
+    }
 }
