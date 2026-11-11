@@ -98,9 +98,9 @@ public sealed class GameHubTests : IDisposable
     private static Inbox<(int Answered, int Total)> AnswerCount(HubConnection c) =>
         new(record => c.On<int, int>("AnswerCount", (answered, total) => record((answered, total))));
 
-    // A round trip on the same connection: everything the server sent to it earlier has arrived by the time this returns.
-    private static async Task Barrier(HubConnection connection) =>
-        await Assert.ThrowsAsync<HubException>(() => connection.InvokeAsync<string>("Join", "0000", "barrier"));
+    // Everything the server sent this connection earlier has arrived and been handled by the time this returns.
+    private Task Barrier(HubConnection connection) =>
+        Settled.After(connection, _factoryOf[connection].Services, Patience);
 
     /// <summary>
     /// Which marker answers the question a screen was sent, looked up in the shipped set by its text.

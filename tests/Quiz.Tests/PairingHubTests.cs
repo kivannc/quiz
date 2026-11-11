@@ -20,6 +20,7 @@ public sealed class PairingHubTests : IDisposable
 
     private readonly List<HubConnection> _connections = [];
     private readonly List<WebApplicationFactory<Program>> _factories = [];
+    private readonly Dictionary<HubConnection, WebApplicationFactory<Program>> _factoryOf = [];
 
     public void Dispose()
     {
@@ -52,6 +53,7 @@ public sealed class PairingHubTests : IDisposable
             .AddJsonProtocol(o => o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)))
             .Build();
         _connections.Add(connection);
+        _factoryOf[connection] = factory;
         await connection.StartAsync();
         return connection;
     }
@@ -88,9 +90,9 @@ public sealed class PairingHubTests : IDisposable
     private static Inbox<(JsonElement Players, string Phase)> RoomState(HubConnection c) =>
         new(record => c.On<JsonElement, string>("RoomState", (players, phase) => record((players, phase))));
 
-    // A round trip on the same connection: everything the server sent to it earlier has arrived by the time this returns.
-    private static async Task Barrier(HubConnection connection) =>
-        await Assert.ThrowsAsync<HubException>(() => connection.InvokeAsync<string>("Join", "0000", "barrier"));
+    // Everything the server sent this connection earlier has arrived and been handled by the time this returns.
+    private Task Barrier(HubConnection connection) =>
+        Settled.After(connection, _factoryOf[connection].Services, Patience);
 
     private static async Task<HubException> Refused(Func<Task> call) => await Assert.ThrowsAsync<HubException>(call);
 
