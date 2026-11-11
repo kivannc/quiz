@@ -1263,6 +1263,9 @@ public sealed class GameHubTests : IDisposable
         var phone = await Connect(factory);
         await phone.InvokeAsync<string>("Join", code, "Ada");
         await host.InvokeAsync("StartRound", code, HostKey);
+        // The first question has been handled by the phone before anything starts counting: a test
+        // that listens from here on must not be handed the message that opened the round.
+        await Barrier(phone);
         return (host, screen, phone, code);
     }
 
