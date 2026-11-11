@@ -95,10 +95,16 @@ function remember() {
   }
 }
 
+/*
+ * Forgets the room this page was running. What the phone remembers is shared by every console tab on
+ * it, so the stored code is only dropped if it is still this page's room: an old tab waking up to
+ * find its long-dead room gone must not take away the code of the room another tab opened since.
+ */
 function forgetRoom() {
+  const gone = state.code;
   state.code = null;
   try {
-    store.removeItem(STORE_CODE);
+    if (store.getItem(STORE_CODE) === gone) store.removeItem(STORE_CODE);
   } catch { /* nothing to forget */ }
 }
 
@@ -553,9 +559,21 @@ async function resume() {
     await conn.invoke('ResumeHost', state.code, state.hostKey);
     state.error = '';
   } catch (error) {
-    // The room has gone, or this key no longer drives it: ask for a room again.
-    state.error = error;
-    forgetRoom();
+    const message = String(error?.message ?? '');
+    if (message.includes('no-such-room')) {
+      // The room ended while this phone was away — closed, swept, or the server restarted. That is
+      // how most evenings end, not something that went wrong: the form comes back with nothing to say.
+      state.error = '';
+      forgetRoom();
+    } else if (message.includes('forbidden')) {
+      // This key no longer drives it: ask for a room, and a key, again.
+      state.error = error;
+      forgetRoom();
+    } else {
+      // Anything else is the connection, not the room. The room is kept, so the next look at this
+      // page, or a reload, takes it back instead of finding it forgotten.
+      state.error = error;
+    }
     show('setup');
   } finally {
     resuming = false;

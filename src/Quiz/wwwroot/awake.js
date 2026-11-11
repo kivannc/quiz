@@ -15,9 +15,14 @@
 
 let wanted = false;
 let lock = null;
+// A request on its way. The pages call keepAwake on every render, and several renders land while
+// one request is still in flight: without this each of them would take a lock of its own, only the
+// last would be remembered, and the rest would hold the screen on after the round was over.
+let asking = false;
 
 async function acquire() {
-  if (!wanted || lock || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+  if (!wanted || lock || asking || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+  asking = true;
   try {
     const taken = await navigator.wakeLock.request('screen');
     taken.addEventListener('release', () => {
@@ -28,6 +33,8 @@ async function acquire() {
     else taken.release().catch(() => {});
   } catch {
     // Refused. The page carries on; the phone may sleep.
+  } finally {
+    asking = false;
   }
 }
 
