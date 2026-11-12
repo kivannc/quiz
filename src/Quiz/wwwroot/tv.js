@@ -6,16 +6,16 @@
  *
  * It is also what paces the round. The countdown on this screen is the one that closes the question,
  * the beat after the last answer is counted here, and so is the time a reveal stays up. That used to
- * be the console's job, and a console is a phone: it gets locked, it gets put in a pocket, and the
- * person holding it wants to play, in another tab — and a browser stops the timers of a page nobody
- * is looking at, so the round stopped with it. The television is the one screen a round cannot be
+ * be the job of the host's phone, and a phone gets locked, gets put in a pocket, and is busy being
+ * played on — and a browser stops the timers of a page nobody is looking at, so the round stopped
+ * with it. The television is the one screen a round cannot be
  * played without, so whenever its timers are not running there is nobody reading the question
  * either. The clock the room watches is now the clock that acts.
  *
  * What it still never does is ask for the host key: a screen is put into a room by being claimed,
  * never by proving anything, and the hub lets the screen a room is shown on say two things about it
  * and no more — this question's time is up, this reveal has been read. Starting, pausing, skipping
- * ahead and closing the room stay with the console.
+ * ahead and closing the room stay with the host's phone.
  */
 
 import { t, applyStatic, onLangChange, setLang } from './i18n.js';
@@ -95,7 +95,7 @@ const state = {
  * A reload loses the connection, and with it the room's groups and the claim that put this screen
  * in them; there is no key here to resume with, so the way back is to be claimed again. What the
  * screen remembers is only the room it fell out of, so the pairing screen can say so rather than
- * looking like a television that was just switched on. The console's claim re-seats it into that
+ * looking like a television that was just switched on. The host's claim re-seats it into that
  * room at once. If the room has gone in the meantime, nothing here is wrong: the code on screen is
  * a fresh one, and the next room opened on it paints over the line.
  */
@@ -132,7 +132,7 @@ let ticker = 0;
 let frozen = 0;
 // What the bar is full at: the time this screen was first told the open question had left.
 let span = 0;
-/* Under this many seconds the clock and the bar change colour, and so does the console's copy. */
+/* Under this many seconds the clock and the bar change colour. */
 const CLOCK_LOW_S = 5;
 
 function stopClock() {

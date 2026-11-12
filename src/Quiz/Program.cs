@@ -99,6 +99,10 @@ app.MapGet("/tv", (HttpContext http, IWebHostEnvironment env) =>
     http.Response.Headers.CacheControl = "no-cache";
     return Results.File(Path.Combine(env.WebRootPath, "tv.html"), "text/html");
 });
+// The host used to have a page of their own here, a console with buttons and no seat. Hosting is
+// done from the page everybody uses now, so a phone that still has the old address — a bookmark, a
+// browser that offers it from history — is sent there instead of to a page that is not found.
+app.MapGet("/host.html", () => Results.Redirect("/"));
 app.MapHub<GameHub>("/hub");
 
 app.Run();

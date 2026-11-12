@@ -5,9 +5,7 @@
  * page, nobody touches the laptop while a game is on, and a machine that dims and sleeps in the
  * middle of a question takes the question with it. A player's phone is held awake for a smaller
  * reason: one that locks between two questions has to be unlocked and reconnected before it can
- * answer the next, and the clock is already running. The console is not held awake at all, since
- * nothing waits for it.
- *
+ * answer the next, and the clock is already running. *
  * The browser gives the lock up by itself whenever the page is hidden, so it is asked for again each
  * time the page comes back. Where the browser has no such thing (as on most real televisions, which
  * do not sleep anyway) or refuses, as it may on a low battery, nothing here fails: the screen simply

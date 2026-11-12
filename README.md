@@ -8,16 +8,16 @@ Question sets are plain JSON files in `src/Quiz/questions/`. Each set has an `id
 
 ## The screens
 
-Three static pages, served by the app itself. `/tv` is the **television**: a display with no field
+Two static pages, served by the app itself. `/tv` is the **television**: a display with no field
 and no button on it, because the only thing in front of it is a remote control. It shows a
 four-digit screen code until a phone claims it, and from then on the game — lobby, question,
 reveal, and a podium for the first three at the end. `/` is the **phone**, the one page everybody
 uses: a name, then four suit buzzers and nothing else. It is also where a room is opened. Whoever
 holds the host key opens the room from that same form, takes a seat like everyone else, and gets
 a short row of buttons under the buzzers — start, pause, next, another round, close. The host
-plays; there is no second device to hold. `/host.html` is the older **console**, a page with the
-host's buttons and no seat, for somebody who wants to run a round without playing in it. The
-television no longer points at it.
+plays; there is no second device to hold. There used to be a third page, a console at
+`/host.html` with the host's buttons and no seat; it is gone, and its address leads to the phone
+page. Two ways of hosting meant one of them was the wrong door, and it was the one people found.
 
 Nobody has to type an address off a television, and nobody has to know who is supposed to scan
 first. The television shows one QR code at a time, and both open the phone page: its own screen
@@ -40,8 +40,8 @@ television, and the key is typed once per phone, which remembers it. The televis
 the server keeps no timers. A question closes three seconds after the last player has answered,
 with the countdown as the backstop for a phone that never does, and a reveal gives way to the next
 question nine seconds later — the host's button moves it on sooner. The pacing is on the
-television and not on the console because a console is a phone: it gets locked, or its owner opens
-another tab to play, and a browser stops the timers of a page nobody is looking at. The television
+television and not on the host's phone because a phone gets locked, or is busy being played
+on, and a browser stops the timers of a page nobody is looking at. The television
 is the one screen a round cannot be played without, so a round with a host who is also a player,
 or whose phone is in a pocket, carries on. The hub lets the screen a room is shown on say two
 things about it, with no key — this question's time is up, this reveal has been read — and each
@@ -51,8 +51,7 @@ refused until it starts again, and closing a room ends it for everyone, frees it
 the television back to a screen code. When a round ends the host is offered another one in the same
 room, from any set: everyone keeps their seat, the scores start from nothing, the lobby is open to
 latecomers again, and the room does not ask a question it has already asked until the set runs out.
-The players' phones are kept awake while they are in a room; the console is not, since nothing
-waits for it.
+The players' phones are kept awake while they are in a room.
 
 Everything comes back on its own. A phone that reloads or loses its connection re-sends its name
 and is back in its seat with its score; the phone that opened the room is its host again in any
@@ -64,7 +63,7 @@ belongs to one connection, so a second tab under the same name takes it and the 
 has fallen out of the room and shows a fresh screen code, saying which room it was in: the host's
 phone says the television has gone and offers a field for that code, and scanning it does the
 same — either puts the screen straight back, mid-question and all. Phones that lose the connection keep trying until it is back.
-All three pages are plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm,
+Both pages are plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm,
 no framework.
 
 The SignalR browser client is vendored rather than loaded from a CDN:
