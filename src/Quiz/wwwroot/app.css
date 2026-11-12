@@ -1,5 +1,5 @@
 /*
- * One stylesheet for every screen: the television (tv.html), the host's console and the phone.
+ * One stylesheet for every screen: the television (tv.html) and the phone.
  * The look is locked: near-black panel, monospace, a ">" cursor, bracketed labels,
  * faint scanlines, glass option cards with a coloured left bar and a card suit.
  *
@@ -162,7 +162,7 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
   letter-spacing: .12em;
 }
 .tv .topbar .clock { color: var(--amber); font-variant-numeric: tabular-nums; font-size: 2.4em; font-weight: 600; line-height: 1; }
-/* the last few seconds, said in a colour, as on the console */
+/* the last few seconds, said in a colour */
 .tv.low .topbar .clock { color: var(--crimson); }
 .tv .topbar > * { white-space: nowrap; }
 
@@ -399,89 +399,6 @@ button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
     8% { opacity: .5; }
     100% { transform: translateY(125vh) rotate(50deg); opacity: .35; }
   }
-}
-
-/* ======================= the host's console ======================= */
-
-/*
- * A remote control for the television, held in one hand. Two rules shape it: what the host reads
- * sits at the top of the screen, and what the host presses sits at the bottom against the thumb —
- * .acts takes up the slack with margin-top:auto, so the buttons stay on the bottom edge however
- * little there is above them. Nothing the television shows is on this page, which is exactly why
- * there is room for the buttons to be this big.
- */
-
-.console .inner { padding: 14px 16px 18px; gap: 16px; }
-
-.console .bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: .1em;
-}
-.console .bar > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-.console .view { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
-.console .view[hidden] { display: none; }
-
-/* claiming a screen and opening a room: one column, full width, nothing centred across a room */
-.console .form { display: flex; flex-direction: column; flex: 1 1 auto; width: 100%; font-size: 14px; }
-.console .form h1 { font-size: 11px; font-weight: 500; letter-spacing: .18em; color: var(--muted); margin: 0 0 10px; text-transform: uppercase; }
-.console .hint { font-size: 12px; color: var(--muted); letter-spacing: .04em; margin: 0 0 18px; }
-/* the one button on this screen goes where the thumb is, as the buttons on the next screen do */
-.console .form .cta { width: 100%; min-height: 54px; padding: 15px; margin-top: auto; }
-.console .form .error { margin: 14px 0 0; font-size: 12px; }
-.console .field input, .console .field select { font-size: 16px; } /* 16px keeps iOS from zooming on focus */
-/* the four digits read off the television, spaced like the television draws them */
-.console .field input[name='pairCode'] { letter-spacing: .4em; text-align: center; font-size: 26px; }
-.console .ok { font-size: 12px; color: var(--teal); margin: -6px 0 14px; letter-spacing: .06em; }
-
-/* the room, as the console reads it: the phase, the clock, the two counts, one line of detail */
-.console .now { text-align: center; padding-top: 8px; }
-.console .now .label { font-size: 12px; }
-.console .now .clock {
-  font-size: 68px;
-  font-weight: 600;
-  line-height: 1.15;
-  color: var(--amber);
-  letter-spacing: .02em;
-  font-variant-numeric: tabular-nums;
-}
-/* the last few seconds, said in a colour: the host is watching the room, not this screen */
-.console .now .clock.low { color: var(--crimson); }
-.console .now .counts { display: flex; justify-content: center; gap: 14px; font-size: 13px; color: var(--muted); letter-spacing: .08em; }
-.console .now .detail { font-size: 13px; color: var(--muted); letter-spacing: .06em; margin: 14px 0 0; }
-.console.paused .now .clock { color: var(--muted); }
-.console.paused .now .detail { color: var(--amber); font-weight: 600; letter-spacing: .2em; }
-/*
- * The room has no television in it: framed, and in the colour this page says "wrong" in, because it
- * has to be noticed without being looked for. A frame is all the weight it gets — the buttons under
- * it stay live, so this says what happened rather than standing in the way of anything.
- */
-.console .now .gone { border: 1px solid var(--crimson); padding: 10px 12px; margin: 16px 0 0; }
-.console .now .gone .label { color: var(--crimson); font-weight: 600; margin: 0; }
-.console .now .gone .detail { margin: 6px 0 0; }
-
-/* the buttons: on the bottom edge, stacked, each one a thumb wide and a thumb tall */
-.console .acts { margin-top: auto; display: flex; flex-direction: column; gap: 10px; }
-.console .acts button { width: 100%; min-height: 54px; padding: 16px; font-size: 15px; }
-.console .acts .error { margin: 0 0 4px; font-size: 12px; text-align: center; }
-/* the set picker for another round sits on its button, not a form's width away from it */
-.console .acts .field { margin: 0; }
-/* Armed, the close button says what it is about to do; coral is the page's "this does something". */
-.console .acts .danger[data-armed='true'] { color: var(--coral); border-color: var(--coral); }
-/* the rarely-needed one: small print under the buttons rather than one more button among them */
-.console .acts .small { min-height: 0; padding: 6px; font-size: 11px; letter-spacing: .1em; border-color: transparent; }
-.console .repair { margin: 0; }
-.console .repair .hint { margin-bottom: 12px; }
-.console .acts > .status { font-size: 12px; text-align: center; margin: 10px 0 0; letter-spacing: .06em; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .console .now .clock.low { animation: ticking 1s ease-in-out infinite; }
-  @keyframes ticking { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 }
 
 /* ======================= the phone ======================= */

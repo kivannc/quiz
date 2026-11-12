@@ -12,8 +12,8 @@
 <!--
   The television. It is a display and nothing else: there is no field, no button and no language
   switch on this page, because the only thing anyone has in front of it is a remote control. The
-  host's phone is the console; this screen shows a four-digit code until a phone claims it, and
-  from then on it paints whatever the room is doing.
+  host drives the room from a phone; this screen shows a four-digit code until a phone claims it,
+  and from then on it paints whatever the room is doing.
 -->
 <main class="panel">
   <div class="inner">
@@ -29,7 +29,7 @@
     <!-- 1 · nobody is driving this screen yet: the code the host types into a phone -->
     <section class="view pair" id="view-pairing" hidden>
       <!-- The code to type and the code to scan say the same thing; whichever is quicker for the
-           phone in hand. The scan opens the console with the four digits already in the field. -->
+           phone in hand. The scan opens the phone page standing in front of this screen. -->
       <div class="duo">
         <div class="scan" id="pair-scan" hidden>
           <div class="qr" id="pair-qr"></div>
@@ -68,7 +68,7 @@
       <p class="status" id="lobby-status" hidden></p>
     </section>
 
-    <!-- 4 · a question is open. The clock here only shows the console's countdown. -->
+    <!-- 4 · a question is open. The clock here is the one that closes it. -->
     <section class="view" id="view-question" hidden>
       <p class="paused-banner" id="paused-banner" hidden>
         <span data-i18n="pausedBanner"></span>

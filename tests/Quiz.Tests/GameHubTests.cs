@@ -1585,7 +1585,7 @@ public sealed class GameHubTests : IDisposable
     public async Task The_pages_are_served_so_that_a_browser_asks_before_reusing_one()
     {
         var client = Factory().CreateClient();
-        foreach (var path in new[] { "/", "/join.js", "/tv", "/tv.js", "/host.html", "/app.css" })
+        foreach (var path in new[] { "/", "/join.js", "/tv", "/tv.js", "/app.css" })
         {
             var response = await client.GetAsync(path);
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
@@ -1653,5 +1653,16 @@ public sealed class GameHubTests : IDisposable
         var late = await Connect(factory);
         Assert.Contains("no-such-code", (await Refused(() => late.InvokeAsync("AwaitRoom", current))).Message);
         Assert.Contains("no-such-code", (await Refused(() => phone.InvokeAsync("ClaimScreen", scanned, HostKey))).Message);
+    }
+
+    [Fact]
+    public async Task The_old_console_address_leads_to_the_page_everybody_uses()
+    {
+        // Followed by hand: a client that follows redirects would hide where it was sent.
+        var client = Factory().CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+        var response = await client.GetAsync("/host.html");
+        Assert.Equal(System.Net.HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Equal("/", response.Headers.Location?.OriginalString);
+        Assert.Equal(System.Net.HttpStatusCode.NotFound, (await client.GetAsync("/host.js")).StatusCode);
     }
 }

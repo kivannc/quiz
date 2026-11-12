@@ -23,8 +23,8 @@ const STORE_TAP = 'quiz.tap';
 const STORE_OPEN = 'quiz.open';
 /* The name last played under, kept across evenings so the form only asks for it once. */
 const STORE_LAST_NAME = 'quiz.lastName';
-/* The host key and the set last chosen, under the names the console uses for them: a phone that has
- * typed the key on either page has typed it for both. */
+/* The host key and the set last chosen. The names are the ones the old console page kept them
+ * under, so a phone that typed the key there has not got to type it again here. */
 const STORE_KEY = 'quiz.hostKey';
 const STORE_SET = 'quiz.setId';
 /* The room this phone opened and the name it sat down under, so that any tab on it — the one a
