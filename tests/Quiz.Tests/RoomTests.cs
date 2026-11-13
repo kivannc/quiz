@@ -1042,4 +1042,50 @@ public sealed class RoomTests
         room.Advance();
         Assert.Null(room.AnswerOf("c1-new"));   // a new question, nothing answered yet
     }
+
+    [Fact]
+    public void A_room_waits_for_the_seats_somebody_is_in_and_for_the_ones_that_have_answered()
+    {
+        var room = NewRoom();
+        room.Join("Ada", "c1");
+        room.Join("Bob", "c2");
+        room.Join("Cem", "c3");
+        Assert.Equal(3, room.Present);
+
+        room.Start();
+        Assert.True(room.Answer("c1", Marker.Clubs));
+
+        // Bob's phone goes: his seat stays, but the question is no longer waiting for him.
+        Assert.True(room.Leave("c2"));
+        Assert.False(room.Leave("c2"));
+        Assert.Equal(3, room.Players.Count);
+        Assert.Equal(2, room.Present);
+
+        // Ada's goes too, after answering: her answer still counts, so she is still counted.
+        Assert.True(room.Leave("c1"));
+        Assert.Equal(2, room.Present);
+        Assert.Equal(1, room.AnswerCount);
+
+        // The next question has no answer of hers to count, and Bob is back.
+        room.CloseQuestion();
+        room.Advance();
+        Assert.Equal(1, room.Present);
+        Assert.Equal(JoinResult.Rejoined, room.Join("Bob", "c2-new"));
+        Assert.Equal(2, room.Present);
+        Assert.True(room.Answer("c2-new", Marker.Hearts));
+    }
+
+    [Fact]
+    public void A_connection_that_lost_its_seat_to_another_gives_nothing_up_by_leaving()
+    {
+        var room = NewRoom();
+        room.Join("Ada", "old");
+        room.Start();
+        Assert.Equal(JoinResult.Rejoined, room.Join("Ada", "new"));
+
+        // The old connection times out a little later, as a reconnecting phone's always does.
+        Assert.False(room.Leave("old"));
+        Assert.Equal(1, room.Present);
+        Assert.True(room.Answer("new", Marker.Hearts));
+    }
 }

@@ -74,9 +74,18 @@ given four seconds to be answered; a page in view with a part in a room asks out
 also brings back what the room is doing now. A dead line is thrown away and a new one made, the
 seat is taken back by name, and the room says what that seat had already answered (`Answered`), so
 the buzzers lock on it rather than offering a second tap the room would refuse. A tap made as the
-line failed is kept and sent once the seat is back, if the same question is still open. The
+line failed, or while the seat was still being taken back, is kept and sent once the seat is
+there, if the same question is still open. The
 television does the same for itself, since a room waits on its clock: it finds a dead connection
 in about six seconds and shows a code again for the host to put it back.
+
+A seat is kept for the whole evening, with its name and its score, for whoever comes back to it.
+But a question only waits for the seats somebody is sitting in: when a phone's connection ends, the
+room stops counting on it, and the television is told the new count, so the players still there
+close a question between them instead of running every one out to its limit for somebody who went
+home. A seat that has answered still counts, and a phone that comes back before the question
+closes is waited for again. A phone that locks without closing its connection is waited for until
+the server gives up on it, which takes about thirty seconds.
 Both pages are plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm,
 no framework.
 

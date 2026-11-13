@@ -337,6 +337,37 @@ public sealed class Room
         }
     }
 
+    /// <summary>
+    /// How many players the room is waiting on for the open question: every seat somebody is sitting
+    /// in right now, and every seat that has answered whether or not its phone is still here. A seat
+    /// is kept for the whole evening — its name and its score are there for whoever comes back — but
+    /// a phone that has gone cannot answer, and a room that waited for it would run every remaining
+    /// question out to its limit for the sake of somebody who went home.
+    /// </summary>
+    public int Present
+    {
+        get
+        {
+            lock (_gate)
+            {
+                var here = new HashSet<Seat>(_seatByConnection.Values);
+                if (_phase == RoomPhase.Question) here.UnionWith(_answers.Keys);
+                return here.Count;
+            }
+        }
+    }
+
+    /// <summary>
+    /// The connection has gone: nobody is sitting in its seat for now. The seat stays, with its name,
+    /// its score and whatever it answered, and is handed to the next connection that joins under that
+    /// name. Says whether there was anything to give up. Not activity: a room everybody has left
+    /// must still go idle.
+    /// </summary>
+    public bool Leave(string connectionId)
+    {
+        lock (_gate) return _seatByConnection.Remove(connectionId);
+    }
+
     /// <summary>Whether this connection holds a seat here right now. A seat taken over by another connection is not held.</summary>
     public bool HasSeat(string connectionId)
     {
