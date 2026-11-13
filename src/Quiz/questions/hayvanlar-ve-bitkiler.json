@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "hv-31",
+      "text": "Erkeğinin yelesi olan kedigil hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Puma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Leopar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kaplan"
+        },
+        {
+          "marker": "spades",
+          "text": "Aslan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-32",
+      "text": "Koyun yavrusuna ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Buzağı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Civciv"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oğlak"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuzu"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-33",
+      "text": "Bütün böceklerin kaç bacağı vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "On"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-34",
+      "text": "Ters asılı uyuyan, uçabilen memeli hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yarasa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Baykuş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güve"
+        },
+        {
+          "marker": "spades",
+          "text": "Kirpi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-35",
+      "text": "Kuşların vücudu neyle kaplıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pul"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kabuk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kıl"
+        },
+        {
+          "marker": "spades",
+          "text": "Tüy"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-36",
+      "text": "Yılanlar hangi hayvan grubundandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Memeli"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sürüngen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Amfibi"
+        },
+        {
+          "marker": "spades",
+          "text": "Böcek"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-37",
+      "text": "Kelebek olmadan önce yapraklarla beslenen canlıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Salyangoz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tırtıl"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yaprak biti"
+        },
+        {
+          "marker": "spades",
+          "text": "Solucan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-38",
+      "text": "Kutup ayısı hangi bölgede yaşar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kuzey Kutbu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Afrika savanı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güney Kutbu"
+        },
+        {
+          "marker": "spades",
+          "text": "Sahra Çölü"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-39",
+      "text": "Dev pandanın başlıca besini nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Balık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Havuç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fındık"
+        },
+        {
+          "marker": "spades",
+          "text": "Bambu"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-40",
+      "text": "Koala hangi ağacın yaprağıyla beslenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çam"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Okaliptüs"
+        },
+        {
+          "marker": "clubs",
+          "text": "Palmiye"
+        },
+        {
+          "marker": "spades",
+          "text": "Zeytin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-41",
+      "text": "Geceleri karanlıkta ışık saçan böcek hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uğur böceği"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Arı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ateşböceği"
+        },
+        {
+          "marker": "spades",
+          "text": "Kelebek"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-42",
+      "text": "Bal arıları balı hangi tatlı sıvıdan yapar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kök suyu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ağaç özü"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çiçek nektarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Yaprak sütü"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-43",
+      "text": "Akkaraman hangi hayvanın cinsidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "At"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Köpek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Keçi"
+        },
+        {
+          "marker": "spades",
+          "text": "Koyun"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-44",
+      "text": "Hangi kuş geceleri avlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güvercin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ördek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Leylek"
+        },
+        {
+          "marker": "spades",
+          "text": "Baykuş"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-45",
+      "text": "Deniz kaplumbağaları yumurtalarını nereye bırakır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kumsala"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Suyun dibine"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mercana"
+        },
+        {
+          "marker": "spades",
+          "text": "Kayaya"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-46",
+      "text": "Zebralar doğal ortamlarında hangi kıtada yaşar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Afrika"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-47",
+      "text": "Yeni Zelanda'nın simgesi olan uçamayan kuş hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pelikan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Flamingo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karabatak"
+        },
+        {
+          "marker": "spades",
+          "text": "Kivi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-48",
+      "text": "Nehirlere dallarla baraj yapan hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kunduz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sincap"
+        },
+        {
+          "marker": "clubs",
+          "text": "Su samuru"
+        },
+        {
+          "marker": "spades",
+          "text": "Porsuk"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-49",
+      "text": "Tehlike anında topa dönen dikenli hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Porsuk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Köstebek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sincap"
+        },
+        {
+          "marker": "spades",
+          "text": "Kirpi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-50",
+      "text": "Hangisi bir böcek değildir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Örümcek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sivrisinek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cırcır böceği"
+        },
+        {
+          "marker": "spades",
+          "text": "Karınca"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-51",
+      "text": "Erkek sığıra ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Aygır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Teke"
+        },
+        {
+          "marker": "spades",
+          "text": "Boğa"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-52",
+      "text": "Kutup sularında yaşayan, uzun dişli deniz hayvanı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mors"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fok"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yunus"
+        },
+        {
+          "marker": "spades",
+          "text": "Penguen"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-53",
+      "text": "Başka kuşların yuvasına yumurta bırakan kuş hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Serçe"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Leylek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Guguk"
+        },
+        {
+          "marker": "spades",
+          "text": "Güvercin"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-54",
+      "text": "Hangi kuş genellikle leşle beslenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Papağan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Akbaba"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kanarya"
+        },
+        {
+          "marker": "spades",
+          "text": "Kumru"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-55",
+      "text": "Hangi kuş insan sesini taklit edebilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ağaçkakan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Leylek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Papağan"
+        },
+        {
+          "marker": "spades",
+          "text": "Martı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-56",
+      "text": "Köpekbalığı hangi hayvan grubundandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Amfibi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sürüngen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Balık"
+        },
+        {
+          "marker": "spades",
+          "text": "Memeli"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-57",
+      "text": "Hem bitki hem et yiyen hayvana ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Etçil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hepçil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Otçul"
+        },
+        {
+          "marker": "spades",
+          "text": "Leşçil"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-58",
+      "text": "Somon balığı yumurtlamak için nereye döner?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Derin okyanusa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mercan kayalığına"
+        },
+        {
+          "marker": "clubs",
+          "text": "Doğduğu nehre"
+        },
+        {
+          "marker": "spades",
+          "text": "Büyük bir göle"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-59",
+      "text": "Atın ayağındaki sert koruyucu yapıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pul"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gaga"
+        },
+        {
+          "marker": "clubs",
+          "text": "Toynak"
+        },
+        {
+          "marker": "spades",
+          "text": "Pençe"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-60",
+      "text": "Yengeçler nasıl yürür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sürünerek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yan yan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Zıplayarak"
+        },
+        {
+          "marker": "spades",
+          "text": "Geri geri"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-61",
+      "text": "Tiftik hangi hayvanın kılından elde edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Keçi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koyun"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lama"
+        },
+        {
+          "marker": "spades",
+          "text": "Deve"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-62",
+      "text": "Evcil köpeğin atası hangi hayvandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çakal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sırtlan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kurt"
+        },
+        {
+          "marker": "spades",
+          "text": "Tilki"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-63",
+      "text": "Gagasının altındaki keseyle balık yakalayan kuş hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Leylek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güvercin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ördek"
+        },
+        {
+          "marker": "spades",
+          "text": "Pelikan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-64",
+      "text": "Hangi hayvan sırtında kabuğunu taşır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Salyangoz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Solucan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kertenkele"
+        },
+        {
+          "marker": "spades",
+          "text": "Sülük"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-65",
+      "text": "Flamingoların pembe rengi neyden gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güneş ışığından"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beslendiği canlılardan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Suyun tuzundan"
+        },
+        {
+          "marker": "spades",
+          "text": "Yumurtadan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-66",
+      "text": "Bitkiler fotosentez sonunda havaya hangi gazı verir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Metan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Oksijen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karbondioksit"
+        },
+        {
+          "marker": "spades",
+          "text": "Azot"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-67",
+      "text": "Yapraklara yeşil rengini veren madde hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karoten"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Klorofil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hemoglobin"
+        },
+        {
+          "marker": "spades",
+          "text": "Melanin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-68",
+      "text": "Çiçeğin renkli yapraklarına ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çanak yaprak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Taç yaprak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tohum"
+        },
+        {
+          "marker": "spades",
+          "text": "Sap"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-69",
+      "text": "Hangi çiçeğin sapında diken bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lale"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Menekşe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gül"
+        },
+        {
+          "marker": "spades",
+          "text": "Papatya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-70",
+      "text": "Çikolata hangi bitkinin tohumundan yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Vanilya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fındık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kahve"
+        },
+        {
+          "marker": "spades",
+          "text": "Kakao"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-71",
+      "text": "Zeytin dalı hangi kavramın simgesidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zafer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Barış"
+        },
+        {
+          "marker": "spades",
+          "text": "Aşk"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-72",
+      "text": "Safran hangi çiçekten elde edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çiğdem"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sümbül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lale"
+        },
+        {
+          "marker": "spades",
+          "text": "Gül"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-73",
+      "text": "Tarçın ağacın hangi kısmından elde edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kökü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kabuğu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yaprağı"
+        },
+        {
+          "marker": "spades",
+          "text": "Tohumu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-74",
+      "text": "Hangi sebzenin yaprakları yenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Havuç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Turp"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ispanak"
+        },
+        {
+          "marker": "spades",
+          "text": "Patates"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-75",
+      "text": "Yer fıstığı nerede olgunlaşır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ağaç dalında"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sapın ucunda"
+        },
+        {
+          "marker": "clubs",
+          "text": "Toprağın altında"
+        },
+        {
+          "marker": "spades",
+          "text": "Suyun üstünde"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-76",
+      "text": "Meyve ağaçları çoğunlukla hangi mevsimde çiçek açar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yaz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İlkbahar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kış"
+        },
+        {
+          "marker": "spades",
+          "text": "Sonbahar"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-77",
+      "text": "Dokunulunca yakan ve kaşındıran bitki hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Papatya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Maydanoz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Isırgan"
+        },
+        {
+          "marker": "spades",
+          "text": "Nane"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-78",
+      "text": "Amazon yağmur ormanı hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Afrika"
+        },
+        {
+          "marker": "spades",
+          "text": "Asya"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-79",
+      "text": "Kanada bayrağındaki yaprak hangi ağaca aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kavak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Meşe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Akçaağaç"
+        },
+        {
+          "marker": "spades",
+          "text": "Çınar"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-80",
+      "text": "Sarımsağın baştaki parçalarına ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Diş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Boğum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dilim"
+        },
+        {
+          "marker": "spades",
+          "text": "Tane"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-81",
+      "text": "Acı biberdeki acılığı veren madde hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Klorofil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kafein"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nikotin"
+        },
+        {
+          "marker": "spades",
+          "text": "Kapsaisin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "hv-82",
+      "text": "Üzüm hasadına geleneksel olarak ne ad verilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Budama"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bağbozumu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dikim"
+        },
+        {
+          "marker": "spades",
+          "text": "Harman"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-83",
+      "text": "Baharda İstanbul'u mora boyayan ağaç hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Erguvan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kavak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çam"
+        },
+        {
+          "marker": "spades",
+          "text": "Çınar"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-84",
+      "text": "Tahin hangi tohumdan yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Susam"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ayçiçeği"
+        },
+        {
+          "marker": "clubs",
+          "text": "Keten"
+        },
+        {
+          "marker": "spades",
+          "text": "Haşhaş"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-85",
+      "text": "Türkiye'de çay en çok hangi ilde yetişir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sinop"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Samsun"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rize"
+        },
+        {
+          "marker": "spades",
+          "text": "Çanakkale"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "hv-86",
+      "text": "Doğradığımızda gözlerimizi yaşartan sebze hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Soğan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Patlıcan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Havuç"
+        },
+        {
+          "marker": "spades",
+          "text": "Salatalık"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-87",
+      "text": "Kaktüs dikenleri aslında neyin değişmiş hâlidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çiçek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yaprak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tohum"
+        },
+        {
+          "marker": "spades",
+          "text": "Kök"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "hv-88",
+      "text": "Hayvan hücresinde olmayıp bitki hücresinde bulunan yapı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hücre duvarı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çekirdek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sitoplazma"
+        },
+        {
+          "marker": "spades",
+          "text": "Hücre zarı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-89",
+      "text": "Eğrelti otları neyle çoğalır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sporla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tohumla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kozalakla"
+        },
+        {
+          "marker": "spades",
+          "text": "Çiçekle"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "hv-90",
+      "text": "Çiçekte polen hangi organda üretilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kök"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sap"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dişi organ"
+        },
+        {
+          "marker": "spades",
+          "text": "Erkek organ"
+        }
+      ],
+      "correct": "spades"
     }
   ]
 }

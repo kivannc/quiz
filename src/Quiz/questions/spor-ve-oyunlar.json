@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "sp-31",
+      "text": "Futbolda bir takım sahada kaleci dahil kaç oyuncuyla oynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "11"
+        },
+        {
+          "marker": "diamonds",
+          "text": "12"
+        },
+        {
+          "marker": "clubs",
+          "text": "9"
+        },
+        {
+          "marker": "spades",
+          "text": "10"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-32",
+      "text": "Hentbolda bir takım sahada kaleci dahil kaç oyuncuyla oynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "8"
+        },
+        {
+          "marker": "diamonds",
+          "text": "7"
+        },
+        {
+          "marker": "clubs",
+          "text": "5"
+        },
+        {
+          "marker": "spades",
+          "text": "6"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-33",
+      "text": "Buz hokeyinde oyuncular hangi nesneyi vurarak oynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Puk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kapsül"
+        },
+        {
+          "marker": "spades",
+          "text": "Çember"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-34",
+      "text": "Tenis sayımında sıfır sayıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ace"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Love"
+        },
+        {
+          "marker": "clubs",
+          "text": "Set"
+        },
+        {
+          "marker": "spades",
+          "text": "Deuce"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-35",
+      "text": "Basketbolda topu yerde sektirerek ilerlemeye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pas"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Smaç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dripling"
+        },
+        {
+          "marker": "spades",
+          "text": "Blok"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-36",
+      "text": "Voleybolda oyunu başlatan vuruşa ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Smaç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Servis"
+        },
+        {
+          "marker": "clubs",
+          "text": "Manşet"
+        },
+        {
+          "marker": "spades",
+          "text": "Blok"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-37",
+      "text": "Antik Olimpiyat Oyunları hangi ülkede yapılırdı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Türkiye"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yunanistan"
+        },
+        {
+          "marker": "clubs",
+          "text": "İtalya"
+        },
+        {
+          "marker": "spades",
+          "text": "Mısır"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-38",
+      "text": "2004 Yaz Olimpiyatları hangi şehirde yapıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Seul"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pekin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sidney"
+        },
+        {
+          "marker": "spades",
+          "text": "Atina"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-39",
+      "text": "2016 Yaz Olimpiyatları hangi şehirde yapıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pekin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Londra"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rio de Janeiro"
+        },
+        {
+          "marker": "spades",
+          "text": "Los Angeles"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-40",
+      "text": "Hangisi bir Kış Olimpiyatları sporudur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Halter"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Okçuluk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Eskrim"
+        },
+        {
+          "marker": "spades",
+          "text": "Curling"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-41",
+      "text": "Judo hangi ülkede ortaya çıkmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kore"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tayland"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çin"
+        },
+        {
+          "marker": "spades",
+          "text": "Japonya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-42",
+      "text": "Standart bir atletizm pistinin bir turu kaç metredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "500"
+        },
+        {
+          "marker": "diamonds",
+          "text": "200"
+        },
+        {
+          "marker": "clubs",
+          "text": "300"
+        },
+        {
+          "marker": "spades",
+          "text": "400"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-43",
+      "text": "Bayrak yarışında koşucular birbirine ne verir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kemer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Baton"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mendil"
+        },
+        {
+          "marker": "spades",
+          "text": "Halat"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-44",
+      "text": "Dekatlon kaç branştan oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "10"
+        },
+        {
+          "marker": "diamonds",
+          "text": "12"
+        },
+        {
+          "marker": "clubs",
+          "text": "8"
+        },
+        {
+          "marker": "spades",
+          "text": "7"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-45",
+      "text": "Triatlonda yüzme ve bisikletin yanında hangi dal vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kayak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koşu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kürek"
+        },
+        {
+          "marker": "spades",
+          "text": "Güreş"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-46",
+      "text": "Formula 1 yarışını bitiren pilotları hangi bayrak karşılar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sarı bayrak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mavi bayrak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kırmızı bayrak"
+        },
+        {
+          "marker": "spades",
+          "text": "Damalı bayrak"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-47",
+      "text": "Futbolda kaleci elini hangi alanda kullanabilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Santra çemberi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Orta saha"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kenar çizgisi"
+        },
+        {
+          "marker": "spades",
+          "text": "Ceza sahası"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-48",
+      "text": "Bir oyuncunun maçta üç gol atmasına ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Röveşata"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Frikik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hat-trick"
+        },
+        {
+          "marker": "spades",
+          "text": "Korner"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-49",
+      "text": "Olimpik yüzme havuzu kaç metre uzunluğundadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "33"
+        },
+        {
+          "marker": "diamonds",
+          "text": "100"
+        },
+        {
+          "marker": "clubs",
+          "text": "50"
+        },
+        {
+          "marker": "spades",
+          "text": "25"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-50",
+      "text": "Yağlı güreşçilerin giydiği deri pantolona ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tulum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şalvar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Etek"
+        },
+        {
+          "marker": "spades",
+          "text": "Kispet"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-51",
+      "text": "Türkiye ilk olimpiyat altın madalyasını hangi dalda kazandı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atletizm"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Halter"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güreş"
+        },
+        {
+          "marker": "spades",
+          "text": "Boks"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-52",
+      "text": "Modern futbolun kuralları ilk kez hangi ülkede yazıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Brezilya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "clubs",
+          "text": "İtalya"
+        },
+        {
+          "marker": "spades",
+          "text": "Almanya"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-53",
+      "text": "İlk futbol Dünya Kupası hangi ülkede yapıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İtalya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Brezilya"
+        },
+        {
+          "marker": "spades",
+          "text": "Uruguay"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-54",
+      "text": "Modern Olimpiyatları başlatan Fransız baron kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Louis Pasteur"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jules Verne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Victor Hugo"
+        },
+        {
+          "marker": "spades",
+          "text": "Pierre de Coubertin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-55",
+      "text": "Olimpiyat sloganı: Daha hızlı, daha yüksek, daha ...",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uzun"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Genç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güçlü"
+        },
+        {
+          "marker": "spades",
+          "text": "Zeki"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-56",
+      "text": "Standart bir golf sahasında kaç delik vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "9"
+        },
+        {
+          "marker": "diamonds",
+          "text": "18"
+        },
+        {
+          "marker": "clubs",
+          "text": "24"
+        },
+        {
+          "marker": "spades",
+          "text": "12"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-57",
+      "text": "Bowlingde dizilişte kaç pin bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "12"
+        },
+        {
+          "marker": "diamonds",
+          "text": "8"
+        },
+        {
+          "marker": "clubs",
+          "text": "10"
+        },
+        {
+          "marker": "spades",
+          "text": "6"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-58",
+      "text": "Bilardoda topa vurmak için kullanılan çubuğa ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kürek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Istaka"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cirit"
+        },
+        {
+          "marker": "spades",
+          "text": "Raket"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-59",
+      "text": "Slalom hangi sporda yer alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yelken"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bisiklet"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kayak"
+        },
+        {
+          "marker": "spades",
+          "text": "Kürek"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-60",
+      "text": "Ritmik jimnastikte hangisi bir alettir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kürek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kurdele"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sırık"
+        },
+        {
+          "marker": "spades",
+          "text": "Dambıl"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-61",
+      "text": "Tenis sayımında 15 ve 30'dan sonra hangi sayı gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "40"
+        },
+        {
+          "marker": "diamonds",
+          "text": "35"
+        },
+        {
+          "marker": "clubs",
+          "text": "45"
+        },
+        {
+          "marker": "spades",
+          "text": "50"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-62",
+      "text": "Boksta yere düşen boksör için hakem kaça kadar sayar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "5"
+        },
+        {
+          "marker": "diamonds",
+          "text": "20"
+        },
+        {
+          "marker": "clubs",
+          "text": "10"
+        },
+        {
+          "marker": "spades",
+          "text": "8"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-63",
+      "text": "Pist bisikleti yarışları hangi tesiste yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Arena"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Stadyum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Velodrom"
+        },
+        {
+          "marker": "spades",
+          "text": "Hipodrom"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-64",
+      "text": "Satrançta rok hamlesi hangi iki taşla yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şah ve at"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vezir ve at"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şah ve fil"
+        },
+        {
+          "marker": "spades",
+          "text": "Şah ve kale"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-65",
+      "text": "Satrançta son sıraya ulaşan piyon ne yapar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Terfi eder"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yok olur"
+        },
+        {
+          "marker": "clubs",
+          "text": "Geri döner"
+        },
+        {
+          "marker": "spades",
+          "text": "Şah olur"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-66",
+      "text": "Satrançta vezir hangi iki taşın hareketini birleştirir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fil ve at"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kale ve fil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kale ve at"
+        },
+        {
+          "marker": "spades",
+          "text": "Şah ve fil"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-67",
+      "text": "Tavla tahtasında kaç üçgen bölge vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "12"
+        },
+        {
+          "marker": "diamonds",
+          "text": "20"
+        },
+        {
+          "marker": "clubs",
+          "text": "28"
+        },
+        {
+          "marker": "spades",
+          "text": "24"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-68",
+      "text": "Okey taşlarının üzerindeki en büyük sayı kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "13"
+        },
+        {
+          "marker": "diamonds",
+          "text": "12"
+        },
+        {
+          "marker": "clubs",
+          "text": "10"
+        },
+        {
+          "marker": "spades",
+          "text": "14"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-69",
+      "text": "Bir iskambil destesinde her sembolden kaç kart vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "12"
+        },
+        {
+          "marker": "diamonds",
+          "text": "14"
+        },
+        {
+          "marker": "clubs",
+          "text": "10"
+        },
+        {
+          "marker": "spades",
+          "text": "13"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-70",
+      "text": "Tombalada torbadan en fazla kaç numaralı top çıkar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "90"
+        },
+        {
+          "marker": "diamonds",
+          "text": "60"
+        },
+        {
+          "marker": "clubs",
+          "text": "99"
+        },
+        {
+          "marker": "spades",
+          "text": "75"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-71",
+      "text": "Standart bir domino setinde kaç taş vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "28"
+        },
+        {
+          "marker": "diamonds",
+          "text": "32"
+        },
+        {
+          "marker": "clubs",
+          "text": "36"
+        },
+        {
+          "marker": "spades",
+          "text": "24"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-72",
+      "text": "Körebe oyununda ebe hangi duyusunu kullanamaz?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dokunma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Görme"
+        },
+        {
+          "marker": "clubs",
+          "text": "Koku"
+        },
+        {
+          "marker": "spades",
+          "text": "İşitme"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-73",
+      "text": "Cam topçuklarla oynanan çocuk oyununun adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Misket"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Seksek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yakartop"
+        },
+        {
+          "marker": "spades",
+          "text": "Ebelemece"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-74",
+      "text": "Standart Rubik küpünün her yüzü kaç kareden oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "6"
+        },
+        {
+          "marker": "diamonds",
+          "text": "9"
+        },
+        {
+          "marker": "clubs",
+          "text": "4"
+        },
+        {
+          "marker": "spades",
+          "text": "12"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-75",
+      "text": "Jenga kulesi neyden yapılmış bloklardan oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ahşap"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Metal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Taş"
+        },
+        {
+          "marker": "spades",
+          "text": "Cam"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-76",
+      "text": "Tavlada \"şeş\" hangi sayıyı anlatır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-77",
+      "text": "Okey taşları kaç farklı renktedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "4"
+        },
+        {
+          "marker": "diamonds",
+          "text": "5"
+        },
+        {
+          "marker": "clubs",
+          "text": "6"
+        },
+        {
+          "marker": "spades",
+          "text": "3"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-78",
+      "text": "Tetris'te düşen her parça kaç kareden oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "6"
+        },
+        {
+          "marker": "diamonds",
+          "text": "3"
+        },
+        {
+          "marker": "clubs",
+          "text": "4"
+        },
+        {
+          "marker": "spades",
+          "text": "5"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-79",
+      "text": "Saklambaçta gözünü kapayıp sayan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hakem"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ebe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pehlivan"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaleci"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-80",
+      "text": "Basketbolda hücum süresi kaç saniyedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "20"
+        },
+        {
+          "marker": "diamonds",
+          "text": "24"
+        },
+        {
+          "marker": "clubs",
+          "text": "30"
+        },
+        {
+          "marker": "spades",
+          "text": "35"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "sp-81",
+      "text": "Futbol kalesinin genişliği yaklaşık kaç metredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "7,32"
+        },
+        {
+          "marker": "diamonds",
+          "text": "6,40"
+        },
+        {
+          "marker": "clubs",
+          "text": "9,15"
+        },
+        {
+          "marker": "spades",
+          "text": "5,50"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-82",
+      "text": "Wimbledon'da oyuncuların giymesi gereken renk nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mavi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beyaz"
+        },
+        {
+          "marker": "spades",
+          "text": "Sarı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-83",
+      "text": "Voleybolda savunma uzmanı oyuncuya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pasör"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Smaçör"
+        },
+        {
+          "marker": "clubs",
+          "text": "Libero"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaptan"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-84",
+      "text": "Basketbolda topun potaya yukarıdan çakılmasına ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ribaund"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Blok"
+        },
+        {
+          "marker": "clubs",
+          "text": "Faul"
+        },
+        {
+          "marker": "spades",
+          "text": "Smaç"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-85",
+      "text": "Hangisi bir artistik jimnastik aletidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Paralel bar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sırık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gülle"
+        },
+        {
+          "marker": "spades",
+          "text": "Cirit"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-86",
+      "text": "İlk Kış Olimpiyatları hangi ülkede yapıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İsviçre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kanada"
+        },
+        {
+          "marker": "spades",
+          "text": "Norveç"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "sp-87",
+      "text": "At yarışında atın üstündeki sporcuya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kaptan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pilot"
+        },
+        {
+          "marker": "clubs",
+          "text": "Jokey"
+        },
+        {
+          "marker": "spades",
+          "text": "Seyis"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "sp-88",
+      "text": "Judo ve karatede başlangıç kuşağı hangi renktir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Siyah"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sarı"
+        },
+        {
+          "marker": "spades",
+          "text": "Beyaz"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-89",
+      "text": "Fair play ne anlama gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sert oyun"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hızlı oyun"
+        },
+        {
+          "marker": "clubs",
+          "text": "Takım oyunu"
+        },
+        {
+          "marker": "spades",
+          "text": "Centilmence oyun"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "sp-90",
+      "text": "Hentbol maçı normalde kaç dakikadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "80"
+        },
+        {
+          "marker": "diamonds",
+          "text": "90"
+        },
+        {
+          "marker": "clubs",
+          "text": "60"
+        },
+        {
+          "marker": "spades",
+          "text": "40"
+        }
+      ],
+      "correct": "clubs"
     }
   ]
 }

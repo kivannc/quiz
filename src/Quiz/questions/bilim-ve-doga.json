@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "bd-31",
+      "text": "Evrensel çekim yasasını formüle eden bilim insanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Isaac Newton"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nikola Tesla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Albert Einstein"
+        },
+        {
+          "marker": "spades",
+          "text": "Marie Curie"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-32",
+      "text": "Elektrik akım şiddetinin birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hertz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Amper"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ohm"
+        },
+        {
+          "marker": "spades",
+          "text": "Volt"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-33",
+      "text": "Gücün birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pascal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Watt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Joule"
+        },
+        {
+          "marker": "spades",
+          "text": "Kelvin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-34",
+      "text": "Işığın bir ortamdan diğerine geçerken yön değiştirmesine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gölge"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Soğurma"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yansıma"
+        },
+        {
+          "marker": "spades",
+          "text": "Kırılma"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-35",
+      "text": "Ses hangi ortamda hiç yayılamaz?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Suda"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Boşlukta"
+        },
+        {
+          "marker": "clubs",
+          "text": "Havada"
+        },
+        {
+          "marker": "spades",
+          "text": "Çelikte"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-36",
+      "text": "Bir maddenin birim hacmindeki kütlesine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ağırlık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Basınç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hız"
+        },
+        {
+          "marker": "spades",
+          "text": "Yoğunluk"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-37",
+      "text": "Yüzeyler arasında hareketi yavaşlatan kuvvete ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Esneklik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Manyetizma"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sürtünme"
+        },
+        {
+          "marker": "spades",
+          "text": "Çekim"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-38",
+      "text": "Suyun buhara dönüşmesine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Buharlaşma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Erime"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yoğuşma"
+        },
+        {
+          "marker": "spades",
+          "text": "Donma"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-39",
+      "text": "Su deniz seviyesinde kaç derecede kaynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "120 derece"
+        },
+        {
+          "marker": "diamonds",
+          "text": "100 derece"
+        },
+        {
+          "marker": "clubs",
+          "text": "90 derece"
+        },
+        {
+          "marker": "spades",
+          "text": "80 derece"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-40",
+      "text": "Atomun eksi yüklü parçacığı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Elektron"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nötron"
+        },
+        {
+          "marker": "clubs",
+          "text": "Foton"
+        },
+        {
+          "marker": "spades",
+          "text": "Proton"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-41",
+      "text": "Hareket halindeki bir cismin sahip olduğu enerjiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Potansiyel enerji"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kinetik enerji"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nükleer enerji"
+        },
+        {
+          "marker": "spades",
+          "text": "Işık enerjisi"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-42",
+      "text": "Hangi metal mıknatıs tarafından çekilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Alüminyum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Altın"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bakır"
+        },
+        {
+          "marker": "spades",
+          "text": "Demir"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-43",
+      "text": "Sofra tuzu hangi iki elementin birleşimidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hidrojen ve klor"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kalsiyum ve karbon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sodyum ve klor"
+        },
+        {
+          "marker": "spades",
+          "text": "Sodyum ve oksijen"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-44",
+      "text": "Altının kimyasal sembolü nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ag"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Au"
+        },
+        {
+          "marker": "clubs",
+          "text": "Al"
+        },
+        {
+          "marker": "spades",
+          "text": "Ar"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-45",
+      "text": "Sodyumun kimyasal sembolü nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "N"
+        },
+        {
+          "marker": "diamonds",
+          "text": "K"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ne"
+        },
+        {
+          "marker": "spades",
+          "text": "Na"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-46",
+      "text": "Limon suyunun ekşiliği hangi asitten gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sitrik asit"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Asetik asit"
+        },
+        {
+          "marker": "clubs",
+          "text": "Laktik asit"
+        },
+        {
+          "marker": "spades",
+          "text": "Sülfürik asit"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-47",
+      "text": "Kuru buz hangi gazın katı halidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Azot"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Oksijen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karbondioksit"
+        },
+        {
+          "marker": "spades",
+          "text": "Metan"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-48",
+      "text": "Demir nemli havada hangi gazla tepkimeye girip paslanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Neon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Oksijen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Argon"
+        },
+        {
+          "marker": "spades",
+          "text": "Helyum"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-49",
+      "text": "Sembolü Pb olan element hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kalay"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fosfor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Platin"
+        },
+        {
+          "marker": "spades",
+          "text": "Kurşun"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-50",
+      "text": "pH ölçeğinde 7 değeri neyi gösterir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Baz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Asit"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nötr"
+        },
+        {
+          "marker": "spades",
+          "text": "Tuz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-51",
+      "text": "Periyodik cetveli düzenleyen bilim insanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mendeleyev"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dalton"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lavoisier"
+        },
+        {
+          "marker": "spades",
+          "text": "Bohr"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-52",
+      "text": "Kalbin kaç odacığı vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Üç"
+        },
+        {
+          "marker": "spades",
+          "text": "Beş"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-53",
+      "text": "Alyuvarlarda oksijeni taşıyan madde nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hemoglobin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kolajen"
+        },
+        {
+          "marker": "clubs",
+          "text": "İnsülin"
+        },
+        {
+          "marker": "spades",
+          "text": "Keratin"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-54",
+      "text": "İnsülini hangi organ üretir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karaciğer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dalak"
+        },
+        {
+          "marker": "clubs",
+          "text": "Böbrek"
+        },
+        {
+          "marker": "spades",
+          "text": "Pankreas"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-55",
+      "text": "Beyinle birlikte merkezî sinir sistemini oluşturan yapı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mide"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kalp"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dalak"
+        },
+        {
+          "marker": "spades",
+          "text": "Omurilik"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-56",
+      "text": "Ses telleri hangi organda bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gırtlak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yemek borusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mide"
+        },
+        {
+          "marker": "spades",
+          "text": "Diyafram"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-57",
+      "text": "Bir çocukta süt dişi sayısı normalde kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "20"
+        },
+        {
+          "marker": "diamonds",
+          "text": "16"
+        },
+        {
+          "marker": "clubs",
+          "text": "32"
+        },
+        {
+          "marker": "spades",
+          "text": "24"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-58",
+      "text": "Vücudu mikroplara karşı savunan kan hücreleri hangileridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kan pulcukları"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Plazma"
+        },
+        {
+          "marker": "clubs",
+          "text": "Akyuvarlar"
+        },
+        {
+          "marker": "spades",
+          "text": "Alyuvarlar"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-59",
+      "text": "Besin maddeleri en çok hangi organda emilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kalın bağırsak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mide"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yemek borusu"
+        },
+        {
+          "marker": "spades",
+          "text": "İnce bağırsak"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-60",
+      "text": "Sağlıklı insanın vücut sıcaklığı yaklaşık kaç derecedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "35"
+        },
+        {
+          "marker": "diamonds",
+          "text": "39"
+        },
+        {
+          "marker": "clubs",
+          "text": "41"
+        },
+        {
+          "marker": "spades",
+          "text": "37"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-61",
+      "text": "Kasları kemiklere bağlayan yapıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Damar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sinir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kiriş"
+        },
+        {
+          "marker": "spades",
+          "text": "Kıkırdak"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-62",
+      "text": "Hangisi kulağımızdaki küçük kemiklerden biridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çene kemiği"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Köprücük kemiği"
+        },
+        {
+          "marker": "clubs",
+          "text": "Üzengi"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaval kemiği"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-63",
+      "text": "Kanı kalpten vücuda taşıyan damarlara ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atardamar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kılcal damar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Toplardamar"
+        },
+        {
+          "marker": "spades",
+          "text": "Lenf damarı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-64",
+      "text": "Midede sindirime yardımcı olan asit hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nitrik asit"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sülfürik asit"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hidroklorik asit"
+        },
+        {
+          "marker": "spades",
+          "text": "Karbonik asit"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-65",
+      "text": "Kan hücreleri başlıca nerede üretilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dalak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kemik iliği"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kalp"
+        },
+        {
+          "marker": "spades",
+          "text": "Böbrek"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-66",
+      "text": "Güneş hangi tür gök cismidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gezegen"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Uydu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yıldız"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuyruklu yıldız"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-67",
+      "text": "Güneş sisteminin en büyük gezegeni hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Neptün"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Satürn"
+        },
+        {
+          "marker": "clubs",
+          "text": "Uranüs"
+        },
+        {
+          "marker": "spades",
+          "text": "Jüpiter"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-68",
+      "text": "Ay'a ilk ayak basan insan kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Buzz Aldrin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "John Glenn"
+        },
+        {
+          "marker": "clubs",
+          "text": "Edgar Mitchell"
+        },
+        {
+          "marker": "spades",
+          "text": "Neil Armstrong"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-69",
+      "text": "Uzaya çıkan ilk insan kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Alan Shepard"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yuri Gagarin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sergey Korolyov"
+        },
+        {
+          "marker": "spades",
+          "text": "Valentina Tereşkova"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-70",
+      "text": "Güneş ışığı Dünya'ya yaklaşık kaç dakikada ulaşır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "60 dakika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "2 dakika"
+        },
+        {
+          "marker": "clubs",
+          "text": "8 dakika"
+        },
+        {
+          "marker": "spades",
+          "text": "20 dakika"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-71",
+      "text": "Samanyolu hangi türden bir yapıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bulutsu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Galaksi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Takımyıldız"
+        },
+        {
+          "marker": "spades",
+          "text": "Kara delik"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-72",
+      "text": "Hangi gezegen neredeyse yan yatmış halde Güneş etrafında döner?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Neptün"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Satürn"
+        },
+        {
+          "marker": "clubs",
+          "text": "Jüpiter"
+        },
+        {
+          "marker": "spades",
+          "text": "Uranüs"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-73",
+      "text": "Güneş sisteminin en sıcak gezegeni hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Merkür"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jüpiter"
+        },
+        {
+          "marker": "clubs",
+          "text": "Venüs"
+        },
+        {
+          "marker": "spades",
+          "text": "Mars"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-74",
+      "text": "Güneş tutulmasında hangi gök cismi Güneş ile Dünya arasına girer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mars"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Merkür"
+        },
+        {
+          "marker": "spades",
+          "text": "Venüs"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-75",
+      "text": "Işık yılı neyin birimidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kütle"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Uzaklık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hız"
+        },
+        {
+          "marker": "spades",
+          "text": "Zaman"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-76",
+      "text": "Güneş'e en uzak gezegen hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uranüs"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jüpiter"
+        },
+        {
+          "marker": "clubs",
+          "text": "Neptün"
+        },
+        {
+          "marker": "spades",
+          "text": "Satürn"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-77",
+      "text": "Mevsimlerin oluşmasının asıl nedeni nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ay'ın çekim gücü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güneş'in sönüp parlaması"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dünya'nın eksen eğikliği"
+        },
+        {
+          "marker": "spades",
+          "text": "Güneş'e olan uzaklık değişimi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-78",
+      "text": "Dünya'nın en iç katmanına ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Manto"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dış çekirdek"
+        },
+        {
+          "marker": "clubs",
+          "text": "İç çekirdek"
+        },
+        {
+          "marker": "spades",
+          "text": "Yer kabuğu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-79",
+      "text": "Depremde yer kabuğunun kırılıp kaydığı çatlak hatta ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fay"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Delta"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kıvrım"
+        },
+        {
+          "marker": "spades",
+          "text": "Düden"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-80",
+      "text": "Kıtaların yavaş yavaş yer değiştirmesini hangi kuram açıklar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Levha tektoniği"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hücre kuramı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Görelilik kuramı"
+        },
+        {
+          "marker": "spades",
+          "text": "Büyük Patlama"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-81",
+      "text": "Magmanın soğuyup katılaşmasıyla oluşan kayaçlara ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Organik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tortul"
+        },
+        {
+          "marker": "clubs",
+          "text": "Metamorfik"
+        },
+        {
+          "marker": "spades",
+          "text": "Magmatik"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-82",
+      "text": "Mohs ölçeğinde en sert mineral hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Elmas"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kalsit"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kuvars"
+        },
+        {
+          "marker": "spades",
+          "text": "Topaz"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-83",
+      "text": "Güneş'in zararlı morötesi ışınlarının çoğunu hangi gaz tutar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Argon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Azot"
+        },
+        {
+          "marker": "clubs",
+          "text": "Metan"
+        },
+        {
+          "marker": "spades",
+          "text": "Ozon"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-84",
+      "text": "Hangisi bir fosil yakıttır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kömür"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rüzgar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dalga enerjisi"
+        },
+        {
+          "marker": "spades",
+          "text": "Güneş ışığı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-85",
+      "text": "Hava olaylarının görüldüğü en alt atmosfer katmanı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Stratosfer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Troposfer"
+        },
+        {
+          "marker": "clubs",
+          "text": "Eksosfer"
+        },
+        {
+          "marker": "spades",
+          "text": "Mezosfer"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "bd-86",
+      "text": "Mağara tavanından aşağı sarkan kireç oluşumuna ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sarkıt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dikit"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ova"
+        },
+        {
+          "marker": "spades",
+          "text": "Geyzer"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-87",
+      "text": "Tsunami en sık hangi olayla oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ay'ın çekimi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şiddetli rüzgar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aşırı yağış"
+        },
+        {
+          "marker": "spades",
+          "text": "Deniz altı depremi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "bd-88",
+      "text": "Barometre neyi ölçer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hava basıncı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nem oranı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rüzgar hızı"
+        },
+        {
+          "marker": "spades",
+          "text": "Yağış miktarı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "bd-89",
+      "text": "Şimşeği gök gürültüsünden önce görmemizin nedeni nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şimşek sese neden olmaz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ses ışıktan hızlıdır"
+        },
+        {
+          "marker": "clubs",
+          "text": "Işık sesten hızlıdır"
+        },
+        {
+          "marker": "spades",
+          "text": "Bulutlar sesi emer"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "bd-90",
+      "text": "Kar taneleri genellikle kaç kollu yıldız biçimindedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Altı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dört"
+        },
+        {
+          "marker": "spades",
+          "text": "Sekiz"
+        }
+      ],
+      "correct": "diamonds"
     }
   ]
 }

@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "mf-31",
+      "text": "\"Çığlık\" tablosunun ressamı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Edvard Munch"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Paul Gauguin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Henri Matisse"
+        },
+        {
+          "marker": "spades",
+          "text": "Egon Schiele"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-32",
+      "text": "\"Su Zambakları\" serisiyle tanınan ressam kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rembrandt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Francisco Goya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Paul Klee"
+        },
+        {
+          "marker": "spades",
+          "text": "Claude Monet"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-33",
+      "text": "Erimiş saatleriyle ünlü \"Belleğin Azmi\" tablosu kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Salvador Dalí"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Joan Miró"
+        },
+        {
+          "marker": "clubs",
+          "text": "Edward Hopper"
+        },
+        {
+          "marker": "spades",
+          "text": "Marc Chagall"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-34",
+      "text": "\"Kaplumbağa Terbiyecisi\" tablosunu kim yaptı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fikret Mualla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Osman Hamdi Bey"
+        },
+        {
+          "marker": "clubs",
+          "text": "Abidin Dino"
+        },
+        {
+          "marker": "spades",
+          "text": "Bedri Rahmi Eyüboğlu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-35",
+      "text": "\"İnci Küpeli Kız\" tablosu hangi ressama aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Vermeer"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Paul Cézanne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Eugène Delacroix"
+        },
+        {
+          "marker": "spades",
+          "text": "Edgar Degas"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-36",
+      "text": "Kırmızı ile sarı boyayı karıştırırsak hangi rengi elde ederiz?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kahverengi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Turuncu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "spades",
+          "text": "Mor"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-37",
+      "text": "İznik hangi el sanatıyla ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Halı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bakırcılık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ebru"
+        },
+        {
+          "marker": "spades",
+          "text": "Çini"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-38",
+      "text": "Kolezyum hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Floransa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Venedik"
+        },
+        {
+          "marker": "spades",
+          "text": "Atina"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-39",
+      "text": "Ressamın boyaları karıştırdığı tahtaya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şövale"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Palet"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çerçeve"
+        },
+        {
+          "marker": "spades",
+          "text": "Tuval"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-40",
+      "text": "Ünlü ressam Frida Kahlo hangi ülkelidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Meksika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şili"
+        },
+        {
+          "marker": "clubs",
+          "text": "Arjantin"
+        },
+        {
+          "marker": "spades",
+          "text": "İspanya"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-41",
+      "text": "Kemanın kaç teli vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-42",
+      "text": "Notaların yazıldığı beş çizgiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Anahtar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ölçü"
+        },
+        {
+          "marker": "clubs",
+          "text": "Porte"
+        },
+        {
+          "marker": "spades",
+          "text": "Tempo"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-43",
+      "text": "Do, re, mi, fa, sol, la, si dizisine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Armoni"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Akor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ritim"
+        },
+        {
+          "marker": "spades",
+          "text": "Gam"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-44",
+      "text": "Müzikte \"forte\" işareti ne anlama gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güçlü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yavaş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tatlı"
+        },
+        {
+          "marker": "spades",
+          "text": "Kesik"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-45",
+      "text": "Müzikte \"allegro\" ne demektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hızlı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sessiz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yumuşak"
+        },
+        {
+          "marker": "spades",
+          "text": "Ağır"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-46",
+      "text": "\"Dört Mevsim\" eserini hangi besteci yazmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Chopin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mozart"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vivaldi"
+        },
+        {
+          "marker": "spades",
+          "text": "Bach"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-47",
+      "text": "\"Kuğu Gölü\" balesinin bestecisi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Verdi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çaykovski"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rossini"
+        },
+        {
+          "marker": "spades",
+          "text": "Chopin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-48",
+      "text": "Chopin hangi çalgı için yazdığı eserlerle tanınır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Keman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Piyano"
+        },
+        {
+          "marker": "clubs",
+          "text": "Flüt"
+        },
+        {
+          "marker": "spades",
+          "text": "Gitar"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-49",
+      "text": "Türk Beşleri'nden biri olan besteci kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dede Efendi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Itri"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cinuçen Tanrıkorur"
+        },
+        {
+          "marker": "spades",
+          "text": "Ahmed Adnan Saygun"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-50",
+      "text": "Orkestradaki yaylı çalgıların en büyüğü hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Viyola"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çello"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kontrbas"
+        },
+        {
+          "marker": "spades",
+          "text": "Keman"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-51",
+      "text": "İki kişinin birlikte söylediği esere ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Düet"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Solo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Koro"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuartet"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-52",
+      "text": "Kadın seslerinin en tizine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Soprano"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tenor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Alto"
+        },
+        {
+          "marker": "spades",
+          "text": "Bas"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-53",
+      "text": "Metronom neyi göstermeye yarar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Akort yüksekliğini"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ses şiddetini"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vuruş hızını"
+        },
+        {
+          "marker": "spades",
+          "text": "Nota değerini"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-54",
+      "text": "Beatles hangi ülkenin müzik grubudur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "ABD"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "clubs",
+          "text": "İrlanda"
+        },
+        {
+          "marker": "spades",
+          "text": "Avustralya"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-55",
+      "text": "Barış Manço'nun sunduğu televizyon programının adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gençlik Zamanı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çocuk Saati"
+        },
+        {
+          "marker": "clubs",
+          "text": "7'den 77'ye"
+        },
+        {
+          "marker": "spades",
+          "text": "Hafta Sonu Keyfi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-56",
+      "text": "Zeki Müren hangi lakapla anılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sanat Güneşi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sanat Yıldızı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sanat Denizi"
+        },
+        {
+          "marker": "spades",
+          "text": "Sanat Ayı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-57",
+      "text": "Eurovision'ı 2003'te kazanan Türk şarkıcı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sezen Aksu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tarkan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sertab Erener"
+        },
+        {
+          "marker": "spades",
+          "text": "Hadise"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-58",
+      "text": "Pinokyo'nun burnu ne zaman uzar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Korktuğunda"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Uyuduğunda"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güldüğünde"
+        },
+        {
+          "marker": "spades",
+          "text": "Yalan söylediğinde"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-59",
+      "text": "Dumbo adlı fili uçuran şey nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kanatlı ayakkabı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Balon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Büyük kulakları"
+        },
+        {
+          "marker": "spades",
+          "text": "Uzun kuyruğu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-60",
+      "text": "Dory adlı balığın en bilinen sorunu nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sessiz kalması"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yüzme bilmemesi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kör olması"
+        },
+        {
+          "marker": "spades",
+          "text": "Çabuk unutması"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-61",
+      "text": "Batman hangi şehirde yaşar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Metropolis"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Smallville"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gotham"
+        },
+        {
+          "marker": "spades",
+          "text": "Atlantis"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-62",
+      "text": "Süpermen'i zayıflatan madde hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Vibranyum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Adamantyum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Platin"
+        },
+        {
+          "marker": "spades",
+          "text": "Kriptonit"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-63",
+      "text": "Harry Potter'ın Quidditch sporunda oyuncular neyin üstünde uçar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kanat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Halı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Balon"
+        },
+        {
+          "marker": "spades",
+          "text": "Süpürge"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-64",
+      "text": "\"Karayip Korsanları\"nda Kaptan Jack'in soyadı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Turner"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Swann"
+        },
+        {
+          "marker": "clubs",
+          "text": "Barbossa"
+        },
+        {
+          "marker": "spades",
+          "text": "Sparrow"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-65",
+      "text": "\"Titanik\" filminde gemi neye çarpar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Başka gemi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Deniz canavarı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Buz dağı"
+        },
+        {
+          "marker": "spades",
+          "text": "Kayalık"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-66",
+      "text": "\"E.T.\" filminin yönetmeni kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "James Cameron"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ridley Scott"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tim Burton"
+        },
+        {
+          "marker": "spades",
+          "text": "Steven Spielberg"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-67",
+      "text": "\"Yıldız Savaşları\"nda Luke Skywalker'ın babası kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Han Solo"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yoda"
+        },
+        {
+          "marker": "clubs",
+          "text": "Obi-Wan Kenobi"
+        },
+        {
+          "marker": "spades",
+          "text": "Darth Vader"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-68",
+      "text": "Jedi şövalyelerinin kullandığı silah hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yay ve ok"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Büyülü asa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Işın kılıcı"
+        },
+        {
+          "marker": "spades",
+          "text": "Lazer tabancası"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-69",
+      "text": "Winnie the Pooh adlı ayı en çok ne yemeyi sever?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Süt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fındık"
+        },
+        {
+          "marker": "spades",
+          "text": "Balık"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-70",
+      "text": "Tom ve Jerry'deki Tom hangi hayvandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Köpek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kurt"
+        },
+        {
+          "marker": "spades",
+          "text": "Tavşan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-71",
+      "text": "Külkedisi'nin ayakkabıları neyden yapılmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kumaş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Cam"
+        },
+        {
+          "marker": "clubs",
+          "text": "Deri"
+        },
+        {
+          "marker": "spades",
+          "text": "Ahşap"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-72",
+      "text": "Disney'in \"Alaaddin\" filminde cin neyin içinden çıkar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lamba"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Küpe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şişe"
+        },
+        {
+          "marker": "spades",
+          "text": "Sandık"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-73",
+      "text": "\"Buz Devri\"ndeki Manny hangi hayvandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gergedan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mamut"
+        },
+        {
+          "marker": "spades",
+          "text": "Ayı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-74",
+      "text": "\"Arabalar\" filminin başkahramanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Doc Hudson"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şimşek McQueen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mater"
+        },
+        {
+          "marker": "spades",
+          "text": "Sally"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-75",
+      "text": "\"Yukarı\" filminde ev neyin yardımıyla uçar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kanat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Roket"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pervane"
+        },
+        {
+          "marker": "spades",
+          "text": "Balon"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-76",
+      "text": "\"Wall-E\" filminin başkahramanı ne tür bir karakterdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uzaylı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Robot"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oyuncak"
+        },
+        {
+          "marker": "spades",
+          "text": "Hayvan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-77",
+      "text": "Mr. Bean'i canlandıran oyuncu kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Jim Carrey"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Eddie Murphy"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rowan Atkinson"
+        },
+        {
+          "marker": "spades",
+          "text": "Adam Sandler"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-78",
+      "text": "Şarlo karakterini canlandıran sessiz sinema oyuncusu kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Harold Lloyd"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Buster Keaton"
+        },
+        {
+          "marker": "clubs",
+          "text": "Charlie Chaplin"
+        },
+        {
+          "marker": "spades",
+          "text": "Stan Laurel"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-79",
+      "text": "Mickey Mouse'un kız arkadaşı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Minnie"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Daisy"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lola"
+        },
+        {
+          "marker": "spades",
+          "text": "Betty"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "mf-80",
+      "text": "\"Oz Büyücüsü\"nde Dorothy'nin köpeğinin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Benji"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lassie"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rex"
+        },
+        {
+          "marker": "spades",
+          "text": "Toto"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-81",
+      "text": "\"Charlie'nin Çikolata Fabrikası\"nın sahibi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Albus Dumbledore"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Willy Wonka"
+        },
+        {
+          "marker": "clubs",
+          "text": "Indiana Jones"
+        },
+        {
+          "marker": "spades",
+          "text": "Sherlock Holmes"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-82",
+      "text": "\"Orman Çocuğu\"nda Mowgli'nin dostu olan ayının adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kaa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Shere Khan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bagheera"
+        },
+        {
+          "marker": "spades",
+          "text": "Baloo"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "mf-83",
+      "text": "\"Aslan Kral\"daki Pumbaa hangi hayvandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hiena"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gergedan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yaban domuzu"
+        },
+        {
+          "marker": "spades",
+          "text": "Zürafa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-84",
+      "text": "Mickey Mouse'un köpeğinin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Scooby"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pluto"
+        },
+        {
+          "marker": "clubs",
+          "text": "Snoopy"
+        },
+        {
+          "marker": "spades",
+          "text": "Odie"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-85",
+      "text": "Donald Duck'ın kaç yeğeni vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Dört"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-86",
+      "text": "Çizgi film köpeği Scooby-Doo hangi cins köpektir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Labrador"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alman dogu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Buldog"
+        },
+        {
+          "marker": "spades",
+          "text": "Pug"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-87",
+      "text": "\"Ruhların Kaçışı\" animesinin yönetmeni kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Makoto Shinkai"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Osamu Tezuka"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hayao Miyazaki"
+        },
+        {
+          "marker": "spades",
+          "text": "Akira Kurosawa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "mf-88",
+      "text": "Bollywood hangi ülkenin film endüstrisine verilen addır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Endonezya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hindistan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nijerya"
+        },
+        {
+          "marker": "spades",
+          "text": "Pakistan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-89",
+      "text": "Hollywood hangi şehrin bir semtidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Chicago"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Los Angeles"
+        },
+        {
+          "marker": "clubs",
+          "text": "Miami"
+        },
+        {
+          "marker": "spades",
+          "text": "New York"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "mf-90",
+      "text": "Cannes Film Festivali hangi ülkede yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İtalya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Almanya"
+        },
+        {
+          "marker": "spades",
+          "text": "İspanya"
+        }
+      ],
+      "correct": "hearts"
     }
   ]
 }

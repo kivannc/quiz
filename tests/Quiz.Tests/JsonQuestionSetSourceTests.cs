@@ -89,6 +89,71 @@ public sealed class JsonQuestionSetSourceTests : IDisposable
             Assert.Single(q.Options, o => o.Marker == q.Correct);
     }
 
+    // The four facts below hold the shipped content to rules that used to be kept by hand. They read
+    // the sets through the public loader, the way the app does.
+
+    /// <summary>Folds case the Turkish way (I/ı, İ/i) and collapses whitespace, so near-copies compare equal.</summary>
+    private static string Normalise(string text) =>
+        string.Join(' ', text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+            .ToLower(new System.Globalization.CultureInfo("tr-TR"));
+
+    [Fact]
+    public void No_shipped_question_text_appears_twice()
+    {
+        var sets = new JsonQuestionSetSource(ShippedQuestions.Directory).All();
+
+        var repeated = sets
+            .SelectMany(s => s.Questions.Select(q => (Set: s.Id, q.Id, Text: Normalise(q.Text))))
+            .GroupBy(q => q.Text)
+            .Where(g => g.Count() > 1)
+            .Select(g => string.Join(" = ", g.Select(q => $"{q.Set}/{q.Id}")))
+            .ToList();
+
+        Assert.True(repeated.Count == 0, "Same question text: " + string.Join("; ", repeated));
+    }
+
+    [Fact]
+    public void Each_shipped_set_spreads_the_correct_suit_evenly()
+    {
+        var sets = new JsonQuestionSetSource(ShippedQuestions.Directory).All();
+
+        foreach (var set in sets)
+        {
+            // A suit that is right more often than the others is a suit worth guessing. One apart is
+            // allowed, so a single question can be added or dropped without bringing three more.
+            var counts = Enum.GetValues<Marker>()
+                .Select(m => set.Questions.Count(q => q.Correct == m))
+                .ToList();
+            Assert.True(
+                counts.Max() - counts.Min() <= 1,
+                $"{set.Id}: correct suits are uneven ({string.Join("/", counts)} for hearts/diamonds/clubs/spades)");
+        }
+    }
+
+    [Fact]
+    public void Shipped_text_fits_the_television()
+    {
+        var sets = new JsonQuestionSetSource(ShippedQuestions.Directory).All();
+
+        foreach (var q in sets.SelectMany(s => s.Questions))
+        {
+            Assert.True(q.Text.Length <= 90, $"{q.Id}: question is {q.Text.Length} characters, over 90");
+            foreach (var o in q.Options)
+                Assert.True(o.Text.Length <= 30, $"{q.Id}: option '{o.Text}' is over 30 characters");
+        }
+    }
+
+    [Fact]
+    public void No_shipped_question_repeats_an_option()
+    {
+        var sets = new JsonQuestionSetSource(ShippedQuestions.Directory).All();
+
+        foreach (var q in sets.SelectMany(s => s.Questions))
+            Assert.True(
+                q.Options.Select(o => Normalise(o.Text)).Distinct().Count() == q.Options.Count,
+                $"{q.Id}: two options read the same");
+    }
+
     [Fact]
     public void Shipped_sets_are_tagged_tr()
     {

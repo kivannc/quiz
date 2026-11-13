@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "gk-21",
+      "text": "Artık yıl her kaç yılda bir gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "İki"
+        },
+        {
+          "marker": "spades",
+          "text": "Üç"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-22",
+      "text": "Takvimde yılın en kısa ayı hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şubat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Eylül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mayıs"
+        },
+        {
+          "marker": "spades",
+          "text": "Kasım"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-23",
+      "text": "Cumartesi gününden sonra hangi gün gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cuma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pazartesi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Salı"
+        },
+        {
+          "marker": "spades",
+          "text": "Pazar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-24",
+      "text": "Bir milenyum kaç yıldır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1000 yıl"
+        },
+        {
+          "marker": "diamonds",
+          "text": "100 yıl"
+        },
+        {
+          "marker": "clubs",
+          "text": "500 yıl"
+        },
+        {
+          "marker": "spades",
+          "text": "10.000 yıl"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-25",
+      "text": "Bir yılda kaç ay 31 gün çeker?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altı"
+        },
+        {
+          "marker": "spades",
+          "text": "Sekiz"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-26",
+      "text": "Hangi ay 30 gün çeker?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ocak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ağustos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mart"
+        },
+        {
+          "marker": "spades",
+          "text": "Nisan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-27",
+      "text": "Cumhuriyet Bayramı hangi tarihte kutlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "19 Mayıs"
+        },
+        {
+          "marker": "diamonds",
+          "text": "23 Nisan"
+        },
+        {
+          "marker": "clubs",
+          "text": "30 Ağustos"
+        },
+        {
+          "marker": "spades",
+          "text": "29 Ekim"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-28",
+      "text": "Zafer Bayramı hangi ayda kutlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ekim"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Temmuz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Eylül"
+        },
+        {
+          "marker": "spades",
+          "text": "Ağustos"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-29",
+      "text": "Yeni yıl takvimde hangi tarihte başlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1 Ocak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1 Eylül"
+        },
+        {
+          "marker": "clubs",
+          "text": "1 Mart"
+        },
+        {
+          "marker": "spades",
+          "text": "1 Şubat"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-30",
+      "text": "Kuzey Yarımküre'de yaz mevsimi hangi ayda başlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Temmuz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ağustos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Haziran"
+        },
+        {
+          "marker": "spades",
+          "text": "Mayıs"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-31",
+      "text": "Türkiye'de resmî hafta sonu tatili hangi günlerdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pazar-Pazartesi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Perşembe-Cuma"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cuma-Cumartesi"
+        },
+        {
+          "marker": "spades",
+          "text": "Cumartesi-Pazar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-32",
+      "text": "Öğretmenler Günü hangi tarihte kutlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "12 Mart"
+        },
+        {
+          "marker": "diamonds",
+          "text": "24 Kasım"
+        },
+        {
+          "marker": "clubs",
+          "text": "19 Mayıs"
+        },
+        {
+          "marker": "spades",
+          "text": "10 Kasım"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-33",
+      "text": "Anneler Günü Türkiye'de hangi ayda kutlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Haziran"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mart"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nisan"
+        },
+        {
+          "marker": "spades",
+          "text": "Mayıs"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-34",
+      "text": "Sevgililer Günü hangi tarihte kutlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "14 Mart"
+        },
+        {
+          "marker": "diamonds",
+          "text": "14 Şubat"
+        },
+        {
+          "marker": "clubs",
+          "text": "14 Ocak"
+        },
+        {
+          "marker": "spades",
+          "text": "1 Şubat"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-35",
+      "text": "Saatte akrep neyi gösterir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dakikayı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Saniyeyi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Saati"
+        },
+        {
+          "marker": "spades",
+          "text": "Tarihi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-36",
+      "text": "Güneş hangi yönden doğar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Doğu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güney"
+        },
+        {
+          "marker": "clubs",
+          "text": "Batı"
+        },
+        {
+          "marker": "spades",
+          "text": "Kuzey"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-37",
+      "text": "Pusulanın ibresi yaklaşık hangi yönü gösterir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kuzey"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Doğu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Batı"
+        },
+        {
+          "marker": "spades",
+          "text": "Güney"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-38",
+      "text": "Bir metre kaç santimetredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "10"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1000"
+        },
+        {
+          "marker": "clubs",
+          "text": "100"
+        },
+        {
+          "marker": "spades",
+          "text": "50"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-39",
+      "text": "Yarım kilo kaç gramdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "500"
+        },
+        {
+          "marker": "diamonds",
+          "text": "750"
+        },
+        {
+          "marker": "clubs",
+          "text": "250"
+        },
+        {
+          "marker": "spades",
+          "text": "50"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-40",
+      "text": "Bir buçuk litre kaç mililitredir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1050"
+        },
+        {
+          "marker": "diamonds",
+          "text": "15.000"
+        },
+        {
+          "marker": "clubs",
+          "text": "1500"
+        },
+        {
+          "marker": "spades",
+          "text": "150"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-41",
+      "text": "Havanın sıcaklığını ölçen alet hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Terazi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Termometre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cetvel"
+        },
+        {
+          "marker": "spades",
+          "text": "Pusula"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-42",
+      "text": "Hangisi bir uzunluk ölçüsüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Saniye"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kilometre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Litre"
+        },
+        {
+          "marker": "spades",
+          "text": "Kilogram"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-43",
+      "text": "Pi sayısı yaklaşık kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "3,14"
+        },
+        {
+          "marker": "diamonds",
+          "text": "9,81"
+        },
+        {
+          "marker": "clubs",
+          "text": "2,71"
+        },
+        {
+          "marker": "spades",
+          "text": "1,41"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-44",
+      "text": "Hangisi bir asal sayıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "9"
+        },
+        {
+          "marker": "diamonds",
+          "text": "15"
+        },
+        {
+          "marker": "clubs",
+          "text": "13"
+        },
+        {
+          "marker": "spades",
+          "text": "21"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-45",
+      "text": "Herhangi bir sayı sıfırla çarpılırsa sonuç ne olur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sonsuz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sıfır"
+        },
+        {
+          "marker": "spades",
+          "text": "Kendisi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-46",
+      "text": "Yüzün karekökü kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "20"
+        },
+        {
+          "marker": "diamonds",
+          "text": "5"
+        },
+        {
+          "marker": "clubs",
+          "text": "50"
+        },
+        {
+          "marker": "spades",
+          "text": "10"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-47",
+      "text": "Bir milyon sayısında kaç sıfır vardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Beş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yedi"
+        },
+        {
+          "marker": "spades",
+          "text": "Dokuz"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-48",
+      "text": "Trafikteki \"dur\" tabelası kaç kenarlıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Beş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dört"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sekiz"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-49",
+      "text": "Saf altın kaç ayardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "18 ayar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "14 ayar"
+        },
+        {
+          "marker": "clubs",
+          "text": "22 ayar"
+        },
+        {
+          "marker": "spades",
+          "text": "24 ayar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-50",
+      "text": "Bir Türk lirası kaç kuruştur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "10"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1000"
+        },
+        {
+          "marker": "clubs",
+          "text": "50"
+        },
+        {
+          "marker": "spades",
+          "text": "100"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-51",
+      "text": "Amerika Birleşik Devletleri'nin para birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Peso"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Frank"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sterlin"
+        },
+        {
+          "marker": "spades",
+          "text": "Dolar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-52",
+      "text": "Japonya'nın para birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yen"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yuan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Won"
+        },
+        {
+          "marker": "spades",
+          "text": "Rupi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-53",
+      "text": "Fransa ve Almanya'nın ortak para birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dolar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sterlin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Euro"
+        },
+        {
+          "marker": "spades",
+          "text": "Yen"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-54",
+      "text": "İngiltere'nin para birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sterlin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kron"
+        },
+        {
+          "marker": "clubs",
+          "text": "Frank"
+        },
+        {
+          "marker": "spades",
+          "text": "Euro"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-55",
+      "text": "Parası hemen ödenen satışa ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Taksit"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peşin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kredi"
+        },
+        {
+          "marker": "spades",
+          "text": "Borç"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-56",
+      "text": "Trafik ışığında kırmızı ne anlama gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Geç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yavaşla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dön"
+        },
+        {
+          "marker": "spades",
+          "text": "Dur"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-57",
+      "text": "Barışın simgesi olarak bilinen kuş hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güvercin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Leylek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kartal"
+        },
+        {
+          "marker": "spades",
+          "text": "Baykuş"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-58",
+      "text": "Türk bayrağında hangi şekiller bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yalnızca bir yıldız"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güneş ve yıldız"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güneş ve hilal"
+        },
+        {
+          "marker": "spades",
+          "text": "Ay ve yıldız"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-59",
+      "text": "Hastane tabelalarında hangi harf kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "D"
+        },
+        {
+          "marker": "diamonds",
+          "text": "T"
+        },
+        {
+          "marker": "clubs",
+          "text": "S"
+        },
+        {
+          "marker": "spades",
+          "text": "H"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-60",
+      "text": "Nazar boncuğu geleneksel olarak hangi renktedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mavi"
+        },
+        {
+          "marker": "spades",
+          "text": "Sarı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-61",
+      "text": "Doğum günü pastasında yaş kadar ne yakılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fener"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Meşale"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mum"
+        },
+        {
+          "marker": "spades",
+          "text": "Kibrit"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-62",
+      "text": "Siyah ile beyaz karıştırılınca hangi renk olur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mor"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pembe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kahverengi"
+        },
+        {
+          "marker": "spades",
+          "text": "Gri"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-63",
+      "text": "Kırmızı ile beyaz karıştırılınca hangi renk olur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Turuncu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pembe"
+        },
+        {
+          "marker": "spades",
+          "text": "Gri"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-64",
+      "text": "Zümrüt hangi renkli bir taştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sarı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "spades",
+          "text": "Mavi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-65",
+      "text": "Ekmek yapan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fırıncı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Terzi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kuyumcu"
+        },
+        {
+          "marker": "spades",
+          "text": "Manav"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-66",
+      "text": "Dişleri tedavi eden hekime ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Psikolog"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Optisyen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dişçi"
+        },
+        {
+          "marker": "spades",
+          "text": "Cerrah"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-67",
+      "text": "Mahkemede kararı veren kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Savcı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hâkim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avukat"
+        },
+        {
+          "marker": "spades",
+          "text": "Katip"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-68",
+      "text": "Uçağı kullanan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rehber"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pilot"
+        },
+        {
+          "marker": "clubs",
+          "text": "Teknisyen"
+        },
+        {
+          "marker": "spades",
+          "text": "Hostes"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-69",
+      "text": "Ameliyat yapan doktora ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Radyolog"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pediatrist"
+        },
+        {
+          "marker": "clubs",
+          "text": "Psikiyatr"
+        },
+        {
+          "marker": "spades",
+          "text": "Cerrah"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "gk-70",
+      "text": "Olta ve ağ hangi mesleğin araçlarıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Arıcılık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Balıkçılık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Madencilik"
+        },
+        {
+          "marker": "spades",
+          "text": "Çobanlık"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-71",
+      "text": "Treni kullanan kişiye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hostes"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kondüktör"
+        },
+        {
+          "marker": "clubs",
+          "text": "Makinist"
+        },
+        {
+          "marker": "spades",
+          "text": "Rehber"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-72",
+      "text": "Araba kullanmak için hangi belge gerekir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Diploma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ehliyet"
+        },
+        {
+          "marker": "spades",
+          "text": "Pasaport"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "gk-73",
+      "text": "Okulda dönem sonunda notları gösteren belgeye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Diploma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rapor"
+        },
+        {
+          "marker": "spades",
+          "text": "Sertifika"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-74",
+      "text": "Doktorun ilaçları yazdığı kâğıda ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Makbuz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Reçete"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dilekçe"
+        },
+        {
+          "marker": "spades",
+          "text": "Fatura"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-75",
+      "text": "Mektubun zarfına yapıştırılan küçük kâğıda ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Etiket"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pul"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kaşe"
+        },
+        {
+          "marker": "spades",
+          "text": "Bant"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-76",
+      "text": "Hangisi ayağa giyilen bir giysidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bere"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çorap"
+        },
+        {
+          "marker": "clubs",
+          "text": "Atkı"
+        },
+        {
+          "marker": "spades",
+          "text": "Eldiven"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-77",
+      "text": "İstanbul'un plaka kodu kaçtır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "35"
+        },
+        {
+          "marker": "diamonds",
+          "text": "34"
+        },
+        {
+          "marker": "clubs",
+          "text": "16"
+        },
+        {
+          "marker": "spades",
+          "text": "06"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-78",
+      "text": "T.C. kimlik numarası kaç haneden oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "11"
+        },
+        {
+          "marker": "diamonds",
+          "text": "12"
+        },
+        {
+          "marker": "clubs",
+          "text": "9"
+        },
+        {
+          "marker": "spades",
+          "text": "10"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "gk-79",
+      "text": "Türkiye'nin uluslararası telefon kodu nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "+44"
+        },
+        {
+          "marker": "diamonds",
+          "text": "+90"
+        },
+        {
+          "marker": "clubs",
+          "text": "+33"
+        },
+        {
+          "marker": "spades",
+          "text": "+49"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "gk-80",
+      "text": "Bir saat kaç saniyedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "3600"
+        },
+        {
+          "marker": "diamonds",
+          "text": "6000"
+        },
+        {
+          "marker": "clubs",
+          "text": "600"
+        },
+        {
+          "marker": "spades",
+          "text": "360"
+        }
+      ],
+      "correct": "hearts"
     }
   ]
 }

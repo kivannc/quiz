@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "ed-31",
+      "text": "\"Sinekli Bakkal\" romanı kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Refik Halit Karay"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peyami Safa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Falih Rıfkı Atay"
+        },
+        {
+          "marker": "spades",
+          "text": "Halide Edib Adıvar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-32",
+      "text": "\"Mai ve Siyah\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Halit Ziya Uşaklıgil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Recaizade Mahmud Ekrem"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ahmet Mithat Efendi"
+        },
+        {
+          "marker": "spades",
+          "text": "Namık Kemal"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-33",
+      "text": "\"Araba Sevdası\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ahmet Mithat Efendi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Samipaşazade Sezai"
+        },
+        {
+          "marker": "clubs",
+          "text": "Recaizade Mahmud Ekrem"
+        },
+        {
+          "marker": "spades",
+          "text": "Şemsettin Sami"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-34",
+      "text": "\"Eylül\" romanı kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mehmet Rauf"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahmet Mithat Efendi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hüseyin Rahmi Gürpınar"
+        },
+        {
+          "marker": "spades",
+          "text": "Hüseyin Cahit Yalçın"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-35",
+      "text": "\"Vatan yahut Silistre\" oyununun yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tevfik Fikret"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Namık Kemal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ahmet Mithat Efendi"
+        },
+        {
+          "marker": "spades",
+          "text": "Ziya Paşa"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-36",
+      "text": "\"Şair Evlenmesi\" adlı oyun kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şinasi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Abdülhak Hamit Tarhan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Namık Kemal"
+        },
+        {
+          "marker": "spades",
+          "text": "Ziya Paşa"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-37",
+      "text": "\"Anayurt Oteli\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yusuf Atılgan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bilge Karasu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oğuz Atay"
+        },
+        {
+          "marker": "spades",
+          "text": "Tarık Buğra"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-38",
+      "text": "\"Bereketli Topraklar Üzerinde\" romanı kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kemal Tahir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fakir Baykurt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Orhan Kemal"
+        },
+        {
+          "marker": "spades",
+          "text": "Yaşar Kemal"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-39",
+      "text": "\"Sevgili Arsız Ölüm\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pınar Kür"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sevgi Soysal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Adalet Ağaoğlu"
+        },
+        {
+          "marker": "spades",
+          "text": "Latife Tekin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-40",
+      "text": "\"Han Duvarları\" şiiri kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Orhan Veli Kanık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahmet Haşim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Faruk Nafiz Çamlıbel"
+        },
+        {
+          "marker": "spades",
+          "text": "Yahya Kemal Beyatlı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-41",
+      "text": "\"İstanbul'u Dinliyorum\" şiirinin şairi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fazıl Hüsnü Dağlarca"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahmet Haşim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Orhan Veli Kanık"
+        },
+        {
+          "marker": "spades",
+          "text": "Cahit Sıtkı Tarancı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-42",
+      "text": "\"Otuz Beş Yaş\" şiirinin şairi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Behçet Necatigil"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahmet Haşim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cahit Sıtkı Tarancı"
+        },
+        {
+          "marker": "spades",
+          "text": "Necip Fazıl Kısakürek"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-43",
+      "text": "\"Çile\" adlı şiir kitabı kimindir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Attila İlhan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Arif Nihat Asya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Necip Fazıl Kısakürek"
+        },
+        {
+          "marker": "spades",
+          "text": "Sezai Karakoç"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-44",
+      "text": "\"Kendi Gök Kubbemiz\" adlı şiir kitabı kimindir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tevfik Fikret"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahmet Haşim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yahya Kemal Beyatlı"
+        },
+        {
+          "marker": "spades",
+          "text": "Ziya Gökalp"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-45",
+      "text": "\"Keşanlı Ali Destanı\" oyununun yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Turgut Özakman"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Necati Cumalı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Orhan Asena"
+        },
+        {
+          "marker": "spades",
+          "text": "Haldun Taner"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-46",
+      "text": "\"Hababam Sınıfı\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Aziz Nesin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rıfat Ilgaz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sait Faik Abasıyanık"
+        },
+        {
+          "marker": "spades",
+          "text": "Orhan Kemal"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-47",
+      "text": "\"Hüsn ü Aşk\" mesnevisinin şairi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nedim"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bâkî"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fuzuli"
+        },
+        {
+          "marker": "spades",
+          "text": "Şeyh Galip"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-48",
+      "text": "Kanuni Sultan Süleyman şiirlerinde hangi mahlası kullanmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nedim"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bâkî"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fuzulî"
+        },
+        {
+          "marker": "spades",
+          "text": "Muhibbî"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-49",
+      "text": "\"Mesnevi\" adlı eser kimindir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ahmet Yesevi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Âşık Veysel"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mevlânâ"
+        },
+        {
+          "marker": "spades",
+          "text": "Hacı Bektaş Veli"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-50",
+      "text": "\"Kutadgu Bilig\" adlı eserin yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yunus Emre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yusuf Has Hacib"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fuzuli"
+        },
+        {
+          "marker": "spades",
+          "text": "Ali Şir Nevai"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-51",
+      "text": "\"Divanü Lügati't-Türk\" sözlüğünü kim yazmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kaşgarlı Mahmud"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şeyhî"
+        },
+        {
+          "marker": "clubs",
+          "text": "Âşık Paşa"
+        },
+        {
+          "marker": "spades",
+          "text": "Ahmet Yesevi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-52",
+      "text": "\"Seyahatname\" adlı eserin yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Katip Çelebi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Evliya Çelebi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Naima"
+        },
+        {
+          "marker": "spades",
+          "text": "Piri Reis"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-53",
+      "text": "\"Heidi\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Astrid Lindgren"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Johanna Spyri"
+        },
+        {
+          "marker": "clubs",
+          "text": "Enid Blyton"
+        },
+        {
+          "marker": "spades",
+          "text": "Selma Lagerlöf"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-54",
+      "text": "\"Pinokyo\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Italo Calvino"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hans Christian Andersen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gianni Rodari"
+        },
+        {
+          "marker": "spades",
+          "text": "Carlo Collodi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-55",
+      "text": "\"Gulliver'in Gezileri\" kitabının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Jonathan Swift"
+        },
+        {
+          "marker": "diamonds",
+          "text": "H. G. Wells"
+        },
+        {
+          "marker": "clubs",
+          "text": "Daniel Defoe"
+        },
+        {
+          "marker": "spades",
+          "text": "Charles Dickens"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-56",
+      "text": "\"Don Kişot\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Miguel de Cervantes"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Federico García Lorca"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lope de Vega"
+        },
+        {
+          "marker": "spades",
+          "text": "Pedro Calderón"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-57",
+      "text": "\"Savaş ve Barış\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lev Tolstoy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nikolay Gogol"
+        },
+        {
+          "marker": "clubs",
+          "text": "Anton Çehov"
+        },
+        {
+          "marker": "spades",
+          "text": "Ivan Turgenyev"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-58",
+      "text": "\"Yüzyıllık Yalnızlık\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mario Vargas Llosa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Julio Cortázar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pablo Neruda"
+        },
+        {
+          "marker": "spades",
+          "text": "Gabriel García Márquez"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-59",
+      "text": "\"Dava\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Thomas Mann"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Stefan Zweig"
+        },
+        {
+          "marker": "clubs",
+          "text": "Franz Kafka"
+        },
+        {
+          "marker": "spades",
+          "text": "Hermann Hesse"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-60",
+      "text": "\"1984\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "George Orwell"
+        },
+        {
+          "marker": "diamonds",
+          "text": "H. G. Wells"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ray Bradbury"
+        },
+        {
+          "marker": "spades",
+          "text": "Aldous Huxley"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-61",
+      "text": "\"Madame Bovary\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Guy de Maupassant"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gustave Flaubert"
+        },
+        {
+          "marker": "clubs",
+          "text": "Honoré de Balzac"
+        },
+        {
+          "marker": "spades",
+          "text": "Stendhal"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-62",
+      "text": "\"İlahi Komedya\" adlı eserin yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Machiavelli"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Boccaccio"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dante Alighieri"
+        },
+        {
+          "marker": "spades",
+          "text": "Petrarca"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-63",
+      "text": "\"Denizler Altında Yirmi Bin Fersah\" kimin eseridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Victor Hugo"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jules Verne"
+        },
+        {
+          "marker": "clubs",
+          "text": "Alexandre Dumas"
+        },
+        {
+          "marker": "spades",
+          "text": "Honoré de Balzac"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-64",
+      "text": "\"Sherlock Holmes\" kahramanını kim yaratmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Edgar Allan Poe"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Arthur Conan Doyle"
+        },
+        {
+          "marker": "clubs",
+          "text": "Charles Dickens"
+        },
+        {
+          "marker": "spades",
+          "text": "Agatha Christie"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-65",
+      "text": "\"Gurur ve Önyargı\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "George Eliot"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Charlotte Brontë"
+        },
+        {
+          "marker": "clubs",
+          "text": "Emily Brontë"
+        },
+        {
+          "marker": "spades",
+          "text": "Jane Austen"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-66",
+      "text": "\"Yabancı\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marcel Proust"
+        },
+        {
+          "marker": "diamonds",
+          "text": "André Gide"
+        },
+        {
+          "marker": "clubs",
+          "text": "Albert Camus"
+        },
+        {
+          "marker": "spades",
+          "text": "Jean-Paul Sartre"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-67",
+      "text": "\"Ölü Canlar\" romanının yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mihail Lermontov"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nikolay Gogol"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aleksandr Puşkin"
+        },
+        {
+          "marker": "spades",
+          "text": "Ivan Turgenyev"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-68",
+      "text": "Beyit kaç dizeden oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Üç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dört"
+        },
+        {
+          "marker": "spades",
+          "text": "İki"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-69",
+      "text": "Sone adlı şiir biçimi kaç dizeden oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "14"
+        },
+        {
+          "marker": "diamonds",
+          "text": "10"
+        },
+        {
+          "marker": "clubs",
+          "text": "12"
+        },
+        {
+          "marker": "spades",
+          "text": "16"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-70",
+      "text": "Haiku adlı kısa şiir türü hangi ülkeden gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hindistan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Japonya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kore"
+        },
+        {
+          "marker": "spades",
+          "text": "Çin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-71",
+      "text": "Divan şairinin şiirlerinde kullandığı takma ada ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Matla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mahlas"
+        },
+        {
+          "marker": "clubs",
+          "text": "Künye"
+        },
+        {
+          "marker": "spades",
+          "text": "Redif"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-72",
+      "text": "Acıklı sonla biten, kahramanın yıkımını anlatan oyun türü hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fars"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Trajedi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vodvil"
+        },
+        {
+          "marker": "spades",
+          "text": "Komedi"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-73",
+      "text": "Hayvanların konuşturulduğu, ders veren kısa anlatı türü hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Destan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fabl"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ağıt"
+        },
+        {
+          "marker": "spades",
+          "text": "Efsane"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-74",
+      "text": "Ölen birinin ardından söylenen halk şiirine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ninni"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mani"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ağıt"
+        },
+        {
+          "marker": "spades",
+          "text": "Türkü"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-75",
+      "text": "Tek dörtlükten oluşan yedi heceli halk şiiri hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Semai"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Koşma"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mani"
+        },
+        {
+          "marker": "spades",
+          "text": "Destan"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-76",
+      "text": "Karagöz'le birlikte oyunun iki baş kişisinden diğeri kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Köroğlu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nasreddin Hoca"
+        },
+        {
+          "marker": "clubs",
+          "text": "Keloğlan"
+        },
+        {
+          "marker": "spades",
+          "text": "Hacivat"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-77",
+      "text": "\"Manas Destanı\" hangi Türk topluluğuna aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Türkmenler"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Özbekler"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kazaklar"
+        },
+        {
+          "marker": "spades",
+          "text": "Kırgızlar"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-78",
+      "text": "Hangisi kalın ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "u"
+        },
+        {
+          "marker": "diamonds",
+          "text": "e"
+        },
+        {
+          "marker": "clubs",
+          "text": "i"
+        },
+        {
+          "marker": "spades",
+          "text": "ö"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-79",
+      "text": "Hangisi yuvarlak ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "ı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "a"
+        },
+        {
+          "marker": "clubs",
+          "text": "e"
+        },
+        {
+          "marker": "spades",
+          "text": "ö"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-80",
+      "text": "Hangisi sert ünsüzdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "t"
+        },
+        {
+          "marker": "diamonds",
+          "text": "b"
+        },
+        {
+          "marker": "clubs",
+          "text": "d"
+        },
+        {
+          "marker": "spades",
+          "text": "g"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-81",
+      "text": "Türkçe sözcüklerin başında hangi harf bulunmaz?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "ö"
+        },
+        {
+          "marker": "diamonds",
+          "text": "ğ"
+        },
+        {
+          "marker": "clubs",
+          "text": "ç"
+        },
+        {
+          "marker": "spades",
+          "text": "ş"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-82",
+      "text": "Türk alfabesinin son harfi hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Y"
+        },
+        {
+          "marker": "clubs",
+          "text": "V"
+        },
+        {
+          "marker": "spades",
+          "text": "Z"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-83",
+      "text": "Türk alfabesinde Ç harfinden hemen sonra hangi harf gelir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "D"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ğ"
+        },
+        {
+          "marker": "clubs",
+          "text": "F"
+        },
+        {
+          "marker": "spades",
+          "text": "E"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-84",
+      "text": "Hangisi Türk alfabesinde bulunmaz?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Z"
+        },
+        {
+          "marker": "diamonds",
+          "text": "V"
+        },
+        {
+          "marker": "clubs",
+          "text": "Y"
+        },
+        {
+          "marker": "spades",
+          "text": "W"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-85",
+      "text": "Hareket, oluş ve durum bildiren sözcüklere ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sıfat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fiil"
+        },
+        {
+          "marker": "clubs",
+          "text": "İsim"
+        },
+        {
+          "marker": "spades",
+          "text": "Zarf"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ed-86",
+      "text": "\"Ve, ama, fakat\" hangi sözcük türündedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zamir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ünlem"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bağlaç"
+        },
+        {
+          "marker": "spades",
+          "text": "Sıfat"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-87",
+      "text": "\"Eyvah, of, aman\" hangi sözcük türündedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zarf"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Edat"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sıfat"
+        },
+        {
+          "marker": "spades",
+          "text": "Ünlem"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ed-88",
+      "text": "Cümlede işi yapan ögeye ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Özne"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yüklem"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tümleç"
+        },
+        {
+          "marker": "spades",
+          "text": "Nesne"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ed-89",
+      "text": "Yazılışı ve okunuşu aynı, anlamı farklı sözcüklere ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yansıma"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Eş anlamlı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sesteş"
+        },
+        {
+          "marker": "spades",
+          "text": "Karşıt anlamlı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ed-90",
+      "text": "Özel adlara gelen ekler hangi işaretle ayrılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kesme işareti"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tırnak işareti"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kısa çizgi"
+        },
+        {
+          "marker": "spades",
+          "text": "Ünlem işareti"
+        }
+      ],
+      "correct": "hearts"
     }
   ]
 }
