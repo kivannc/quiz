@@ -1013,4 +1013,33 @@ public sealed class RoomTests
 
         Assert.Empty(first.Intersect(second));
     }
+
+    [Fact]
+    public void A_seat_is_told_what_it_answered_and_only_while_the_question_is_open()
+    {
+        var room = NewRoom();
+        room.Join("Ada", "c1");
+        room.Join("Bob", "c2");
+        Assert.True(room.HasSeat("c1"));
+        Assert.False(room.HasSeat("nobody"));
+        Assert.Null(room.AnswerOf("c1"));   // the lobby asks nothing
+
+        room.Start();
+        Assert.Null(room.AnswerOf("c1"));
+        Assert.True(room.Answer("c1", Marker.Clubs));
+        Assert.Equal(Marker.Clubs, room.AnswerOf("c1"));
+        Assert.Null(room.AnswerOf("c2"));
+        Assert.Null(room.AnswerOf("nobody"));
+
+        // The seat moves to another connection and takes its answer with it.
+        Assert.Equal(JoinResult.Rejoined, room.Join("Ada", "c1-new"));
+        Assert.False(room.HasSeat("c1"));
+        Assert.Null(room.AnswerOf("c1"));
+        Assert.Equal(Marker.Clubs, room.AnswerOf("c1-new"));
+
+        room.CloseQuestion();
+        Assert.Null(room.AnswerOf("c1-new"));
+        room.Advance();
+        Assert.Null(room.AnswerOf("c1-new"));   // a new question, nothing answered yet
+    }
 }

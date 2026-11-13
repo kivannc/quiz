@@ -1665,4 +1665,54 @@ public sealed class GameHubTests : IDisposable
         Assert.Equal("/", response.Headers.Location?.OriginalString);
         Assert.Equal(System.Net.HttpStatusCode.NotFound, (await client.GetAsync("/host.js")).StatusCode);
     }
+
+    /* ---------- a phone that doubts its connection ---------- */
+
+    [Fact]
+    public async Task A_phone_that_asks_is_told_whether_it_is_still_in_its_seat_and_what_the_room_is_doing()
+    {
+        var (host, _, phone, code) = await RoomWithAQuestionOpen();
+        var questions = new Inbox<JsonElement>(phone, "QuestionStarted");
+        var answered = new Inbox<string>(phone, "Answered");
+
+        // Alive at all: an answer, and nothing else — nothing is sent because of it.
+        await phone.InvokeAsync("Ping");
+        await Barrier(phone);
+        Assert.Equal(0, questions.Total);
+
+        // In its seat: true, and the question again, to this phone only.
+        Assert.True(await phone.InvokeAsync<bool>("StillHere", code));
+        Assert.Equal(0, (await questions.Next()).GetProperty("index").GetInt32());
+        await Barrier(phone);
+        Assert.Equal(0, answered.Total);
+
+        // Once it has answered, asking again also says so.
+        Assert.True(await phone.InvokeAsync<bool>("Answer", code, "clubs"));
+        Assert.True(await phone.InvokeAsync<bool>("StillHere", code));
+        Assert.Equal("clubs", await answered.Next());
+
+        // Not for a room it is not in, not for one that does not exist, and not for a caller with no seat.
+        Assert.False(await phone.InvokeAsync<bool>("StillHere", "0000"));
+        Assert.False(await host.InvokeAsync<bool>("StillHere", code));
+        var stranger = await Connect(_factoryOf[host]);
+        Assert.False(await stranger.InvokeAsync<bool>("StillHere", code));
+    }
+
+    [Fact]
+    public async Task A_seat_that_moved_to_another_connection_keeps_its_answer_and_the_old_one_is_no_longer_there()
+    {
+        var (host, _, phone, code) = await RoomWithAQuestionOpen();
+        Assert.True(await phone.InvokeAsync<bool>("Answer", code, "spades"));
+
+        // A new tab: nothing remembered, the same name. It is told the answer is already in.
+        var tab = await Connect(_factoryOf[host]);
+        var answered = new Inbox<string>(tab, "Answered");
+        Assert.Equal("rejoined", await tab.InvokeAsync<string>("Join", code, "Ada"));
+        Assert.Equal("spades", await answered.Next());
+        Assert.False(await tab.InvokeAsync<bool>("Answer", code, "clubs"));
+
+        // The connection that lost the seat is still in the room's group, and is told the truth.
+        Assert.False(await phone.InvokeAsync<bool>("StillHere", code));
+        Assert.True(await tab.InvokeAsync<bool>("StillHere", code));
+    }
 }

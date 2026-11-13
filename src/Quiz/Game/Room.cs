@@ -337,6 +337,28 @@ public sealed class Room
         }
     }
 
+    /// <summary>Whether this connection holds a seat here right now. A seat taken over by another connection is not held.</summary>
+    public bool HasSeat(string connectionId)
+    {
+        lock (_gate) return _seatByConnection.ContainsKey(connectionId);
+    }
+
+    /// <summary>
+    /// The marker this connection's seat has answered the open question with, or null: no question is
+    /// open, the connection has no seat, or the seat has not answered. Read-only. It is what lets a
+    /// phone that lost track — a reload in a new tab, a tap whose acknowledgement never arrived — be
+    /// told that its answer is in, rather than offering buzzers the room would refuse.
+    /// </summary>
+    public Marker? AnswerOf(string connectionId)
+    {
+        lock (_gate)
+        {
+            if (_phase != RoomPhase.Question) return null;
+            if (!_seatByConnection.TryGetValue(connectionId, out var seat)) return null;
+            return _answers.TryGetValue(seat, out var given) ? given.Marker : null;
+        }
+    }
+
     /// <summary>
     /// Stops the question's clock: the limit stops running down, answers are refused, and the time spent
     /// paused never counts against the question. Refused (false) unless a question is open and running.

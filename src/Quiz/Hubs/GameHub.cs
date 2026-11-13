@@ -237,6 +237,33 @@ public sealed class GameHub(
         return code;
     }
 
+    /// <summary>
+    /// Answers, and does nothing else. A page asks this every few seconds while it has a part in a
+    /// room, because an answer is the only proof a connection is alive: a dead one never says so,
+    /// and a page that waited to be told would go on showing a question the room left long ago.
+    /// </summary>
+    public Task Ping() => Task.CompletedTask;
+
+    /// <summary>
+    /// A phone asking whether it is still where it thinks it is: seated in <paramref name="code"/>,
+    /// on this very connection. If so it is sent the room as it stands, to that connection only,
+    /// and the answer is true. It is asked whenever a phone has reason to doubt — its page was in
+    /// the background, the network changed — and doubles as the question "is this connection alive
+    /// at all": no answer within a few seconds is the phone's cue to start a new one.
+    ///
+    /// Nothing is counted against it and nothing is given away: it only ever speaks about the
+    /// caller's own seat, so a code that is wrong, or a room the caller is not in, reads as false.
+    /// </summary>
+    public async Task<bool> StillHere(string code)
+    {
+        if (connections.Playing(Context.ConnectionId) != code || rooms.Find(code) is not { } room) return false;
+        // The room's own word on it, not only the ledger's: a seat taken over by another tab has
+        // left this connection in the room's group and out of its seat.
+        if (!room.HasSeat(Context.ConnectionId)) return false;
+        await Resync(room);
+        return true;
+    }
+
     /// <summary>Seats a player. Returns the <see cref="JoinResult"/> (camelCase on the wire); a refused join (RoomFull, RoundInProgress) is a result, not an error.</summary>
     public async Task<JoinResult> Join(string code, string name)
     {
@@ -585,6 +612,10 @@ public sealed class GameHub(
         else if (room.Phase == RoomPhase.Question && room.CurrentQuestion is { } question)
         {
             await Clients.Caller.SendAsync("QuestionStarted", question);
+            // What this seat has already answered, if it has: the phone may not know. A new tab has
+            // no memory of the tap, and a tap whose acknowledgement was lost with the connection was
+            // taken all the same — either way four live buzzers would be an offer the room refuses.
+            if (room.AnswerOf(Context.ConnectionId) is { } given) await Clients.Caller.SendAsync("Answered", given);
             // Its buzzers would otherwise look live while the room is refusing every tap.
             if (room.Paused) await Clients.Caller.SendAsync("Paused", true);
         }

@@ -260,8 +260,11 @@ function revealRead() {
  * question or the reveal, and that starts these timers afresh.
  */
 function say(method, round, index) {
-  conn.invoke(method, state.room, round, index).catch((error) => {
+  ask(method, state.room, round, index).catch((error) => {
     console.error(`the room did not take ${method}`, error);
+    // Not refused: never heard. The connection is dead and has not said so, and a television that
+    // waited for it to would hold the question open for as long as that took.
+    if (error instanceof Unanswered) giveUpOnConnection();
   });
 }
 
@@ -278,6 +281,48 @@ const conn = new signalR.HubConnectionBuilder()
   // console to read it in.
   .configureLogging(signalR.LogLevel.Warning)
   .build();
+
+/*
+ * How long the server's silence is believed: twelve seconds, against a ping every five. A television
+ * whose connection has died without a word is the worst case in the house — it is the screen that
+ * paces the round, so the whole room would sit in front of a question that cannot close — and the
+ * default patience was thirty.
+ */
+conn.serverTimeoutInMilliseconds = 12_000;
+conn.keepAliveIntervalInMilliseconds = 5_000;
+
+/* How long a call may go unanswered before the connection is taken for dead. */
+const ANSWER_WITHIN_MS = 4_000;
+/* The same for the calls that exist only to find that out, which have nothing to wait for. */
+const PROBE_WITHIN_MS = 2_500;
+/* How often this screen asks whether its connection is alive while it is in a room. */
+const HEARTBEAT_MS = 4_000;
+
+class Unanswered extends Error {}
+
+/** A hub call that is given up on: a dead connection answers nothing, and never says so. */
+function ask(method, ...args) {
+  return within(ANSWER_WITHIN_MS, method, ...args);
+}
+
+function within(ms, method, ...args) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Unanswered(method)), ms);
+    conn.invoke(method, ...args).then(
+      (value) => { clearTimeout(timer); resolve(value); },
+      (error) => { clearTimeout(timer); reject(error); },
+    );
+  });
+}
+
+/*
+ * Throws a connection that has gone silent away. Closing it is all there is to do: onclose puts the
+ * pairing screen up and starts another, which is what any lost connection ends in on this page.
+ */
+function giveUpOnConnection() {
+  conn.stop().catch(() => {});
+}
+
 
 conn.on('Paired', () => {
   // A phone has this screen. The code it typed is spent, so stop showing one and wait for the room.
@@ -331,7 +376,11 @@ conn.on('RoomState', (players, phase) => {
 
 conn.on('AnswerCount', (answered, total) => {
   // Both numbers come from the server: total counts seated players, answered the ones in.
-  state.answered = answered;
+  // Never backwards within a question. Each answer is announced with the count as it stood when
+  // that answer was taken, and two taps landing together can have their announcements arrive the
+  // wrong way round: "3 of 3" and then "2 of 3". Taken at its word, the late one would call off
+  // the beat that closes a question everybody has answered, and the room would sit out the limit.
+  state.answered = Math.max(state.answered, answered);
   state.seated = total;
   drawTopbar();
   // Nobody is left to wait for, so there is nothing for the rest of the limit to buy: close after a
@@ -458,6 +507,50 @@ conn.onclose(() => {
   show('pairing');
   connect();
 });
+
+/* ---------- doubting the connection ---------- */
+
+/*
+ * The moment to doubt the connection: the page has just come back into view, or the network has
+ * just changed. The room is asked something that changes nothing — the time is up on a question
+ * that does not exist — and its answer says where this screen stands: silence means the connection
+ * is dead, a refusal means this screen is not the room's television any more (another one was
+ * claimed, or the room is gone) while it sat here still painting it.
+ */
+async function doubt() {
+  if (document.visibilityState !== 'visible' || !state.room) return;
+  if (conn.state !== signalR.HubConnectionState.Connected) return;
+  const room = state.room;
+  try {
+    await within(PROBE_WITHIN_MS, 'TimeUp', room, -1, -1);
+  } catch (error) {
+    if (error instanceof Unanswered) {
+      giveUpOnConnection();
+    } else if (state.room === room && /forbidden|no-such-room/.test(String(error?.message ?? ''))) {
+      stopClock();
+      state.wasIn = room;
+      state.room = null;
+      show('pairing');
+    }
+  }
+}
+document.addEventListener('visibilitychange', doubt);
+window.addEventListener('online', doubt);
+
+/*
+ * And between those moments, a heartbeat, for as long as this screen is in a room. Nothing prompts
+ * a doubt on a television that is simply left on, and a connection can die under it all the same;
+ * the client's own patience is twelve seconds and is only checked now and then. This is the screen
+ * the whole room is waiting on, so it asks outright every few seconds.
+ */
+setInterval(async () => {
+  if (!state.room || conn.state !== signalR.HubConnectionState.Connected) return;
+  try {
+    await within(PROBE_WITHIN_MS, 'Ping');
+  } catch (error) {
+    if (error instanceof Unanswered) giveUpOnConnection();
+  }
+}, HEARTBEAT_MS);
 
 /* ---------- pairing ---------- */
 
