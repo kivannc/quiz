@@ -709,6 +709,20 @@ let retry = 0;
 let retried = 0;
 
 async function rejoin() {
+  // Until the seat is back a tap has nowhere to go: the connection may be up again, but the room
+  // does not know whose it is yet and would refuse the answer. Taps made meanwhile are kept.
+  returning = true;
+  try {
+    await takeSeatBack();
+  } finally {
+    returning = false;
+  }
+  resend();
+}
+
+let returning = false;
+
+async function takeSeatBack() {
   clearTimeout(retry);
   retry = 0;
   if (displaced || !state.code || !state.name) return;
@@ -738,7 +752,6 @@ async function rejoin() {
     return;
   }
   if (state.phase !== 'join' && isHost()) await resumeHost();
-  resend();
 }
 
 /*
@@ -1087,10 +1100,16 @@ async function answer(marker) {
   // only locks once the room says it took the answer. A host tab the browser has put to sleep can
   // leave a question open past its limit, and the room refuses answers that arrive after it;
   // telling that player their answer is in would be a lie the scoreboard then contradicts.
-  state.pending = marker;
-  state.error = '';
-  render();
   const asked = { round: state.round, index: state.index, marker };
+  state.error = '';
+  // No line, or no seat on it yet: the tap is kept and goes out the moment the seat is back.
+  if (returning || conn.state !== signalR.HubConnectionState.Connected) {
+    wanted = asked;
+    render();
+    return;
+  }
+  state.pending = marker;
+  render();
   try {
     if (await ask('Answer', state.code, marker)) {
       state.chosen = marker;

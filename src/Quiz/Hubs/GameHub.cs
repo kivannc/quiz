@@ -289,6 +289,9 @@ public sealed class GameHub(
             await Clients.Caller.SendAsync("Seated", seat.Name, seat.Score);
             await Resync(room);
             await SendRoomState(room);
+            // Somebody is sitting in this seat again, so an open question is waiting for one more
+            // answer than it was a moment ago — which calls off a beat that had started without them.
+            if (room.Phase == RoomPhase.Question) await SendAnswerCount(room);
         }
         return result;
     }
@@ -328,7 +331,7 @@ public sealed class GameHub(
             // reserved to mean "for context only" below.
             var left = Math.Max(1, (int)(room.Remaining ?? TimeSpan.Zero).TotalSeconds);
             await target.SendAsync("QuestionStarted", question with { LimitSeconds = left });
-            await target.SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
+            await target.SendAsync("AnswerCount", room.AnswerCount, room.Present);
             // Only when it is: a screen starts out running, and what it was sent above is the time that
             // is left, which a paused room has stopped spending. Without this it would spend it.
             if (room.Paused) await target.SendAsync("Paused", true);
@@ -540,8 +543,19 @@ public sealed class GameHub(
         // A code nobody claimed would otherwise be claimable for a connection that no longer exists. First,
         // so that a connection no longer reading as connected has certainly lost its code too.
         pairings.Forget(Context.ConnectionId);
+        // Read before the ledger forgets it: the room this connection was sitting in, if any.
+        var seatedIn = connections.Playing(Context.ConnectionId);
         // The one thing about a gone connection that a room has to act on: it was the television.
         if (connections.Forget(Context.ConnectionId) is { } blinded) await DisplayGone(blinded);
+        // And the other: it was a player. The seat is kept, but nobody is in it, so the open question
+        // stops waiting for it — otherwise one phone that went home makes every question left in the
+        // evening run to its limit. The television is told the new count, which is what lets it close
+        // a question the players still in the room have all answered.
+        if (seatedIn is not null && rooms.Find(seatedIn) is { } room && room.Leave(Context.ConnectionId)
+            && room.Phase == RoomPhase.Question)
+        {
+            await SendAnswerCount(room);
+        }
         // If this was a television, the phones waiting in front of it are waiting for a connection
         // that no longer exists: it comes back as a new one, showing a new code, and a room opened
         // there would never reach them. They are told, and go back to "scan it again". After the
@@ -687,7 +701,7 @@ public sealed class GameHub(
     }
 
     private Task SendAnswerCount(Room room) =>
-        Clients.Group(HostGroup(room.Code)).SendAsync("AnswerCount", room.AnswerCount, room.Players.Count);
+        Clients.Group(HostGroup(room.Code)).SendAsync("AnswerCount", room.AnswerCount, room.Present);
 
     private Task SendRoomState(Room room) =>
         Clients.Group(HostGroup(room.Code)).SendAsync("RoomState", room.Players, PhaseName(room.Phase));

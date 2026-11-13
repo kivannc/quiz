@@ -1715,4 +1715,60 @@ public sealed class GameHubTests : IDisposable
         Assert.False(await phone.InvokeAsync<bool>("StillHere", code));
         Assert.True(await tab.InvokeAsync<bool>("StillHere", code));
     }
+
+    /* ---------- a player who has gone ---------- */
+
+    [Fact]
+    public async Task A_question_stops_waiting_for_a_player_whose_phone_has_gone_and_waits_again_when_it_is_back()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var screen = await ClaimAScreen(host);
+        var counts = AnswerCount(screen);
+        var code = await host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        var ada = await Connect(factory);
+        var bob = await Connect(factory);
+        await ada.InvokeAsync<string>("Join", code, "Ada");
+        await bob.InvokeAsync<string>("Join", code, "Bob");
+        await host.InvokeAsync("StartRound", code, HostKey);
+        Assert.Equal((0, 2), await counts.Next());
+
+        Assert.True(await ada.InvokeAsync<bool>("Answer", code, "clubs"));
+        Assert.Equal((1, 2), await counts.Next());
+
+        // Bob's phone goes. The television hears that the question is waiting on one player, and
+        // that she has answered — which is what lets it close the question instead of running it out.
+        await bob.DisposeAsync();
+        Assert.Equal((1, 1), await counts.Next());
+
+        // He comes back before it closes, on a new connection: the question waits for him again.
+        var back = await Connect(factory);
+        Assert.Equal("rejoined", await back.InvokeAsync<string>("Join", code, "Bob"));
+        Assert.Equal((1, 2), await counts.Next());
+        Assert.True(await back.InvokeAsync<bool>("Answer", code, "hearts"));
+        Assert.Equal((2, 2), await counts.Next());
+    }
+
+    [Fact]
+    public async Task A_player_who_goes_in_the_lobby_or_the_reveal_tells_the_television_nothing_about_answers()
+    {
+        var factory = Factory();
+        var host = await Connect(factory);
+        var screen = await ClaimAScreen(host);
+        var counts = AnswerCount(screen);
+        var code = await host.InvokeAsync<string>("CreateRoom", HostKey, "genel-kultur");
+        var ada = await Connect(factory);
+        var bob = await Connect(factory);
+        await ada.InvokeAsync<string>("Join", code, "Ada");
+        await bob.InvokeAsync<string>("Join", code, "Bob");
+
+        // In the lobby nothing is being counted.
+        await bob.DisposeAsync();
+        await Barrier(screen);
+        Assert.Equal(0, counts.Total);
+
+        // The round starts for whoever is here: one player, not two.
+        await host.InvokeAsync("StartRound", code, HostKey);
+        Assert.Equal((0, 1), await counts.Next());
+    }
 }
