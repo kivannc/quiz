@@ -58,7 +58,12 @@ builder.Services.AddSingleton<PairingStore>();
 builder.Services.AddHostedService<IdleRoomSweeper>();
 
 // Markers and phases travel as camelCase words ("hearts", "lobby"), matching the question files.
-builder.Services.AddSignalR().AddJsonProtocol(o =>
+// A phone's connection dies without a word all the time: the screen locks, the radio sleeps, the
+// network changes from Wi-Fi to mobile. Nothing closes; the page goes on believing it is connected
+// and shows the last thing it was told, while the room has moved on. The only thing that tells a
+// client so is the server's silence, and by default it takes thirty seconds of it — three questions'
+// worth — to be believed. A ping every five seconds lets the pages give up after twelve.
+builder.Services.AddSignalR(o => o.KeepAliveInterval = TimeSpan.FromSeconds(5)).AddJsonProtocol(o =>
     o.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
 builder.Services.Configure<ForwardedHeadersOptions>(o =>

@@ -202,6 +202,122 @@ const conn = new signalR.HubConnectionBuilder()
   .configureLogging(signalR.LogLevel.Warning)
   .build();
 
+/*
+ * How long the server's silence is believed. A phone's connection dies without a word all the time
+ * — the screen locks, the radio sleeps, Wi-Fi hands over to mobile — and nothing closes: the page
+ * goes on showing the last thing it was told while the room moves on. The server pings every five
+ * seconds, so twelve of silence means the line is dead; the default was thirty, which is three
+ * questions sat through in front of buzzers that never came.
+ */
+conn.serverTimeoutInMilliseconds = 12_000;
+conn.keepAliveIntervalInMilliseconds = 5_000;
+
+/* How long a call may go unanswered before the connection is taken for dead. */
+const ANSWER_WITHIN_MS = 4_000;
+/* The same for the calls that exist only to find that out, which have nothing to wait for. */
+const PROBE_WITHIN_MS = 2_500;
+/* How often a page with a part in a room asks whether its connection is alive. */
+const HEARTBEAT_MS = 4_000;
+
+class Unanswered extends Error {}
+
+/** A hub call that is given up on: a dead connection answers nothing, and never says so. */
+function ask(method, ...args) {
+  return within(ANSWER_WITHIN_MS, method, ...args);
+}
+
+function within(ms, method, ...args) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Unanswered(method)), ms);
+    conn.invoke(method, ...args).then(
+      (value) => { clearTimeout(timer); resolve(value); },
+      (error) => { clearTimeout(timer); reject(error); },
+    );
+  });
+}
+
+/* A failure of the line rather than an answer from the room. */
+function lineFailed(error) {
+  return error instanceof Unanswered || conn.state !== signalR.HubConnectionState.Connected;
+}
+
+/*
+ * Throws the connection away and starts another: the cure for one that has gone silent. What comes
+ * back is a new connection, so the page then takes its place back the way it does after any drop.
+ */
+let restarting = null;
+
+function restart() {
+  restarting ??= (async () => {
+    try {
+      await conn.stop();
+    } catch { /* it was dead anyway */ }
+    try {
+      await conn.start();
+      state.connection = '';
+      render();
+      if (arrived) await comeBack();
+      else await arrive();
+    } catch {
+      // Unreachable for now. onclose has said so; the next look at the page, or the network
+      // coming back, tries again.
+    } finally {
+      restarting = null;
+    }
+  })();
+  return restarting;
+}
+
+/*
+ * The moment to doubt the connection: the page has just come back into view, or the network has
+ * just changed. A connection that looks open may have died while nobody was looking, and the
+ * client would take up to twelve seconds to notice by itself — so the room is asked, and has a few
+ * seconds to answer. The same question brings back what the room is doing now, which a page that
+ * was frozen for a while has missed.
+ */
+let doubting = false;
+
+async function doubt() {
+  if (displaced || doubting || restarting || document.visibilityState !== 'visible') return;
+  if (conn.state === signalR.HubConnectionState.Disconnected) {
+    await revive();
+    return;
+  }
+  if (conn.state !== signalR.HubConnectionState.Connected) return;
+  // On the form with nothing at stake there is nothing to lose and nothing to ask about.
+  const seated = state.phase !== 'join' && state.code;
+  if (!seated && !state.screen) return;
+  doubting = true;
+  try {
+    const here = await within(PROBE_WITHIN_MS, 'StillHere', state.code ?? '');
+    // Alive, but the room does not have this connection in that seat: take it back by name.
+    if (seated && !here) await rejoin();
+    else if (seated) resend();
+  } catch (error) {
+    if (lineFailed(error)) await restart();
+  } finally {
+    doubting = false;
+  }
+}
+
+/*
+ * And between those moments, a heartbeat. With the phone in the hand and the page in front nothing
+ * prompts a doubt, and the connection can still die — a router restarting, Wi-Fi handing over to
+ * mobile without the browser saying "offline". The client's own patience is twelve seconds and it
+ * checks it only now and then; asking outright every few seconds finds a dead line in six or seven.
+ * Only while the page is in view and has something to lose: a seat, or a place in front of a television.
+ */
+setInterval(async () => {
+  if (displaced || doubting || restarting || document.visibilityState !== 'visible') return;
+  if (conn.state !== signalR.HubConnectionState.Connected) return;
+  if (!(state.phase !== 'join' && state.code) && !state.screen) return;
+  try {
+    await within(PROBE_WITHIN_MS, 'Ping');
+  } catch (error) {
+    if (error instanceof Unanswered) restart();
+  }
+}, HEARTBEAT_MS);
+
 conn.on('Seated', (name, score) => {
   state.name = name;
   state.score = score;
@@ -327,6 +443,21 @@ conn.on('SeatTaken', () => {
   state.error = '';
   state.notice = t('seatTaken');
   conn.stop();
+  render();
+});
+
+/*
+ * What this seat has already answered, said by the room as part of handing the question back. The
+ * phone may not know: a new tab remembers no tap, and a tap whose acknowledgement was lost with the
+ * connection was taken all the same. The buzzers lock on it, as if the tap had just been confirmed.
+ */
+conn.on('Answered', (marker) => {
+  if (state.phase !== 'question') return;
+  state.chosen = marker;
+  state.pending = null;
+  wanted = null;
+  state.error = '';
+  rememberTap(state.index, marker);
   render();
 });
 
@@ -482,8 +613,10 @@ async function revive() {
     // Still unreachable. The notice stays, and the next time the page is looked at tries again.
   }
 }
-document.addEventListener('visibilitychange', revive);
-window.addEventListener('online', revive);
+document.addEventListener('visibilitychange', doubt);
+window.addEventListener('online', doubt);
+// The network going is the surest sign of all that the connection needs looking at when it returns.
+window.addEventListener('offline', () => { if (!displaced && conn.state === signalR.HubConnectionState.Connected) restart(); });
 
 /*
  * The result and the total it would be worked out from both belong to one question, so they go
@@ -605,6 +738,23 @@ async function rejoin() {
     return;
   }
   if (state.phase !== 'join' && isHost()) await resumeHost();
+  resend();
+}
+
+/*
+ * A tap that could not be sent because the line failed under it. It is the player's answer, and
+ * the player has stopped looking at the phone: once the seat is back and the same question is
+ * still open, it is sent again. If the room had taken it after all, the seat coming back said so
+ * (Answered) and there is nothing left to send.
+ */
+let wanted = null;
+
+function resend() {
+  const tap = wanted;
+  wanted = null;
+  if (!tap || state.phase !== 'question' || state.paused || state.chosen || state.pending) return;
+  if (tap.round !== state.round || tap.index !== state.index) return;
+  answer(tap.marker);
 }
 
 /* ---------- at a television with no room on it yet ---------- */
@@ -746,7 +896,17 @@ async function resumeHost() {
  * needs no guard here. A room that has gone is the one failure worth acting on. */
 async function hostAction(method, ...more) {
   try {
-    await conn.invoke(method, state.code, state.hostKey, ...more);
+    try {
+      await ask(method, state.code, state.hostKey, ...more);
+    } catch (error) {
+      if (!lineFailed(error)) throw error;
+      // The press went nowhere: the line is dead. A new one is made and the press is sent once
+      // more — which is safe even if the first one did arrive, because every host action names
+      // what it wants (pause, not "toggle") and the room ignores one that no longer fits.
+      await (error instanceof Unanswered ? restart() : (restarting ?? Promise.resolve()));
+      if (!isHost()) return;
+      await ask(method, state.code, state.hostKey, ...more);
+    }
     state.hostError = '';
   } catch (error) {
     if (String(error?.message ?? '').includes('no-such-room')) {
@@ -930,17 +1090,26 @@ async function answer(marker) {
   state.pending = marker;
   state.error = '';
   render();
+  const asked = { round: state.round, index: state.index, marker };
   try {
-    if (await conn.invoke('Answer', state.code, marker)) {
+    if (await ask('Answer', state.code, marker)) {
       state.chosen = marker;
       rememberTap(state.index, marker);
     } else {
       state.error = t('answerRefused');
     }
   } catch (error) {
-    state.error = errorText(error);
+    if (lineFailed(error)) {
+      // Not refused: never heard. Kept, and sent again when the seat is back — which a silent
+      // connection needs help with, and a dropped one is already doing.
+      wanted = asked;
+      if (error instanceof Unanswered) restart();
+    } else {
+      state.error = errorText(error);
+    }
   } finally {
-    state.pending = null;
+    // Only if nothing newer has taken this question over in the meantime.
+    if (state.pending === marker && state.round === asked.round && state.index === asked.index) state.pending = null;
     render();
   }
 }
@@ -976,7 +1145,10 @@ function render() {
   el('play-status').textContent = state.connection || failure || statusText();
   el('play-status').classList.toggle('error', Boolean(!state.connection && failure));
 
-  const picked = state.chosen ?? state.pending;
+  // A tap waiting for the line to come back is still this player's tap: it stays lit, and the
+  // other three stay locked, until it has been sent or the question has gone.
+  const waiting = wanted && wanted.round === state.round && wanted.index === state.index ? wanted.marker : null;
+  const picked = state.chosen ?? state.pending ?? waiting;
   for (const buzzer of el('buzzers').querySelectorAll('.buzz')) {
     const marker = buzzer.dataset.marker;
     buzzer.setAttribute('aria-pressed', String(marker === picked));
@@ -1168,7 +1340,7 @@ function statusText() {
   if (state.paused) return t('paused');
   if (state.phase === 'question') {
     if (state.chosen) return t('answerSent');
-    if (state.pending) return t('answerSending');
+    if (state.pending || wanted) return t('answerSending');
     return t('pickYours');
   }
   if (state.phase === 'closed') return t('questionClosed');

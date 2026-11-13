@@ -63,6 +63,20 @@ belongs to one connection, so a second tab under the same name takes it and the 
 has fallen out of the room and shows a fresh screen code, saying which room it was in: the host's
 phone says the television has gone and offers a field for that code, and scanning it does the
 same — either puts the screen straight back, mid-question and all. Phones that lose the connection keep trying until it is back.
+
+The connection that matters most is the one that dies without saying so. A phone locks, its radio
+sleeps, Wi-Fi hands over to mobile: nothing closes, and the page goes on showing the last thing it
+was told while the room moves on. Left to the defaults that lasted over thirty seconds — a player
+looking at "wait for the round to start" through three questions. So the pages do not wait to be
+told. The server pings every five seconds and a page believes twelve of silence; every call is
+given four seconds to be answered; a page in view with a part in a room asks outright every four
+(`Ping`); and coming back into view, or the network changing, asks at once (`StillHere`), which
+also brings back what the room is doing now. A dead line is thrown away and a new one made, the
+seat is taken back by name, and the room says what that seat had already answered (`Answered`), so
+the buzzers lock on it rather than offering a second tap the room would refuse. A tap made as the
+line failed is kept and sent once the seat is back, if the same question is still open. The
+television does the same for itself, since a room waits on its clock: it finds a dead connection
+in about six seconds and shows a code again for the host to put it back.
 Both pages are plain HTML, CSS and ES modules with a TR / EN switch — no build step, no npm,
 no framework.
 
