@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "th-31",
+      "text": "İstiklal Marşı'nın söz yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mehmet Akif Ersoy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ziya Gökalp"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tevfik Fikret"
+        },
+        {
+          "marker": "spades",
+          "text": "Namık Kemal"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-32",
+      "text": "Türkiye Büyük Millet Meclisi hangi yıl açıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1919"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1923"
+        },
+        {
+          "marker": "clubs",
+          "text": "1921"
+        },
+        {
+          "marker": "spades",
+          "text": "1920"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-33",
+      "text": "Mohaç Meydan Muharebesi'ni kazanan padişah kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fatih Sultan Mehmet"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yavuz Sultan Selim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yıldırım Bayezid"
+        },
+        {
+          "marker": "spades",
+          "text": "Kanuni Sultan Süleyman"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-34",
+      "text": "Yeniçeri Ocağı'nı kaldıran padişah kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "I. Ahmed"
+        },
+        {
+          "marker": "diamonds",
+          "text": "II. Bayezid"
+        },
+        {
+          "marker": "clubs",
+          "text": "II. Mahmud"
+        },
+        {
+          "marker": "spades",
+          "text": "III. Selim"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-35",
+      "text": "Osmanlı'da Bursa'dan sonra başkent olan şehir hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Konya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Manisa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Amasya"
+        },
+        {
+          "marker": "spades",
+          "text": "Edirne"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-36",
+      "text": "Mimar Sinan'ın \"ustalık eserim\" dediği cami hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Selimiye"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sultanahmet"
+        },
+        {
+          "marker": "clubs",
+          "text": "Süleymaniye"
+        },
+        {
+          "marker": "spades",
+          "text": "Şehzade"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-37",
+      "text": "Evliya Çelebi'nin gezi notlarını topladığı eser hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Seyahatname"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Babürname"
+        },
+        {
+          "marker": "clubs",
+          "text": "Siyasetname"
+        },
+        {
+          "marker": "spades",
+          "text": "Gülistan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-38",
+      "text": "Bilge Kağan hangi Türk devletinin hükümdarıydı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Göktürk"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karahanlı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hun"
+        },
+        {
+          "marker": "spades",
+          "text": "Uygur"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-39",
+      "text": "Kutadgu Bilig'in yazarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yunus Emre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ahmet Yesevi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hacı Bektaş Veli"
+        },
+        {
+          "marker": "spades",
+          "text": "Yusuf Has Hacib"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-40",
+      "text": "Ankara Savaşı'nda Yıldırım Bayezid'i yenen hükümdar kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Attila"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Timur"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tuğrul Bey"
+        },
+        {
+          "marker": "spades",
+          "text": "Alparslan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-41",
+      "text": "Preveze Deniz Savaşı'nda Osmanlı donanmasını kim komuta etti?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Turgut Reis"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Piri Reis"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kemal Reis"
+        },
+        {
+          "marker": "spades",
+          "text": "Barbaros Hayreddin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-42",
+      "text": "Cumhuriyetimizin ikinci cumhurbaşkanı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Celal Bayar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İsmet İnönü"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cemal Gürsel"
+        },
+        {
+          "marker": "spades",
+          "text": "Fevzi Çakmak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-43",
+      "text": "Atatürk hangi şehirde doğdu?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İstanbul"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Manastır"
+        },
+        {
+          "marker": "clubs",
+          "text": "Selanik"
+        },
+        {
+          "marker": "spades",
+          "text": "Edirne"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-44",
+      "text": "Zafer Bayramı hangi tarihte kutlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "29 Ekim"
+        },
+        {
+          "marker": "diamonds",
+          "text": "23 Nisan"
+        },
+        {
+          "marker": "clubs",
+          "text": "19 Mayıs"
+        },
+        {
+          "marker": "spades",
+          "text": "30 Ağustos"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-45",
+      "text": "Mısır'ı Osmanlı topraklarına katan padişah kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "II. Bayezid"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kanuni Sultan Süleyman"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yavuz Sultan Selim"
+        },
+        {
+          "marker": "spades",
+          "text": "Fatih Sultan Mehmet"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-46",
+      "text": "Anıtkabir hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ankara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzmir"
+        },
+        {
+          "marker": "clubs",
+          "text": "İstanbul"
+        },
+        {
+          "marker": "spades",
+          "text": "Samsun"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-47",
+      "text": "Soyadı Kanunu hangi yıl çıkarıldı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1934"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1938"
+        },
+        {
+          "marker": "clubs",
+          "text": "1925"
+        },
+        {
+          "marker": "spades",
+          "text": "1928"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-48",
+      "text": "Amerika Birleşik Devletleri hangi yıl bağımsızlığını ilan etti?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1865"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1812"
+        },
+        {
+          "marker": "clubs",
+          "text": "1776"
+        },
+        {
+          "marker": "spades",
+          "text": "1620"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-49",
+      "text": "Titanik gemisi hangi yıl battı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "1898"
+        },
+        {
+          "marker": "diamonds",
+          "text": "1912"
+        },
+        {
+          "marker": "clubs",
+          "text": "1921"
+        },
+        {
+          "marker": "spades",
+          "text": "1905"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-50",
+      "text": "Rönesans hangi ülkede başladı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Almanya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fransa"
+        },
+        {
+          "marker": "spades",
+          "text": "İtalya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-51",
+      "text": "Avrupa'da matbaayı geliştiren Gutenberg hangi ülkeliydi?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Polonya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fransa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Almanya"
+        },
+        {
+          "marker": "spades",
+          "text": "İspanya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-52",
+      "text": "Napolyon hangi savaşta kesin yenilgiye uğradı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Trafalgar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Austerlitz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Borodino"
+        },
+        {
+          "marker": "spades",
+          "text": "Waterloo"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-53",
+      "text": "Cengiz Han hangi devleti kurdu?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Selçuklu Devleti"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hun İmparatorluğu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Safevi Devleti"
+        },
+        {
+          "marker": "spades",
+          "text": "Moğol İmparatorluğu"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-54",
+      "text": "Magna Carta hangi ülkede imzalandı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İtalya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fransa"
+        },
+        {
+          "marker": "spades",
+          "text": "İspanya"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-55",
+      "text": "Antik Yunan'da demokrasinin doğduğu şehir devleti hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sparta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Atina"
+        },
+        {
+          "marker": "clubs",
+          "text": "Teb"
+        },
+        {
+          "marker": "spades",
+          "text": "Korint"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-56",
+      "text": "Machu Picchu hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bolivya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Brezilya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Peru"
+        },
+        {
+          "marker": "spades",
+          "text": "Şili"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-57",
+      "text": "Vikingler hangi bölgenin denizcileridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Akdeniz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İskandinavya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Balkanlar"
+        },
+        {
+          "marker": "spades",
+          "text": "Kafkasya"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-58",
+      "text": "Tutankamon'un mezarını 1922'de bulan arkeolog kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Howard Carter"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Leonard Woolley"
+        },
+        {
+          "marker": "clubs",
+          "text": "Arthur Evans"
+        },
+        {
+          "marker": "spades",
+          "text": "Heinrich Schliemann"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-59",
+      "text": "Efes Antik Kenti hangi ilimizin sınırlarındadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İzmir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Muğla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aydın"
+        },
+        {
+          "marker": "spades",
+          "text": "Antalya"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-60",
+      "text": "Attila hangi devletin hükümdarıydı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Göktürk Devleti"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hun Devleti"
+        },
+        {
+          "marker": "clubs",
+          "text": "Roma İmparatorluğu"
+        },
+        {
+          "marker": "spades",
+          "text": "Kartaca"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-61",
+      "text": "Bugünkü Ayasofya'yı yaptıran Bizans imparatoru kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Theodosius"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Justinianus"
+        },
+        {
+          "marker": "clubs",
+          "text": "Herakleios"
+        },
+        {
+          "marker": "spades",
+          "text": "Konstantin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-62",
+      "text": "Sanayi Devrimi hangi ülkede başladı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İtalya"
+        },
+        {
+          "marker": "clubs",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "spades",
+          "text": "Almanya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-63",
+      "text": "Yunan mitolojisinde ölüler diyarının tanrısı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ares"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hades"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kronos"
+        },
+        {
+          "marker": "spades",
+          "text": "Hephaistos"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-64",
+      "text": "Yunan mitolojisinde şarap ve eğlence tanrısı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Poseidon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dionysos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pan"
+        },
+        {
+          "marker": "spades",
+          "text": "Apollon"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-65",
+      "text": "Tanrıların habercisi olan kanatlı sandaletli tanrı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hermes"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hephaistos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ares"
+        },
+        {
+          "marker": "spades",
+          "text": "Apollon"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-66",
+      "text": "Ölüler diyarının kapısını bekleyen üç başlı köpeğin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hydra"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sfenks"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kerberos"
+        },
+        {
+          "marker": "spades",
+          "text": "Harpi"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-67",
+      "text": "Yunan mitolojisinde Herakles hangi tanrının oğludur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Poseidon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Zeus"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hades"
+        },
+        {
+          "marker": "spades",
+          "text": "Apollon"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-68",
+      "text": "Odysseus yıllarca hangi adaya dönmeye çalıştı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rodos"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Girit"
+        },
+        {
+          "marker": "clubs",
+          "text": "İthaka"
+        },
+        {
+          "marker": "spades",
+          "text": "Sicilya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-69",
+      "text": "Odysseus'un sadık eşi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kassandra"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Helena"
+        },
+        {
+          "marker": "clubs",
+          "text": "Andromaka"
+        },
+        {
+          "marker": "spades",
+          "text": "Penelope"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-70",
+      "text": "Kanatlı beyaz at olarak bilinen yaratık hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kimera"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Grifon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kentaur"
+        },
+        {
+          "marker": "spades",
+          "text": "Pegasus"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-71",
+      "text": "Narkissos bir gölde neye âşık oldu?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir geyiğe"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bir çiçeğe"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bir su perisine"
+        },
+        {
+          "marker": "spades",
+          "text": "Kendi yansımasına"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-72",
+      "text": "Orpheus hangi çalgıyı çalardı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Flüt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Davul"
+        },
+        {
+          "marker": "spades",
+          "text": "Zurna"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-73",
+      "text": "Kral Midas'ın dokunduğu her şey neye dönüşürdü?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gümüş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Taş"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altın"
+        },
+        {
+          "marker": "spades",
+          "text": "Buz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-74",
+      "text": "Argonotlar Altın Post'u aramaya kimin önderliğinde çıktı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Theseus"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hektor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Perseus"
+        },
+        {
+          "marker": "spades",
+          "text": "Iason"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-75",
+      "text": "İnsanlara ateşi vermek için çalan Titan kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kronos"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Atlas"
+        },
+        {
+          "marker": "clubs",
+          "text": "Epimetheus"
+        },
+        {
+          "marker": "spades",
+          "text": "Prometheus"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-76",
+      "text": "Yunan mitolojisinde tarım ve bereket tanrıçası kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hera"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hestia"
+        },
+        {
+          "marker": "clubs",
+          "text": "Demeter"
+        },
+        {
+          "marker": "spades",
+          "text": "Athena"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-77",
+      "text": "Yunan mitolojisinde tanrıların demircisi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Apollon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hermes"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hephaistos"
+        },
+        {
+          "marker": "spades",
+          "text": "Dionysos"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-78",
+      "text": "Yunan mitolojisinde savaş tanrısı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hermes"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Apollon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ares"
+        },
+        {
+          "marker": "spades",
+          "text": "Poseidon"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-79",
+      "text": "Roma mitolojisinde tanrıların kralı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Jüpiter"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Plüton"
+        },
+        {
+          "marker": "clubs",
+          "text": "Vulkan"
+        },
+        {
+          "marker": "spades",
+          "text": "Neptün"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-80",
+      "text": "Roma mitolojisinde savaş tanrısı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mars"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Merkür"
+        },
+        {
+          "marker": "clubs",
+          "text": "Satürn"
+        },
+        {
+          "marker": "spades",
+          "text": "Vesta"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-81",
+      "text": "Romulus ve Remus'u efsaneye göre hangi hayvan emzirdi?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dişi kurt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İnek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Keçi"
+        },
+        {
+          "marker": "spades",
+          "text": "Dişi ayı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-82",
+      "text": "İskandinav mitolojisinde tanrıların başı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Odin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Baldur"
+        },
+        {
+          "marker": "clubs",
+          "text": "Loki"
+        },
+        {
+          "marker": "spades",
+          "text": "Thor"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-83",
+      "text": "Thor'un güçlü çekicinin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mjölnir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Durandal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Gungnir"
+        },
+        {
+          "marker": "spades",
+          "text": "Excalibur"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-84",
+      "text": "Odin'in sekiz bacaklı atının adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Grani"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bucephalus"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pegasus"
+        },
+        {
+          "marker": "spades",
+          "text": "Sleipnir"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "th-85",
+      "text": "İskandinav mitolojisinde Valhalla'ya kimler gider?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Savaşta ölenler"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çocuklar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Boğulanlar"
+        },
+        {
+          "marker": "spades",
+          "text": "Yaşlılar"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "th-86",
+      "text": "İskandinav mitolojisinde hile ve oyunlarıyla bilinen tanrı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Thor"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Loki"
+        },
+        {
+          "marker": "clubs",
+          "text": "Baldur"
+        },
+        {
+          "marker": "spades",
+          "text": "Heimdall"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-87",
+      "text": "İskandinav mitolojisinde Yggdrasil nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gökkuşağı köprüsü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ölüler diyarı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dünya ağacı"
+        },
+        {
+          "marker": "spades",
+          "text": "Tanrıların sarayı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-88",
+      "text": "İskandinav mitolojisinde Fenrir hangi hayvandır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Dev kartal"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dev yılan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dev kurt"
+        },
+        {
+          "marker": "spades",
+          "text": "Dev ayı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "th-89",
+      "text": "İskandinav mitolojisinde Ragnarök neyi anlatır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Bir hasat şenliğini"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dünyanın sonunu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yeni yılı"
+        },
+        {
+          "marker": "spades",
+          "text": "Tanrıların doğumunu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "th-90",
+      "text": "Mısır mitolojisinde ölüler diyarının hükümdarı kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Thoth"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Osiris"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sekhmet"
+        },
+        {
+          "marker": "spades",
+          "text": "Ra"
+        }
+      ],
+      "correct": "diamonds"
     }
   ]
 }

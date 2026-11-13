@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "ym-41",
+      "text": "Sushi hangi ülkenin mutfağına aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Japonya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çin"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tayland"
+        },
+        {
+          "marker": "spades",
+          "text": "Kore"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-42",
+      "text": "Pizza hangi ülkenin mutfağından dünyaya yayılmıştır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İspanya"
+        },
+        {
+          "marker": "clubs",
+          "text": "İtalya"
+        },
+        {
+          "marker": "spades",
+          "text": "Yunanistan"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-43",
+      "text": "Guacamole hangi meyveden yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Papaya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Muz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avokado"
+        },
+        {
+          "marker": "spades",
+          "text": "Mango"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-44",
+      "text": "Humusun ana malzemesi hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Nohut"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Barbunya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bakla"
+        },
+        {
+          "marker": "spades",
+          "text": "Mercimek"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-45",
+      "text": "Paella hangi ülkenin geleneksel yemeğidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Meksika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İtalya"
+        },
+        {
+          "marker": "clubs",
+          "text": "İspanya"
+        },
+        {
+          "marker": "spades",
+          "text": "Fransa"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-46",
+      "text": "Baget hangi ülkenin ekmeğidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Almanya"
+        },
+        {
+          "marker": "clubs",
+          "text": "İtalya"
+        },
+        {
+          "marker": "spades",
+          "text": "İngiltere"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-47",
+      "text": "Tofu hangi bitkinin sütünden yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hindistan cevizi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Badem"
+        },
+        {
+          "marker": "clubs",
+          "text": "Soya"
+        },
+        {
+          "marker": "spades",
+          "text": "Pirinç"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-48",
+      "text": "Hamuru açmak için kullanılan uzun yuvarlak sopaya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Süzgeç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rende"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oklava"
+        },
+        {
+          "marker": "spades",
+          "text": "Kepçe"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-49",
+      "text": "Haşlanmış makarnanın suyunu süzmek için ne kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Süzgeç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rende"
+        },
+        {
+          "marker": "clubs",
+          "text": "Oklava"
+        },
+        {
+          "marker": "spades",
+          "text": "Havan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-50",
+      "text": "Baharatları ezmek için kullanılan kaba ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cezve"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tepsi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sahan"
+        },
+        {
+          "marker": "spades",
+          "text": "Havan"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-51",
+      "text": "Peyniri ince ince kazımak için hangi alet kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rende"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çırpıcı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Maşa"
+        },
+        {
+          "marker": "spades",
+          "text": "Kepçe"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-52",
+      "text": "Çorbayı tabaklara dağıtmak için ne kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rende"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kevgir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kepçe"
+        },
+        {
+          "marker": "spades",
+          "text": "Spatula"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-53",
+      "text": "Yumurta akını köpürtmek için hangi alet kullanılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kevgir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çırpıcı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Havan"
+        },
+        {
+          "marker": "spades",
+          "text": "Rende"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-54",
+      "text": "Etin baharatlı sosta bekletilmesine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Közleme"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Haşlama"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kavurma"
+        },
+        {
+          "marker": "spades",
+          "text": "Marine etme"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-55",
+      "text": "Makarna için 'al dente' pişme derecesi nasıl bir kıvamdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Soğutulmuş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çiğ kalmış"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lapa olmuş"
+        },
+        {
+          "marker": "spades",
+          "text": "Hafif diri"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-56",
+      "text": "Şeker ısıtılıp kahverengileşince ne oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Krema"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Jöle"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karamel"
+        },
+        {
+          "marker": "spades",
+          "text": "Şurup"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-57",
+      "text": "Salep hangi çiçeğin yumrusundan elde edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lale"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gül"
+        },
+        {
+          "marker": "clubs",
+          "text": "Orkide"
+        },
+        {
+          "marker": "spades",
+          "text": "Papatya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-58",
+      "text": "Türk usulü çay hangi kapta demlenir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güveç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Cezve"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sahan"
+        },
+        {
+          "marker": "spades",
+          "text": "Çaydanlık"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-59",
+      "text": "Çay geleneksel olarak hangi şekilli bardakta içilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kulplu kupa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İnce belli"
+        },
+        {
+          "marker": "clubs",
+          "text": "Geniş kâse"
+        },
+        {
+          "marker": "spades",
+          "text": "Uzun kadeh"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-60",
+      "text": "Etli ekmek hangi ilimizle anılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Konya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kars"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sinop"
+        },
+        {
+          "marker": "spades",
+          "text": "Muğla"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-61",
+      "text": "Tulumba kızartıldıktan sonra neye batırılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sirke"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Süt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Şerbet"
+        },
+        {
+          "marker": "spades",
+          "text": "Yumurta"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-62",
+      "text": "Ayva tatlısı yanında geleneksel olarak ne servis edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tereyağı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peynir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yoğurt"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaymak"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-63",
+      "text": "Mercimek hangi gıda grubuna girer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yağlı tohum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Tahıl"
+        },
+        {
+          "marker": "clubs",
+          "text": "Baklagil"
+        },
+        {
+          "marker": "spades",
+          "text": "Sebze"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-64",
+      "text": "Lokumun temel malzemeleri şeker ve hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yumurta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nişasta"
+        },
+        {
+          "marker": "clubs",
+          "text": "Un"
+        },
+        {
+          "marker": "spades",
+          "text": "İrmik"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-65",
+      "text": "Kuru kayısıyla ünlü ilimiz hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Isparta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bolu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aydın"
+        },
+        {
+          "marker": "spades",
+          "text": "Malatya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-66",
+      "text": "Taşköprü sarımsağı hangi ilde yetişir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sinop"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bolu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çankırı"
+        },
+        {
+          "marker": "spades",
+          "text": "Kastamonu"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-67",
+      "text": "Amasya hangi meyvesiyle ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kayısı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Armut"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kiraz"
+        },
+        {
+          "marker": "spades",
+          "text": "Elma"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-68",
+      "text": "Bolu'nun Mengen ilçesi hangi mesleğin ustalarıyla ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çömlekçilik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Halıcılık"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aşçılık"
+        },
+        {
+          "marker": "spades",
+          "text": "Demircilik"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-69",
+      "text": "Kimchi hangi ülkenin mutfağına aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vietnam"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kore"
+        },
+        {
+          "marker": "spades",
+          "text": "Japonya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-70",
+      "text": "Taco hangi ülkenin mutfağına aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Peru"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Küba"
+        },
+        {
+          "marker": "clubs",
+          "text": "İspanya"
+        },
+        {
+          "marker": "spades",
+          "text": "Meksika"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-71",
+      "text": "Fish and chips hangi ülkenin klasik yemeğidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Almanya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İngiltere"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hollanda"
+        },
+        {
+          "marker": "spades",
+          "text": "İsveç"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-72",
+      "text": "Risotto hangi tahılla yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pirinç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mısır"
+        },
+        {
+          "marker": "clubs",
+          "text": "Buğday"
+        },
+        {
+          "marker": "spades",
+          "text": "Arpa"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-73",
+      "text": "Camembert peyniri hangi ülkeye aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fransa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İtalya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hollanda"
+        },
+        {
+          "marker": "spades",
+          "text": "İsviçre"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-74",
+      "text": "Gouda peyniri hangi ülkeyle özdeşleşmiştir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İsviçre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hollanda"
+        },
+        {
+          "marker": "clubs",
+          "text": "Belçika"
+        },
+        {
+          "marker": "spades",
+          "text": "Danimarka"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-75",
+      "text": "Safran hangi çiçeğin tepeciklerinden elde edilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Gül"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nergis"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çiğdem"
+        },
+        {
+          "marker": "spades",
+          "text": "Lale"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-76",
+      "text": "Çikolatanın ana hammaddesi hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fındık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vanilya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kahve"
+        },
+        {
+          "marker": "spades",
+          "text": "Kakao"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-77",
+      "text": "Domates Avrupa'ya hangi kıtadan gelmiştir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Afrika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Okyanusya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Asya"
+        },
+        {
+          "marker": "spades",
+          "text": "Amerika"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-78",
+      "text": "Rafadan yumurtanın sarısı nasıldır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tamamen sert"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yarı akışkan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kuru ve çatlak"
+        },
+        {
+          "marker": "spades",
+          "text": "Hiç pişmemiş"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-79",
+      "text": "Beyran çorbası hangi ilimizle anılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sivas"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gaziantep"
+        },
+        {
+          "marker": "clubs",
+          "text": "Erzincan"
+        },
+        {
+          "marker": "spades",
+          "text": "Tokat"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-80",
+      "text": "Tire köftesi hangi ilimizle anılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Aydın"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzmir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Denizli"
+        },
+        {
+          "marker": "spades",
+          "text": "Manisa"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-81",
+      "text": "Çorum hangi kuruyemişle ünlüdür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fındık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Leblebi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çekirdek"
+        },
+        {
+          "marker": "spades",
+          "text": "Ceviz"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-82",
+      "text": "Toz şeker Türkiye'de başlıca hangi bitkiden üretilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kereviz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Turp"
+        },
+        {
+          "marker": "clubs",
+          "text": "Marul"
+        },
+        {
+          "marker": "spades",
+          "text": "Şeker pancarı"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-83",
+      "text": "Mayonez hangi iki malzemeyle hazırlanır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Krema ve şeker"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Peynir ve su"
+        },
+        {
+          "marker": "clubs",
+          "text": "Süt ve un"
+        },
+        {
+          "marker": "spades",
+          "text": "Yumurta ve yağ"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-84",
+      "text": "Cacık yoğurt ve hangi sebzeyle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Salatalık"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Havuç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patlıcan"
+        },
+        {
+          "marker": "spades",
+          "text": "Kabak"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-85",
+      "text": "Deniz seviyesinde su kaç derecede kaynar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "120"
+        },
+        {
+          "marker": "diamonds",
+          "text": "80"
+        },
+        {
+          "marker": "clubs",
+          "text": "90"
+        },
+        {
+          "marker": "spades",
+          "text": "100"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-86",
+      "text": "Sofra tuzu hangi iki elementten oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sodyum ve klor"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kalsiyum ve flor"
+        },
+        {
+          "marker": "clubs",
+          "text": "Demir ve oksijen"
+        },
+        {
+          "marker": "spades",
+          "text": "Potasyum ve iyot"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-87",
+      "text": "Pesto sosu hangi yaprakla yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Maydanoz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fesleğen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Nane"
+        },
+        {
+          "marker": "spades",
+          "text": "Dereotu"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-88",
+      "text": "Bulgur hangi tahıldan yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Arpa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mısır"
+        },
+        {
+          "marker": "clubs",
+          "text": "Buğday"
+        },
+        {
+          "marker": "spades",
+          "text": "Pirinç"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-89",
+      "text": "Mısır tanesi ısınınca neden patlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İçindeki su buharlaşır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Şekeri karamelleşir"
+        },
+        {
+          "marker": "clubs",
+          "text": "İçindeki yağ yanar"
+        },
+        {
+          "marker": "spades",
+          "text": "Kabuğu erir"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-90",
+      "text": "Düdüklü tencere yemeği nasıl çabuk pişirir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Soğuk buharla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Titreşimle"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yüksek basınçla"
+        },
+        {
+          "marker": "spades",
+          "text": "Daha az suyla"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "ym-91",
+      "text": "Wok tavası hangi ülkenin mutfağıyla özdeşleşmiştir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İtalya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hindistan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Meksika"
+        },
+        {
+          "marker": "spades",
+          "text": "Çin"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "ym-92",
+      "text": "Fondü hangi ülkenin mutfağıyla özdeşleşmiştir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İsviçre"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avusturya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Belçika"
+        },
+        {
+          "marker": "spades",
+          "text": "İspanya"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-93",
+      "text": "Köri karışımı hangi ülkenin mutfağıyla özdeşleşmiştir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hindistan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Japonya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Meksika"
+        },
+        {
+          "marker": "spades",
+          "text": "Yunanistan"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-94",
+      "text": "Pastörizasyon adını hangi bilim insanından alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marie Curie"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Louis Pasteur"
+        },
+        {
+          "marker": "clubs",
+          "text": "Isaac Newton"
+        },
+        {
+          "marker": "spades",
+          "text": "Albert Einstein"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-95",
+      "text": "Laktoz hangi üründe bulunan şekerdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pancar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Süt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bal"
+        },
+        {
+          "marker": "spades",
+          "text": "Üzüm"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-96",
+      "text": "İsot adıyla bilinen kurutulmuş biber hangi ilimizle anılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şanlıurfa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Van"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hatay"
+        },
+        {
+          "marker": "spades",
+          "text": "Muş"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-97",
+      "text": "Taze yumurta tuzsuz suya konunca ne olur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çatlar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dibe batar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yüzeye çıkar"
+        },
+        {
+          "marker": "spades",
+          "text": "Renk değiştirir"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-98",
+      "text": "Çılbırın temel malzemeleri hangileridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Peynir ve zeytin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yumurta ve yoğurt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patates ve soğan"
+        },
+        {
+          "marker": "spades",
+          "text": "Yumurta ve domates"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "ym-99",
+      "text": "Hangisi yer altında yetişen bir sebzedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Havuç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Biber"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patlıcan"
+        },
+        {
+          "marker": "spades",
+          "text": "Domates"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "ym-100",
+      "text": "Gözleme geleneksel olarak neyin üzerinde pişirilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kevgir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sac"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güveç"
+        },
+        {
+          "marker": "spades",
+          "text": "Cezve"
+        }
+      ],
+      "correct": "diamonds"
     }
   ]
 }

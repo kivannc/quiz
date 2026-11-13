@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "it-31",
+      "text": "Kâğıdı ilk icat eden uygarlık hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Romalılar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Persler"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çinliler"
+        },
+        {
+          "marker": "spades",
+          "text": "Hintliler"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-32",
+      "text": "Termometre neyi ölçer?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Basıncı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nemi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sıcaklığı"
+        },
+        {
+          "marker": "spades",
+          "text": "Hızı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-33",
+      "text": "Sismograf hangi doğa olayını kaydeder?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çığ"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fırtına"
+        },
+        {
+          "marker": "clubs",
+          "text": "Yıldırım"
+        },
+        {
+          "marker": "spades",
+          "text": "Deprem"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-34",
+      "text": "Mikrofon sesi neye dönüştürür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Isıya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Işığa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Elektrik sinyaline"
+        },
+        {
+          "marker": "spades",
+          "text": "Manyetik alana"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-35",
+      "text": "Güneş paneli ışığı neye çevirir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yakıta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rüzgâra"
+        },
+        {
+          "marker": "clubs",
+          "text": "Elektriğe"
+        },
+        {
+          "marker": "spades",
+          "text": "Suya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-36",
+      "text": "X ışınlarını keşfeden fizikçi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ernest Rutherford"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Wilhelm Röntgen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Max Planck"
+        },
+        {
+          "marker": "spades",
+          "text": "Niels Bohr"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-37",
+      "text": "Dinamiti icat eden ve adına ödül kurulan kişi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rudolf Diesel"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alfred Nobel"
+        },
+        {
+          "marker": "clubs",
+          "text": "Werner von Siemens"
+        },
+        {
+          "marker": "spades",
+          "text": "Gustave Eiffel"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-38",
+      "text": "Görme engellilerin parmakla okuduğu kabartma yazıyı kim geliştirdi?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Charles Babbage"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Michael Faraday"
+        },
+        {
+          "marker": "clubs",
+          "text": "Helen Keller"
+        },
+        {
+          "marker": "spades",
+          "text": "Louis Braille"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-39",
+      "text": "Bilgisayarlar verileri hangi sayı sistemiyle işler?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Altmışlı sistem"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Onlu sistem"
+        },
+        {
+          "marker": "clubs",
+          "text": "Roma rakamları"
+        },
+        {
+          "marker": "spades",
+          "text": "İkili sistem"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-40",
+      "text": "Bir byte kaç bitten oluşur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "8"
+        },
+        {
+          "marker": "diamonds",
+          "text": "10"
+        },
+        {
+          "marker": "clubs",
+          "text": "16"
+        },
+        {
+          "marker": "spades",
+          "text": "4"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-41",
+      "text": "GPS cihazları konumu hangi araçlardan gelen sinyalle bulur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uydular"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hava balonları"
+        },
+        {
+          "marker": "clubs",
+          "text": "Denizaltılar"
+        },
+        {
+          "marker": "spades",
+          "text": "Radyo kuleleri"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-42",
+      "text": "Sonar cihazı su altında neyle çalışır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kızılötesi ışın"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ses dalgaları"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mıknatıs"
+        },
+        {
+          "marker": "spades",
+          "text": "Radyo dalgaları"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-43",
+      "text": "Akkor telli ampulde ışık veren ince tel nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Duy"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Filaman"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fitil"
+        },
+        {
+          "marker": "spades",
+          "text": "Sigorta"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-44",
+      "text": "Elektrik direncinin birimi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Joule"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pascal"
+        },
+        {
+          "marker": "clubs",
+          "text": "Metre"
+        },
+        {
+          "marker": "spades",
+          "text": "Ohm"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-45",
+      "text": "Ampulün gücü genellikle hangi birimle yazılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Watt"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Litre"
+        },
+        {
+          "marker": "clubs",
+          "text": "Newton"
+        },
+        {
+          "marker": "spades",
+          "text": "Kelvin"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-46",
+      "text": "Radyo frekansı hangi birimle ölçülür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Desibel"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lümen"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hertz"
+        },
+        {
+          "marker": "spades",
+          "text": "Santimetre"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-47",
+      "text": "Doktorların kalp ve akciğer seslerini dinlediği alet hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Stetoskop"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Otoskop"
+        },
+        {
+          "marker": "clubs",
+          "text": "Endoskop"
+        },
+        {
+          "marker": "spades",
+          "text": "Kaleydoskop"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-48",
+      "text": "Uzaya çıkan ilk kadın kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sally Ride"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mae Jemison"
+        },
+        {
+          "marker": "clubs",
+          "text": "Valentina Tereşkova"
+        },
+        {
+          "marker": "spades",
+          "text": "Svetlana Savitskaya"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-49",
+      "text": "Sputnik 2 ile Dünya yörüngesine gönderilen köpeğin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Belka"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dezik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Strelka"
+        },
+        {
+          "marker": "spades",
+          "text": "Laika"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-50",
+      "text": "Hubble Uzay Teleskobu nerede bulunur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mars'ta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Everest'in zirvesinde"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dünya yörüngesinde"
+        },
+        {
+          "marker": "spades",
+          "text": "Ay'ın yüzeyinde"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-51",
+      "text": "1961'de yapılan ilk yerli Türk otomobilinin adı nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Anadol"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Devrim"
+        },
+        {
+          "marker": "clubs",
+          "text": "Murat"
+        },
+        {
+          "marker": "spades",
+          "text": "Şahin"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-52",
+      "text": "Su saatleri ve otomatik makineleriyle tanınan Artuklu mühendisi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Uluğ Bey"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İbn-i Sina"
+        },
+        {
+          "marker": "clubs",
+          "text": "Farabi"
+        },
+        {
+          "marker": "spades",
+          "text": "El-Cezeri"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-53",
+      "text": "E-posta adresinde kullanıcı adını alan adından ayıran işaret hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "@"
+        },
+        {
+          "marker": "diamonds",
+          "text": "%"
+        },
+        {
+          "marker": "clubs",
+          "text": "#"
+        },
+        {
+          "marker": "spades",
+          "text": "&"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-54",
+      "text": "Bilgisayarın açık programları geçici olarak tuttuğu bellek hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Optik sürücü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sabit disk"
+        },
+        {
+          "marker": "clubs",
+          "text": "RAM"
+        },
+        {
+          "marker": "spades",
+          "text": "Disket"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-55",
+      "text": "Çoğu televizyon uzaktan kumandası hangi ışınla çalışır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mor ötesi ışın"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gama ışını"
+        },
+        {
+          "marker": "clubs",
+          "text": "X ışını"
+        },
+        {
+          "marker": "spades",
+          "text": "Kızılötesi ışın"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-56",
+      "text": "Uçan makine ve paraşüt taslakları çizen Rönesans dahisi kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Leonardo da Vinci"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Raffaello"
+        },
+        {
+          "marker": "clubs",
+          "text": "Botticelli"
+        },
+        {
+          "marker": "spades",
+          "text": "Michelangelo"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-57",
+      "text": "Hidroelektrik santral elektriği neyin gücüyle üretir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kömürün"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rüzgârın"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güneşin"
+        },
+        {
+          "marker": "spades",
+          "text": "Akan suyun"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-58",
+      "text": "Paratönerin görevi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Rüzgârı ölçmek"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yıldırımı toprağa iletmek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bulutları dağıtmak"
+        },
+        {
+          "marker": "spades",
+          "text": "Yağmur getirmek"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-59",
+      "text": "Cam hangi hammaddenin eritilmesiyle yapılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tuz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kum"
+        },
+        {
+          "marker": "spades",
+          "text": "Kömür"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-60",
+      "text": "Çelik, hangi madenin karbonla karışımıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Demir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alüminyum"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kurşun"
+        },
+        {
+          "marker": "spades",
+          "text": "Bakır"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-61",
+      "text": "Bronz hangi iki madenin alaşımıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kurşun ve çinko"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bakır ve kalay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Altın ve gümüş"
+        },
+        {
+          "marker": "spades",
+          "text": "Demir ve nikel"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-62",
+      "text": "Mikroskopla gördüğü yapıya \"hücre\" adını veren kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Charles Darwin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Robert Hooke"
+        },
+        {
+          "marker": "clubs",
+          "text": "Carl Linnaeus"
+        },
+        {
+          "marker": "spades",
+          "text": "Gregor Mendel"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-63",
+      "text": "Chrome, Firefox ve Safari ne tür programlardır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ofis programı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Web tarayıcı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Antivirüs"
+        },
+        {
+          "marker": "spades",
+          "text": "İşletim sistemi"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-64",
+      "text": "Yazılımlardaki hatalara halk arasında ne ad verilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Cookie"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bug"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patch"
+        },
+        {
+          "marker": "spades",
+          "text": "Cache"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-65",
+      "text": "Marmaray nasıl bir ulaşım hattıdır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asma köprü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Feribot hattı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Otoyol tüneli"
+        },
+        {
+          "marker": "spades",
+          "text": "Deniz altı raylı sistem"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-66",
+      "text": "Ünlü Orient Express hangi iki şehri bağlamasıyla bilinir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Roma ve Atina"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Londra ve Moskova"
+        },
+        {
+          "marker": "clubs",
+          "text": "Berlin ve Kahire"
+        },
+        {
+          "marker": "spades",
+          "text": "Paris ve İstanbul"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-67",
+      "text": "Titanic gemisi hangi okyanusta battı?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hint Okyanusu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pasifik Okyanusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Atlas Okyanusu"
+        },
+        {
+          "marker": "spades",
+          "text": "Arktik Okyanusu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-68",
+      "text": "Concorde yolcu uçağı en çok hangi özelliğiyle bilinir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sesten hızlı uçması"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güneşle çalışması"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dikey inebilmesi"
+        },
+        {
+          "marker": "spades",
+          "text": "Suya inebilmesi"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-69",
+      "text": "Sıcak hava balonu neden yükselir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Motoru çeker"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sıcak hava daha hafiftir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rüzgâr onu iter"
+        },
+        {
+          "marker": "spades",
+          "text": "Pervanesi döner"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-70",
+      "text": "Geminin sağ yanına ne ad verilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sancak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Pupa"
+        },
+        {
+          "marker": "clubs",
+          "text": "İskele"
+        },
+        {
+          "marker": "spades",
+          "text": "Pruva"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-71",
+      "text": "Deniz fenerinin görevi nedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Balıkları toplamak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gemilere yol göstermek"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dalgaları kırmak"
+        },
+        {
+          "marker": "spades",
+          "text": "Hava tahmini yapmak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-72",
+      "text": "Gemilerin batmadan suda yüzmesini sağlayan kuvvet hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kaldırma kuvveti"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sürtünme kuvveti"
+        },
+        {
+          "marker": "clubs",
+          "text": "Merkezkaç kuvveti"
+        },
+        {
+          "marker": "spades",
+          "text": "Manyetik kuvvet"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-73",
+      "text": "Denizaltı suya dalmak için balast tanklarını neyle doldurur?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kum"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Buz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Su"
+        },
+        {
+          "marker": "spades",
+          "text": "Yağ"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-74",
+      "text": "Otomobilde motoru çalıştıran elektriği depolayan parça hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Egzoz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Akü"
+        },
+        {
+          "marker": "clubs",
+          "text": "Amortisör"
+        },
+        {
+          "marker": "spades",
+          "text": "Silindir"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-75",
+      "text": "Çarpışma anında şişerek sürücüyü koruyan donanım hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hava yastığı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Radyatör"
+        },
+        {
+          "marker": "clubs",
+          "text": "Far"
+        },
+        {
+          "marker": "spades",
+          "text": "Vites kolu"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-76",
+      "text": "Düz vitesli arabada vites değiştirirken hangi pedala basılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Korna"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Fren"
+        },
+        {
+          "marker": "clubs",
+          "text": "Debriyaj"
+        },
+        {
+          "marker": "spades",
+          "text": "Gaz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-77",
+      "text": "Hem benzinli hem elektrik motoru bulunan araca ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Otomatik araç"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Turbo araç"
+        },
+        {
+          "marker": "clubs",
+          "text": "Dizel araç"
+        },
+        {
+          "marker": "spades",
+          "text": "Hibrit araç"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-78",
+      "text": "Uçakta pilotların bulunduğu bölüme ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kargo bölümü"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yolcu salonu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kokpit"
+        },
+        {
+          "marker": "spades",
+          "text": "İniş takımı"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-79",
+      "text": "Mach 1 hangi hıza eşittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ses hızı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rüzgâr hızı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mermi hızı"
+        },
+        {
+          "marker": "spades",
+          "text": "Işık hızı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-80",
+      "text": "Ay'a ilk ayak basan astronot kimdir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Buzz Aldrin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Alan Shepard"
+        },
+        {
+          "marker": "clubs",
+          "text": "Michael Collins"
+        },
+        {
+          "marker": "spades",
+          "text": "Neil Armstrong"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-81",
+      "text": "Japonya'daki ünlü yüksek hızlı trenlere ne ad verilir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "ICE"
+        },
+        {
+          "marker": "diamonds",
+          "text": "AVE"
+        },
+        {
+          "marker": "clubs",
+          "text": "Shinkansen"
+        },
+        {
+          "marker": "spades",
+          "text": "TGV"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "it-82",
+      "text": "Manş Tüneli hangi iki ülkeyi birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İspanya ve Fas"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İngiltere ve Fransa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Danimarka ve İsveç"
+        },
+        {
+          "marker": "spades",
+          "text": "İtalya ve Fransa"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-83",
+      "text": "Golden Gate Köprüsü hangi ABD şehrindedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Los Angeles"
+        },
+        {
+          "marker": "diamonds",
+          "text": "San Francisco"
+        },
+        {
+          "marker": "clubs",
+          "text": "Seattle"
+        },
+        {
+          "marker": "spades",
+          "text": "New York"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "it-84",
+      "text": "Havalimanında uçak trafiğini yöneten yapıya ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kontrol kulesi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Terminal binası"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bagaj bandı"
+        },
+        {
+          "marker": "spades",
+          "text": "Yakıt deposu"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-85",
+      "text": "Geminin yönünü değiştirmeye yarayan parça hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Küpeşte"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Çapa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Direk"
+        },
+        {
+          "marker": "spades",
+          "text": "Dümen"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-86",
+      "text": "Tren istasyonunda yolcuların bindiği yüksek zemine ne denir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Peron"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dingil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Makas"
+        },
+        {
+          "marker": "spades",
+          "text": "Lokomotif"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-87",
+      "text": "Londra'nın simgesi çift katlı otobüsler genellikle hangi renktir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kırmızı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yeşil"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mavi"
+        },
+        {
+          "marker": "spades",
+          "text": "Sarı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "it-88",
+      "text": "Venedik'in kanallarında yolcu taşıyan geleneksel tekne hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Feribot"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mavna"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kano"
+        },
+        {
+          "marker": "spades",
+          "text": "Gondol"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-89",
+      "text": "Çölde ağır yük taşıdığı için \"çöl gemisi\" denen hayvan hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Katır"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Eşek"
+        },
+        {
+          "marker": "clubs",
+          "text": "At"
+        },
+        {
+          "marker": "spades",
+          "text": "Deve"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "it-90",
+      "text": "Maglev trenleri neyin gücüyle raydan yükselir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pervane"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yay"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mıknatıs"
+        },
+        {
+          "marker": "spades",
+          "text": "Buhar"
+        }
+      ],
+      "correct": "clubs"
     }
   ]
 }

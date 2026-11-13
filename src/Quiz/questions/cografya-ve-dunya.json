@@ -922,6 +922,1386 @@
         }
       ],
       "correct": "spades"
+    },
+    {
+      "id": "cg-31",
+      "text": "Kızılırmak hangi denize dökülür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marmara Denizi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ege Denizi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-32",
+      "text": "Büyük Menderes Nehri hangi denize dökülür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Karadeniz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Marmara Denizi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ege Denizi"
+        },
+        {
+          "marker": "spades",
+          "text": "Akdeniz"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-33",
+      "text": "Efes Antik Kenti hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Manisa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Muğla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aydın"
+        },
+        {
+          "marker": "spades",
+          "text": "İzmir"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-34",
+      "text": "Sümela Manastırı hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Trabzon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ordu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Rize"
+        },
+        {
+          "marker": "spades",
+          "text": "Giresun"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-35",
+      "text": "Türkiye kaç coğrafi bölgeye ayrılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yedi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Dokuz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Beş"
+        },
+        {
+          "marker": "spades",
+          "text": "Altı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-36",
+      "text": "Aşağıdakilerden hangisi Karadeniz Bölgesi'nde yer alan bir ildir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Samsun"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Konya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Denizli"
+        },
+        {
+          "marker": "spades",
+          "text": "Mersin"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-37",
+      "text": "Tuz Gölü hangi bölgemizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marmara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Akdeniz"
+        },
+        {
+          "marker": "clubs",
+          "text": "İç Anadolu"
+        },
+        {
+          "marker": "spades",
+          "text": "Ege"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-38",
+      "text": "Uludağ hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Balıkesir"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bolu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bursa"
+        },
+        {
+          "marker": "spades",
+          "text": "Kastamonu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-39",
+      "text": "Salda Gölü hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Isparta"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Burdur"
+        },
+        {
+          "marker": "clubs",
+          "text": "Afyonkarahisar"
+        },
+        {
+          "marker": "spades",
+          "text": "Denizli"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-40",
+      "text": "Hangi ilimiz Trakya Bölgesi'nde yer alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sakarya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bursa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Edirne"
+        },
+        {
+          "marker": "spades",
+          "text": "Kocaeli"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-41",
+      "text": "Atatürk Barajı hangi nehir üzerindedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Fırat"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Seyhan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kızılırmak"
+        },
+        {
+          "marker": "spades",
+          "text": "Dicle"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-42",
+      "text": "Ihlara Vadisi hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kayseri"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Nevşehir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aksaray"
+        },
+        {
+          "marker": "spades",
+          "text": "Niğde"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-43",
+      "text": "Yüzölçümü en büyük ilimiz hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sivas"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Konya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Ankara"
+        },
+        {
+          "marker": "spades",
+          "text": "Erzurum"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-44",
+      "text": "Truva Antik Kenti hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Edirne"
+        },
+        {
+          "marker": "diamonds",
+          "text": "İzmir"
+        },
+        {
+          "marker": "clubs",
+          "text": "Balıkesir"
+        },
+        {
+          "marker": "spades",
+          "text": "Çanakkale"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-45",
+      "text": "Kaş, Kemer ve Alanya hangi ilimizin ilçeleridir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mersin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Muğla"
+        },
+        {
+          "marker": "clubs",
+          "text": "Aydın"
+        },
+        {
+          "marker": "spades",
+          "text": "Antalya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-46",
+      "text": "Safranbolu hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Zonguldak"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Bartın"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kastamonu"
+        },
+        {
+          "marker": "spades",
+          "text": "Karabük"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-47",
+      "text": "İstanbul Boğazı hangi iki denizi birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ege ve Akdeniz"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Marmara ve Ege"
+        },
+        {
+          "marker": "clubs",
+          "text": "Akdeniz ve Karadeniz"
+        },
+        {
+          "marker": "spades",
+          "text": "Karadeniz ve Marmara"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-48",
+      "text": "Erciyes Dağı hangi ilimizdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Niğde"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kayseri"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sivas"
+        },
+        {
+          "marker": "spades",
+          "text": "Nevşehir"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-49",
+      "text": "Türkiye'nin en doğu noktası hangi ildedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Van"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ağrı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Iğdır"
+        },
+        {
+          "marker": "spades",
+          "text": "Kars"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-50",
+      "text": "Türkiye'nin en kuzey noktası hangi ildedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kastamonu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Trabzon"
+        },
+        {
+          "marker": "clubs",
+          "text": "Sinop"
+        },
+        {
+          "marker": "spades",
+          "text": "Samsun"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-51",
+      "text": "Almanya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Berlin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Frankfurt"
+        },
+        {
+          "marker": "clubs",
+          "text": "Münih"
+        },
+        {
+          "marker": "spades",
+          "text": "Hamburg"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-52",
+      "text": "İspanya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Madrid"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Valensiya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Barselona"
+        },
+        {
+          "marker": "spades",
+          "text": "Sevilla"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-53",
+      "text": "Yunanistan'ın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Atina"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rodos"
+        },
+        {
+          "marker": "clubs",
+          "text": "Patras"
+        },
+        {
+          "marker": "spades",
+          "text": "Selanik"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-54",
+      "text": "Portekiz'in başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Lizbon"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Porto"
+        },
+        {
+          "marker": "clubs",
+          "text": "Coimbra"
+        },
+        {
+          "marker": "spades",
+          "text": "Faro"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-55",
+      "text": "Arjantin'in başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Santiago"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Buenos Aires"
+        },
+        {
+          "marker": "clubs",
+          "text": "Córdoba"
+        },
+        {
+          "marker": "spades",
+          "text": "Montevideo"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-56",
+      "text": "Çin'in başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Şanghay"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hong Kong"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pekin"
+        },
+        {
+          "marker": "spades",
+          "text": "Kanton"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-57",
+      "text": "Rusya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kazan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Sankt Petersburg"
+        },
+        {
+          "marker": "clubs",
+          "text": "Moskova"
+        },
+        {
+          "marker": "spades",
+          "text": "Novosibirsk"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-58",
+      "text": "Güney Kore'nin başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Busan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Seul"
+        },
+        {
+          "marker": "clubs",
+          "text": "Incheon"
+        },
+        {
+          "marker": "spades",
+          "text": "Pyongyang"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-59",
+      "text": "Kenya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Mombasa"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Addis Ababa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kampala"
+        },
+        {
+          "marker": "spades",
+          "text": "Nairobi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-60",
+      "text": "Peru'nun başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Quito"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Lima"
+        },
+        {
+          "marker": "clubs",
+          "text": "Cusco"
+        },
+        {
+          "marker": "spades",
+          "text": "Bogota"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-61",
+      "text": "Norveç'in başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Helsinki"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Oslo"
+        },
+        {
+          "marker": "clubs",
+          "text": "Stokholm"
+        },
+        {
+          "marker": "spades",
+          "text": "Bergen"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-62",
+      "text": "Avusturya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Innsbruck"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Graz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Salzburg"
+        },
+        {
+          "marker": "spades",
+          "text": "Viyana"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-63",
+      "text": "Polonya'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Varşova"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gdansk"
+        },
+        {
+          "marker": "clubs",
+          "text": "Prag"
+        },
+        {
+          "marker": "spades",
+          "text": "Krakov"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-64",
+      "text": "Fas'ın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Marakeş"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kazablanka"
+        },
+        {
+          "marker": "clubs",
+          "text": "Tanca"
+        },
+        {
+          "marker": "spades",
+          "text": "Rabat"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-65",
+      "text": "Hindistan'ın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Yeni Delhi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Kalküta"
+        },
+        {
+          "marker": "clubs",
+          "text": "Mumbai"
+        },
+        {
+          "marker": "spades",
+          "text": "Bangalore"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-66",
+      "text": "Azerbaycan'ın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Tiflis"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Gence"
+        },
+        {
+          "marker": "clubs",
+          "text": "Bakü"
+        },
+        {
+          "marker": "spades",
+          "text": "Erivan"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-67",
+      "text": "Meksika'nın başkenti neresidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Guadalajara"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Mexico City"
+        },
+        {
+          "marker": "clubs",
+          "text": "Monterrey"
+        },
+        {
+          "marker": "spades",
+          "text": "Cancún"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-68",
+      "text": "Gobi Çölü hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Asya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kuzey Amerika"
+        },
+        {
+          "marker": "spades",
+          "text": "Avustralya"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-69",
+      "text": "Kilimanjaro Dağı hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Asya"
+        },
+        {
+          "marker": "spades",
+          "text": "Avrupa"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-70",
+      "text": "Mississippi Nehri hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "ABD"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Brezilya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Meksika"
+        },
+        {
+          "marker": "spades",
+          "text": "Kanada"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-71",
+      "text": "Baykal Gölü hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kazakistan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Rusya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Çin"
+        },
+        {
+          "marker": "spades",
+          "text": "Moğolistan"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-72",
+      "text": "Büyük Set Resifi hangi ülkenin kıyısındadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Endonezya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Filipinler"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "spades",
+          "text": "Yeni Zelanda"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-73",
+      "text": "Kızıldeniz'i Akdeniz'e bağlayan kanal hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Süveyş Kanalı"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Erie Kanalı"
+        },
+        {
+          "marker": "clubs",
+          "text": "Kiel Kanalı"
+        },
+        {
+          "marker": "spades",
+          "text": "Korint Kanalı"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-74",
+      "text": "Panama Kanalı hangi iki okyanusu birbirine bağlar?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Hint ve Pasifik"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Atlas ve Pasifik"
+        },
+        {
+          "marker": "clubs",
+          "text": "Atlas ve Hint"
+        },
+        {
+          "marker": "spades",
+          "text": "Arktik ve Atlas"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-75",
+      "text": "Dünyanın en küçük kıtası hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Antarktika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "spades",
+          "text": "Avustralya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-76",
+      "text": "Güney Kutbu hangi kıtadadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Antarktika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avustralya"
+        },
+        {
+          "marker": "clubs",
+          "text": "Güney Amerika"
+        },
+        {
+          "marker": "spades",
+          "text": "Afrika"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-77",
+      "text": "Kesintisiz düşüşle dünyanın en yüksek şelalesi hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Victoria Şelalesi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Iguazu Şelalesi"
+        },
+        {
+          "marker": "clubs",
+          "text": "Niagara Şelalesi"
+        },
+        {
+          "marker": "spades",
+          "text": "Angel Şelalesi"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-78",
+      "text": "Amazon Nehri hangi okyanusa dökülür?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Arktik Okyanusu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Hint Okyanusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pasifik Okyanusu"
+        },
+        {
+          "marker": "spades",
+          "text": "Atlas Okyanusu"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-79",
+      "text": "Mont Blanc hangi sıradağlarda yer alır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kafkaslar"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karpatlar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Alpler"
+        },
+        {
+          "marker": "spades",
+          "text": "Pireneler"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-80",
+      "text": "Madagaskar Adası hangi okyanustadır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Pasifik Okyanusu"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Arktik Okyanusu"
+        },
+        {
+          "marker": "clubs",
+          "text": "Hint Okyanusu"
+        },
+        {
+          "marker": "spades",
+          "text": "Atlas Okyanusu"
+        }
+      ],
+      "correct": "clubs"
+    },
+    {
+      "id": "cg-81",
+      "text": "Dünyanın en büyük kıtası hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Kuzey Amerika"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avrupa"
+        },
+        {
+          "marker": "clubs",
+          "text": "Afrika"
+        },
+        {
+          "marker": "spades",
+          "text": "Asya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-82",
+      "text": "Cebelitarık Boğazı hangi iki kıtayı ayırır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Avrupa ve Asya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Avrupa ve Afrika"
+        },
+        {
+          "marker": "clubs",
+          "text": "Asya ve Afrika"
+        },
+        {
+          "marker": "spades",
+          "text": "Asya ve Avustralya"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-83",
+      "text": "Hangi dağlar Avrupa ile Asya arasında sınır sayılır?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ural Dağları"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Karpatlar"
+        },
+        {
+          "marker": "clubs",
+          "text": "Pireneler"
+        },
+        {
+          "marker": "spades",
+          "text": "Atlas Dağları"
+        }
+      ],
+      "correct": "hearts"
+    },
+    {
+      "id": "cg-84",
+      "text": "Suyu çok tuzlu olduğu için insanın batmadığı deniz hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Ege Denizi"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ölü Deniz"
+        },
+        {
+          "marker": "clubs",
+          "text": "Baltık Denizi"
+        },
+        {
+          "marker": "spades",
+          "text": "Kızıldeniz"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-85",
+      "text": "Dünyanın en küçük ülkesi hangisidir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "San Marino"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Vatikan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Lihtenştayn"
+        },
+        {
+          "marker": "spades",
+          "text": "Monako"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-86",
+      "text": "Pisa Kulesi hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "İspanya"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Yunanistan"
+        },
+        {
+          "marker": "clubs",
+          "text": "Fransa"
+        },
+        {
+          "marker": "spades",
+          "text": "İtalya"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-87",
+      "text": "Özgürlük Heykeli hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Boston"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Los Angeles"
+        },
+        {
+          "marker": "clubs",
+          "text": "Washington"
+        },
+        {
+          "marker": "spades",
+          "text": "New York"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-88",
+      "text": "Petra Antik Kenti hangi ülkededir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Suudi Arabistan"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Ürdün"
+        },
+        {
+          "marker": "clubs",
+          "text": "Suriye"
+        },
+        {
+          "marker": "spades",
+          "text": "Irak"
+        }
+      ],
+      "correct": "diamonds"
+    },
+    {
+      "id": "cg-89",
+      "text": "Sagrada Familia Kilisesi hangi şehirdedir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Sevilla"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Madrid"
+        },
+        {
+          "marker": "clubs",
+          "text": "Valensiya"
+        },
+        {
+          "marker": "spades",
+          "text": "Barselona"
+        }
+      ],
+      "correct": "spades"
+    },
+    {
+      "id": "cg-90",
+      "text": "Beyaz zeminde ortasında kırmızı daire olan bayrak hangi ülkeye aittir?",
+      "options": [
+        {
+          "marker": "hearts",
+          "text": "Çin"
+        },
+        {
+          "marker": "diamonds",
+          "text": "Güney Kore"
+        },
+        {
+          "marker": "clubs",
+          "text": "Japonya"
+        },
+        {
+          "marker": "spades",
+          "text": "Singapur"
+        }
+      ],
+      "correct": "clubs"
     }
   ]
 }
