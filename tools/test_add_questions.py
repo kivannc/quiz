@@ -123,6 +123,18 @@ class AssembleTests(unittest.TestCase):
         for line, (_, reason) in zip(rejects, bad):
             self.assertIn(reason, line)
 
+    def test_a_question_already_in_a_neighbouring_set_is_rejected(self):
+        other = fixture_set()
+        other["id"] = "other"
+        other["questions"][0]["text"] = "Komşu sette olan soru?"
+        self.write("other", [], data=other)
+        self.write("s", [candidate(i) for i in range(60)]
+                   + [{"q": "komşu sette olan soru?", "a": "x", "d": ["y", "z", "w"]}])
+
+        self.assertEqual(0, self.run_assemble("s"))
+
+        self.assertIn("same text", self.read("s.rejects"))
+
     def test_too_few_survivors_fails_and_leaves_the_set_alone(self):
         self.write("s", [candidate(i) for i in range(59)])
         before = self.read("s.json")
@@ -141,11 +153,12 @@ class AssembleTests(unittest.TestCase):
         self.assertEqual(grown, self.read("s.json"))
 
     def test_the_same_inputs_give_the_same_file(self):
-        for name in ("one", "two"):
+        for name in ("one/s", "two/s"):  # apart, or the second would see the first's questions as taken
+            os.mkdir(self.path(os.path.dirname(name)))
             self.write(name, [candidate(i) for i in range(60)])
             self.assertEqual(0, self.run_assemble(name))
 
-        self.assertEqual(self.read("one.json"), self.read("two.json"))
+        self.assertEqual(self.read("one/s.json"), self.read("two/s.json"))
 
     def test_blind_hides_the_answer_and_keeps_all_four_options(self):
         candidates = [candidate(0), {"q": "Bozuk?", "a": "x", "d": ["x", "y", "z"]}, candidate(2)]

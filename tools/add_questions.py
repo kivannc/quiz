@@ -19,6 +19,7 @@ Standard library only.
 
 import argparse
 import json
+import os
 import random
 import sys
 from collections import Counter
@@ -95,7 +96,12 @@ def assemble(set_path, candidates_path, verdicts_path, take, rejects_path):
         return 1
 
     verdicts = {v["n"]: v for v in read_lines(verdicts_path)}
-    seen = {normalise(q["text"]) for q in questions}
+    # Every set next to this one counts: the same question must not turn up in two categories.
+    seen = set()
+    for name in sorted(os.listdir(os.path.dirname(os.path.abspath(set_path)))):
+        if name.endswith(".json"):
+            with open(os.path.join(os.path.dirname(os.path.abspath(set_path)), name), encoding="utf-8") as f:
+                seen.update(normalise(q["text"]) for q in json.load(f)["questions"])
     kept, rejects = [], []
     for n, c in enumerate(read_lines(candidates_path), start=1):
         reason = shape_problem(c)
